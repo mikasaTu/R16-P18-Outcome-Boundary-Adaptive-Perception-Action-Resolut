@@ -1,0 +1,152 @@
+protocol_id: R16-P18-LIBERO-STAGE1-PILOT-V1
+locked_at_utc: "2026-08-12T22:00:00Z"
+source_wiki_token: RCkKwlcyGi0TAAkw0Zwc62bFnMb
+decision_scope: stage1_only
+
+benchmark:
+  name: LIBERO
+  suite: libero_goal
+  libero_commit: 2319dbd914673f6ef34a00584536212b10e10395
+  control_mode: OSC_POSE
+  observation_mode: agentview_rgb_plus_proprio
+  image_size: [128, 128]
+  action_dim: 7
+  task_horizon: 300
+  wait_steps: 10
+
+runtime:
+  python: 3.11.11
+  torch: 2.5.1+cu124
+  torchvision: 0.20.1+cu124
+  cuda_runtime: "12.4"
+  cudnn: 90100
+  numpy: 1.26.4
+  h5py: 3.16.0
+  mujoco: 3.6.0
+  robosuite: 1.4.0
+  scipy: 1.17.1
+  pyyaml: 6.0.3
+
+runtime_environment:
+  python_executable: /mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python
+  resolved_python_sha256: 89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48fc4f961a
+  overlay: /mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/r22p10-libero-pai-overlay/site-packages
+  overlay_manifest_sha256: 64dfffdaf464d1a37be19b038cca919a252dba573eb2d0f8aa442b91a4099459
+  overlay_file_count: 1688
+  pai_image: dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04
+
+assets:
+  root: /mnt/cpfs/zbl-cpfs-new/USERS/leon/code/LIBERO-original/libero/libero/assets
+  files: 585
+  bytes: 422313213
+  tree_manifest_sha256: 39b115a50b590dfa061d36439702eddf99c178a0fcfeab90c5c60afcc6c05a35
+
+tasks:
+  push_plate:
+    name: push_the_plate_to_the_front_of_the_stove
+    role: boundary_push
+    baseline_success_min: 0.40
+    baseline_success_max: 0.90
+    demo_file_bytes: 762855139
+    demo_file_sha256: 36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6
+    bddl_sha256: 26f22f8ad39a4b2b344b049115c45661a877fa0b4821fb78246725e7e87d8c0b
+    init_states_sha256: 794beed679b18bbd7d9fb851c81877a974915ad63addff2d5ac5af0607fafac9
+  bottle_rack:
+    name: put_the_wine_bottle_on_the_rack
+    role: constrained_placement
+    baseline_success_min: 0.25
+    baseline_success_max: 0.80
+    demo_file_bytes: 878958730
+    demo_file_sha256: f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e
+    bddl_sha256: 3d3ee18139056aa3780572cde17b1c50dc20ae0d299403f65e514e8471ba0e8e
+    init_states_sha256: fa09aa4ade871c1c6be3dd8c93eb3437ea15190fd7dc73b8c986c8d2d3cfb062
+  bowl_plate:
+    name: put_the_bowl_on_the_plate
+    role: smooth_negative_control
+    baseline_success_min: 0.80
+    baseline_success_max: 1.00
+    demo_file_bytes: 468246288
+    demo_file_sha256: e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406
+    bddl_sha256: 358b7781437e412c67d6a7648c1c28796b6b1bf117a25e61316cb8dfeb940e5b
+    init_states_sha256: ef3466ffad734754dc40eba1f6f5712e37aa46b9692c595e0da34f16d3a0c668
+
+data:
+  requested_successful_demos_per_task: 200
+  available_official_successful_demos_per_task: 50
+  protocol_deviation: true
+  deviation_reason: >-
+    Official LIBERO exposes 50 successful demonstrations for each exact task and
+    does not store the original episode seed. This pilot uses all 50 without
+    duplicating or relabeling augmented trajectories as independent episodes.
+  episode_identity: sha256_of_demo_init_state
+  split_by_identity_count:
+    train: 40
+    validation: 5
+    test: 5
+  split_order: lexicographic_sha256
+  runtime_pin_amendment: >-
+    Before observing any training outcome, the runtime pin was changed from
+    the dev14 CUDA 13 environment to the CUDA 12.4 environment already used on
+    the live-verified PAI carrier. Model, data, seeds, budgets, and thresholds
+    were unchanged.
+
+model:
+  name: BoundaryBC-S
+  visual_backbone: resnet18_layer3_random_init
+  micro_feature_map: [8, 8]
+  micro_feature_dim: 128
+  baseline_visual_tokens: 16
+  proprio_dim: 15
+  transformer_layers: 2
+  transformer_heads: 4
+  hidden_dim: 128
+  action_horizon: 8
+  execute_horizon: 4
+
+training:
+  seeds: [16018, 16019, 16020]
+  optimizer: adamw
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  batch_size: 64
+  precision: bf16
+  optimizer_steps: 3000
+  validation_interval: 250
+  complete_checkpoint_interval: 250
+  checkpoint_retention: latest_3_complete_per_task_seed
+  pai_automatic_fault_tolerance: false
+
+baseline_gate:
+  aggregation: mean_success_across_three_model_seeds_and_50_paired_init_states
+  require_all_tasks: true
+  on_failure: stop_before_adaptive_implementation
+
+stage1_budgets:
+  visual_microtokens: 64
+  active_visual_tokens: 16
+  hidden_full_action_candidates: 49
+  active_action_candidates: 13
+  full_fine_oracle_is_unmatched: true
+
+stage1_go_thresholds:
+  nontrivial_boundary_fraction_min: 0.25
+  boundary_tasks: [push_plate, bottle_rack]
+  regret_relative_drop_vs_uniform_min: 0.15
+  alias_relative_drop_vs_uniform_min: 0.20
+  best_action_recall_absolute_gain_vs_strongest_single_or_independent_min: 0.05
+  regret_relative_drop_vs_strongest_single_or_independent_min: 0.10
+  require_positive_direction_on_both_boundary_tasks: true
+  shuffled_joint_gain_removed_fraction_min: 0.50
+  negative_control_success_drop_max: 0.02
+  closed_loop_success_absolute_gain_min: 0.05
+  closed_loop_failure_relative_drop_min: 0.15
+  require_exact_budget_equality: true
+  paired_bootstrap_replicates: 10000
+  confidence_level: 0.95
+
+stop_rules:
+  stop_after_stage1: true
+  never_auto_start_diffusion_policy: true
+  never_auto_start_dino_wm: true
+  never_auto_start_pi05: true
+  pilot_cannot_return_go_if_data_protocol_deviation_is_unresolved: true
