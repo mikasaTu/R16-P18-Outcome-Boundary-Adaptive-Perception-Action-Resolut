@@ -1,0 +1,100 @@
+{
+  "checkpoint_root": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1",
+  "config_sha256": "d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf",
+  "cuda": "12.4",
+  "data_parallel": false,
+  "dataset_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO",
+  "gid": 2254,
+  "git_commit": "20d65a9ab7ff42662496c093e14531904cf1fe31",
+  "git_head_tree": "b87468210362a81a5d3754630f1ff804f79577e4",
+  "git_status_porcelain": "",
+  "locked_inputs": {
+    "assets": {
+      "bytes": 422313213,
+      "files": 585,
+      "root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/LIBERO-original/libero/libero/assets",
+      "tree_manifest_sha256": "39b115a50b590dfa061d36439702eddf99c178a0fcfeab90c5c60afcc6c05a35"
+    },
+    "runtime": {
+      "cuda_runtime": "12.4",
+      "cudnn": 90100,
+      "h5py": "3.16.0",
+      "mujoco": "3.6.0",
+      "numpy": "1.26.4",
+      "python": "3.11.11",
+      "pyyaml": "6.0.3",
+      "robosuite": "1.4.0",
+      "scipy": "1.17.1",
+      "torch": "2.5.1+cu124",
+      "torchvision": "0.20.1+cu124"
+    },
+    "tasks": {
+      "bottle_rack": {
+        "bddl": {
+          "bytes": 2953,
+          "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero/bddl_files/libero_goal/put_the_wine_bottle_on_the_rack.bddl",
+          "sha256": "3d3ee18139056aa3780572cde17b1c50dc20ae0d299403f65e514e8471ba0e8e"
+        },
+        "demo": {
+          "bytes": 878958730,
+          "path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO/libero_goal/put_the_wine_bottle_on_the_rack_demo.hdf5",
+          "sha256": "f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e"
+        },
+        "init_states": {
+          "bytes": 37487,
+          "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero/init_files/libero_goal/put_the_wine_bottle_on_the_rack.pruned_init",
+          "sha256": "fa09aa4ade871c1c6be3dd8c93eb3437ea15190fd7dc73b8c986c8d2d3cfb062"
+        }
+      },
+      "bowl_plate": {
+        "bddl": {
+          "bytes": 2927,
+          "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero/bddl_files/libero_goal/put_the_bowl_on_the_plate.bddl",
+          "sha256": "358b7781437e412c67d6a7648c1c28796b6b1bf117a25e61316cb8dfeb940e5b"
+        },
+        "demo": {
+          "bytes": 468246288,
+          "path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO/libero_goal/put_the_bowl_on_the_plate_demo.hdf5",
+          "sha256": "e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406"
+        },
+        "init_states": {
+          "bytes": 37615,
+          "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero/init_files/libero_goal/put_the_bowl_on_the_plate.pruned_init",
+          "sha256": "ef3466ffad734754dc40eba1f6f5712e37aa46b9692c595e0da34f16d3a0c668"
+        }
+      },
+      "push_plate": {
+        "bddl": {
+          "bytes": 2964,
+          "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero/bddl_files/libero_goal/push_the_plate_to_the_front_of_the_stove.bddl",
+          "sha256": "26f22f8ad39a4b2b344b049115c45661a877fa0b4821fb78246725e7e87d8c0b"
+        },
+        "demo": {
+          "bytes": 762855139,
+          "path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO/libero_goal/push_the_plate_to_the_front_of_the_stove_demo.hdf5",
+          "sha256": "36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6"
+        },
+        "init_states": {
+          "bytes": 37551,
+          "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero/init_files/libero_goal/push_the_plate_to_the_front_of_the_stove.pruned_init",
+          "sha256": "794beed679b18bbd7d9fb851c81877a974915ad63addff2d5ac5af0607fafac9"
+        }
+      }
+    }
+  },
+  "log_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1",
+  "pai_probe_created": false,
+  "per_model_batch_size": 64,
+  "project_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812",
+  "protocol_id": "R16-P18-LIBERO-STAGE1-PILOT-V1",
+  "python": "3.11.11",
+  "requested_devices": [
+    "cuda:0",
+    "cuda:1"
+  ],
+  "run_id": "r16-p18-libero-stage1-bc-gate-20260812-003",
+  "schema_version": 1,
+  "torch": "2.5.1+cu124",
+  "uid": 2254,
+  "worker_parallelism": 2
+}

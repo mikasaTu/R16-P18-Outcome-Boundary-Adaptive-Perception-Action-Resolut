@@ -1,0 +1,228 @@
+{
+  "artifacts": {
+    "baseline_gate": {
+      "baseline_gate_passed": false,
+      "complete": true,
+      "decision": "NO_GO_BASELINE_GATE",
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/reports/baseline_gate.json",
+      "sha256": "20d64ae8cec3e5405f79b678710189b0799e3ed4b87614e7e32ab6fd7295b5fd",
+      "size_bytes": 1785,
+      "task_results": {
+        "bottle_rack": {
+          "confidence_interval_95": [
+            0.94,
+            1.0
+          ],
+          "passed": false,
+          "required_range": [
+            0.25,
+            0.8
+          ],
+          "role": "constrained_placement",
+          "seed_success_rates": {
+            "16018": 0.96,
+            "16019": 1.0,
+            "16020": 0.98
+          },
+          "success_rate": 0.98,
+          "task_name": "put_the_wine_bottle_on_the_rack"
+        },
+        "bowl_plate": {
+          "confidence_interval_95": [
+            0.78,
+            0.9733333333333334
+          ],
+          "passed": true,
+          "required_range": [
+            0.8,
+            1.0
+          ],
+          "role": "smooth_negative_control",
+          "seed_success_rates": {
+            "16018": 0.94,
+            "16019": 0.8,
+            "16020": 0.92
+          },
+          "success_rate": 0.8866666666666667,
+          "task_name": "put_the_bowl_on_the_plate"
+        },
+        "push_plate": {
+          "confidence_interval_95": [
+            0.52,
+            0.98
+          ],
+          "passed": true,
+          "required_range": [
+            0.4,
+            0.9
+          ],
+          "role": "boundary_push",
+          "seed_success_rates": {
+            "16018": 0.96,
+            "16019": 0.5,
+            "16020": 0.94
+          },
+          "success_rate": 0.8,
+          "task_name": "push_the_plate_to_the_front_of_the_stove"
+        }
+      }
+    },
+    "complete": true,
+    "evaluation_summary_count": 9,
+    "first_completed_rollout": {
+      "complete": true,
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/evaluation/push_plate/seed_16018.first_rollout.json",
+      "sha256": "580e9e3e6d8b5f18587c8a1afc86e6c0193296337ea34e389f91ea027403d5b6",
+      "size_bytes": 689,
+      "success": true
+    },
+    "first_training_step": {
+      "complete": true,
+      "global_step": 1,
+      "loss": 0.3117666244506836,
+      "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/models/push_plate/seed_16018/FIRST_WORK.json",
+      "sha256": "214ed6fa072a109afb99709c25c292b23bd0bf3c92a8e1927ccc9df3c1fc8ee6",
+      "size_bytes": 393
+    },
+    "model_final_count": 9
+  },
+  "complete": true,
+  "contract": {
+    "checks": {
+      "aimaster_args": true,
+      "aimaster_enabled": true,
+      "data_sources": true,
+      "disable_ecs_stock_check": true,
+      "display_name": true,
+      "driver": true,
+      "empty_network": true,
+      "exact_job_object": true,
+      "extended_cidrs": true,
+      "job_id": true,
+      "job_reserved_minutes": true,
+      "job_reserved_policy": true,
+      "oversold_type": true,
+      "pod_env": true,
+      "priority": true,
+      "resource_id": true,
+      "security_group_id": true,
+      "single_worker_spec": true,
+      "switch_id": true,
+      "tags": true,
+      "user_command": true,
+      "vpc_id": true,
+      "worker_count": true,
+      "worker_cpu": true,
+      "worker_gpu": true,
+      "worker_image": true,
+      "worker_memory": true,
+      "worker_shared_memory": true,
+      "workspace_id": true
+    },
+    "complete": true,
+    "observed": {
+      "data_sources": [
+        [
+          "d-36p023eg0f2vuqny8y",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/CKPT/leon",
+          ""
+        ],
+        [
+          "d-7fi8hehav247qi6x5o",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/Models",
+          ""
+        ],
+        [
+          "d-ejgj2ej7io1t2t32uc",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/dataset/leon",
+          ""
+        ],
+        [
+          "d-lg9t2b6xajpukeqqeb",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/SHARE/leon",
+          ""
+        ],
+        [
+          "d-mkixtohdn75dp8x9tb",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/USERS/leon",
+          ""
+        ]
+      ],
+      "display_name": "r16p18-lib-r16-p18-libero-stage1-bc-gate-20260812-003-n25d901c4",
+      "pod_env": {
+        "WANDB_API_KEY": "<redacted>",
+        "WANDB_ENTITY": "<redacted>"
+      },
+      "resource_id": "quotakzri8a5wqcp",
+      "settings": {
+        "BusinessUserId": "",
+        "Caller": "",
+        "DisableEcsStockCheck": false,
+        "Driver": "",
+        "EnableDistributedTaskAssigment": false,
+        "EnableErrorMonitoringInAIMaster": false,
+        "EnableOssAppend": false,
+        "EnablePreemptibleJob": false,
+        "EnableRDMA": true,
+        "EnableTideResource": false,
+        "ErrorMonitoringArgs": "",
+        "JobReservedMinutes": 0,
+        "JobReservedPolicy": "",
+        "OversoldType": "ForbiddenQuotaOverSold",
+        "PipelineId": "",
+        "QueueId": "",
+        "Tags": {
+          "contract_source_job_id": "dlcfp1szuc2cgqfp",
+          "dataset": "libero-goal-three-task-50-demo-pilot",
+          "experiment_role": "stage1-necessary-condition-baseline-gate",
+          "hardware": "2xa800-dedicated",
+          "managed_by": "pai-job-registry",
+          "model": "boundarybc-s-resnet18-h8-e4-three-seeds",
+          "nonce": "25d901c48ff3056238c762be85cbfcf6",
+          "purpose": "formal-training",
+          "resource_pool": "exp-efficiency",
+          "run_id": "r16-p18-libero-stage1-bc-gate-20260812-003",
+          "task": "r16p18-libero-stage1-boundarybc-baseline-20260812"
+        }
+      },
+      "user_command_sha256": "14a6149e8c1cf4156f7adacbe9fc4192724278a5dea44c49fac03b7b54309e98",
+      "user_vpc": {},
+      "worker_spec": {
+        "AssignNodeSpec": {
+          "AntiAffinityNodeNames": "",
+          "EnableAssignNode": false,
+          "NodeNames": ""
+        },
+        "EcsSpec": "",
+        "Image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+        "ImageConfig": {
+          "Auth": "",
+          "DockerRegistry": "",
+          "Password": "",
+          "Username": ""
+        },
+        "PodCount": 1,
+        "ResourceConfig": {
+          "CPU": "12",
+          "GPU": "2",
+          "GPUType": "",
+          "Memory": "200Gi",
+          "SharedMemory": "200Gi"
+        },
+        "Type": "Worker"
+      },
+      "workspace_id": "179169"
+    }
+  },
+  "finished_at_utc": "2026-08-12T15:32:33Z",
+  "job_id": "dlcnouq6igkhfyub",
+  "run_id": "r16-p18-libero-stage1-bc-gate-20260812-003",
+  "schema_version": 1,
+  "status": "Succeeded",
+  "superseded_cleanup_complete": true
+}

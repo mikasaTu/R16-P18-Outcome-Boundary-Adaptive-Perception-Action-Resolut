@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "setup_helper": {
+    "file": "bin/pai-wandb-setup",
+    "sha256": "10f82c60b36947eda815d70a7753d0f944338c2f0cde4a25b946bb48204f6c07"
+  },
+  "private_config": {
+    "path": "/workspace/leon/.pai-secrets/wandb.json",
+    "owner_uid": 2254,
+    "owner_gid": 2254,
+    "mode": "0600"
+  },
+  "entity_access": {
+    "required_entity": "chen_jian-cj-workspace",
+    "graphql_url": "https://api.wandb.ai/graphql",
+    "forbidden_viewers": [
+      "shiyanpei0826"
+    ],
+    "writable_roles": [
+      "admin",
+      "member"
+    ],
+    "verify_on_setup": true,
+    "verify_before_create_job": true,
+    "allow_identity_inference": false
+  },
+  "credential_source": {
+    "active_config_path": "/workspace/leon/.pai-secrets/wandb.json",
+    "allow_transient_environment": false,
+    "allow_history_session_cache_recovery": false
+  }
+}

@@ -1,0 +1,337 @@
+From 0bf05ce0015461ad966d1f238cdaed117636b2b7 Mon Sep 17 00:00:00 2001
+From: Codex <codex@local>
+Date: Wed, 12 Aug 2026 23:05:29 +0800
+Subject: [PATCH 2/2] Fix R16-P18 PAI cwd and replacement cleanup
+
+---
+ bin/pai-job                                   | 110 +++++++++++++++---
+ config/toolchain.json                         |   2 +-
+ launchers/r16_p18_libero_stage1_baseline.sh   |   1 +
+ ...1-baseline-exp-efficiency-2gpu-formal.json |  10 +-
+ tests/test_r16p18_libero_stage1_contract.py   |  60 ++++++++++
+ 5 files changed, 166 insertions(+), 17 deletions(-)
+
+diff --git a/bin/pai-job b/bin/pai-job
+index ede0bb66..88e81cf5 100755
+--- a/bin/pai-job
++++ b/bin/pai-job
+@@ -6537,6 +6537,7 @@ def validate_r16p18_libero_stage1_profile(
+         "EXPECTED_CONFIG_SHA256=d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf",
+         "test \"${PAI_CANARY_EXPECTED_GPUS:-}\" = 2",
+         "test \"${WANDB_ENTITY:-}\" = chen_jian-cj-workspace",
++        "cd \"$PROJECT_DIR\"",
+     ):
+         if payload_text.count(fragment) != 1:
+             raise Refused(f"R16-P18 LIBERO Stage-1 payload binding drifted: {fragment}")
+@@ -6611,6 +6612,14 @@ def validate_r16p18_libero_stage1_profile(
+         "pilot_can_return_stage1_go": False,
+         "stop_after_baseline_failure": True,
+         "stop_after_stage1": True,
++        "superseded_terminal_jobs": [
++            {
++                "run_id": "r16-p18-libero-stage1-bc-gate-20260812-002",
++                "job_id": "dlc1eloj62mdzw2y",
++                "expected_status": "Failed",
++                "expected_purpose": "formal-training",
++            }
++        ],
+         "wandb_mode": "online_exact_entity_grouped_by_pai_run",
+         "experiment_scope": "necessary_condition_baseline_gate_then_conditional_stage1_only",
+         "expected_first_work_uid": 2254,
+@@ -11646,6 +11655,78 @@ def verify_r16p18_artifacts(resolved: Dict[str, Any]) -> Dict[str, Any]:
+     return result
+ 
+ 
++def verify_r16p18_superseded_cleanup(
++    resolved: Dict[str, Any],
++) -> Dict[str, Any]:
++    targets = resolved["evidence"]["superseded_terminal_jobs"]
++    result: Dict[str, Any] = {
++        "schema_version": 1,
++        "run_id": resolved["run_id"],
++        "targets": [],
++        "complete": False,
++    }
++    if not targets:
++        result.update(
++            {
++                "complete": True,
++                "reason": (
++                    "initial formal run has no superseded failed or stopped "
++                    "predecessor"
++                ),
++            }
++        )
++        return result
++
++    complete = True
++    for target in targets:
++        predecessor_dir = run_dir(str(target["run_id"]))
++        require_private_directory(predecessor_dir)
++        evidence_path = predecessor_dir / "pai-task-delete-evidence.json"
++        item: Dict[str, Any] = {
++            **target,
++            "evidence_path": str(evidence_path),
++            "complete": False,
++        }
++        if evidence_path.is_file() and not evidence_path.is_symlink():
++            evidence, metadata = _read_r16p18_json(evidence_path)
++            expected_fields = {
++                "schema_version": 1,
++                "run_id": target["run_id"],
++                "job_id": target["job_id"],
++                "workspace_id": "179169",
++                "pre_delete_status": target["expected_status"],
++                "expected_purpose": target["expected_purpose"],
++                "performed_by_uid": 2254,
++                "performed_by_gid": 2254,
++                "cpfs_and_registry_evidence_preserved": True,
++                "complete": True,
++            }
++            fields_match = all(
++                evidence.get(key) == value
++                for key, value in expected_fields.items()
++            )
++            absence = evidence.get("absence")
++            item.update(
++                {
++                    "sha256": sha256(evidence_path),
++                    "size_bytes": metadata.st_size,
++                    "verified_absent": (
++                        isinstance(absence, dict)
++                        and absence.get("complete") is True
++                    ),
++                    "complete": (
++                        fields_match
++                        and isinstance(absence, dict)
++                        and absence.get("complete") is True
++                    ),
++                }
++            )
++        complete = complete and item["complete"]
++        result["targets"].append(item)
++    result["complete"] = complete
++    return result
++
++
+ def watch_r16p18_stage1(
+     args: argparse.Namespace,
+     config_path: Path,
+@@ -11653,7 +11734,7 @@ def watch_r16p18_stage1(
+     resolved: Dict[str, Any],
+ ) -> int:
+     deadline = time.monotonic() + args.timeout_seconds
+-    last_state: Optional[Tuple[str, bool, bool, bool]] = None
++    last_state: Optional[Tuple[str, bool, bool, bool, bool]] = None
+     get_failures = 0
+     while True:
+         try:
+@@ -11678,12 +11759,18 @@ def watch_r16p18_stage1(
+             atomic_text(target_dir / "getjob-latest.stderr.txt", stderr)
+             contract = verify_getjob_contract(data, args.job_id, resolved)
+             artifacts = verify_r16p18_artifacts(resolved)
++            cleanup = (
++                verify_r16p18_superseded_cleanup(resolved)
++                if artifacts["first_training_step"]["complete"]
++                else {"complete": False}
++            )
+             atomic_json(target_dir / "contract-readback.json", contract)
+             atomic_json(target_dir / "artifact-evidence.json", artifacts)
+             state = (
+                 status_value,
+                 artifacts["first_training_step"]["complete"],
+                 artifacts["first_completed_rollout"]["complete"],
++                cleanup["complete"],
+                 artifacts["complete"],
+             )
+             if state != last_state:
+@@ -11692,21 +11779,15 @@ def watch_r16p18_stage1(
+                     f"contract={contract['complete']} "
+                     f"train_first_work={state[1]} "
+                     f"evaluation_first_work={state[2]} "
+-                    f"artifacts_complete={state[3]}",
++                    f"superseded_cleanup={state[3]} "
++                    f"artifacts_complete={state[4]}",
+                     flush=True,
+                 )
+                 last_state = state
+             if artifacts["first_training_step"]["complete"]:
+-                zero_cleanup = {
+-                    "schema_version": 1,
+-                    "sealed_at_utc": utc_now(),
+-                    "run_id": args.run_id,
+-                    "job_id": args.job_id,
+-                    "targets": [],
+-                    "complete": True,
+-                    "reason": "initial formal run has no superseded failed or stopped predecessor",
+-                }
+-                atomic_json(target_dir / "superseded-delete-set.json", zero_cleanup)
++                cleanup["sealed_at_utc"] = utc_now()
++                cleanup["job_id"] = args.job_id
++                atomic_json(target_dir / "superseded-delete-set.json", cleanup)
+             if status_value in TERMINAL_STATES:
+                 capture_terminal_diagnostics(
+                     args.job_id, config_path, data, target_dir
+@@ -11715,6 +11796,7 @@ def watch_r16p18_stage1(
+                     status_value == "Succeeded"
+                     and contract["complete"]
+                     and artifacts["complete"]
++                    and cleanup["complete"]
+                 )
+                 final = {
+                     "schema_version": 1,
+@@ -11724,9 +11806,7 @@ def watch_r16p18_stage1(
+                     "status": status_value,
+                     "contract": contract,
+                     "artifacts": artifacts,
+-                    "superseded_cleanup_complete": (
+-                        target_dir / "superseded-delete-set.json"
+-                    ).is_file(),
++                    "superseded_cleanup_complete": cleanup["complete"],
+                     "complete": final_complete,
+                 }
+                 atomic_json(target_dir / "monitor-result.json", final)
+diff --git a/config/toolchain.json b/config/toolchain.json
+index bfe2a584..843c15e4 100644
+--- a/config/toolchain.json
++++ b/config/toolchain.json
+@@ -99,7 +99,7 @@
+   },
+   "r16p18_libero_stage1_baseline_launcher": {
+     "file": "launchers/r16_p18_libero_stage1_baseline.sh",
+-    "sha256": "2b8caf3eeaf6bffc5d17c00ac2dfe3d017ec802c0de266ed637ced4d28993f30"
++    "sha256": "4a82f8350bae72832e560dfe0543c0da4fd1ab551771ab4e9fbc23f207ea5afa"
+   },
+   "wallx_where_real_npz_e2e_launcher": {
+     "file": "launchers/wallx_where_real_npz_e2e.sh",
+diff --git a/launchers/r16_p18_libero_stage1_baseline.sh b/launchers/r16_p18_libero_stage1_baseline.sh
+index 94afa0d7..bac81bc9 100755
+--- a/launchers/r16_p18_libero_stage1_baseline.sh
++++ b/launchers/r16_p18_libero_stage1_baseline.sh
+@@ -78,4 +78,5 @@ export TORCH_HOME=$ARTIFACT_DIR/cache/torch
+ export WANDB_DIR=$ARTIFACT_DIR/wandb
+ export WANDB_CACHE_DIR=$ARTIFACT_DIR/cache/wandb
+ 
++cd "$PROJECT_DIR"
+ exec "$PROJECT_DIR/scripts/pai_r16_p18_leon.sh" "$RUN_ID"
+diff --git a/templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json b/templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json
+index d7810072..553432a3 100644
+--- a/templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json
++++ b/templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json
+@@ -75,7 +75,7 @@
+     "libero_source_commit": "2319dbd914673f6ef34a00584536212b10e10395",
+     "config_sha256": "d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf",
+     "project_launcher_sha256": "506f6a98490c3eca7dad8096a550c46e694629192a1deb7a03c8c102e116574f",
+-    "registry_launcher_sha256": "2b8caf3eeaf6bffc5d17c00ac2dfe3d017ec802c0de266ed637ced4d28993f30",
++    "registry_launcher_sha256": "4a82f8350bae72832e560dfe0543c0da4fd1ab551771ab4e9fbc23f207ea5afa",
+     "dev14_smoke_result_sha256": "8a5cb0c1c3f5b68f45f34c7e75227086d61e34bd709a54003875b2c2a6658fb2",
+     "formal_python_sha256": "89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48fc4f961a",
+     "formal_torch": "2.5.1+cu124",
+@@ -116,6 +116,14 @@
+     "pilot_can_return_stage1_go": false,
+     "stop_after_baseline_failure": true,
+     "stop_after_stage1": true,
++    "superseded_terminal_jobs": [
++      {
++        "run_id": "r16-p18-libero-stage1-bc-gate-20260812-002",
++        "job_id": "dlc1eloj62mdzw2y",
++        "expected_status": "Failed",
++        "expected_purpose": "formal-training"
++      }
++    ],
+     "wandb_mode": "online_exact_entity_grouped_by_pai_run",
+     "experiment_scope": "necessary_condition_baseline_gate_then_conditional_stage1_only",
+     "expected_first_work_uid": 2254,
+diff --git a/tests/test_r16p18_libero_stage1_contract.py b/tests/test_r16p18_libero_stage1_contract.py
+index 02dedf00..1b4f1225 100644
+--- a/tests/test_r16p18_libero_stage1_contract.py
++++ b/tests/test_r16p18_libero_stage1_contract.py
+@@ -9,7 +9,9 @@ import importlib.util
+ import json
+ from pathlib import Path
+ import subprocess
++import tempfile
+ import unittest
++from unittest import mock
+ 
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+@@ -67,6 +69,17 @@ class R16P18LiberoStage1ContractTest(unittest.TestCase):
+             resolved["evidence"]["registry_launcher_sha256"],
+             resolved["runtime"]["payload_sha256"],
+         )
++        self.assertEqual(
++            resolved["evidence"]["superseded_terminal_jobs"],
++            [
++                {
++                    "run_id": "r16-p18-libero-stage1-bc-gate-20260812-002",
++                    "job_id": "dlc1eloj62mdzw2y",
++                    "expected_status": "Failed",
++                    "expected_purpose": "formal-training",
++                }
++            ],
++        )
+         PAI_JOB.validate_resolved(resolved)
+ 
+     def test_outer_command_and_frozen_payload_are_shell_syntax_valid(self) -> None:
+@@ -80,6 +93,10 @@ class R16P18LiberoStage1ContractTest(unittest.TestCase):
+             validate=True,
+         )
+         subprocess.run(["/bin/bash", "-n"], input=payload, check=True)
++        self.assertIn(
++            b'cd "$PROJECT_DIR"\nexec "$PROJECT_DIR/scripts/',
++            payload,
++        )
+ 
+     def test_worker_fault_wandb_and_evidence_drift_fail_closed(self) -> None:
+         mutations = []
+@@ -121,6 +138,49 @@ class R16P18LiberoStage1ContractTest(unittest.TestCase):
+         self.assertFalse(artifacts["first_completed_rollout"]["complete"])
+         self.assertFalse(artifacts["baseline_gate"]["complete"])
+ 
++    def test_replacement_cleanup_requires_exact_verified_absence(self) -> None:
++        target = {
++            "run_id": "failed-predecessor",
++            "job_id": "dlcfailed123",
++            "expected_status": "Failed",
++            "expected_purpose": "formal-training",
++        }
++        resolved = {
++            "run_id": "replacement",
++            "evidence": {"superseded_terminal_jobs": [target]},
++        }
++        with tempfile.TemporaryDirectory() as temporary:
++            runs_root = Path(temporary)
++            predecessor = runs_root / target["run_id"]
++            predecessor.mkdir(mode=0o700)
++            with mock.patch.object(PAI_JOB, "RUNS_ROOT", runs_root):
++                incomplete = PAI_JOB.verify_r16p18_superseded_cleanup(resolved)
++                self.assertFalse(incomplete["complete"])
++
++                delete_evidence = predecessor / "pai-task-delete-evidence.json"
++                delete_evidence.write_text(
++                    json.dumps(
++                        {
++                            "schema_version": 1,
++                            "run_id": target["run_id"],
++                            "job_id": target["job_id"],
++                            "workspace_id": "179169",
++                            "pre_delete_status": target["expected_status"],
++                            "expected_purpose": target["expected_purpose"],
++                            "performed_by_uid": 2254,
++                            "performed_by_gid": 2254,
++                            "cpfs_and_registry_evidence_preserved": True,
++                            "absence": {"complete": True},
++                            "complete": True,
++                        }
++                    ),
++                    encoding="utf-8",
++                )
++                delete_evidence.chmod(0o600)
++                complete = PAI_JOB.verify_r16p18_superseded_cleanup(resolved)
++                self.assertTrue(complete["complete"])
++                self.assertTrue(complete["targets"][0]["verified_absent"])
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

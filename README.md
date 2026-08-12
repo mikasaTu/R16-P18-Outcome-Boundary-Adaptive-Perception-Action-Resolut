@@ -1,3 +1,87 @@
+# R16-P18 Outcome-Boundary Adaptive Perception–Action Resolution
+
+This repository is the complete archived implementation and evidence package for the
+**LIBERO Stage-1 Small-BC baseline gate** run on 2026-08-12. It contains the frozen
+BoundaryBC-S source, PAI launch contracts and audit trail, all 36 checkpoints, raw
+training/evaluation records, W&B run files, smoke-test evidence, and the experiment report.
+
+> **Final decision: `NO_GO_BASELINE_GATE`.** This is a baseline health-gate result,
+> not a result for the R16-P18 adaptive mechanism. The joint visual/action selector,
+> effect predictor, state bank, and matched adaptive arms were intentionally not implemented
+> because the preregistered gate failed.
+
+## Baseline-gate result
+
+| LIBERO task | Aggregate success | 95% paired bootstrap CI | Required range | Gate |
+|---|---:|---:|---:|---|
+| `push_the_plate_to_the_front_of_the_stove` | 80.0% | [52.0%, 98.0%] | 40%–90% | PASS |
+| `put_the_wine_bottle_on_the_rack` | 98.0% | [94.0%, 100.0%] | 25%–80% | **FAIL (ceiling)** |
+| `put_the_bowl_on_the_plate` | 88.7% | [78.0%, 97.3%] | 80%–100% | PASS |
+
+The formal PAI job `dlcnouq6igkhfyub` completed successfully: 3 tasks × 3 model
+seeds × 3000 optimizer steps and 50 fixed closed-loop episodes per task/seed,
+for 9 models and 450 episodes. Bottle placement exceeded the preregistered 80%
+upper bound, so all three tasks did not jointly pass.
+
+Official LIBERO provides only 50 successful demonstrations for each exact task and no
+original episode-seed field. This pilot used deterministic SHA256 identities and a 40/5/5
+split. That preregistered protocol deviation independently prevents a Stage-1 GO.
+
+## Repository map
+
+- `boundarybc/`: BoundaryBC-S model, data, checkpointing, training, rollout, reporting,
+  provenance, and smoke-test implementation.
+- `configs/r16_p18_libero_stage1.yaml`: frozen protocol and thresholds.
+- `scripts/pai_r16_p18_*.sh`: owner-safe PAI runtime launchers.
+- `tests/test_stage1_contract.py`: static model/config/checkpoint/device-queue contract tests.
+- `artifacts/dev-smoke/`: both development smoke records, including the final A800 smoke.
+- `artifacts/formal-run/`: raw 3000-step training logs, all 450 episode records,
+  summaries, W&B files, manifest, and gate reports.
+- `artifacts/checkpoints/`: all 36 PyTorch checkpoint/final files plus completion markers
+  and training summaries; `.pt` files are stored with Git LFS.
+- `artifacts/pai-registry/`: exact final PAI registry files and complete 001–003 job evidence.
+- `docs/EXPERIMENT_REPORT.md`: full experiment interpretation and results.
+- `docs/ARTIFACTS.md`: inclusion/exclusion scope and artifact guide.
+- `provenance/`: original source/registry commit patches and release checksums.
+
+## Clone and verify
+
+Git LFS is required for the model files:
+
+```bash
+git lfs install
+git clone git@github.com:mikasaTu/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut.git
+cd R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut
+git lfs pull
+```
+
+With the pinned Python environment installed, run the read-only result recomputation and
+unit tests:
+
+```bash
+python scripts/verify_archived_results.py
+pytest -q tests/test_stage1_contract.py
+sha256sum -c provenance/SHA256SUMS
+```
+
+The archived runtime was Python 3.11.11, PyTorch 2.5.1+cu124,
+torchvision 0.20.1+cu124, CUDA 12.4, cuDNN 90100, MuJoCo 3.6.0,
+robosuite 1.4.0, and NumPy 1.26.4. Full provenance is in
+`artifacts/formal-run/r16-p18-libero-stage1-bc-gate-20260812-003/run_manifest.json`.
+
+## Scope boundary
+
+No claim is made that the R16-P18 idea is validated, accepted, or refuted. No Diffusion
+Policy, DINO-WM, world model, or π0.5 experiment was started. A future attempt requires a
+fresh preregistration with a harder constrained-placement task and a resolved 200-demo
+episode-seed protocol; thresholds must not be widened retroactively.
+
+---
+
+## Vendored LIBERO base
+
+The implementation is based on the Hugging Face LIBERO fork. Its original README follows.
+
 <div align="center">
 <img src="https://github.com/Lifelong-Robot-Learning/LIBERO/blob/master/images/libero_logo.png" width="360">
 

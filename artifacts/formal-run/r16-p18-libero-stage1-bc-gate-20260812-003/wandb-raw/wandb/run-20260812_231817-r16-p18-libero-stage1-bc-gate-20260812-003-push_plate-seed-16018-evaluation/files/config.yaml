@@ -1,0 +1,81 @@
+wandb_version: 1
+
+protocol_id:
+  desc: null
+  value: R16-P18-LIBERO-STAGE1-PILOT-V1
+config_sha256:
+  desc: null
+  value: d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf
+task_key:
+  desc: null
+  value: push_plate
+task_name:
+  desc: null
+  value: push_the_plate_to_the_front_of_the_stove
+model_seed:
+  desc: null
+  value: 16018
+training:
+  desc: null
+  value:
+    seeds:
+    - 16018
+    - 16019
+    - 16020
+    optimizer: adamw
+    learning_rate: 0.0003
+    weight_decay: 0.0001
+    batch_size: 64
+    precision: bf16
+    optimizer_steps: 3000
+    validation_interval: 250
+    complete_checkpoint_interval: 250
+    checkpoint_retention: latest_3_complete_per_task_seed
+    pai_automatic_fault_tolerance: false
+model:
+  desc: null
+  value:
+    name: BoundaryBC-S
+    visual_backbone: resnet18_layer3_random_init
+    micro_feature_map:
+    - 8
+    - 8
+    micro_feature_dim: 128
+    baseline_visual_tokens: 16
+    proprio_dim: 15
+    transformer_layers: 2
+    transformer_heads: 4
+    hidden_dim: 128
+    action_horizon: 8
+    execute_horizon: 4
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.11
+    cli_version: 0.16.6
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1786547897.0
+    t:
+      1:
+      - 1
+      - 41
+      - 55
+      2:
+      - 1
+      - 41
+      - 55
+      3:
+      - 2
+      - 13
+      - 14
+      - 16
+      - 23
+      - 61
+      - 62
+      4: 3.11.11
+      5: 0.16.6
+      8:
+      - 5
+      13: linux-x86_64

@@ -1,0 +1,1058 @@
+From d708f0febfcf1ce5828e27d4d93afb618df46c91 Mon Sep 17 00:00:00 2001
+From: Codex <codex@local>
+Date: Wed, 12 Aug 2026 22:55:24 +0800
+Subject: [PATCH 1/2] Add R16-P18 LIBERO Stage-1 PAI baseline gate
+
+---
+ bin/pai-job                                   | 544 ++++++++++++++++++
+ config/resources.json                         |  66 +++
+ config/toolchain.json                         |   4 +
+ launchers/r16_p18_libero_stage1_baseline.sh   |  81 +++
+ ...1-baseline-exp-efficiency-2gpu-formal.json | 141 +++++
+ tests/test_r16p18_libero_stage1_contract.py   | 126 ++++
+ 6 files changed, 962 insertions(+)
+ create mode 100755 launchers/r16_p18_libero_stage1_baseline.sh
+ create mode 100644 templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json
+ create mode 100644 tests/test_r16p18_libero_stage1_contract.py
+
+diff --git a/bin/pai-job b/bin/pai-job
+index b0125d06..ede0bb66 100755
+--- a/bin/pai-job
++++ b/bin/pai-job
+@@ -187,6 +187,22 @@ R22P10_LIBERO_PHASE1_EVAL_OUTPUT_ROOT = Path(
+     "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/"
+     "r22p10-libero-phase1-20260812/pai-eval"
+ )
++R16P18_LIBERO_STAGE1_RESOURCE_ALIAS = "exp-efficiency-r16p18-libero-2gpu"
++R16P18_LIBERO_STAGE1_EVIDENCE_KIND = (
++    "r16p18_libero_stage1_boundarybc_baseline_formal_training_evaluation"
++)
++R16P18_LIBERO_STAGE1_SOURCE_COMMIT = (
++    "20d65a9ab7ff42662496c093e14531904cf1fe31"
++)
++R16P18_LIBERO_STAGE1_SOURCE_TREE = (
++    "b87468210362a81a5d3754630f1ff804f79577e4"
++)
++R16P18_LIBERO_STAGE1_CHECKPOINT_BASE = Path(
++    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1"
++)
++R16P18_LIBERO_STAGE1_OUTPUT_ROOT = Path(
++    "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1"
++)
+ WALLX_WHERE_REAL_NPZ_E2E_EVIDENCE_KIND = (
+     "wallx_three_view_where_real_npz_full_forward_backward_regression"
+ )
+@@ -6408,6 +6424,236 @@ def validate_r22p10_libero_phase1_profile(
+         raise Refused("R22-P10 LIBERO Phase-1 submission contract drifted")
+ 
+ 
++def validate_r16p18_libero_stage1_profile(
++    *,
++    resolved: Dict[str, Any],
++    toolchain_config: Dict[str, Any],
++    runtime: Dict[str, Any],
++    payload: bytes,
++    write_paths: List[str],
++    artifact_dir: Path,
++    output_mode: Any,
++) -> None:
++    evidence = resolved.get("evidence")
++    submission = resolved.get("submission")
++    fault = resolved.get("fault_tolerance")
++    if not isinstance(evidence, dict):
++        raise Refused("R16-P18 LIBERO Stage-1 evidence is missing")
++    if not isinstance(submission, dict) or not isinstance(fault, dict):
++        raise Refused("R16-P18 LIBERO Stage-1 submission/fault contract is missing")
++    if evidence.get("kind") != R16P18_LIBERO_STAGE1_EVIDENCE_KIND:
++        raise Refused("R16-P18 LIBERO Stage-1 evidence kind is not authorized")
++    if resolved.get("resource_alias") != R16P18_LIBERO_STAGE1_RESOURCE_ALIAS:
++        raise Refused("R16-P18 LIBERO Stage-1 requires its verified 2-GPU alias")
++    if resolved.get("network") != {}:
++        raise Refused("R16-P18 LIBERO Stage-1 network must be source-derived empty")
++    expected_worker = {
++        "count": 1,
++        "image": (
++            "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/"
++            "modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-"
++            "py311-cu121-ubuntu22.04"
++        ),
++        "gpu": 2,
++        "cpu": 12,
++        "memory": "200Gi",
++        "shared_memory": "200Gi",
++    }
++    if resolved.get("worker") != expected_worker:
++        raise Refused("R16-P18 LIBERO Stage-1 worker must equal the verified preset")
++    storage = resolved.get("storage")
++    if not isinstance(storage, dict) or Path(
++        str(storage.get("output_root", ""))
++    ) != R16P18_LIBERO_STAGE1_OUTPUT_ROOT:
++        raise Refused("R16-P18 LIBERO Stage-1 output root drifted")
++
++    expected_runtime_fields = {
++        "canary_nonce",
++        "command",
++        "command_file",
++        "command_file_sha256",
++        "create_artifact_dir",
++        "gid",
++        "identity_mechanism",
++        "output_mode",
++        "payload_base64",
++        "payload_sha256",
++        "payload_transport",
++        "pod_env",
++        "recursive_repair",
++        "secret_env_names",
++        "uid",
++        "wandb_entity_contract",
++        "write_paths",
++    }
++    if set(runtime) != expected_runtime_fields:
++        raise Refused("R16-P18 LIBERO Stage-1 runtime fields drifted")
++    if runtime.get("pod_env") != {}:
++        raise Refused("R16-P18 LIBERO Stage-1 public pod environment drifted")
++    if normalize_secret_env_names(runtime.get("secret_env_names")) != [
++        "WANDB_API_KEY",
++        "WANDB_ENTITY",
++    ]:
++        raise Refused("R16-P18 LIBERO Stage-1 requires the exact W&B secret pair")
++    if runtime.get("wandb_entity_contract") != expected_wandb_entity_contract():
++        raise Refused("R16-P18 LIBERO Stage-1 W&B entity contract drifted")
++    if runtime.get("payload_transport") != PAYLOAD_TRANSPORT_BASE64:
++        raise Refused("R16-P18 LIBERO Stage-1 requires base64 payload transport")
++
++    launcher_info = toolchain_config.get("r16p18_libero_stage1_baseline_launcher")
++    if not isinstance(launcher_info, dict) or set(launcher_info) != {
++        "file",
++        "sha256",
++    }:
++        raise Refused("R16-P18 LIBERO Stage-1 pinned launcher is missing")
++    launcher_path = ROOT / str(launcher_info.get("file", ""))
++    try:
++        canonical_launcher = launcher_path.resolve(strict=True)
++    except OSError as exc:
++        raise Refused(f"R16-P18 LIBERO Stage-1 launcher is missing: {exc}") from exc
++    if (
++        canonical_launcher != launcher_path
++        or launcher_path.is_symlink()
++        or not launcher_path.is_file()
++        or not os.access(launcher_path, os.X_OK)
++    ):
++        raise Refused("R16-P18 LIBERO Stage-1 launcher is not canonical/executable")
++    launcher_sha = sha256(launcher_path)
++    if launcher_sha != launcher_info.get("sha256"):
++        raise Refused("R16-P18 LIBERO Stage-1 launcher toolchain hash drifted")
++    if runtime.get("command_file") != str(launcher_path):
++        raise Refused("R16-P18 LIBERO Stage-1 command_file is not pinned")
++    if runtime.get("payload_sha256") != launcher_sha:
++        raise Refused("R16-P18 LIBERO Stage-1 frozen payload hash drifted")
++    if sha256_bytes(payload) != launcher_sha:
++        raise Refused("R16-P18 LIBERO Stage-1 decoded payload hash drifted")
++    try:
++        payload_text = payload.decode("utf-8")
++    except UnicodeDecodeError as exc:
++        raise Refused("R16-P18 LIBERO Stage-1 launcher must be UTF-8") from exc
++    for fragment in (
++        f"EXPECTED_SOURCE_COMMIT={R16P18_LIBERO_STAGE1_SOURCE_COMMIT}",
++        f"EXPECTED_SOURCE_TREE={R16P18_LIBERO_STAGE1_SOURCE_TREE}",
++        "EXPECTED_CONFIG_SHA256=d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf",
++        "test \"${PAI_CANARY_EXPECTED_GPUS:-}\" = 2",
++        "test \"${WANDB_ENTITY:-}\" = chen_jian-cj-workspace",
++    ):
++        if payload_text.count(fragment) != 1:
++            raise Refused(f"R16-P18 LIBERO Stage-1 payload binding drifted: {fragment}")
++
++    checkpoint_run_dir = R16P18_LIBERO_STAGE1_CHECKPOINT_BASE / resolved["run_id"]
++    expected_evidence = {
++        "kind": R16P18_LIBERO_STAGE1_EVIDENCE_KIND,
++        "resource_contract": "dedicated_2gpu_v1",
++        "workload_type": "training_and_rollout_evaluation",
++        "task_id": "r16p18-libero-stage1-boundarybc-baseline-20260812",
++        "model_id": "boundarybc-s-resnet18-h8-e4-three-seeds",
++        "success_gate": "persisted_step_loss_completed_rollout_and_baseline_gate",
++        "validation_method": "static+dev14_one_gpu_batch_one_smoke",
++        "validation_status": "passed_no_pai_gpu_probe",
++        "pai_probe_created": False,
++        "first_work_evidence_path": str(
++            checkpoint_run_dir
++            / "models/push_plate/seed_16018/FIRST_WORK.json"
++        ),
++        "evaluation_first_work_evidence_path": str(
++            artifact_dir
++            / "evaluation/push_plate/seed_16018.first_rollout.json"
++        ),
++        "completed_evidence_path": str(
++            artifact_dir / "reports/baseline_gate.json"
++        ),
++        "contract_ready": True,
++        "mount_contract": "exact_five_new_root_sources_from_live_readback",
++        "source_commit": R16P18_LIBERO_STAGE1_SOURCE_COMMIT,
++        "source_tree": R16P18_LIBERO_STAGE1_SOURCE_TREE,
++        "libero_source_commit": "2319dbd914673f6ef34a00584536212b10e10395",
++        "config_sha256": "d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf",
++        "project_launcher_sha256": "506f6a98490c3eca7dad8096a550c46e694629192a1deb7a03c8c102e116574f",
++        "registry_launcher_sha256": launcher_sha,
++        "dev14_smoke_result_sha256": "8a5cb0c1c3f5b68f45f34c7e75227086d61e34bd709a54003875b2c2a6658fb2",
++        "formal_python_sha256": "89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48fc4f961a",
++        "formal_torch": "2.5.1+cu124",
++        "formal_cuda": "12.4",
++        "overlay_manifest_sha256": "64dfffdaf464d1a37be19b038cca919a252dba573eb2d0f8aa442b91a4099459",
++        "overlay_file_count": 1688,
++        "demo_sha256": {
++            "push_plate": "36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6",
++            "bottle_rack": "f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e",
++            "bowl_plate": "e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406",
++        },
++        "requested_demos_per_task": 200,
++        "available_official_demos_per_task": 50,
++        "data_protocol_deviation": True,
++        "split_by_stable_init_state_identity": [40, 5, 5],
++        "tasks": [
++            "push_the_plate_to_the_front_of_the_stove",
++            "put_the_wine_bottle_on_the_rack",
++            "put_the_bowl_on_the_plate",
++        ],
++        "model_seeds": [16018, 16019, 16020],
++        "optimizer_steps_per_model": 3000,
++        "batch_size_per_model": 64,
++        "checkpoint_cadence_steps": 250,
++        "checkpoint_retention": "latest_3_complete_per_task_seed",
++        "checkpoint_contract": "model_optimizer_scheduler_rng_batch_generator_global_step",
++        "full_state_resume": True,
++        "gpu_execution": "two_independent_single_gpu_model_queues",
++        "closed_loop_episodes_per_task_seed": 50,
++        "total_models": 9,
++        "total_closed_loop_episodes": 450,
++        "baseline_ranges": {
++            "push_plate": [0.40, 0.90],
++            "bottle_rack": [0.25, 0.80],
++            "bowl_plate": [0.80, 1.00],
++        },
++        "adaptive_components_implemented_before_gate": False,
++        "pilot_can_return_stage1_go": False,
++        "stop_after_baseline_failure": True,
++        "stop_after_stage1": True,
++        "wandb_mode": "online_exact_entity_grouped_by_pai_run",
++        "experiment_scope": "necessary_condition_baseline_gate_then_conditional_stage1_only",
++        "expected_first_work_uid": 2254,
++        "expected_first_work_gid": 2254,
++    }
++    if evidence != expected_evidence:
++        raise Refused("R16-P18 LIBERO Stage-1 exact evidence contract drifted")
++    if write_paths != [str(artifact_dir), str(checkpoint_run_dir)]:
++        raise Refused("R16-P18 LIBERO Stage-1 write paths drifted")
++    if output_mode != "resume" or runtime.get("create_artifact_dir") is not True:
++        raise Refused("R16-P18 LIBERO Stage-1 requires resumable application output")
++    if runtime.get("recursive_repair") is not False:
++        raise Refused("R16-P18 LIBERO Stage-1 forbids recursive ownership repair")
++    if fault != {
++        "aimaster_args": "",
++        "maximum_platform_restarts": 0,
++        "expected_platform_restarts": 0,
++        "launcher_attempts": 1,
++        "retry_sleep_seconds": 30,
++        "pai_automatic_fault_tolerance": False,
++    }:
++        raise Refused("R16-P18 LIBERO Stage-1 fault-tolerance contract drifted")
++    expected_tags = {
++        "managed_by": "pai-job-registry",
++        "purpose": "formal-training",
++        "task": "r16p18-libero-stage1-boundarybc-baseline-20260812",
++        "model": "boundarybc-s-resnet18-h8-e4-three-seeds",
++        "dataset": "libero-goal-three-task-50-demo-pilot",
++        "hardware": "2xa800-dedicated",
++        "resource_pool": "exp-efficiency",
++        "experiment_role": "stage1-necessary-condition-baseline-gate",
++    }
++    if submission != {
++        "priority": 9,
++        "disable_ecs_stock_check": False,
++        "job_reserved_policy": "",
++        "job_reserved_minutes": 0,
++        "job_max_running_time_minutes": 0,
++        "tags": expected_tags,
++    }:
++        raise Refused("R16-P18 LIBERO Stage-1 submission contract drifted")
++
++
+ def validate_resolved(resolved: Dict[str, Any]) -> None:
+     assert_no_legacy_or_placeholder(resolved)
+     ensure_run_id(str(resolved.get("run_id", "")))
+@@ -6791,6 +7037,17 @@ def validate_resolved(resolved: Dict[str, Any]) -> None:
+             output_mode=output_mode,
+         )
+         return
++    elif alias == R16P18_LIBERO_STAGE1_RESOURCE_ALIAS:
++        validate_r16p18_libero_stage1_profile(
++            resolved=resolved,
++            toolchain_config=tc,
++            runtime=runtime,
++            payload=payload,
++            write_paths=write_paths,
++            artifact_dir=artifact_dir,
++            output_mode=output_mode,
++        )
++        return
+     elif alias == "exp-efficiency-a800-2gpu":
+         evidence_kind = resolved.get("evidence", {}).get("kind")
+         if evidence_kind not in {
+@@ -11204,6 +11461,289 @@ def watch_dinowm_evaluation(
+         time.sleep(args.interval_seconds)
+ 
+ 
++def _read_r16p18_json(path: Path) -> Tuple[Dict[str, Any], os.stat_result]:
++    body, metadata = read_regular_path(path, max_size_bytes=2 * 1024 * 1024)
++    if metadata.st_uid != 2254 or metadata.st_gid != 2254:
++        raise Refused(f"R16-P18 artifact is not owned by 2254:2254: {path}")
++    if stat.S_IMODE(metadata.st_mode) != 0o600:
++        raise Refused(f"R16-P18 artifact mode is not 0600: {path}")
++    try:
++        value = json.loads(body)
++    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
++        raise Refused(f"R16-P18 artifact is not valid JSON: {path}") from exc
++    if not isinstance(value, dict):
++        raise Refused(f"R16-P18 artifact is not a JSON object: {path}")
++    return value, metadata
++
++
++def verify_r16p18_artifacts(resolved: Dict[str, Any]) -> Dict[str, Any]:
++    evidence = resolved["evidence"]
++    run_id = str(resolved["run_id"])
++    config_sha = str(evidence["config_sha256"])
++    checkpoint_run = R16P18_LIBERO_STAGE1_CHECKPOINT_BASE / run_id
++    artifact_dir = Path(str(resolved["artifact_dir"]))
++    first_path = Path(str(evidence["first_work_evidence_path"]))
++    eval_first_path = Path(str(evidence["evaluation_first_work_evidence_path"]))
++    complete_path = Path(str(evidence["completed_evidence_path"]))
++    result: Dict[str, Any] = {
++        "first_training_step": {"path": str(first_path), "complete": False},
++        "first_completed_rollout": {
++            "path": str(eval_first_path),
++            "complete": False,
++        },
++        "baseline_gate": {"path": str(complete_path), "complete": False},
++        "model_final_count": 0,
++        "evaluation_summary_count": 0,
++        "complete": False,
++    }
++    if first_path.exists() or first_path.is_symlink():
++        first, metadata = _read_r16p18_json(first_path)
++        loss = first.get("loss")
++        expected = {
++            "schema_version": 1,
++            "event": "PERSISTED_OPTIMIZER_STEP_AND_LOSS",
++            "run_id": run_id,
++            "config_sha256": config_sha,
++            "task_key": "push_plate",
++            "model_seed": 16018,
++            "global_step": 1,
++            "uid": 2254,
++            "gid": 2254,
++        }
++        for key, value in expected.items():
++            if first.get(key) != value:
++                raise Refused(f"R16-P18 first-work field drifted: {key}")
++        if type(loss) not in (int, float) or loss != loss or abs(loss) > 1e6:
++            raise Refused("R16-P18 first-work loss is invalid")
++        result["first_training_step"] = {
++            "path": str(first_path),
++            "sha256": sha256(first_path),
++            "size_bytes": metadata.st_size,
++            "global_step": 1,
++            "loss": float(loss),
++            "complete": True,
++        }
++
++    if eval_first_path.exists() or eval_first_path.is_symlink():
++        rollout, metadata = _read_r16p18_json(eval_first_path)
++        expected = {
++            "schema_version": 1,
++            "event": "PERSISTED_FIRST_COMPLETED_ROLLOUT",
++            "run_id": run_id,
++            "config_sha256": config_sha,
++            "task_key": "push_plate",
++            "model_seed": 16018,
++            "episode_id": 0,
++            "uid": 2254,
++            "gid": 2254,
++        }
++        for key, value in expected.items():
++            if rollout.get(key) != value:
++                raise Refused(f"R16-P18 first rollout field drifted: {key}")
++        if type(rollout.get("success")) is not bool:
++            raise Refused("R16-P18 first rollout success is not Boolean")
++        result["first_completed_rollout"] = {
++            "path": str(eval_first_path),
++            "sha256": sha256(eval_first_path),
++            "size_bytes": metadata.st_size,
++            "success": rollout["success"],
++            "complete": True,
++        }
++
++    task_keys = ("push_plate", "bottle_rack", "bowl_plate")
++    seeds = (16018, 16019, 16020)
++    model_final_count = 0
++    evaluation_summary_count = 0
++    for task_key in task_keys:
++        for seed in seeds:
++            model_dir = checkpoint_run / "models" / task_key / f"seed_{seed}"
++            final_path = model_dir / "final.pt"
++            marker_path = model_dir / "final.pt.complete.json"
++            if final_path.is_file() and marker_path.is_file():
++                marker, _ = _read_r16p18_json(marker_path)
++                if (
++                    marker.get("run_id") != run_id
++                    or marker.get("task_key") != task_key
++                    or marker.get("model_seed") != seed
++                    or marker.get("global_step") != 3000
++                    or marker.get("bytes") != final_path.stat().st_size
++                    or marker.get("sha256") != sha256(final_path)
++                    or final_path.stat().st_uid != 2254
++                    or final_path.stat().st_gid != 2254
++                ):
++                    raise Refused(
++                        f"R16-P18 final model completeness drifted: {task_key}/{seed}"
++                    )
++                model_final_count += 1
++            summary_path = (
++                artifact_dir
++                / "evaluation"
++                / task_key
++                / f"seed_{seed}.summary.json"
++            )
++            if summary_path.is_file():
++                summary, _ = _read_r16p18_json(summary_path)
++                if (
++                    summary.get("event") != "PERSISTED_COMPLETED_EVALUATION_RESULT"
++                    or summary.get("run_id") != run_id
++                    or summary.get("config_sha256") != config_sha
++                    or summary.get("task_key") != task_key
++                    or summary.get("model_seed") != seed
++                    or summary.get("episodes") != 50
++                    or type(summary.get("successes")) is not int
++                    or not 0 <= summary["successes"] <= 50
++                ):
++                    raise Refused(
++                        f"R16-P18 evaluation summary drifted: {task_key}/{seed}"
++                    )
++                evaluation_summary_count += 1
++    result["model_final_count"] = model_final_count
++    result["evaluation_summary_count"] = evaluation_summary_count
++
++    if complete_path.exists() or complete_path.is_symlink():
++        gate, metadata = _read_r16p18_json(complete_path)
++        if (
++            gate.get("schema_version") != 1
++            or gate.get("protocol_id") != "R16-P18-LIBERO-STAGE1-PILOT-V1"
++            or gate.get("config_sha256") != config_sha
++            or gate.get("run_id") != run_id
++            or gate.get("decision")
++            not in {"BASELINE_GATE_PASS_CONTINUE_STAGE1", "NO_GO_BASELINE_GATE"}
++            or type(gate.get("baseline_gate_passed")) is not bool
++            or gate.get("data_protocol_deviation") is not True
++            or gate.get("stage1_go_permitted_from_this_pilot") is not False
++            or set(gate.get("task_results", {})) != set(task_keys)
++        ):
++            raise Refused("R16-P18 persisted baseline-gate contract drifted")
++        for task_key, task in gate["task_results"].items():
++            rate = task.get("success_rate")
++            interval = task.get("confidence_interval_95")
++            if (
++                type(rate) not in (int, float)
++                or not 0.0 <= rate <= 1.0
++                or not isinstance(interval, list)
++                or len(interval) != 2
++                or not 0.0 <= interval[0] <= interval[1] <= 1.0
++            ):
++                raise Refused(f"R16-P18 baseline metric drifted: {task_key}")
++        result["baseline_gate"] = {
++            "path": str(complete_path),
++            "sha256": sha256(complete_path),
++            "size_bytes": metadata.st_size,
++            "decision": gate["decision"],
++            "baseline_gate_passed": gate["baseline_gate_passed"],
++            "task_results": gate["task_results"],
++            "complete": True,
++        }
++
++    result["complete"] = (
++        result["first_training_step"]["complete"]
++        and result["first_completed_rollout"]["complete"]
++        and result["baseline_gate"]["complete"]
++        and model_final_count == 9
++        and evaluation_summary_count == 9
++    )
++    return result
++
++
++def watch_r16p18_stage1(
++    args: argparse.Namespace,
++    config_path: Path,
++    target_dir: Path,
++    resolved: Dict[str, Any],
++) -> int:
++    deadline = time.monotonic() + args.timeout_seconds
++    last_state: Optional[Tuple[str, bool, bool, bool]] = None
++    get_failures = 0
++    while True:
++        try:
++            data, stdout, stderr = get_job(args.job_id, config_path)
++            get_failures = 0
++        except Refused as exc:
++            get_failures += 1
++            print(f"{utc_now()} getjob_error={exc}", file=sys.stderr, flush=True)
++            if get_failures >= 5:
++                raise
++        else:
++            job = find_job_object(data, args.job_id)
++            status_value = (
++                str(job.get("Status") or "Unknown")
++                if isinstance(job, dict)
++                else "Unknown"
++            )
++            stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
++            atomic_json(target_dir / "monitor" / f"{stamp}.json", data)
++            atomic_json(target_dir / "getjob-latest.json", data)
++            atomic_text(target_dir / "getjob-latest.stdout.txt", stdout)
++            atomic_text(target_dir / "getjob-latest.stderr.txt", stderr)
++            contract = verify_getjob_contract(data, args.job_id, resolved)
++            artifacts = verify_r16p18_artifacts(resolved)
++            atomic_json(target_dir / "contract-readback.json", contract)
++            atomic_json(target_dir / "artifact-evidence.json", artifacts)
++            state = (
++                status_value,
++                artifacts["first_training_step"]["complete"],
++                artifacts["first_completed_rollout"]["complete"],
++                artifacts["complete"],
++            )
++            if state != last_state:
++                print(
++                    f"{utc_now()} status={status_value} "
++                    f"contract={contract['complete']} "
++                    f"train_first_work={state[1]} "
++                    f"evaluation_first_work={state[2]} "
++                    f"artifacts_complete={state[3]}",
++                    flush=True,
++                )
++                last_state = state
++            if artifacts["first_training_step"]["complete"]:
++                zero_cleanup = {
++                    "schema_version": 1,
++                    "sealed_at_utc": utc_now(),
++                    "run_id": args.run_id,
++                    "job_id": args.job_id,
++                    "targets": [],
++                    "complete": True,
++                    "reason": "initial formal run has no superseded failed or stopped predecessor",
++                }
++                atomic_json(target_dir / "superseded-delete-set.json", zero_cleanup)
++            if status_value in TERMINAL_STATES:
++                capture_terminal_diagnostics(
++                    args.job_id, config_path, data, target_dir
++                )
++                final_complete = (
++                    status_value == "Succeeded"
++                    and contract["complete"]
++                    and artifacts["complete"]
++                )
++                final = {
++                    "schema_version": 1,
++                    "finished_at_utc": utc_now(),
++                    "job_id": args.job_id,
++                    "run_id": args.run_id,
++                    "status": status_value,
++                    "contract": contract,
++                    "artifacts": artifacts,
++                    "superseded_cleanup_complete": (
++                        target_dir / "superseded-delete-set.json"
++                    ).is_file(),
++                    "complete": final_complete,
++                }
++                atomic_json(target_dir / "monitor-result.json", final)
++                if final_complete:
++                    print("R16P18_STAGE1_BASELINE_MONITOR_SUCCEEDED", flush=True)
++                    return 0
++                raise Refused(
++                    "terminal R16-P18 job did not satisfy exact JobId, first-step, "
++                    "completed-rollout, baseline-gate, and ownership contracts"
++                )
++        if time.monotonic() >= deadline:
++            raise Refused(
++                f"watch timeout after {args.timeout_seconds}s; job remains non-terminal"
++            )
++        time.sleep(args.interval_seconds)
++
++
+ def command_watch(args: argparse.Namespace) -> int:
+     require_leon_controller()
+     config_path = checked_config(args.config)
+@@ -11216,6 +11756,10 @@ def command_watch(args: argparse.Namespace) -> int:
+         raise Refused("watch JobId/run_id binding does not match result.json")
+     validate_resolved(resolved)
+     evidence_kind = resolved.get("evidence", {}).get("kind")
++    if evidence_kind == R16P18_LIBERO_STAGE1_EVIDENCE_KIND:
++        return watch_r16p18_stage1(
++            args, config_path, target_dir, resolved
++        )
+     if evidence_kind == DINO_WM_PUSHT_OFFICIAL_EVAL_EVIDENCE_KIND:
+         return watch_dinowm_evaluation(
+             args, config_path, target_dir, resolved
+diff --git a/config/resources.json b/config/resources.json
+index 1a48394b..aeda8c61 100644
+--- a/config/resources.json
++++ b/config/resources.json
+@@ -215,6 +215,72 @@
+         }
+       ]
+     },
++    "exp-efficiency-r16p18-libero-2gpu": {
++      "display_name": "exp-efficiency",
++      "resource_id": "quotakzri8a5wqcp",
++      "resource_source": "resource_quota_two_card_verified_carrier",
++      "contract_source_job_id": "dlcfp1szuc2cgqfp",
++      "source_job_id": "dlc1j2p8ui63ulps",
++      "source_contract": {
++        "require_status": "Succeeded",
++        "aimaster_enabled": false,
++        "aimaster_args": ""
++      },
++      "source_worker_contracts": {
++        "contract": {
++          "count": 1,
++          "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
++          "gpu": 8,
++          "cpu": 92,
++          "memory": "1600Gi",
++          "shared_memory": "1600Gi"
++        },
++        "resource": {
++          "count": 1,
++          "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
++          "gpu": 2,
++          "cpu": 12,
++          "memory": "200Gi",
++          "shared_memory": "200Gi"
++        }
++      },
++      "oversold_type": "ForbiddenQuotaOverSold",
++      "verification_state": "specialized_r16p18_libero_stage1_over_live_verified_two_card_carrier",
++      "verified_at": "2026-08-12T23:30:00+00:00",
++      "evidence": "Exact dedicated 2xA800 worker and resource placement are inherited only as readback facts from the live canonical contract source dlcfp1szuc2cgqfp and succeeded exp-efficiency two-card source dlc1j2p8ui63ulps. The controller restricts this alias to the pinned R16-P18 LIBERO Stage-1 BoundaryBC-S baseline-gate profile and repeats both live readbacks before CreateJob.",
++      "authorized_data_sources": [
++        {
++          "id": "d-mkixtohdn75dp8x9tb",
++          "version": "v1",
++          "mount_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon",
++          "options": ""
++        },
++        {
++          "id": "d-lg9t2b6xajpukeqqeb",
++          "version": "v1",
++          "mount_path": "/mnt/cpfs/zbl-cpfs-new/SHARE/leon",
++          "options": ""
++        },
++        {
++          "id": "d-36p023eg0f2vuqny8y",
++          "version": "v1",
++          "mount_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon",
++          "options": ""
++        },
++        {
++          "id": "d-ejgj2ej7io1t2t32uc",
++          "version": "v1",
++          "mount_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon",
++          "options": ""
++        },
++        {
++          "id": "d-7fi8hehav247qi6x5o",
++          "version": "v1",
++          "mount_path": "/mnt/cpfs/zbl-cpfs-new/Models/",
++          "options": ""
++        }
++      ]
++    },
+     "exp-efficiency-wallx-e2e-2gpu": {
+       "display_name": "exp-efficiency",
+       "resource_id": "quotakzri8a5wqcp",
+diff --git a/config/toolchain.json b/config/toolchain.json
+index c299d51e..bfe2a584 100644
+--- a/config/toolchain.json
++++ b/config/toolchain.json
+@@ -97,6 +97,10 @@
+     "file": "launchers/r22p10_libero_phase1_eval.sh",
+     "sha256": "115810d3da1e7e20d9f86772236ecd59e92be316db2470783546bb0c08188b00"
+   },
++  "r16p18_libero_stage1_baseline_launcher": {
++    "file": "launchers/r16_p18_libero_stage1_baseline.sh",
++    "sha256": "2b8caf3eeaf6bffc5d17c00ac2dfe3d017ec802c0de266ed637ced4d28993f30"
++  },
+   "wallx_where_real_npz_e2e_launcher": {
+     "file": "launchers/wallx_where_real_npz_e2e.sh",
+     "sha256": "fed90b513dab9ffdf37ce7df585462af24ee484228b37f78a01d7c2aa9036957"
+diff --git a/launchers/r16_p18_libero_stage1_baseline.sh b/launchers/r16_p18_libero_stage1_baseline.sh
+new file mode 100755
+index 00000000..94afa0d7
+--- /dev/null
++++ b/launchers/r16_p18_libero_stage1_baseline.sh
+@@ -0,0 +1,81 @@
++#!/usr/bin/env bash
++set -Eeuo pipefail
++
++umask 077
++
++PROJECT_DIR=/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812
++PYTHON=/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python
++DATASET_ROOT=/mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO
++CHECKPOINT_BASE=/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1
++ARTIFACT_DIR=${PAI_CANARY_RUN_DIR:?PAI_CANARY_RUN_DIR is required}
++RUN_ID=${PAI_CANARY_RUN_ID:?PAI_CANARY_RUN_ID is required}
++NONCE=${PAI_CANARY_NONCE:?PAI_CANARY_NONCE is required}
++
++EXPECTED_SOURCE_COMMIT=20d65a9ab7ff42662496c093e14531904cf1fe31
++EXPECTED_SOURCE_TREE=b87468210362a81a5d3754630f1ff804f79577e4
++EXPECTED_CONFIG_SHA256=d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf
++EXPECTED_PROJECT_LAUNCHER_SHA256=506f6a98490c3eca7dad8096a550c46e694629192a1deb7a03c8c102e116574f
++EXPECTED_SMOKE_EVIDENCE_SHA256=f9968365ec092f9e83e14c2789ad45809fddae7e025e45c5dd3f7bb3f3c592da
++EXPECTED_SMOKE_RESULT_SHA256=8a5cb0c1c3f5b68f45f34c7e75227086d61e34bd709a54003875b2c2a6658fb2
++SMOKE_RESULT=/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/dev14-smoke-20260812-v5/smoke_result.json
++
++on_error() {
++  local exit_code=$?
++  printf 'R16P18_BASELINE_COMMAND_FAILED line=%s exit_code=%s command=%q\n' \
++    "${BASH_LINENO[0]:-unknown}" "$exit_code" "$BASH_COMMAND" >&2
++  return "$exit_code"
++}
++trap on_error ERR
++
++for required in git sha256sum nvidia-smi stat realpath awk grep; do
++  command -v "$required" >/dev/null
++done
++test "$(id -u):$(id -g)" = 2254:2254
++test "${PAI_CANARY_EXPECTED_GPUS:-}" = 2
++test "${WANDB_ENTITY:-}" = chen_jian-cj-workspace
++test -n "${WANDB_API_KEY:-}"
++[[ "$RUN_ID" =~ ^[a-z0-9][a-z0-9.-]{2,63}$ ]]
++[[ "$NONCE" =~ ^[a-f0-9]{32}$ ]]
++case "$ARTIFACT_DIR" in
++  /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/*) ;;
++  *) printf 'artifact directory escaped the R16-P18 output root\n' >&2; exit 71 ;;
++esac
++test "$(realpath -e "$ARTIFACT_DIR")" = "$ARTIFACT_DIR"
++test "$(stat -c '%u:%g' "$ARTIFACT_DIR")" = 2254:2254
++
++CHECKPOINT_RUN_DIR=$CHECKPOINT_BASE/$RUN_ID
++test "$(realpath -e "$CHECKPOINT_RUN_DIR")" = "$CHECKPOINT_RUN_DIR"
++test "$(stat -c '%u:%g' "$CHECKPOINT_RUN_DIR")" = 2254:2254
++test "$(git -C "$PROJECT_DIR" rev-parse HEAD)" = "$EXPECTED_SOURCE_COMMIT"
++test "$(git -C "$PROJECT_DIR" rev-parse 'HEAD^{tree}')" = "$EXPECTED_SOURCE_TREE"
++test -z "$(git -C "$PROJECT_DIR" status --porcelain)"
++test "$(sha256sum "$PROJECT_DIR/configs/r16_p18_libero_stage1.yaml" | awk '{print $1}')" = "$EXPECTED_CONFIG_SHA256"
++test "$(sha256sum "$PROJECT_DIR/scripts/pai_r16_p18_leon.sh" | awk '{print $1}')" = "$EXPECTED_PROJECT_LAUNCHER_SHA256"
++test "$(sha256sum "$PROJECT_DIR/configs/dev14_smoke_evidence.yaml" | awk '{print $1}')" = "$EXPECTED_SMOKE_EVIDENCE_SHA256"
++test "$(sha256sum "$SMOKE_RESULT" | awk '{print $1}')" = "$EXPECTED_SMOKE_RESULT_SHA256"
++test "$(stat -c '%u:%g' "$SMOKE_RESULT")" = 2254:2254
++test -x "$PYTHON"
++"$PYTHON" - "$SMOKE_RESULT" "$EXPECTED_CONFIG_SHA256" <<'PY'
++import json
++import pathlib
++import sys
++
++value = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
++assert value["event"] == "DEV14_ONE_GPU_SMOKE_COMPLETE"
++assert value["config_sha256"] == sys.argv[2]
++assert value["adaptive_components_implemented"] is False
++PY
++test "$(nvidia-smi --query-gpu=name --format=csv,noheader | grep -c '^NVIDIA A800')" = 2
++test -d "$DATASET_ROOT"
++
++export R16_EXPECTED_GIT_COMMIT=$EXPECTED_SOURCE_COMMIT
++export R16_EXPECTED_CONFIG_SHA256=$EXPECTED_CONFIG_SHA256
++export R16_CHECKPOINT_RUN_DIR=$CHECKPOINT_RUN_DIR
++export R16_LOG_RUN_DIR=$ARTIFACT_DIR
++export R16_CACHE_RUN_DIR=$ARTIFACT_DIR/cache
++export XDG_CACHE_HOME=$ARTIFACT_DIR/cache/xdg
++export TORCH_HOME=$ARTIFACT_DIR/cache/torch
++export WANDB_DIR=$ARTIFACT_DIR/wandb
++export WANDB_CACHE_DIR=$ARTIFACT_DIR/cache/wandb
++
++exec "$PROJECT_DIR/scripts/pai_r16_p18_leon.sh" "$RUN_ID"
+diff --git a/templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json b/templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json
+new file mode 100644
+index 00000000..d7810072
+--- /dev/null
++++ b/templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json
+@@ -0,0 +1,141 @@
++{
++  "schema_version": 2,
++  "kind": "pytorchjob",
++  "name_prefix": "r16p18-libero-stage1-baseline",
++  "description": "Formal R16-P18 Stage-1 BoundaryBC-S necessary-condition baseline gate on three locked LIBERO-GOAL tasks; two independent one-GPU model workers on the verified 2xA800 carrier; stop before effect predictor or adaptive arms unless all preregistered baseline ranges pass",
++  "resource_alias": "exp-efficiency-r16p18-libero-2gpu",
++  "workspace_id": "179169",
++  "provenance": {
++    "contract_source_job_id": "dlcfp1szuc2cgqfp",
++    "resource_source_job_id": "dlc1j2p8ui63ulps",
++    "submission_method": "cli_create",
++    "pai_clone_performed": false,
++    "source_role": "readback_reference"
++  },
++  "network": {},
++  "storage": {
++    "data_sources": [
++      {"id": "d-mkixtohdn75dp8x9tb", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon", "options": ""},
++      {"id": "d-lg9t2b6xajpukeqqeb", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/SHARE/leon", "options": ""},
++      {"id": "d-36p023eg0f2vuqny8y", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon", "options": ""},
++      {"id": "d-ejgj2ej7io1t2t32uc", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon", "options": ""},
++      {"id": "d-7fi8hehav247qi6x5o", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/Models/", "options": ""}
++    ],
++    "output_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1"
++  },
++  "worker": {
++    "count": 1,
++    "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
++    "gpu": 2,
++    "cpu": 12,
++    "memory": "200Gi",
++    "shared_memory": "200Gi"
++  },
++  "runtime": {
++    "command_file": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry-r16-p18-20260812/launchers/r16_p18_libero_stage1_baseline.sh",
++    "identity_mechanism": "controller_inline_bootstrap_then_setpriv",
++    "uid": 2254,
++    "gid": 2254,
++    "pod_env": {},
++    "secret_env_names": [],
++    "write_paths": [
++      "{{ARTIFACT_DIR}}",
++      "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/{{RUN_ID}}"
++    ],
++    "output_mode": "resume",
++    "create_artifact_dir": true,
++    "recursive_repair": false,
++    "payload_transport": "base64"
++  },
++  "fault_tolerance": {
++    "aimaster_args": "",
++    "maximum_platform_restarts": 0,
++    "expected_platform_restarts": 0,
++    "launcher_attempts": 1,
++    "retry_sleep_seconds": 30,
++    "pai_automatic_fault_tolerance": false
++  },
++  "evidence": {
++    "kind": "r16p18_libero_stage1_boundarybc_baseline_formal_training_evaluation",
++    "resource_contract": "dedicated_2gpu_v1",
++    "workload_type": "training_and_rollout_evaluation",
++    "task_id": "r16p18-libero-stage1-boundarybc-baseline-20260812",
++    "model_id": "boundarybc-s-resnet18-h8-e4-three-seeds",
++    "success_gate": "persisted_step_loss_completed_rollout_and_baseline_gate",
++    "validation_method": "static+dev14_one_gpu_batch_one_smoke",
++    "validation_status": "passed_no_pai_gpu_probe",
++    "pai_probe_created": false,
++    "first_work_evidence_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/{{RUN_ID}}/models/push_plate/seed_16018/FIRST_WORK.json",
++    "evaluation_first_work_evidence_path": "{{ARTIFACT_DIR}}/evaluation/push_plate/seed_16018.first_rollout.json",
++    "completed_evidence_path": "{{ARTIFACT_DIR}}/reports/baseline_gate.json",
++    "contract_ready": true,
++    "mount_contract": "exact_five_new_root_sources_from_live_readback",
++    "source_commit": "20d65a9ab7ff42662496c093e14531904cf1fe31",
++    "source_tree": "b87468210362a81a5d3754630f1ff804f79577e4",
++    "libero_source_commit": "2319dbd914673f6ef34a00584536212b10e10395",
++    "config_sha256": "d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf",
++    "project_launcher_sha256": "506f6a98490c3eca7dad8096a550c46e694629192a1deb7a03c8c102e116574f",
++    "registry_launcher_sha256": "2b8caf3eeaf6bffc5d17c00ac2dfe3d017ec802c0de266ed637ced4d28993f30",
++    "dev14_smoke_result_sha256": "8a5cb0c1c3f5b68f45f34c7e75227086d61e34bd709a54003875b2c2a6658fb2",
++    "formal_python_sha256": "89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48fc4f961a",
++    "formal_torch": "2.5.1+cu124",
++    "formal_cuda": "12.4",
++    "overlay_manifest_sha256": "64dfffdaf464d1a37be19b038cca919a252dba573eb2d0f8aa442b91a4099459",
++    "overlay_file_count": 1688,
++    "demo_sha256": {
++      "push_plate": "36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6",
++      "bottle_rack": "f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e",
++      "bowl_plate": "e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406"
++    },
++    "requested_demos_per_task": 200,
++    "available_official_demos_per_task": 50,
++    "data_protocol_deviation": true,
++    "split_by_stable_init_state_identity": [40, 5, 5],
++    "tasks": [
++      "push_the_plate_to_the_front_of_the_stove",
++      "put_the_wine_bottle_on_the_rack",
++      "put_the_bowl_on_the_plate"
++    ],
++    "model_seeds": [16018, 16019, 16020],
++    "optimizer_steps_per_model": 3000,
++    "batch_size_per_model": 64,
++    "checkpoint_cadence_steps": 250,
++    "checkpoint_retention": "latest_3_complete_per_task_seed",
++    "checkpoint_contract": "model_optimizer_scheduler_rng_batch_generator_global_step",
++    "full_state_resume": true,
++    "gpu_execution": "two_independent_single_gpu_model_queues",
++    "closed_loop_episodes_per_task_seed": 50,
++    "total_models": 9,
++    "total_closed_loop_episodes": 450,
++    "baseline_ranges": {
++      "push_plate": [0.40, 0.90],
++      "bottle_rack": [0.25, 0.80],
++      "bowl_plate": [0.80, 1.00]
++    },
++    "adaptive_components_implemented_before_gate": false,
++    "pilot_can_return_stage1_go": false,
++    "stop_after_baseline_failure": true,
++    "stop_after_stage1": true,
++    "wandb_mode": "online_exact_entity_grouped_by_pai_run",
++    "experiment_scope": "necessary_condition_baseline_gate_then_conditional_stage1_only",
++    "expected_first_work_uid": 2254,
++    "expected_first_work_gid": 2254
++  },
++  "submission": {
++    "priority": 9,
++    "disable_ecs_stock_check": false,
++    "job_reserved_policy": "",
++    "job_reserved_minutes": 0,
++    "job_max_running_time_minutes": 0,
++    "tags": {
++      "managed_by": "pai-job-registry",
++      "purpose": "formal-training",
++      "task": "r16p18-libero-stage1-boundarybc-baseline-20260812",
++      "model": "boundarybc-s-resnet18-h8-e4-three-seeds",
++      "dataset": "libero-goal-three-task-50-demo-pilot",
++      "hardware": "2xa800-dedicated",
++      "resource_pool": "exp-efficiency",
++      "experiment_role": "stage1-necessary-condition-baseline-gate"
++    }
++  }
++}
+diff --git a/tests/test_r16p18_libero_stage1_contract.py b/tests/test_r16p18_libero_stage1_contract.py
+new file mode 100644
+index 00000000..02dedf00
+--- /dev/null
++++ b/tests/test_r16p18_libero_stage1_contract.py
+@@ -0,0 +1,126 @@
++#!/usr/bin/env python3
++"""Fail-closed contract tests for the R16-P18 LIBERO baseline gate."""
++
++from __future__ import annotations
++
++import base64
++import importlib.machinery
++import importlib.util
++import json
++from pathlib import Path
++import subprocess
++import unittest
++
++
++ROOT = Path(__file__).resolve().parents[1]
++TEMPLATE = ROOT / "templates" / "r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json"
++
++
++def load_script(name: str, path: Path):
++    loader = importlib.machinery.SourceFileLoader(name, str(path))
++    spec = importlib.util.spec_from_loader(name, loader)
++    if spec is None:
++        raise RuntimeError(f"cannot import {path}")
++    module = importlib.util.module_from_spec(spec)
++    loader.exec_module(module)
++    return module
++
++
++PAI_JOB = load_script("pai_job_r16p18_contract_test", ROOT / "bin" / "pai-job")
++
++
++class R16P18LiberoStage1ContractTest(unittest.TestCase):
++    def resolved(self) -> dict:
++        _, resolved = PAI_JOB.resolve_template(
++            TEMPLATE,
++            "r16-p18-contract-unit-test",
++            with_wandb=True,
++        )
++        return resolved
++
++    def test_exact_formal_contract_resolves(self) -> None:
++        resolved = self.resolved()
++        self.assertEqual(
++            resolved["resource_alias"],
++            "exp-efficiency-r16p18-libero-2gpu",
++        )
++        self.assertEqual(resolved["worker"]["gpu"], 2)
++        self.assertEqual(resolved["fault_tolerance"]["aimaster_args"], "")
++        self.assertEqual(
++            resolved["fault_tolerance"]["maximum_platform_restarts"],
++            0,
++        )
++        self.assertFalse(
++            resolved["fault_tolerance"]["pai_automatic_fault_tolerance"]
++        )
++        self.assertEqual(
++            resolved["runtime"]["secret_env_names"],
++            ["WANDB_API_KEY", "WANDB_ENTITY"],
++        )
++        self.assertFalse(resolved["evidence"]["pai_probe_created"])
++        self.assertTrue(resolved["evidence"]["data_protocol_deviation"])
++        self.assertFalse(resolved["evidence"]["pilot_can_return_stage1_go"])
++        self.assertFalse(
++            resolved["evidence"]["adaptive_components_implemented_before_gate"]
++        )
++        self.assertEqual(
++            resolved["evidence"]["registry_launcher_sha256"],
++            resolved["runtime"]["payload_sha256"],
++        )
++        PAI_JOB.validate_resolved(resolved)
++
++    def test_outer_command_and_frozen_payload_are_shell_syntax_valid(self) -> None:
++        resolved = self.resolved()
++        subprocess.run(
++            ["/bin/sh", "-n", "-c", resolved["runtime"]["command"]],
++            check=True,
++        )
++        payload = base64.b64decode(
++            resolved["runtime"]["payload_base64"],
++            validate=True,
++        )
++        subprocess.run(["/bin/bash", "-n"], input=payload, check=True)
++
++    def test_worker_fault_wandb_and_evidence_drift_fail_closed(self) -> None:
++        mutations = []
++
++        worker = self.resolved()
++        worker["worker"]["gpu"] = 1
++        mutations.append(worker)
++
++        fault = self.resolved()
++        fault["fault_tolerance"]["maximum_platform_restarts"] = 1
++        mutations.append(fault)
++
++        wandb = self.resolved()
++        wandb["runtime"]["wandb_entity_contract"]["entity"] = "other"
++        mutations.append(wandb)
++
++        evidence = self.resolved()
++        evidence["evidence"]["optimizer_steps_per_model"] = 2999
++        mutations.append(evidence)
++
++        for index, resolved in enumerate(mutations):
++            with self.subTest(index=index), self.assertRaises(PAI_JOB.Refused):
++                PAI_JOB.validate_resolved(resolved)
++
++    def test_template_uses_no_idle_or_4090_resource(self) -> None:
++        requested = json.loads(TEMPLATE.read_text(encoding="utf-8"))
++        self.assertEqual(
++            requested["resource_alias"],
++            "exp-efficiency-r16p18-libero-2gpu",
++        )
++        self.assertNotIn("4090", json.dumps(requested).lower())
++        self.assertFalse(requested["submission"]["disable_ecs_stock_check"])
++        self.assertEqual(requested["fault_tolerance"]["aimaster_args"], "")
++
++    def test_absent_persistent_evidence_is_incomplete_not_success(self) -> None:
++        artifacts = PAI_JOB.verify_r16p18_artifacts(self.resolved())
++        self.assertFalse(artifacts["complete"])
++        self.assertFalse(artifacts["first_training_step"]["complete"])
++        self.assertFalse(artifacts["first_completed_rollout"]["complete"])
++        self.assertFalse(artifacts["baseline_gate"]["complete"])
++
++
++if __name__ == "__main__":
++    unittest.main()

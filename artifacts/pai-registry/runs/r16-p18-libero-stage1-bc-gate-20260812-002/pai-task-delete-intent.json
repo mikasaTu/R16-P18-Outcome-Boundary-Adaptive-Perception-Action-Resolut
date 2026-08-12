@@ -1,0 +1,39 @@
+{
+  "action": "DeleteJob",
+  "api_path": "/api/v1/jobs/dlc1eloj62mdzw2y",
+  "api_version": "2020-12-03",
+  "expected_purpose": "formal-training",
+  "expected_status": "Failed",
+  "intent_at_utc": "2026-08-12T15:09:31Z",
+  "job_id": "dlc1eloj62mdzw2y",
+  "performed_by_gid": 2254,
+  "performed_by_uid": 2254,
+  "phase": "prepared",
+  "preflight_getjob_sha256": "f56dbe6ec60e3217bae408c12d5c68d4ec1bd14e070a1052ea33071ffbec0e88",
+  "preflight_listjobs_sha256": "bf8dd63ace1de8a971df596b681724497c70a8155283da5381965db4aec4995c",
+  "preflight_summary": {
+    "DisplayName": "r16p18-lib-r16-p18-libero-stage1-bc-gate-20260812-002-n6368049f",
+    "JobId": "dlc1eloj62mdzw2y",
+    "ResourceId": "quotakzri8a5wqcp",
+    "Status": "Failed",
+    "Tags": {
+      "contract_source_job_id": "dlcfp1szuc2cgqfp",
+      "dataset": "libero-goal-three-task-50-demo-pilot",
+      "experiment_role": "stage1-necessary-condition-baseline-gate",
+      "hardware": "2xa800-dedicated",
+      "managed_by": "pai-job-registry",
+      "model": "boundarybc-s-resnet18-h8-e4-three-seeds",
+      "nonce": "6368049ff810685384b1c1a9fc6e4604",
+      "purpose": "formal-training",
+      "resource_pool": "exp-efficiency",
+      "run_id": "r16-p18-libero-stage1-bc-gate-20260812-002",
+      "task": "r16p18-libero-stage1-boundarybc-baseline-20260812"
+    },
+    "UserId": "204304175653577039",
+    "WorkspaceId": "179169"
+  },
+  "preserve_cpfs_and_registry_evidence": true,
+  "run_id": "r16-p18-libero-stage1-bc-gate-20260812-002",
+  "schema_version": 1,
+  "workspace_id": "179169"
+}

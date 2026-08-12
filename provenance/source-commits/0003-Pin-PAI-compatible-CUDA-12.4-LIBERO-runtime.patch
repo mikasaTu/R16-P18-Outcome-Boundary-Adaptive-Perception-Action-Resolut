@@ -1,0 +1,136 @@
+From 20d65a9ab7ff42662496c093e14531904cf1fe31 Mon Sep 17 00:00:00 2001
+From: Codex <codex@local>
+Date: Wed, 12 Aug 2026 22:41:45 +0800
+Subject: [PATCH 3/3] Pin PAI-compatible CUDA 12.4 LIBERO runtime
+
+---
+ configs/dev14_smoke_evidence.yaml  | 12 ++++++------
+ configs/r16_p18_libero_stage1.yaml | 23 ++++++++++++++++++-----
+ scripts/pai_r16_p18_leon.sh        | 18 +++++++++++++++++-
+ 3 files changed, 41 insertions(+), 12 deletions(-)
+
+diff --git a/configs/dev14_smoke_evidence.yaml b/configs/dev14_smoke_evidence.yaml
+index fa500a8..357d14e 100644
+--- a/configs/dev14_smoke_evidence.yaml
++++ b/configs/dev14_smoke_evidence.yaml
+@@ -1,13 +1,13 @@
+ schema_version: 1
+ protocol_id: R16-P18-LIBERO-STAGE1-PILOT-V1
+-smoke_id: dev14-smoke-20260812-v4
+-smoke_source_commit: 2ecad26d8b6616d4bf613938e2a956abce4dde70
++smoke_id: dev14-smoke-20260812-v5
+ completed_at_date_utc: "2026-08-12"
+ scope: dev14_one_gpu_batch_one_only
+ pai_probe_created: false
+ 
+ runtime:
+-  python_executable: /mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sim/bin/python
++  python_executable: /mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python
++  python_overlay: /mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/r22p10-libero-pai-overlay/site-packages
+   device: NVIDIA A800-SXM4-80GB
+   gpu_count: 1
+   batch_size: 1
+@@ -15,10 +15,10 @@ runtime:
+ 
+ inputs:
+   config: configs/r16_p18_libero_stage1.yaml
+-  config_sha256: f07ddc8a47cdd1fc43fca3919dbf73d67e6a4a914a09fcff91801269e7b23426
++  config_sha256: d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf
+   dataset_path: /mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO
+-  output: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/dev14-smoke-20260812-v4/smoke_result.json
+-  output_sha256: bf06ef75966094346f4530a1c49c232a07117420bd3c7e36c955fb355d5b3b98
++  output: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/dev14-smoke-20260812-v5/smoke_result.json
++  output_sha256: 8a5cb0c1c3f5b68f45f34c7e75227086d61e34bd709a54003875b2c2a6658fb2
+   output_owner_uid_gid: "2254:2254"
+ 
+ checks:
+diff --git a/configs/r16_p18_libero_stage1.yaml b/configs/r16_p18_libero_stage1.yaml
+index c51dd9c..fe94e67 100644
+--- a/configs/r16_p18_libero_stage1.yaml
++++ b/configs/r16_p18_libero_stage1.yaml
+@@ -16,17 +16,25 @@ benchmark:
+ 
+ runtime:
+   python: 3.11.11
+-  torch: 2.12.1+cu130
+-  torchvision: 0.27.1+cu130
+-  cuda_runtime: "13.0"
+-  cudnn: 92000
+-  numpy: 2.4.6
++  torch: 2.5.1+cu124
++  torchvision: 0.20.1+cu124
++  cuda_runtime: "12.4"
++  cudnn: 90100
++  numpy: 1.26.4
+   h5py: 3.16.0
+   mujoco: 3.6.0
+   robosuite: 1.4.0
+   scipy: 1.17.1
+   pyyaml: 6.0.3
+ 
++runtime_environment:
++  python_executable: /mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python
++  resolved_python_sha256: 89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48fc4f961a
++  overlay: /mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/r22p10-libero-pai-overlay/site-packages
++  overlay_manifest_sha256: 64dfffdaf464d1a37be19b038cca919a252dba573eb2d0f8aa442b91a4099459
++  overlay_file_count: 1688
++  pai_image: dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04
++
+ assets:
+   root: /mnt/cpfs/zbl-cpfs-new/USERS/leon/code/LIBERO-original/libero/libero/assets
+   files: 585
+@@ -76,6 +84,11 @@ data:
+     validation: 5
+     test: 5
+   split_order: lexicographic_sha256
++  runtime_pin_amendment: >-
++    Before observing any training outcome, the runtime pin was changed from
++    the dev14 CUDA 13 environment to the CUDA 12.4 environment already used on
++    the live-verified PAI carrier. Model, data, seeds, budgets, and thresholds
++    were unchanged.
+ 
+ model:
+   name: BoundaryBC-S
+diff --git a/scripts/pai_r16_p18_leon.sh b/scripts/pai_r16_p18_leon.sh
+index cf836ef..0f07644 100755
+--- a/scripts/pai_r16_p18_leon.sh
++++ b/scripts/pai_r16_p18_leon.sh
+@@ -7,7 +7,8 @@ leon_gid=2254
+ new_root=/mnt/cpfs/zbl-cpfs-new
+ user_root=$new_root/USERS/leon
+ project_dir=$user_root/code/r16-p18-libero-stage1-20260812
+-python_bin=$user_root/envs/libero_sim/bin/python
++python_bin=$user_root/envs/libero_sft/bin/python
++python_overlay=$user_root/envs/r22p10-libero-pai-overlay/site-packages
+ dataset_root=$new_root/dataset/leon/embodied_benchmark/datasets/LIBERO
+ checkpoint_base=$new_root/CKPT/leon/torch/r16-p18-libero-stage1
+ log_base=$user_root/logs/r16-p18-libero-stage1
+@@ -33,6 +34,20 @@ test -x "$python_bin" && test -d "$dataset_root" || {
+   echo "[preflight] pinned Python or dataset root is missing" >&2
+   exit 74
+ }
++test "$(sha256sum "$(realpath -e "$python_bin")" | awk '{print $1}')" = \
++  89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48fc4f961a || {
++  echo "[preflight] pinned Python hash mismatch" >&2
++  exit 80
++}
++overlay_manifest_sha=$(find "$python_overlay" -type f -printf '%P\0' | sort -z | while IFS= read -r -d '' relative; do printf '%s\0' "$relative"; cat "$python_overlay/$relative"; done | sha256sum | awk '{print $1}')
++test "$overlay_manifest_sha" = 64dfffdaf464d1a37be19b038cca919a252dba573eb2d0f8aa442b91a4099459 || {
++  echo "[preflight] pinned Python overlay hash mismatch" >&2
++  exit 81
++}
++test "$(find "$python_overlay" -type f | wc -l)" = 1688 || {
++  echo "[preflight] pinned Python overlay file count mismatch" >&2
++  exit 82
++}
+ test "${PAI_CANARY_EXPECTED_GPUS:-}" = 2 || {
+   echo "[preflight] expected the verified 2xA800 carrier" >&2
+   exit 77
+@@ -53,6 +68,7 @@ if rg -n "$legacy_re" "$config" "$project_dir/scripts" "$project_dir/boundarybc"
+ fi
+ 
+ mkdir -p "$XDG_CACHE_HOME" "$TORCH_HOME" "$WANDB_DIR" "$WANDB_CACHE_DIR"
++export PYTHONPATH="$python_overlay:$project_dir"
+ "$python_bin" -m boundarybc.preflight \
+   --config "$config" \
+   --run-id "$run_id" \

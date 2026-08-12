@@ -1,0 +1,17 @@
+{
+  "bytes": 39528952,
+  "complete_state": [
+    "model",
+    "optimizer",
+    "scheduler",
+    "rng",
+    "batch_generator_state",
+    "global_step"
+  ],
+  "model_seed": 16019,
+  "run_id": "r16-p18-libero-stage1-bc-gate-20260812-003",
+  "schema_version": 1,
+  "sha256": "e2ab9524dfefba18a1f980959e3b82ea6330d2d1675909ef39b922287eb25e92",
+  "step": 2500,
+  "task_key": "bottle_rack"
+}

@@ -1,0 +1,270 @@
+{
+  "artifact_dir": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002",
+  "controller_version": "5",
+  "description": "Formal R16-P18 Stage-1 BoundaryBC-S necessary-condition baseline gate on three locked LIBERO-GOAL tasks; two independent one-GPU model workers on the verified 2xA800 carrier; stop before effect predictor or adaptive arms unless all preregistered baseline ranges pass; run_id=r16-p18-libero-stage1-bc-gate-20260812-002; resource_alias=exp-efficiency-r16p18-libero-2gpu; resource_id=quotakzri8a5wqcp; contract_source_job_id=dlcfp1szuc2cgqfp; resource_source_job_id=dlc1j2p8ui63ulps; submission_method=cli_create; pai_clone_performed=false; nonce=6368049ff810685384b1c1a9fc6e4604",
+  "evidence": {
+    "adaptive_components_implemented_before_gate": false,
+    "available_official_demos_per_task": 50,
+    "baseline_ranges": {
+      "bottle_rack": [
+        0.25,
+        0.8
+      ],
+      "bowl_plate": [
+        0.8,
+        1.0
+      ],
+      "push_plate": [
+        0.4,
+        0.9
+      ]
+    },
+    "batch_size_per_model": 64,
+    "checkpoint_cadence_steps": 250,
+    "checkpoint_contract": "model_optimizer_scheduler_rng_batch_generator_global_step",
+    "checkpoint_retention": "latest_3_complete_per_task_seed",
+    "closed_loop_episodes_per_task_seed": 50,
+    "completed_evidence_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002/reports/baseline_gate.json",
+    "config_sha256": "d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf",
+    "contract_ready": true,
+    "data_protocol_deviation": true,
+    "demo_sha256": {
+      "bottle_rack": "f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e",
+      "bowl_plate": "e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406",
+      "push_plate": "36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6"
+    },
+    "dev14_smoke_result_sha256": "8a5cb0c1c3f5b68f45f34c7e75227086d61e34bd709a54003875b2c2a6658fb2",
+    "evaluation_first_work_evidence_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002/evaluation/push_plate/seed_16018.first_rollout.json",
+    "expected_first_work_gid": 2254,
+    "expected_first_work_uid": 2254,
+    "experiment_scope": "necessary_condition_baseline_gate_then_conditional_stage1_only",
+    "first_work_evidence_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002/models/push_plate/seed_16018/FIRST_WORK.json",
+    "formal_cuda": "12.4",
+    "formal_python_sha256": "89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48fc4f961a",
+    "formal_torch": "2.5.1+cu124",
+    "full_state_resume": true,
+    "gpu_execution": "two_independent_single_gpu_model_queues",
+    "kind": "r16p18_libero_stage1_boundarybc_baseline_formal_training_evaluation",
+    "libero_source_commit": "2319dbd914673f6ef34a00584536212b10e10395",
+    "model_id": "boundarybc-s-resnet18-h8-e4-three-seeds",
+    "model_seeds": [
+      16018,
+      16019,
+      16020
+    ],
+    "mount_contract": "exact_five_new_root_sources_from_live_readback",
+    "optimizer_steps_per_model": 3000,
+    "overlay_file_count": 1688,
+    "overlay_manifest_sha256": "64dfffdaf464d1a37be19b038cca919a252dba573eb2d0f8aa442b91a4099459",
+    "pai_probe_created": false,
+    "pilot_can_return_stage1_go": false,
+    "project_launcher_sha256": "506f6a98490c3eca7dad8096a550c46e694629192a1deb7a03c8c102e116574f",
+    "registry_launcher_sha256": "2b8caf3eeaf6bffc5d17c00ac2dfe3d017ec802c0de266ed637ced4d28993f30",
+    "requested_demos_per_task": 200,
+    "resource_contract": "dedicated_2gpu_v1",
+    "source_commit": "20d65a9ab7ff42662496c093e14531904cf1fe31",
+    "source_tree": "b87468210362a81a5d3754630f1ff804f79577e4",
+    "split_by_stable_init_state_identity": [
+      40,
+      5,
+      5
+    ],
+    "stop_after_baseline_failure": true,
+    "stop_after_stage1": true,
+    "success_gate": "persisted_step_loss_completed_rollout_and_baseline_gate",
+    "task_id": "r16p18-libero-stage1-boundarybc-baseline-20260812",
+    "tasks": [
+      "push_the_plate_to_the_front_of_the_stove",
+      "put_the_wine_bottle_on_the_rack",
+      "put_the_bowl_on_the_plate"
+    ],
+    "total_closed_loop_episodes": 450,
+    "total_models": 9,
+    "validation_method": "static+dev14_one_gpu_batch_one_smoke",
+    "validation_status": "passed_no_pai_gpu_probe",
+    "wandb_mode": "online_exact_entity_grouped_by_pai_run",
+    "workload_type": "training_and_rollout_evaluation"
+  },
+  "fault_tolerance": {
+    "aimaster_args": "",
+    "expected_platform_restarts": 0,
+    "launcher_attempts": 1,
+    "maximum_platform_restarts": 0,
+    "pai_automatic_fault_tolerance": false,
+    "retry_sleep_seconds": 30
+  },
+  "name": "r16p18-lib-r16-p18-libero-stage1-bc-gate-20260812-002-n6368049f",
+  "network": {},
+  "provenance": {
+    "contract_source_job_id": "dlcfp1szuc2cgqfp",
+    "pai_clone_performed": false,
+    "resource_source_job_id": "dlc1j2p8ui63ulps",
+    "source_role": "readback_reference",
+    "submission_method": "cli_create"
+  },
+  "resolved_at_utc": "2026-08-12T14:58:49Z",
+  "resource": {
+    "authorized_data_sources": [
+      {
+        "id": "d-mkixtohdn75dp8x9tb",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon",
+        "options": "",
+        "version": "v1"
+      },
+      {
+        "id": "d-lg9t2b6xajpukeqqeb",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/SHARE/leon",
+        "options": "",
+        "version": "v1"
+      },
+      {
+        "id": "d-36p023eg0f2vuqny8y",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon",
+        "options": "",
+        "version": "v1"
+      },
+      {
+        "id": "d-ejgj2ej7io1t2t32uc",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon",
+        "options": "",
+        "version": "v1"
+      },
+      {
+        "id": "d-7fi8hehav247qi6x5o",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/Models/",
+        "options": "",
+        "version": "v1"
+      }
+    ],
+    "contract_source_job_id": "dlcfp1szuc2cgqfp",
+    "display_name": "exp-efficiency",
+    "evidence": "Exact dedicated 2xA800 worker and resource placement are inherited only as readback facts from the live canonical contract source dlcfp1szuc2cgqfp and succeeded exp-efficiency two-card source dlc1j2p8ui63ulps. The controller restricts this alias to the pinned R16-P18 LIBERO Stage-1 BoundaryBC-S baseline-gate profile and repeats both live readbacks before CreateJob.",
+    "oversold_type": "ForbiddenQuotaOverSold",
+    "resource_id": "quotakzri8a5wqcp",
+    "resource_source": "resource_quota_two_card_verified_carrier",
+    "source_contract": {
+      "aimaster_args": "",
+      "aimaster_enabled": false,
+      "require_status": "Succeeded"
+    },
+    "source_job_id": "dlc1j2p8ui63ulps",
+    "source_worker_contracts": {
+      "contract": {
+        "count": 1,
+        "cpu": 92,
+        "gpu": 8,
+        "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+        "memory": "1600Gi",
+        "shared_memory": "1600Gi"
+      },
+      "resource": {
+        "count": 1,
+        "cpu": 12,
+        "gpu": 2,
+        "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+        "memory": "200Gi",
+        "shared_memory": "200Gi"
+      }
+    },
+    "verification_state": "specialized_r16p18_libero_stage1_over_live_verified_two_card_carrier",
+    "verified_at": "2026-08-12T23:30:00+00:00"
+  },
+  "resource_alias": "exp-efficiency-r16p18-libero-2gpu",
+  "run_id": "r16-p18-libero-stage1-bc-gate-20260812-002",
+  "runtime": {
+    "canary_nonce": "6368049ff810685384b1c1a9fc6e4604",
+    "command": "exec /bin/bash --noprofile --norc -c '#!/usr/bin/env bash\nset -Eeuo pipefail\numask 077\nexport PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\nunset BASH_ENV ENV CDPATH GLOBIGNORE\nLEON_UID=2254\nLEON_GID=2254\nNEW_ROOT=/mnt/cpfs/zbl-cpfs-new\nUSER_ROOT=/mnt/cpfs/zbl-cpfs-new/USERS/leon\nRUN_ID=r16-p18-libero-stage1-bc-gate-20260812-002\nNONCE=6368049ff810685384b1c1a9fc6e4604\nEXPECTED_GPUS=2\nSENTINEL=/mnt/cpfs/zbl-cpfs-new/USERS/leon/.pai_mount_identity\nSENTINEL_SHA256=b3cc124ffbbebf8a12d52f70555b834f9c62a34ae09ff6ee397d0abbba600ef9\nEXPECTED_CPFS_ID=cpfs-29001v2qz7p5ag7gckzsw\nPAYLOAD_SHA256=2b8caf3eeaf6bffc5d17c00ac2dfe3d017ec802c0de266ed637ced4d28993f30\nWRITE_PATHS=(/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002 /mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002)\nRECURSIVE_REPAIR=0\nCURRENT_UID=$(id -u)\nCURRENT_GID=$(id -g)\nif [[ \"$CURRENT_UID\" != 0 && \"$CURRENT_UID:$CURRENT_GID\" != \"$LEON_UID:$LEON_GID\" ]]; then\n  echo \"BOOTSTRAP_REFUSED unexpected identity $CURRENT_UID:$CURRENT_GID\" >&2\n  exit 50\nfi\nfor required in realpath findmnt sha256sum base64 mktemp stat dirname install setpriv env bash; do\n  command -v \"$required\" >/dev/null || {\n    echo \"BOOTSTRAP_REFUSED missing command: $required\" >&2\n    exit 51\n  }\ndone\ntest -d \"$NEW_ROOT\" || { echo \"BOOTSTRAP_REFUSED missing new root\" >&2; exit 52; }\n[[ \"$(realpath -e \"$NEW_ROOT\")\" == \"$NEW_ROOT\" ]] || {\n  echo \"BOOTSTRAP_REFUSED non-canonical new root\" >&2; exit 53;\n}\nassert_cpfs_path() {\n  local path=$1 resolved target fstype source\n  resolved=$(realpath -e -- \"$path\") || {\n    echo \"BOOTSTRAP_REFUSED cannot resolve CPFS path: $path\" >&2; exit 54;\n  }\n  case \"$resolved\" in \"$NEW_ROOT\"|\"$NEW_ROOT\"/*) ;;\n    *) echo \"BOOTSTRAP_REFUSED path outside new root: $resolved\" >&2; exit 55 ;;\n  esac\n  target=$(findmnt -n -o TARGET -T \"$resolved\") || {\n    echo \"BOOTSTRAP_REFUSED path is not mounted: $resolved\" >&2; exit 56;\n  }\n  case \"$target\" in \"$NEW_ROOT\"|\"$NEW_ROOT\"/*) ;;\n    *) echo \"BOOTSTRAP_REFUSED unexpected mount target: $target\" >&2; exit 57 ;;\n  esac\n  fstype=$(findmnt -n -o FSTYPE -T \"$resolved\")\n  case \"$fstype\" in *cpfs*|*aliyun-alinas*) ;;\n    *) echo \"BOOTSTRAP_REFUSED unexpected filesystem: $fstype\" >&2; exit 58 ;;\n  esac\n  source=$(findmnt -n -o SOURCE -T \"$resolved\")\n  [[ \"$source\" == *\"$EXPECTED_CPFS_ID\"* ]] || {\n    echo \"BOOTSTRAP_REFUSED unexpected CPFS source: $source\" >&2; exit 59;\n  }\n}\ntest -f \"$SENTINEL\" && test ! -L \"$SENTINEL\" || {\n  echo \"BOOTSTRAP_REFUSED mount sentinel missing\" >&2; exit 60;\n}\n[[ \"$(sha256sum \"$SENTINEL\" | awk '\"'\"'{print $1}'\"'\"')\" == \"$SENTINEL_SHA256\" ]] || {\n  echo \"BOOTSTRAP_REFUSED mount sentinel mismatch\" >&2; exit 61;\n}\nassert_cpfs_path \"$SENTINEL\"\nassert_write_path() {\n  local path=$1 resolved\n  [[ \"$path\" == /* && \"$path\" != *\"/../\"* && \"$path\" != */.. ]] || {\n    echo \"BOOTSTRAP_REFUSED invalid write path $path\" >&2; exit 62;\n  }\n  resolved=$(realpath -m -- \"$path\")\n  [[ \"$resolved\" == \"$path\" ]] || {\n    echo \"BOOTSTRAP_REFUSED non-canonical write path $path -> $resolved\" >&2; exit 63;\n  }\n  case \"$path\" in\n    /mnt/cpfs/zbl-cpfs-new/USERS/leon/cache/*|/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/*|/mnt/cpfs/zbl-cpfs-new/USERS/leon/assets/*|/mnt/cpfs/zbl-cpfs-new/USERS/leon/artifacts/qpilots/wrc_task_success_q/*|/mnt/cpfs/zbl-cpfs-new/dataset/leon/*|/mnt/cpfs/zbl-cpfs-new/CKPT/leon/*|/mnt/cpfs/zbl-cpfs-new/SHARE/leon/*) ;;\n    *) echo \"BOOTSTRAP_REFUSED write path outside Leon roots: $path\" >&2; exit 64 ;;\n  esac\n}\nfor path in \"${WRITE_PATHS[@]}\"; do\n  assert_write_path \"$path\"\n  anchor=\"$path\"\n  while [[ ! -e \"$anchor\" ]]; do\n    parent=$(dirname -- \"$anchor\")\n    [[ \"$parent\" != \"$anchor\" ]] || {\n      echo \"BOOTSTRAP_REFUSED no mounted ancestor for $path\" >&2; exit 65;\n    }\n    anchor=\"$parent\"\n  done\n  assert_cpfs_path \"$anchor\"\n  if [[ \"$CURRENT_UID\" == 0 ]]; then\n    install -d -m 0700 -o \"$LEON_UID\" -g \"$LEON_GID\" -- \"$path\"\n  else\n    mkdir -p -- \"$path\"\n    chmod 0700 -- \"$path\"\n  fi\n  assert_cpfs_path \"$path\"\n  [[ \"$(stat -c '\"'\"'%u:%g'\"'\"' \"$path\")\" == \"$LEON_UID:$LEON_GID\" ]] || {\n    echo \"BOOTSTRAP_REFUSED write directory owner mismatch: $path\" >&2; exit 66;\n  }\ndone\nif [[ \"$CURRENT_UID\" == 0 && \"$RECURSIVE_REPAIR\" == 1 ]]; then\n  chown -R --no-dereference \"$LEON_UID:$LEON_GID\" -- \"${WRITE_PATHS[@]}\"\nfi\npayload_dir=$(mktemp -d /tmp/pai-payload.XXXXXXXX) || exit 67\nif [[ \"$CURRENT_UID\" == 0 ]]; then chmod 0711 \"$payload_dir\"; fi\npayload_path=\"$payload_dir/payload.sh\"\npayload_b64=IyEvdXNyL2Jpbi9lbnYgYmFzaApzZXQgLUVldW8gcGlwZWZhaWwKCnVtYXNrIDA3NwoKUFJPSkVDVF9ESVI9L21udC9jcGZzL3pibC1jcGZzLW5ldy9VU0VSUy9sZW9uL2NvZGUvcjE2LXAxOC1saWJlcm8tc3RhZ2UxLTIwMjYwODEyClBZVEhPTj0vbW50L2NwZnMvemJsLWNwZnMtbmV3L1VTRVJTL2xlb24vZW52cy9saWJlcm9fc2Z0L2Jpbi9weXRob24KREFUQVNFVF9ST09UPS9tbnQvY3Bmcy96YmwtY3Bmcy1uZXcvZGF0YXNldC9sZW9uL2VtYm9kaWVkX2JlbmNobWFyay9kYXRhc2V0cy9MSUJFUk8KQ0hFQ0tQT0lOVF9CQVNFPS9tbnQvY3Bmcy96YmwtY3Bmcy1uZXcvQ0tQVC9sZW9uL3RvcmNoL3IxNi1wMTgtbGliZXJvLXN0YWdlMQpBUlRJRkFDVF9ESVI9JHtQQUlfQ0FOQVJZX1JVTl9ESVI6P1BBSV9DQU5BUllfUlVOX0RJUiBpcyByZXF1aXJlZH0KUlVOX0lEPSR7UEFJX0NBTkFSWV9SVU5fSUQ6P1BBSV9DQU5BUllfUlVOX0lEIGlzIHJlcXVpcmVkfQpOT05DRT0ke1BBSV9DQU5BUllfTk9OQ0U6P1BBSV9DQU5BUllfTk9OQ0UgaXMgcmVxdWlyZWR9CgpFWFBFQ1RFRF9TT1VSQ0VfQ09NTUlUPTIwZDY1YTlhYjdmZjQyNjYyNDk2YzA5M2UxNDUzMTkwNGNmMWZlMzEKRVhQRUNURURfU09VUkNFX1RSRUU9Yjg3NDY4MjEwMzYyYTgxYTVkMzc1NDYzMGYxZmY4MDRmNzk1NzdlNApFWFBFQ1RFRF9DT05GSUdfU0hBMjU2PWQ0MzQ0YzA1NmUxYzc2ODJjZWM5ZGVhYmQwYzgyODg4YmQ2ZWMyOWQ2ZDQ3M2I5YTE4NzBhMjYyYWVhYTY0YmYKRVhQRUNURURfUFJPSkVDVF9MQVVOQ0hFUl9TSEEyNTY9NTA2ZjZhOTg0OTBjM2VjYTdkYWQ4MDk2YTU1MGM0NmU2OTQ2MjkxOTJhMWRlYjdhMDNjOGMxMDJlMTE2NTc0ZgpFWFBFQ1RFRF9TTU9LRV9FVklERU5DRV9TSEEyNTY9Zjk5NjgzNjVlYzA5MmY5ZTgzZTE0YzI3ODlhZDQ1ODA5ZmRkYWU3ZTAyNWU0NWM1ZGQzZjdiYjNmM2M1OTJkYQpFWFBFQ1RFRF9TTU9LRV9SRVNVTFRfU0hBMjU2PThhNWNiMGMxYzNmNWI2OGY0NWYzNGM3ZTc1MjI3MDg2ZDYxZTM0YmQ3MDlhNTQwMDM4NzViMmMyYTY2NThmYjIKU01PS0VfUkVTVUxUPS9tbnQvY3Bmcy96YmwtY3Bmcy1uZXcvVVNFUlMvbGVvbi9sb2dzL3IxNi1wMTgtbGliZXJvLXN0YWdlMS9kZXYxNC1zbW9rZS0yMDI2MDgxMi12NS9zbW9rZV9yZXN1bHQuanNvbgoKb25fZXJyb3IoKSB7CiAgbG9jYWwgZXhpdF9jb2RlPSQ/CiAgcHJpbnRmICdSMTZQMThfQkFTRUxJTkVfQ09NTUFORF9GQUlMRUQgbGluZT0lcyBleGl0X2NvZGU9JXMgY29tbWFuZD0lcVxuJyBcCiAgICAiJHtCQVNIX0xJTkVOT1swXTotdW5rbm93bn0iICIkZXhpdF9jb2RlIiAiJEJBU0hfQ09NTUFORCIgPiYyCiAgcmV0dXJuICIkZXhpdF9jb2RlIgp9CnRyYXAgb25fZXJyb3IgRVJSCgpmb3IgcmVxdWlyZWQgaW4gZ2l0IHNoYTI1NnN1bSBudmlkaWEtc21pIHN0YXQgcmVhbHBhdGggYXdrIGdyZXA7IGRvCiAgY29tbWFuZCAtdiAiJHJlcXVpcmVkIiA+L2Rldi9udWxsCmRvbmUKdGVzdCAiJChpZCAtdSk6JChpZCAtZykiID0gMjI1NDoyMjU0CnRlc3QgIiR7UEFJX0NBTkFSWV9FWFBFQ1RFRF9HUFVTOi19IiA9IDIKdGVzdCAiJHtXQU5EQl9FTlRJVFk6LX0iID0gY2hlbl9qaWFuLWNqLXdvcmtzcGFjZQp0ZXN0IC1uICIke1dBTkRCX0FQSV9LRVk6LX0iCltbICIkUlVOX0lEIiA9fiBeW2EtejAtOV1bYS16MC05Li1dezIsNjN9JCBdXQpbWyAiJE5PTkNFIiA9fiBeW2EtZjAtOV17MzJ9JCBdXQpjYXNlICIkQVJUSUZBQ1RfRElSIiBpbgogIC9tbnQvY3Bmcy96YmwtY3Bmcy1uZXcvVVNFUlMvbGVvbi9sb2dzL3IxNi1wMTgtbGliZXJvLXN0YWdlMS8qKSA7OwogICopIHByaW50ZiAnYXJ0aWZhY3QgZGlyZWN0b3J5IGVzY2FwZWQgdGhlIFIxNi1QMTggb3V0cHV0IHJvb3RcbicgPiYyOyBleGl0IDcxIDs7CmVzYWMKdGVzdCAiJChyZWFscGF0aCAtZSAiJEFSVElGQUNUX0RJUiIpIiA9ICIkQVJUSUZBQ1RfRElSIgp0ZXN0ICIkKHN0YXQgLWMgJyV1OiVnJyAiJEFSVElGQUNUX0RJUiIpIiA9IDIyNTQ6MjI1NAoKQ0hFQ0tQT0lOVF9SVU5fRElSPSRDSEVDS1BPSU5UX0JBU0UvJFJVTl9JRAp0ZXN0ICIkKHJlYWxwYXRoIC1lICIkQ0hFQ0tQT0lOVF9SVU5fRElSIikiID0gIiRDSEVDS1BPSU5UX1JVTl9ESVIiCnRlc3QgIiQoc3RhdCAtYyAnJXU6JWcnICIkQ0hFQ0tQT0lOVF9SVU5fRElSIikiID0gMjI1NDoyMjU0CnRlc3QgIiQoZ2l0IC1DICIkUFJPSkVDVF9ESVIiIHJldi1wYXJzZSBIRUFEKSIgPSAiJEVYUEVDVEVEX1NPVVJDRV9DT01NSVQiCnRlc3QgIiQoZ2l0IC1DICIkUFJPSkVDVF9ESVIiIHJldi1wYXJzZSAnSEVBRF57dHJlZX0nKSIgPSAiJEVYUEVDVEVEX1NPVVJDRV9UUkVFIgp0ZXN0IC16ICIkKGdpdCAtQyAiJFBST0pFQ1RfRElSIiBzdGF0dXMgLS1wb3JjZWxhaW4pIgp0ZXN0ICIkKHNoYTI1NnN1bSAiJFBST0pFQ1RfRElSL2NvbmZpZ3MvcjE2X3AxOF9saWJlcm9fc3RhZ2UxLnlhbWwiIHwgYXdrICd7cHJpbnQgJDF9JykiID0gIiRFWFBFQ1RFRF9DT05GSUdfU0hBMjU2Igp0ZXN0ICIkKHNoYTI1NnN1bSAiJFBST0pFQ1RfRElSL3NjcmlwdHMvcGFpX3IxNl9wMThfbGVvbi5zaCIgfCBhd2sgJ3twcmludCAkMX0nKSIgPSAiJEVYUEVDVEVEX1BST0pFQ1RfTEFVTkNIRVJfU0hBMjU2Igp0ZXN0ICIkKHNoYTI1NnN1bSAiJFBST0pFQ1RfRElSL2NvbmZpZ3MvZGV2MTRfc21va2VfZXZpZGVuY2UueWFtbCIgfCBhd2sgJ3twcmludCAkMX0nKSIgPSAiJEVYUEVDVEVEX1NNT0tFX0VWSURFTkNFX1NIQTI1NiIKdGVzdCAiJChzaGEyNTZzdW0gIiRTTU9LRV9SRVNVTFQiIHwgYXdrICd7cHJpbnQgJDF9JykiID0gIiRFWFBFQ1RFRF9TTU9LRV9SRVNVTFRfU0hBMjU2Igp0ZXN0ICIkKHN0YXQgLWMgJyV1OiVnJyAiJFNNT0tFX1JFU1VMVCIpIiA9IDIyNTQ6MjI1NAp0ZXN0IC14ICIkUFlUSE9OIgoiJFBZVEhPTiIgLSAiJFNNT0tFX1JFU1VMVCIgIiRFWFBFQ1RFRF9DT05GSUdfU0hBMjU2IiA8PCdQWScKaW1wb3J0IGpzb24KaW1wb3J0IHBhdGhsaWIKaW1wb3J0IHN5cwoKdmFsdWUgPSBqc29uLmxvYWRzKHBhdGhsaWIuUGF0aChzeXMuYXJndlsxXSkucmVhZF90ZXh0KGVuY29kaW5nPSJ1dGYtOCIpKQphc3NlcnQgdmFsdWVbImV2ZW50Il0gPT0gIkRFVjE0X09ORV9HUFVfU01PS0VfQ09NUExFVEUiCmFzc2VydCB2YWx1ZVsiY29uZmlnX3NoYTI1NiJdID09IHN5cy5hcmd2WzJdCmFzc2VydCB2YWx1ZVsiYWRhcHRpdmVfY29tcG9uZW50c19pbXBsZW1lbnRlZCJdIGlzIEZhbHNlClBZCnRlc3QgIiQobnZpZGlhLXNtaSAtLXF1ZXJ5LWdwdT1uYW1lIC0tZm9ybWF0PWNzdixub2hlYWRlciB8IGdyZXAgLWMgJ15OVklESUEgQTgwMCcpIiA9IDIKdGVzdCAtZCAiJERBVEFTRVRfUk9PVCIKCmV4cG9ydCBSMTZfRVhQRUNURURfR0lUX0NPTU1JVD0kRVhQRUNURURfU09VUkNFX0NPTU1JVApleHBvcnQgUjE2X0VYUEVDVEVEX0NPTkZJR19TSEEyNTY9JEVYUEVDVEVEX0NPTkZJR19TSEEyNTYKZXhwb3J0IFIxNl9DSEVDS1BPSU5UX1JVTl9ESVI9JENIRUNLUE9JTlRfUlVOX0RJUgpleHBvcnQgUjE2X0xPR19SVU5fRElSPSRBUlRJRkFDVF9ESVIKZXhwb3J0IFIxNl9DQUNIRV9SVU5fRElSPSRBUlRJRkFDVF9ESVIvY2FjaGUKZXhwb3J0IFhER19DQUNIRV9IT01FPSRBUlRJRkFDVF9ESVIvY2FjaGUveGRnCmV4cG9ydCBUT1JDSF9IT01FPSRBUlRJRkFDVF9ESVIvY2FjaGUvdG9yY2gKZXhwb3J0IFdBTkRCX0RJUj0kQVJUSUZBQ1RfRElSL3dhbmRiCmV4cG9ydCBXQU5EQl9DQUNIRV9ESVI9JEFSVElGQUNUX0RJUi9jYWNoZS93YW5kYgoKZXhlYyAiJFBST0pFQ1RfRElSL3NjcmlwdHMvcGFpX3IxNl9wMThfbGVvbi5zaCIgIiRSVU5fSUQiCg==\n(umask 022; printf '\"'\"'%s'\"'\"' \"$payload_b64\" | base64 -d >\"$payload_path\")\nunset payload_b64\nchmod 0555 \"$payload_path\"\n[[ \"$(sha256sum \"$payload_path\" | awk '\"'\"'{print $1}'\"'\"')\" == \"$PAYLOAD_SHA256\" ]] || {\n  echo \"BOOTSTRAP_REFUSED payload hash mismatch\" >&2; exit 68;\n}\nHOME_DIR=/mnt/cpfs/zbl-cpfs-new/USERS/leon\nXDG_DIR=/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002/xdg-cache\nsafe_env=(\n  HOME=\"$HOME_DIR\" USER=leon LOGNAME=leon XDG_CACHE_HOME=\"$XDG_DIR\"\n  PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\n  PAI_CANARY_RUN_ID=\"$RUN_ID\" PAI_CANARY_NONCE=\"$NONCE\"\n  PAI_CANARY_RUN_DIR=/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002\n  PAI_CANARY_EXPECTED_GPUS=\"$EXPECTED_GPUS\"\n  PAI_MOUNT_SENTINEL=\"$SENTINEL\"\n  PAI_MOUNT_SENTINEL_SHA256=\"$SENTINEL_SHA256\"\n)\nwhile IFS= read -r env_name; do\n  case \"$env_name\" in\n    CUDA_*|NVIDIA_*|NCCL_*|OMPI_*|PMI_*|PMIX_*|MASTER_ADDR|MASTER_PORT|WORLD_SIZE|RANK|LOCAL_RANK|NODE_RANK|GROUP_RANK|ROLE_RANK|TORCHELASTIC_*|LD_LIBRARY_PATH|HTTP_PROXY|HTTPS_PROXY|NO_PROXY|http_proxy|https_proxy|no_proxy|WANDB_*|HF_*|TRANSFORMERS_*|XLA_*|JAX_*|TORCH_*|OMP_*|MKL_*|PAI_TASK_*)\n      safe_env+=(\"$env_name=${!env_name}\") ;;\n  esac\ndone < <(compgen -e)\nif [[ \"$CURRENT_UID\" == 0 ]]; then\n  exec setpriv --reuid=\"$LEON_UID\" --regid=\"$LEON_GID\" --clear-groups -- \\\n    env -i \"${safe_env[@]}\" bash --noprofile --norc \"$payload_path\"\nfi\n[[ \"$CURRENT_UID:$CURRENT_GID\" == \"$LEON_UID:$LEON_GID\" ]] || exit 69\nexec env -i \"${safe_env[@]}\" bash --noprofile --norc \"$payload_path\"\n'",
+    "command_file": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry-r16-p18-20260812/launchers/r16_p18_libero_stage1_baseline.sh",
+    "command_file_sha256": "2b8caf3eeaf6bffc5d17c00ac2dfe3d017ec802c0de266ed637ced4d28993f30",
+    "create_artifact_dir": true,
+    "gid": 2254,
+    "identity_mechanism": "controller_inline_bootstrap_then_setpriv",
+    "output_mode": "resume",
+    "payload_base64": "IyEvdXNyL2Jpbi9lbnYgYmFzaApzZXQgLUVldW8gcGlwZWZhaWwKCnVtYXNrIDA3NwoKUFJPSkVDVF9ESVI9L21udC9jcGZzL3pibC1jcGZzLW5ldy9VU0VSUy9sZW9uL2NvZGUvcjE2LXAxOC1saWJlcm8tc3RhZ2UxLTIwMjYwODEyClBZVEhPTj0vbW50L2NwZnMvemJsLWNwZnMtbmV3L1VTRVJTL2xlb24vZW52cy9saWJlcm9fc2Z0L2Jpbi9weXRob24KREFUQVNFVF9ST09UPS9tbnQvY3Bmcy96YmwtY3Bmcy1uZXcvZGF0YXNldC9sZW9uL2VtYm9kaWVkX2JlbmNobWFyay9kYXRhc2V0cy9MSUJFUk8KQ0hFQ0tQT0lOVF9CQVNFPS9tbnQvY3Bmcy96YmwtY3Bmcy1uZXcvQ0tQVC9sZW9uL3RvcmNoL3IxNi1wMTgtbGliZXJvLXN0YWdlMQpBUlRJRkFDVF9ESVI9JHtQQUlfQ0FOQVJZX1JVTl9ESVI6P1BBSV9DQU5BUllfUlVOX0RJUiBpcyByZXF1aXJlZH0KUlVOX0lEPSR7UEFJX0NBTkFSWV9SVU5fSUQ6P1BBSV9DQU5BUllfUlVOX0lEIGlzIHJlcXVpcmVkfQpOT05DRT0ke1BBSV9DQU5BUllfTk9OQ0U6P1BBSV9DQU5BUllfTk9OQ0UgaXMgcmVxdWlyZWR9CgpFWFBFQ1RFRF9TT1VSQ0VfQ09NTUlUPTIwZDY1YTlhYjdmZjQyNjYyNDk2YzA5M2UxNDUzMTkwNGNmMWZlMzEKRVhQRUNURURfU09VUkNFX1RSRUU9Yjg3NDY4MjEwMzYyYTgxYTVkMzc1NDYzMGYxZmY4MDRmNzk1NzdlNApFWFBFQ1RFRF9DT05GSUdfU0hBMjU2PWQ0MzQ0YzA1NmUxYzc2ODJjZWM5ZGVhYmQwYzgyODg4YmQ2ZWMyOWQ2ZDQ3M2I5YTE4NzBhMjYyYWVhYTY0YmYKRVhQRUNURURfUFJPSkVDVF9MQVVOQ0hFUl9TSEEyNTY9NTA2ZjZhOTg0OTBjM2VjYTdkYWQ4MDk2YTU1MGM0NmU2OTQ2MjkxOTJhMWRlYjdhMDNjOGMxMDJlMTE2NTc0ZgpFWFBFQ1RFRF9TTU9LRV9FVklERU5DRV9TSEEyNTY9Zjk5NjgzNjVlYzA5MmY5ZTgzZTE0YzI3ODlhZDQ1ODA5ZmRkYWU3ZTAyNWU0NWM1ZGQzZjdiYjNmM2M1OTJkYQpFWFBFQ1RFRF9TTU9LRV9SRVNVTFRfU0hBMjU2PThhNWNiMGMxYzNmNWI2OGY0NWYzNGM3ZTc1MjI3MDg2ZDYxZTM0YmQ3MDlhNTQwMDM4NzViMmMyYTY2NThmYjIKU01PS0VfUkVTVUxUPS9tbnQvY3Bmcy96YmwtY3Bmcy1uZXcvVVNFUlMvbGVvbi9sb2dzL3IxNi1wMTgtbGliZXJvLXN0YWdlMS9kZXYxNC1zbW9rZS0yMDI2MDgxMi12NS9zbW9rZV9yZXN1bHQuanNvbgoKb25fZXJyb3IoKSB7CiAgbG9jYWwgZXhpdF9jb2RlPSQ/CiAgcHJpbnRmICdSMTZQMThfQkFTRUxJTkVfQ09NTUFORF9GQUlMRUQgbGluZT0lcyBleGl0X2NvZGU9JXMgY29tbWFuZD0lcVxuJyBcCiAgICAiJHtCQVNIX0xJTkVOT1swXTotdW5rbm93bn0iICIkZXhpdF9jb2RlIiAiJEJBU0hfQ09NTUFORCIgPiYyCiAgcmV0dXJuICIkZXhpdF9jb2RlIgp9CnRyYXAgb25fZXJyb3IgRVJSCgpmb3IgcmVxdWlyZWQgaW4gZ2l0IHNoYTI1NnN1bSBudmlkaWEtc21pIHN0YXQgcmVhbHBhdGggYXdrIGdyZXA7IGRvCiAgY29tbWFuZCAtdiAiJHJlcXVpcmVkIiA+L2Rldi9udWxsCmRvbmUKdGVzdCAiJChpZCAtdSk6JChpZCAtZykiID0gMjI1NDoyMjU0CnRlc3QgIiR7UEFJX0NBTkFSWV9FWFBFQ1RFRF9HUFVTOi19IiA9IDIKdGVzdCAiJHtXQU5EQl9FTlRJVFk6LX0iID0gY2hlbl9qaWFuLWNqLXdvcmtzcGFjZQp0ZXN0IC1uICIke1dBTkRCX0FQSV9LRVk6LX0iCltbICIkUlVOX0lEIiA9fiBeW2EtejAtOV1bYS16MC05Li1dezIsNjN9JCBdXQpbWyAiJE5PTkNFIiA9fiBeW2EtZjAtOV17MzJ9JCBdXQpjYXNlICIkQVJUSUZBQ1RfRElSIiBpbgogIC9tbnQvY3Bmcy96YmwtY3Bmcy1uZXcvVVNFUlMvbGVvbi9sb2dzL3IxNi1wMTgtbGliZXJvLXN0YWdlMS8qKSA7OwogICopIHByaW50ZiAnYXJ0aWZhY3QgZGlyZWN0b3J5IGVzY2FwZWQgdGhlIFIxNi1QMTggb3V0cHV0IHJvb3RcbicgPiYyOyBleGl0IDcxIDs7CmVzYWMKdGVzdCAiJChyZWFscGF0aCAtZSAiJEFSVElGQUNUX0RJUiIpIiA9ICIkQVJUSUZBQ1RfRElSIgp0ZXN0ICIkKHN0YXQgLWMgJyV1OiVnJyAiJEFSVElGQUNUX0RJUiIpIiA9IDIyNTQ6MjI1NAoKQ0hFQ0tQT0lOVF9SVU5fRElSPSRDSEVDS1BPSU5UX0JBU0UvJFJVTl9JRAp0ZXN0ICIkKHJlYWxwYXRoIC1lICIkQ0hFQ0tQT0lOVF9SVU5fRElSIikiID0gIiRDSEVDS1BPSU5UX1JVTl9ESVIiCnRlc3QgIiQoc3RhdCAtYyAnJXU6JWcnICIkQ0hFQ0tQT0lOVF9SVU5fRElSIikiID0gMjI1NDoyMjU0CnRlc3QgIiQoZ2l0IC1DICIkUFJPSkVDVF9ESVIiIHJldi1wYXJzZSBIRUFEKSIgPSAiJEVYUEVDVEVEX1NPVVJDRV9DT01NSVQiCnRlc3QgIiQoZ2l0IC1DICIkUFJPSkVDVF9ESVIiIHJldi1wYXJzZSAnSEVBRF57dHJlZX0nKSIgPSAiJEVYUEVDVEVEX1NPVVJDRV9UUkVFIgp0ZXN0IC16ICIkKGdpdCAtQyAiJFBST0pFQ1RfRElSIiBzdGF0dXMgLS1wb3JjZWxhaW4pIgp0ZXN0ICIkKHNoYTI1NnN1bSAiJFBST0pFQ1RfRElSL2NvbmZpZ3MvcjE2X3AxOF9saWJlcm9fc3RhZ2UxLnlhbWwiIHwgYXdrICd7cHJpbnQgJDF9JykiID0gIiRFWFBFQ1RFRF9DT05GSUdfU0hBMjU2Igp0ZXN0ICIkKHNoYTI1NnN1bSAiJFBST0pFQ1RfRElSL3NjcmlwdHMvcGFpX3IxNl9wMThfbGVvbi5zaCIgfCBhd2sgJ3twcmludCAkMX0nKSIgPSAiJEVYUEVDVEVEX1BST0pFQ1RfTEFVTkNIRVJfU0hBMjU2Igp0ZXN0ICIkKHNoYTI1NnN1bSAiJFBST0pFQ1RfRElSL2NvbmZpZ3MvZGV2MTRfc21va2VfZXZpZGVuY2UueWFtbCIgfCBhd2sgJ3twcmludCAkMX0nKSIgPSAiJEVYUEVDVEVEX1NNT0tFX0VWSURFTkNFX1NIQTI1NiIKdGVzdCAiJChzaGEyNTZzdW0gIiRTTU9LRV9SRVNVTFQiIHwgYXdrICd7cHJpbnQgJDF9JykiID0gIiRFWFBFQ1RFRF9TTU9LRV9SRVNVTFRfU0hBMjU2Igp0ZXN0ICIkKHN0YXQgLWMgJyV1OiVnJyAiJFNNT0tFX1JFU1VMVCIpIiA9IDIyNTQ6MjI1NAp0ZXN0IC14ICIkUFlUSE9OIgoiJFBZVEhPTiIgLSAiJFNNT0tFX1JFU1VMVCIgIiRFWFBFQ1RFRF9DT05GSUdfU0hBMjU2IiA8PCdQWScKaW1wb3J0IGpzb24KaW1wb3J0IHBhdGhsaWIKaW1wb3J0IHN5cwoKdmFsdWUgPSBqc29uLmxvYWRzKHBhdGhsaWIuUGF0aChzeXMuYXJndlsxXSkucmVhZF90ZXh0KGVuY29kaW5nPSJ1dGYtOCIpKQphc3NlcnQgdmFsdWVbImV2ZW50Il0gPT0gIkRFVjE0X09ORV9HUFVfU01PS0VfQ09NUExFVEUiCmFzc2VydCB2YWx1ZVsiY29uZmlnX3NoYTI1NiJdID09IHN5cy5hcmd2WzJdCmFzc2VydCB2YWx1ZVsiYWRhcHRpdmVfY29tcG9uZW50c19pbXBsZW1lbnRlZCJdIGlzIEZhbHNlClBZCnRlc3QgIiQobnZpZGlhLXNtaSAtLXF1ZXJ5LWdwdT1uYW1lIC0tZm9ybWF0PWNzdixub2hlYWRlciB8IGdyZXAgLWMgJ15OVklESUEgQTgwMCcpIiA9IDIKdGVzdCAtZCAiJERBVEFTRVRfUk9PVCIKCmV4cG9ydCBSMTZfRVhQRUNURURfR0lUX0NPTU1JVD0kRVhQRUNURURfU09VUkNFX0NPTU1JVApleHBvcnQgUjE2X0VYUEVDVEVEX0NPTkZJR19TSEEyNTY9JEVYUEVDVEVEX0NPTkZJR19TSEEyNTYKZXhwb3J0IFIxNl9DSEVDS1BPSU5UX1JVTl9ESVI9JENIRUNLUE9JTlRfUlVOX0RJUgpleHBvcnQgUjE2X0xPR19SVU5fRElSPSRBUlRJRkFDVF9ESVIKZXhwb3J0IFIxNl9DQUNIRV9SVU5fRElSPSRBUlRJRkFDVF9ESVIvY2FjaGUKZXhwb3J0IFhER19DQUNIRV9IT01FPSRBUlRJRkFDVF9ESVIvY2FjaGUveGRnCmV4cG9ydCBUT1JDSF9IT01FPSRBUlRJRkFDVF9ESVIvY2FjaGUvdG9yY2gKZXhwb3J0IFdBTkRCX0RJUj0kQVJUSUZBQ1RfRElSL3dhbmRiCmV4cG9ydCBXQU5EQl9DQUNIRV9ESVI9JEFSVElGQUNUX0RJUi9jYWNoZS93YW5kYgoKZXhlYyAiJFBST0pFQ1RfRElSL3NjcmlwdHMvcGFpX3IxNl9wMThfbGVvbi5zaCIgIiRSVU5fSUQiCg==",
+    "payload_sha256": "2b8caf3eeaf6bffc5d17c00ac2dfe3d017ec802c0de266ed637ced4d28993f30",
+    "payload_transport": "base64",
+    "pod_env": {},
+    "recursive_repair": false,
+    "secret_env_names": [
+      "WANDB_API_KEY",
+      "WANDB_ENTITY"
+    ],
+    "uid": 2254,
+    "wandb_entity_contract": {
+      "allow_identity_inference": false,
+      "entity": "chen_jian-cj-workspace",
+      "forbidden_viewers": [
+        "shiyanpei0826"
+      ],
+      "require_live_membership_write_gate": true,
+      "source": "explicit_user_contract"
+    },
+    "write_paths": [
+      "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002",
+      "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-002"
+    ]
+  },
+  "schema_version": 2,
+  "source_template": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry-r16-p18-20260812/templates/r16p18-libero-stage1-baseline-exp-efficiency-2gpu-formal.json",
+  "storage": {
+    "data_sources": [
+      {
+        "id": "d-mkixtohdn75dp8x9tb",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon",
+        "options": "",
+        "version": "v1"
+      },
+      {
+        "id": "d-lg9t2b6xajpukeqqeb",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/SHARE/leon",
+        "options": "",
+        "version": "v1"
+      },
+      {
+        "id": "d-36p023eg0f2vuqny8y",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon",
+        "options": "",
+        "version": "v1"
+      },
+      {
+        "id": "d-ejgj2ej7io1t2t32uc",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon",
+        "options": "",
+        "version": "v1"
+      },
+      {
+        "id": "d-7fi8hehav247qi6x5o",
+        "mount_path": "/mnt/cpfs/zbl-cpfs-new/Models/",
+        "options": "",
+        "version": "v1"
+      }
+    ],
+    "output_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1"
+  },
+  "submission": {
+    "disable_ecs_stock_check": false,
+    "job_max_running_time_minutes": 0,
+    "job_reserved_minutes": 0,
+    "job_reserved_policy": "",
+    "priority": 9,
+    "tags": {
+      "dataset": "libero-goal-three-task-50-demo-pilot",
+      "experiment_role": "stage1-necessary-condition-baseline-gate",
+      "hardware": "2xa800-dedicated",
+      "managed_by": "pai-job-registry",
+      "model": "boundarybc-s-resnet18-h8-e4-three-seeds",
+      "purpose": "formal-training",
+      "resource_pool": "exp-efficiency",
+      "task": "r16p18-libero-stage1-boundarybc-baseline-20260812"
+    }
+  },
+  "worker": {
+    "count": 1,
+    "cpu": 12,
+    "gpu": 2,
+    "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+    "memory": "200Gi",
+    "shared_memory": "200Gi"
+  },
+  "workspace_id": "179169"
+}

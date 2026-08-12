@@ -1,0 +1,3053 @@
+From 2ecad26d8b6616d4bf613938e2a956abce4dde70 Mon Sep 17 00:00:00 2001
+From: Codex <codex@local>
+Date: Wed, 12 Aug 2026 22:24:38 +0800
+Subject: [PATCH 1/3] Add LIBERO BoundaryBC-S Stage-1 baseline gate
+
+---
+ boundarybc/__init__.py             |   6 +
+ boundarybc/checkpoint.py           | 254 ++++++++++++++++++
+ boundarybc/config.py               | 100 +++++++
+ boundarybc/data.py                 | 198 ++++++++++++++
+ boundarybc/evaluation.py           | 175 +++++++++++++
+ boundarybc/libero_runtime.py       | 231 +++++++++++++++++
+ boundarybc/model.py                | 101 ++++++++
+ boundarybc/pipeline.py             | 166 ++++++++++++
+ boundarybc/preflight.py            |  96 +++++++
+ boundarybc/provenance.py           | 138 ++++++++++
+ boundarybc/replay_worker.py        |  98 +++++++
+ boundarybc/reporting.py            | 136 ++++++++++
+ boundarybc/smoke.py                | 161 ++++++++++++
+ boundarybc/training.py             | 402 +++++++++++++++++++++++++++++
+ boundarybc/worker.py               |  59 +++++
+ configs/dev14_smoke_evidence.yaml  |  60 +++++
+ configs/egl/10_nvidia.json         |   6 +
+ configs/libero/config.yaml         |   6 +
+ configs/r16_p18_libero_stage1.yaml | 139 ++++++++++
+ libero/libero/__init__.py          |  11 +
+ scripts/pai_r16_p18_bootstrap.sh   | 154 +++++++++++
+ scripts/pai_r16_p18_leon.sh        |  64 +++++
+ tests/test_stage1_contract.py      |  96 +++++++
+ 23 files changed, 2857 insertions(+)
+ create mode 100644 boundarybc/__init__.py
+ create mode 100644 boundarybc/checkpoint.py
+ create mode 100644 boundarybc/config.py
+ create mode 100644 boundarybc/data.py
+ create mode 100644 boundarybc/evaluation.py
+ create mode 100644 boundarybc/libero_runtime.py
+ create mode 100644 boundarybc/model.py
+ create mode 100644 boundarybc/pipeline.py
+ create mode 100644 boundarybc/preflight.py
+ create mode 100644 boundarybc/provenance.py
+ create mode 100644 boundarybc/replay_worker.py
+ create mode 100644 boundarybc/reporting.py
+ create mode 100644 boundarybc/smoke.py
+ create mode 100644 boundarybc/training.py
+ create mode 100644 boundarybc/worker.py
+ create mode 100644 configs/dev14_smoke_evidence.yaml
+ create mode 100644 configs/egl/10_nvidia.json
+ create mode 100644 configs/libero/config.yaml
+ create mode 100644 configs/r16_p18_libero_stage1.yaml
+ create mode 100755 scripts/pai_r16_p18_bootstrap.sh
+ create mode 100755 scripts/pai_r16_p18_leon.sh
+ create mode 100644 tests/test_stage1_contract.py
+
+diff --git a/boundarybc/__init__.py b/boundarybc/__init__.py
+new file mode 100644
+index 0000000..ea43f70
+--- /dev/null
++++ b/boundarybc/__init__.py
+@@ -0,0 +1,6 @@
++"""Small-BC health gate for the R16-P18 LIBERO Stage-1 falsifier."""
++
++__all__ = ["__version__"]
++
++__version__ = "0.1.0"
++
+diff --git a/boundarybc/checkpoint.py b/boundarybc/checkpoint.py
+new file mode 100644
+index 0000000..55f0519
+--- /dev/null
++++ b/boundarybc/checkpoint.py
+@@ -0,0 +1,254 @@
++from __future__ import annotations
++
++import hashlib
++import json
++import os
++import random
++import re
++import tempfile
++from pathlib import Path
++from typing import Any
++
++import numpy as np
++import torch
++
++
++_STEP_RE = re.compile(r"checkpoint_step_(\d{8})\.pt$")
++
++
++def sha256_file(path: str | Path) -> str:
++    digest = hashlib.sha256()
++    with Path(path).open("rb") as handle:
++        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
++            digest.update(chunk)
++    return digest.hexdigest()
++
++
++def atomic_write_json(path: str | Path, value: Any) -> None:
++    path = Path(path)
++    path.parent.mkdir(parents=True, exist_ok=True)
++    fd, temporary = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
++    try:
++        with os.fdopen(fd, "w", encoding="utf-8") as handle:
++            json.dump(value, handle, sort_keys=True, indent=2)
++            handle.write("\n")
++            handle.flush()
++            os.fsync(handle.fileno())
++        os.replace(temporary, path)
++        _fsync_directory(path.parent)
++    except BaseException:
++        try:
++            os.unlink(temporary)
++        except FileNotFoundError:
++            pass
++        raise
++
++
++def capture_rng_state() -> dict[str, Any]:
++    state: dict[str, Any] = {
++        "python": random.getstate(),
++        "numpy": np.random.get_state(),
++        "torch_cpu": torch.get_rng_state(),
++    }
++    if torch.cuda.is_available():
++        state["torch_cuda"] = torch.cuda.get_rng_state_all()
++    return state
++
++
++def restore_rng_state(state: dict[str, Any]) -> None:
++    random.setstate(state["python"])
++    np.random.set_state(state["numpy"])
++    torch.set_rng_state(state["torch_cpu"])
++    if torch.cuda.is_available() and "torch_cuda" in state:
++        torch.cuda.set_rng_state_all(state["torch_cuda"])
++
++
++def checkpoint_path(directory: str | Path, step: int) -> Path:
++    return Path(directory) / f"checkpoint_step_{step:08d}.pt"
++
++
++def marker_path(checkpoint: str | Path) -> Path:
++    checkpoint = Path(checkpoint)
++    return checkpoint.with_suffix(checkpoint.suffix + ".complete.json")
++
++
++def save_complete_checkpoint(
++    directory: str | Path,
++    *,
++    step: int,
++    payload: dict[str, Any],
++    keep_last: int = 3,
++) -> Path:
++    _validate_complete_payload(payload, expected_step=step)
++    directory = Path(directory)
++    directory.mkdir(parents=True, exist_ok=True)
++    target = checkpoint_path(directory, step)
++    temporary = directory / f".{target.name}.{os.getpid()}.tmp"
++    if temporary.exists():
++        raise FileExistsError(f"temporary checkpoint already exists: {temporary}")
++    try:
++        with temporary.open("wb") as handle:
++            torch.save(payload, handle)
++            handle.flush()
++            os.fsync(handle.fileno())
++        os.replace(temporary, target)
++        _fsync_directory(directory)
++    except BaseException:
++        try:
++            temporary.unlink()
++        except FileNotFoundError:
++            pass
++        raise
++    marker = {
++        "schema_version": 1,
++        "step": int(step),
++        "bytes": target.stat().st_size,
++        "sha256": sha256_file(target),
++        "run_id": payload["run_id"],
++        "task_key": payload["task_key"],
++        "model_seed": int(payload["model_seed"]),
++        "complete_state": [
++            "model",
++            "optimizer",
++            "scheduler",
++            "rng",
++            "batch_generator_state",
++            "global_step",
++        ],
++    }
++    atomic_write_json(marker_path(target), marker)
++    retained = prune_complete_checkpoints(directory, keep_last=keep_last)
++    print(
++        json.dumps(
++            {
++                "event": "CHECKPOINT_RETENTION_OK",
++                "saved_step": int(step),
++                "retained_steps": [item[0] for item in retained],
++            },
++            sort_keys=True,
++        ),
++        flush=True,
++    )
++    return target
++
++
++def discover_complete_checkpoints(directory: str | Path) -> list[tuple[int, Path]]:
++    directory = Path(directory)
++    if not directory.exists():
++        return []
++    complete: list[tuple[int, Path]] = []
++    for checkpoint in directory.glob("checkpoint_step_*.pt"):
++        match = _STEP_RE.search(checkpoint.name)
++        if match is None:
++            continue
++        marker = marker_path(checkpoint)
++        if not marker.is_file():
++            continue
++        metadata = json.loads(marker.read_text(encoding="utf-8"))
++        step = int(match.group(1))
++        if metadata.get("step") != step:
++            raise RuntimeError(f"checkpoint marker step mismatch: {marker}")
++        if checkpoint.stat().st_size != int(metadata.get("bytes", -1)):
++            raise RuntimeError(f"checkpoint size mismatch: {checkpoint}")
++        if sha256_file(checkpoint) != metadata.get("sha256"):
++            raise RuntimeError(f"checkpoint hash mismatch: {checkpoint}")
++        complete.append((step, checkpoint))
++    return sorted(complete)
++
++
++def latest_complete_checkpoint(directory: str | Path) -> Path | None:
++    checkpoints = discover_complete_checkpoints(directory)
++    return checkpoints[-1][1] if checkpoints else None
++
++
++def prune_complete_checkpoints(
++    directory: str | Path,
++    *,
++    keep_last: int,
++) -> list[tuple[int, Path]]:
++    if keep_last < 1:
++        raise ValueError("keep_last must be positive")
++    complete = discover_complete_checkpoints(directory)
++    for _, checkpoint in complete[:-keep_last]:
++        marker = marker_path(checkpoint)
++        marker.unlink()
++        checkpoint.unlink()
++        _fsync_directory(Path(directory))
++    retained = discover_complete_checkpoints(directory)
++    if retained != complete[-keep_last:]:
++        raise RuntimeError("checkpoint retention inventory did not converge")
++    return retained
++
++
++def load_complete_checkpoint(path: str | Path, *, map_location: str | torch.device) -> dict[str, Any]:
++    path = Path(path)
++    valid = {candidate for _, candidate in discover_complete_checkpoints(path.parent)}
++    if path not in valid:
++        raise RuntimeError(f"checkpoint is not complete and validated: {path}")
++    return torch.load(path, map_location=map_location, weights_only=False)
++
++
++def save_final_model(path: str | Path, payload: dict[str, Any]) -> Path:
++    path = Path(path)
++    path.parent.mkdir(parents=True, exist_ok=True)
++    temporary = path.parent / f".{path.name}.{os.getpid()}.tmp"
++    with temporary.open("wb") as handle:
++        torch.save(payload, handle)
++        handle.flush()
++        os.fsync(handle.fileno())
++    os.replace(temporary, path)
++    _fsync_directory(path.parent)
++    atomic_write_json(
++        marker_path(path),
++        {
++            "schema_version": 1,
++            "bytes": path.stat().st_size,
++            "sha256": sha256_file(path),
++            "run_id": payload["run_id"],
++            "task_key": payload["task_key"],
++            "model_seed": int(payload["model_seed"]),
++            "global_step": int(payload["global_step"]),
++        },
++    )
++    return path
++
++
++def validate_final_model(path: str | Path) -> bool:
++    path = Path(path)
++    marker = marker_path(path)
++    if not path.is_file() or not marker.is_file():
++        return False
++    metadata = json.loads(marker.read_text(encoding="utf-8"))
++    return (
++        path.stat().st_size == int(metadata.get("bytes", -1))
++        and sha256_file(path) == metadata.get("sha256")
++    )
++
++
++def _fsync_directory(directory: Path) -> None:
++    descriptor = os.open(directory, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
++    try:
++        os.fsync(descriptor)
++    finally:
++        os.close(descriptor)
++
++
++def _validate_complete_payload(payload: dict[str, Any], *, expected_step: int) -> None:
++    required = {
++        "run_id",
++        "task_key",
++        "model_seed",
++        "model",
++        "optimizer",
++        "scheduler",
++        "rng",
++        "batch_generator_state",
++        "global_step",
++    }
++    missing = sorted(required.difference(payload))
++    if missing:
++        raise ValueError(f"checkpoint payload is incomplete: {missing}")
++    if int(payload["global_step"]) != int(expected_step):
++        raise ValueError(
++            f"checkpoint step mismatch: filename step={expected_step}, payload={payload['global_step']}"
++        )
+diff --git a/boundarybc/config.py b/boundarybc/config.py
+new file mode 100644
+index 0000000..d067536
+--- /dev/null
++++ b/boundarybc/config.py
+@@ -0,0 +1,100 @@
++from __future__ import annotations
++
++import dataclasses
++import hashlib
++import json
++from pathlib import Path
++from typing import Any
++
++import yaml
++
++
++@dataclasses.dataclass(frozen=True)
++class TaskConfig:
++    key: str
++    name: str
++    role: str
++    baseline_success_min: float
++    baseline_success_max: float
++
++
++@dataclasses.dataclass(frozen=True)
++class ExperimentConfig:
++    path: Path
++    raw: dict[str, Any]
++    sha256: str
++
++    @property
++    def protocol_id(self) -> str:
++        return str(self.raw["protocol_id"])
++
++    @property
++    def tasks(self) -> tuple[TaskConfig, ...]:
++        return tuple(
++            TaskConfig(
++                key=key,
++                name=value["name"],
++                role=value["role"],
++                baseline_success_min=float(value["baseline_success_min"]),
++                baseline_success_max=float(value["baseline_success_max"]),
++            )
++            for key, value in self.raw["tasks"].items()
++        )
++
++    @property
++    def training_seeds(self) -> tuple[int, ...]:
++        return tuple(int(seed) for seed in self.raw["training"]["seeds"])
++
++    def task(self, key: str) -> TaskConfig:
++        for task in self.tasks:
++            if task.key == key:
++                return task
++        raise KeyError(f"unknown task key: {key}")
++
++    def canonical_json(self) -> str:
++        return json.dumps(self.raw, sort_keys=True, separators=(",", ":"))
++
++
++def load_config(path: str | Path) -> ExperimentConfig:
++    path = Path(path).resolve()
++    payload = path.read_bytes()
++    raw = yaml.safe_load(payload)
++    if not isinstance(raw, dict):
++        raise ValueError(f"config must be a mapping: {path}")
++    _validate_config(raw)
++    return ExperimentConfig(
++        path=path,
++        raw=raw,
++        sha256=hashlib.sha256(payload).hexdigest(),
++    )
++
++
++def _validate_config(raw: dict[str, Any]) -> None:
++    if raw.get("protocol_id") != "R16-P18-LIBERO-STAGE1-PILOT-V1":
++        raise ValueError("unexpected protocol_id")
++    tasks = raw.get("tasks")
++    if not isinstance(tasks, dict) or tuple(tasks) != (
++        "push_plate",
++        "bottle_rack",
++        "bowl_plate",
++    ):
++        raise ValueError("the three preregistered tasks or their order changed")
++    model = raw.get("model", {})
++    exact_model_fields = {
++        "micro_feature_map": [8, 8],
++        "baseline_visual_tokens": 16,
++        "proprio_dim": 15,
++        "action_horizon": 8,
++        "execute_horizon": 4,
++    }
++    for key, expected in exact_model_fields.items():
++        if model.get(key) != expected:
++            raise ValueError(f"model.{key} must remain {expected!r}")
++    training = raw.get("training", {})
++    if training.get("seeds") != [16018, 16019, 16020]:
++        raise ValueError("training seeds changed after preregistration")
++    if training.get("complete_checkpoint_interval") == 1000:
++        raise ValueError("this pilot intentionally uses a 250-step cadence")
++    if raw.get("stop_rules", {}).get("stop_after_stage1") is not True:
++        raise ValueError("stage-1 stop rule must be enabled")
++
+diff --git a/boundarybc/data.py b/boundarybc/data.py
+new file mode 100644
+index 0000000..b4b580b
+--- /dev/null
++++ b/boundarybc/data.py
+@@ -0,0 +1,198 @@
++from __future__ import annotations
++
++import dataclasses
++import hashlib
++from pathlib import Path
++from typing import Iterable
++
++import h5py
++import numpy as np
++import torch
++import torch.nn.functional as F
++
++
++@dataclasses.dataclass(frozen=True)
++class EpisodeRecord:
++    demo_key: str
++    identity: str
++    length: int
++
++
++@dataclasses.dataclass
++class TaskArrays:
++    images: np.ndarray
++    proprio: np.ndarray
++    action_chunks: np.ndarray
++    action_mask: np.ndarray
++    episode_ids: np.ndarray
++    timesteps: np.ndarray
++
++    def __len__(self) -> int:
++        return int(self.images.shape[0])
++
++
++@dataclasses.dataclass(frozen=True)
++class ProprioNormalizer:
++    mean: np.ndarray
++    std: np.ndarray
++
++    def normalize_numpy(self, value: np.ndarray) -> np.ndarray:
++        return (value - self.mean) / self.std
++
++    def as_dict(self) -> dict[str, list[float]]:
++        return {"mean": self.mean.tolist(), "std": self.std.tolist()}
++
++    @classmethod
++    def from_dict(cls, value: dict[str, list[float]]) -> "ProprioNormalizer":
++        return cls(
++            mean=np.asarray(value["mean"], dtype=np.float32),
++            std=np.asarray(value["std"], dtype=np.float32),
++        )
++
++
++def official_demo_path(dataset_root: str | Path, suite: str, task_name: str) -> Path:
++    return Path(dataset_root) / suite / f"{task_name}_demo.hdf5"
++
++
++def discover_episodes(hdf5_path: str | Path) -> list[EpisodeRecord]:
++    records: list[EpisodeRecord] = []
++    with h5py.File(hdf5_path, "r") as handle:
++        data = handle["data"]
++        for demo_key in data.keys():
++            group = data[demo_key]
++            initial_state = np.asarray(group.attrs["init_state"], dtype=np.float64)
++            identity = hashlib.sha256(initial_state.tobytes(order="C")).hexdigest()
++            records.append(
++                EpisodeRecord(
++                    demo_key=demo_key,
++                    identity=identity,
++                    length=int(group["actions"].shape[0]),
++                )
++            )
++    records.sort(key=lambda item: item.identity)
++    if len(records) != 50:
++        raise ValueError(f"expected exactly 50 official demos, found {len(records)}")
++    if len({record.identity for record in records}) != len(records):
++        raise ValueError("duplicate initial-state episode identities")
++    return records
++
++
++def split_episode_records(
++    records: Iterable[EpisodeRecord],
++) -> dict[str, tuple[EpisodeRecord, ...]]:
++    ordered = tuple(records)
++    if len(ordered) != 50:
++        raise ValueError("the locked LIBERO pilot split requires 50 episodes")
++    return {
++        "train": ordered[:40],
++        "validation": ordered[40:45],
++        "test": ordered[45:50],
++    }
++
++
++def _build_action_chunks(actions: np.ndarray, horizon: int) -> tuple[np.ndarray, np.ndarray]:
++    chunks = np.zeros((len(actions), horizon, actions.shape[-1]), dtype=np.float32)
++    masks = np.zeros((len(actions), horizon), dtype=np.float32)
++    for t in range(len(actions)):
++        count = min(horizon, len(actions) - t)
++        chunks[t, :count] = actions[t : t + count]
++        masks[t, :count] = 1.0
++        if count < horizon:
++            chunks[t, count:] = actions[-1]
++    return chunks, masks
++
++
++def load_task_arrays(
++    hdf5_path: str | Path,
++    records: Iterable[EpisodeRecord],
++    *,
++    action_horizon: int = 8,
++) -> TaskArrays:
++    image_parts: list[np.ndarray] = []
++    proprio_parts: list[np.ndarray] = []
++    action_parts: list[np.ndarray] = []
++    mask_parts: list[np.ndarray] = []
++    episode_parts: list[np.ndarray] = []
++    timestep_parts: list[np.ndarray] = []
++    records = tuple(records)
++    with h5py.File(hdf5_path, "r") as handle:
++        data = handle["data"]
++        for episode_index, record in enumerate(records):
++            group = data[record.demo_key]
++            images = np.asarray(group["obs/agentview_rgb"], dtype=np.uint8)
++            joints = np.asarray(group["obs/joint_states"], dtype=np.float32)
++            gripper = np.asarray(group["obs/gripper_states"], dtype=np.float32)
++            ee_pos = np.asarray(group["obs/ee_pos"], dtype=np.float32)
++            ee_ori = np.asarray(group["obs/ee_ori"], dtype=np.float32)
++            actions = np.asarray(group["actions"], dtype=np.float32)
++            if not (len(images) == len(joints) == len(gripper) == len(ee_pos) == len(ee_ori) == len(actions)):
++                raise ValueError(f"unaligned arrays in {record.demo_key}")
++            proprio = np.concatenate((joints, gripper, ee_pos, ee_ori), axis=-1)
++            if proprio.shape[1] != 15 or actions.shape[1] != 7:
++                raise ValueError(
++                    f"unexpected dimensions in {record.demo_key}: proprio={proprio.shape}, actions={actions.shape}"
++                )
++            chunks, masks = _build_action_chunks(actions, action_horizon)
++            image_parts.append(images)
++            proprio_parts.append(proprio)
++            action_parts.append(chunks)
++            mask_parts.append(masks)
++            episode_parts.append(np.full(len(actions), episode_index, dtype=np.int32))
++            timestep_parts.append(np.arange(len(actions), dtype=np.int32))
++    return TaskArrays(
++        images=np.concatenate(image_parts, axis=0),
++        proprio=np.concatenate(proprio_parts, axis=0),
++        action_chunks=np.concatenate(action_parts, axis=0),
++        action_mask=np.concatenate(mask_parts, axis=0),
++        episode_ids=np.concatenate(episode_parts, axis=0),
++        timesteps=np.concatenate(timestep_parts, axis=0),
++    )
++
++
++def fit_proprio_normalizer(proprio: np.ndarray) -> ProprioNormalizer:
++    mean = proprio.mean(axis=0, dtype=np.float64).astype(np.float32)
++    std = proprio.std(axis=0, dtype=np.float64).astype(np.float32)
++    std = np.maximum(std, np.float32(1e-4))
++    return ProprioNormalizer(mean=mean, std=std)
++
++
++def make_batch(
++    arrays: TaskArrays,
++    indices: torch.Tensor,
++    normalizer: ProprioNormalizer,
++    *,
++    device: torch.device,
++    augment: bool,
++) -> dict[str, torch.Tensor]:
++    cpu_indices = indices.detach().cpu().numpy()
++    images = torch.from_numpy(arrays.images[cpu_indices]).to(device=device, non_blocking=True)
++    images = images.permute(0, 3, 1, 2).to(dtype=torch.float32).div_(255.0)
++    images = images.sub_(0.5).div_(0.5)
++    if augment:
++        images = random_shift(images, pad=4)
++        brightness = 1.0 + 0.10 * (2.0 * torch.rand((len(images), 1, 1, 1), device=device) - 1.0)
++        images = (images * brightness).clamp_(-1.0, 1.0)
++    proprio = normalizer.normalize_numpy(arrays.proprio[cpu_indices]).astype(np.float32, copy=False)
++    return {
++        "images": images,
++        "proprio": torch.from_numpy(proprio).to(device=device, non_blocking=True),
++        "actions": torch.from_numpy(arrays.action_chunks[cpu_indices]).to(device=device, non_blocking=True),
++        "mask": torch.from_numpy(arrays.action_mask[cpu_indices]).to(device=device, non_blocking=True),
++    }
++
++
++def random_shift(images: torch.Tensor, pad: int) -> torch.Tensor:
++    if pad <= 0:
++        return images
++    batch, channels, height, width = images.shape
++    padded = F.pad(images, (pad, pad, pad, pad), mode="replicate")
++    max_offset = 2 * pad + 1
++    offsets_y = torch.randint(max_offset, (batch,), device=images.device)
++    offsets_x = torch.randint(max_offset, (batch,), device=images.device)
++    result = torch.empty_like(images)
++    for index in range(batch):
++        y = int(offsets_y[index])
++        x = int(offsets_x[index])
++        result[index] = padded[index, :, y : y + height, x : x + width]
++    return result
++
+diff --git a/boundarybc/evaluation.py b/boundarybc/evaluation.py
+new file mode 100644
+index 0000000..67e768e
+--- /dev/null
++++ b/boundarybc/evaluation.py
+@@ -0,0 +1,175 @@
++from __future__ import annotations
++
++import json
++import os
++import time
++from pathlib import Path
++from typing import Any
++
++import numpy as np
++import torch
++
++from boundarybc.checkpoint import atomic_write_json, validate_final_model
++from boundarybc.config import ExperimentConfig
++from boundarybc.data import ProprioNormalizer
++from boundarybc.libero_runtime import (
++    load_task_init_states,
++    make_offscreen_env,
++    observation_tensors,
++)
++from boundarybc.training import final_model_path, make_model
++
++
++def evaluation_result_path(log_root: str | Path, run_id: str, task_key: str, seed: int) -> Path:
++    return Path(log_root) / run_id / "evaluation" / task_key / f"seed_{seed}.jsonl"
++
++
++def evaluate_one_model(
++    config: ExperimentConfig,
++    *,
++    task_key: str,
++    model_seed: int,
++    run_id: str,
++    checkpoint_root: str | Path,
++    log_root: str | Path,
++    device: torch.device,
++    gpu_device_id: int = 0,
++) -> Path:
++    task = config.task(task_key)
++    model_path = final_model_path(checkpoint_root, run_id, task_key, model_seed)
++    if not validate_final_model(model_path):
++        raise RuntimeError(f"final model is absent or incomplete: {model_path}")
++    # Load and validate on CPU first. LIBERO's EGL context must be created
++    # before this process initializes a CUDA compute context.
++    checkpoint = torch.load(model_path, map_location="cpu", weights_only=False)
++    for key, expected in {
++        "run_id": run_id,
++        "task_key": task_key,
++        "model_seed": model_seed,
++        "config_sha256": config.sha256,
++    }.items():
++        if checkpoint.get(key) != expected:
++            raise RuntimeError(f"evaluation checkpoint contract mismatch: {key}")
++    model = make_model(config)
++    model.load_state_dict(checkpoint["model"])
++    normalizer = ProprioNormalizer.from_dict(checkpoint["normalizer"])
++    result_path = evaluation_result_path(log_root, run_id, task_key, model_seed)
++    existing = _read_episode_records(result_path)
++    init_states = load_task_init_states(config, task)
++    env = make_offscreen_env(config, task, gpu_device_id=gpu_device_id)
++    try:
++        model = model.to(device)
++        model.eval()
++        use_bf16 = config.raw["training"].get("precision") == "bf16" and device.type == "cuda"
++        for episode_id, init_state in enumerate(init_states):
++            if episode_id in existing:
++                continue
++            env.seed(episode_id)
++            env.reset()
++            observation = env.set_init_state(init_state)
++            for _ in range(int(config.raw["benchmark"]["wait_steps"])):
++                observation, _, _, _ = env.step(np.zeros(7, dtype=np.float32))
++            success = bool(env.check_success())
++            executed_steps = 0
++            policy_calls = 0
++            inference_seconds = 0.0
++            start = time.perf_counter()
++            while not success and executed_steps < int(config.raw["benchmark"]["task_horizon"]):
++                image, proprio = observation_tensors(observation, normalizer, device=device)
++                call_start = time.perf_counter()
++                with torch.inference_mode(), torch.autocast(
++                    device_type=device.type,
++                    dtype=torch.bfloat16,
++                    enabled=use_bf16,
++                ):
++                    chunk = model(image, proprio)[0].float().cpu().numpy()
++                inference_seconds += time.perf_counter() - call_start
++                policy_calls += 1
++                execute_count = min(
++                    int(config.raw["model"]["execute_horizon"]),
++                    int(config.raw["benchmark"]["task_horizon"]) - executed_steps,
++                )
++                for action in chunk[:execute_count]:
++                    observation, _, _, _ = env.step(np.clip(action, -1.0, 1.0))
++                    executed_steps += 1
++                    success = bool(env.check_success())
++                    if success:
++                        break
++            record = {
++                "schema_version": 1,
++                "event": "COMPLETED_EVALUATION_EPISODE",
++                "run_id": run_id,
++                "config_sha256": config.sha256,
++                "task_key": task_key,
++                "task_name": task.name,
++                "model_seed": model_seed,
++                "episode_id": episode_id,
++                "success": success,
++                "executed_steps": executed_steps,
++                "policy_calls": policy_calls,
++                "inference_seconds": inference_seconds,
++                "wall_seconds": time.perf_counter() - start,
++            }
++            _append_jsonl(result_path, record)
++            existing[episode_id] = record
++            print(json.dumps(record, sort_keys=True), flush=True)
++    finally:
++        env.close()
++    records = _read_episode_records(result_path)
++    if set(records) != set(range(50)):
++        raise RuntimeError(f"evaluation is incomplete for {task_key}/seed {model_seed}")
++    summary_path = result_path.with_suffix(".summary.json")
++    atomic_write_json(
++        summary_path,
++        {
++            "schema_version": 1,
++            "event": "PERSISTED_COMPLETED_EVALUATION_RESULT",
++            "run_id": run_id,
++            "config_sha256": config.sha256,
++            "task_key": task_key,
++            "task_name": task.name,
++            "model_seed": model_seed,
++            "episodes": 50,
++            "successes": sum(bool(record["success"]) for record in records.values()),
++            "success_rate": float(np.mean([record["success"] for record in records.values()])),
++            "result_jsonl": str(result_path),
++        },
++    )
++    print(
++        json.dumps(
++            {
++                "event": "PERSISTED_COMPLETED_EVALUATION_RESULT",
++                "path": str(summary_path),
++            },
++            sort_keys=True,
++        ),
++        flush=True,
++    )
++    return summary_path
++
++
++def _read_episode_records(path: Path) -> dict[int, dict[str, Any]]:
++    if not path.is_file():
++        return {}
++    records: dict[int, dict[str, Any]] = {}
++    with path.open("r", encoding="utf-8") as handle:
++        for line in handle:
++            if not line.strip():
++                continue
++            record = json.loads(line)
++            episode_id = int(record["episode_id"])
++            if episode_id in records and records[episode_id] != record:
++                raise RuntimeError(f"conflicting duplicate episode {episode_id}: {path}")
++            records[episode_id] = record
++    return records
++
++
++def _append_jsonl(path: Path, value: dict[str, Any]) -> None:
++    path.parent.mkdir(parents=True, exist_ok=True)
++    encoded = (json.dumps(value, sort_keys=True) + "\n").encode("utf-8")
++    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
++    try:
++        os.write(descriptor, encoded)
++        os.fsync(descriptor)
++    finally:
++        os.close(descriptor)
+diff --git a/boundarybc/libero_runtime.py b/boundarybc/libero_runtime.py
+new file mode 100644
+index 0000000..85097ed
+--- /dev/null
++++ b/boundarybc/libero_runtime.py
+@@ -0,0 +1,231 @@
++from __future__ import annotations
++
++import os
++import xml.etree.ElementTree as ET
++from pathlib import Path
++from typing import Any
++
++import h5py
++import numpy as np
++import torch
++
++from boundarybc.config import ExperimentConfig, TaskConfig
++from boundarybc.data import ProprioNormalizer
++
++
++def configure_headless_runtime(project_root: str | Path) -> None:
++    project_root = Path(project_root).resolve()
++    vendor = project_root / "configs" / "egl" / "10_nvidia.json"
++    libero_config = project_root / "configs" / "libero"
++    os.environ.setdefault("__EGL_VENDOR_LIBRARY_FILENAMES", str(vendor))
++    os.environ.setdefault("MUJOCO_GL", "egl")
++    os.environ.setdefault("PYOPENGL_PLATFORM", "egl")
++    os.environ.setdefault("MUJOCO_EGL_DEVICE_ID", "0")
++    os.environ.setdefault("EGL_DEVICE_ID", "0")
++    os.environ.setdefault("LIBERO_CONFIG_PATH", str(libero_config))
++
++
++def task_bddl_path(config: ExperimentConfig, task: TaskConfig) -> Path:
++    project_root = config.path.parents[1]
++    return (
++        project_root
++        / "libero"
++        / "libero"
++        / "bddl_files"
++        / config.raw["benchmark"]["suite"]
++        / f"{task.name}.bddl"
++    )
++
++
++def task_init_states_path(config: ExperimentConfig, task: TaskConfig) -> Path:
++    project_root = config.path.parents[1]
++    return (
++        project_root
++        / "libero"
++        / "libero"
++        / "init_files"
++        / config.raw["benchmark"]["suite"]
++        / f"{task.name}.pruned_init"
++    )
++
++
++def make_offscreen_env(config: ExperimentConfig, task: TaskConfig, *, gpu_device_id: int = 0) -> Any:
++    from libero.libero.envs import OffScreenRenderEnv
++
++    image_height, image_width = config.raw["benchmark"]["image_size"]
++    return OffScreenRenderEnv(
++        bddl_file_name=str(task_bddl_path(config, task)),
++        camera_heights=int(image_height),
++        camera_widths=int(image_width),
++        camera_names=["agentview", "robot0_eye_in_hand"],
++        horizon=int(config.raw["benchmark"]["task_horizon"]) + int(config.raw["benchmark"]["wait_steps"]),
++        render_gpu_device_id=gpu_device_id,
++    )
++
++
++def load_task_init_states(config: ExperimentConfig, task: TaskConfig) -> np.ndarray:
++    states = torch.load(task_init_states_path(config, task), map_location="cpu", weights_only=False)
++    states = np.asarray(states, dtype=np.float64)
++    if len(states) != 50:
++        raise ValueError(f"expected 50 official init states for {task.key}, got {len(states)}")
++    return states
++
++
++def runtime_proprio(observation: dict[str, np.ndarray]) -> np.ndarray:
++    from robosuite.utils import transform_utils as transform
++
++    quaternion = np.asarray(observation["robot0_eef_quat"], dtype=np.float64)
++    axis_angle = np.asarray(transform.quat2axisangle(quaternion), dtype=np.float32)
++    value = np.concatenate(
++        (
++            np.asarray(observation["robot0_joint_pos"], dtype=np.float32),
++            np.asarray(observation["robot0_gripper_qpos"], dtype=np.float32),
++            np.asarray(observation["robot0_eef_pos"], dtype=np.float32),
++            axis_angle,
++        )
++    )
++    if value.shape != (15,):
++        raise ValueError(f"unexpected runtime proprio shape: {value.shape}")
++    return value
++
++
++def observation_tensors(
++    observation: dict[str, np.ndarray],
++    normalizer: ProprioNormalizer,
++    *,
++    device: torch.device,
++) -> tuple[torch.Tensor, torch.Tensor]:
++    image = np.asarray(observation["agentview_image"], dtype=np.uint8)
++    if image.shape != (128, 128, 3):
++        raise ValueError(f"unexpected agentview image shape: {image.shape}")
++    image_tensor = torch.from_numpy(image.copy()).permute(2, 0, 1).unsqueeze(0)
++    image_tensor = image_tensor.to(device=device, dtype=torch.float32).div_(255.0).sub_(0.5).div_(0.5)
++    proprio = normalizer.normalize_numpy(runtime_proprio(observation)).astype(np.float32, copy=False)
++    proprio_tensor = torch.from_numpy(proprio).unsqueeze(0).to(device=device)
++    return image_tensor, proprio_tensor
++
++
++def rewrite_demo_model_xml(xml_string: str) -> str:
++    from libero.libero import get_libero_path
++    from libero.libero.utils.utils import postprocess_model_xml
++
++    rewritten = postprocess_model_xml(xml_string, {})
++    root = ET.fromstring(rewritten)
++    asset_root = Path(get_libero_path("assets")).resolve()
++    asset_element = root.find("asset")
++    if asset_element is None:
++        raise ValueError("demo model XML is missing its asset section")
++    elements = list(asset_element.findall("mesh")) + list(asset_element.findall("texture"))
++    unresolved: list[str] = []
++    for element in elements:
++        old_path = element.get("file")
++        if not old_path or Path(old_path).exists():
++            continue
++        marker = "/assets/"
++        if marker not in old_path:
++            unresolved.append(old_path)
++            continue
++        candidate = asset_root / old_path.split(marker, 1)[1]
++        if not candidate.is_file():
++            unresolved.append(old_path)
++            continue
++        element.set("file", str(candidate))
++    if unresolved:
++        raise FileNotFoundError(f"unresolved demo XML assets: {unresolved[:3]}")
++    return ET.tostring(root, encoding="unicode")
++
++
++def deterministic_short_replay_check(
++    config: ExperimentConfig,
++    task: TaskConfig,
++    demo_path: str | Path,
++    *,
++    demo_key: str = "demo_0",
++    state_index: int = 30,
++    horizon: int = 4,
++    gpu_device_id: int = 0,
++) -> dict[str, float | int | str]:
++    with h5py.File(demo_path, "r") as handle:
++        group = handle[f"data/{demo_key}"]
++        model_xml = rewrite_demo_model_xml(group.attrs["model_file"])
++        states = np.asarray(group["states"], dtype=np.float64)
++        actions = np.asarray(group["actions"], dtype=np.float64)
++        if state_index < 1:
++            raise ValueError("LIBERO states[t] aligns to observations[t-1], so state_index must be positive")
++        expected_proprio = np.concatenate(
++            (
++                np.asarray(group["obs/joint_states"][state_index - 1], dtype=np.float32),
++                np.asarray(group["obs/gripper_states"][state_index - 1], dtype=np.float32),
++                np.asarray(group["obs/ee_pos"][state_index - 1], dtype=np.float32),
++                np.asarray(group["obs/ee_ori"][state_index - 1], dtype=np.float32),
++            )
++        )
++        expected_image = np.asarray(
++            group["obs/agentview_rgb"][state_index - 1],
++            dtype=np.uint8,
++        )
++    if state_index + horizon > len(actions):
++        raise ValueError("short replay exceeds demonstration length")
++    final_states: list[np.ndarray] = []
++    final_images: list[np.ndarray] = []
++    alignment_proprio_error: float | None = None
++    alignment_image_mae: float | None = None
++    # A flattened LIBERO MuJoCo state does not include every warm-start and
++    # controller cache. Reusing one Python env therefore is not a valid replay
++    # isolation test. Each repetition starts from a freshly constructed env,
++    # then loads the exact demonstration XML and flattened state.
++    for _ in range(2):
++        env = make_offscreen_env(config, task, gpu_device_id=gpu_device_id)
++        try:
++            env.reset()
++            env.reset_from_xml_string(model_xml)
++            observation = env.set_init_state(states[state_index])
++            if alignment_proprio_error is None:
++                alignment_proprio_error = float(
++                    np.max(np.abs(runtime_proprio(observation) - expected_proprio))
++                )
++                restored_image = np.asarray(observation["agentview_image"], dtype=np.uint8)
++                alignment_image_mae = float(
++                    np.mean(
++                        np.abs(
++                            restored_image.astype(np.int16) - expected_image.astype(np.int16)
++                        )
++                    )
++                )
++            env.robots[0].controller.reset_goal()
++            env.env.timestep = 0
++            env.env.done = False
++            for action in actions[state_index : state_index + horizon]:
++                observation, _, _, _ = env.step(action)
++            final_states.append(env.get_sim_state().copy())
++            final_images.append(np.asarray(observation["agentview_image"]).copy())
++        finally:
++            env.close()
++    state_error = float(np.max(np.abs(final_states[0] - final_states[1])))
++    image_error = int(
++        np.max(
++            np.abs(
++                final_images[0].astype(np.int16) - final_images[1].astype(np.int16)
++            )
++        )
++    )
++    image_mae = float(
++        np.mean(
++            np.abs(
++                final_images[0].astype(np.int16) - final_images[1].astype(np.int16)
++            )
++        )
++    )
++    return {
++        "task_key": task.key,
++        "demo_key": demo_key,
++        "state_index": state_index,
++        "horizon": horizon,
++        "isolation": "fresh_env_per_replay",
++        "state_observation_alignment": "states[t]_to_obs[t-1]",
++        "alignment_proprio_max_abs": float(alignment_proprio_error),
++        "alignment_image_mae": float(alignment_image_mae),
++        "state_repeat_max_abs": state_error,
++        "image_repeat_max_abs": image_error,
++        "image_repeat_mae": image_mae,
++    }
+diff --git a/boundarybc/model.py b/boundarybc/model.py
+new file mode 100644
+index 0000000..5f47650
+--- /dev/null
++++ b/boundarybc/model.py
+@@ -0,0 +1,101 @@
++from __future__ import annotations
++
++import torch
++from torch import nn
++from torchvision.models import resnet18
++
++
++class BoundaryBCS(nn.Module):
++    """BoundaryBC-S health-gate policy with a fixed 16-token visual budget."""
++
++    def __init__(
++        self,
++        *,
++        proprio_dim: int = 15,
++        hidden_dim: int = 128,
++        action_dim: int = 7,
++        action_horizon: int = 8,
++        transformer_layers: int = 2,
++        transformer_heads: int = 4,
++    ) -> None:
++        super().__init__()
++        backbone = resnet18(weights=None)
++        self.visual_stem = nn.Sequential(
++            backbone.conv1,
++            backbone.bn1,
++            backbone.relu,
++            backbone.maxpool,
++            backbone.layer1,
++            backbone.layer2,
++            backbone.layer3,
++        )
++        self.visual_projection = nn.Conv2d(256, hidden_dim, kernel_size=1)
++        self.visual_position = nn.Parameter(torch.zeros(1, 16, hidden_dim))
++        self.proprio_position = nn.Parameter(torch.zeros(1, 1, hidden_dim))
++        self.proprio_mlp = nn.Sequential(
++            nn.Linear(proprio_dim, hidden_dim),
++            nn.GELU(),
++            nn.Linear(hidden_dim, hidden_dim),
++        )
++        encoder_layer = nn.TransformerEncoderLayer(
++            d_model=hidden_dim,
++            nhead=transformer_heads,
++            dim_feedforward=hidden_dim * 4,
++            dropout=0.1,
++            activation="gelu",
++            batch_first=True,
++            norm_first=True,
++        )
++        self.aggregator = nn.TransformerEncoder(
++            encoder_layer,
++            num_layers=transformer_layers,
++            enable_nested_tensor=False,
++        )
++        self.action_head = nn.Sequential(
++            nn.LayerNorm(hidden_dim),
++            nn.Linear(hidden_dim, hidden_dim * 2),
++            nn.GELU(),
++            nn.Linear(hidden_dim * 2, action_horizon * action_dim),
++        )
++        self.action_dim = action_dim
++        self.action_horizon = action_horizon
++        self._reset_parameters()
++
++    def _reset_parameters(self) -> None:
++        nn.init.trunc_normal_(self.visual_position, std=0.02)
++        nn.init.trunc_normal_(self.proprio_position, std=0.02)
++
++    def encode_microtokens(self, images: torch.Tensor) -> torch.Tensor:
++        features = self.visual_projection(self.visual_stem(images))
++        if features.shape[-2:] != (8, 8):
++            raise RuntimeError(f"expected an 8x8 layer3 feature map, got {features.shape[-2:]}")
++        return features.flatten(2).transpose(1, 2)
++
++    @staticmethod
++    def uniform_tokens(microtokens: torch.Tensor) -> torch.Tensor:
++        batch, count, channels = microtokens.shape
++        if count != 64:
++            raise ValueError(f"expected 64 microtokens, got {count}")
++        grid = microtokens.reshape(batch, 8, 8, channels)
++        pooled = grid.reshape(batch, 4, 2, 4, 2, channels).mean(dim=(2, 4))
++        return pooled.reshape(batch, 16, channels)
++
++    def forward(self, images: torch.Tensor, proprio: torch.Tensor) -> torch.Tensor:
++        microtokens = self.encode_microtokens(images)
++        visual_tokens = self.uniform_tokens(microtokens) + self.visual_position
++        proprio_token = self.proprio_mlp(proprio).unsqueeze(1) + self.proprio_position
++        tokens = torch.cat((proprio_token, visual_tokens), dim=1)
++        encoded = self.aggregator(tokens)
++        action = torch.tanh(self.action_head(encoded[:, 0]))
++        return action.reshape(-1, self.action_horizon, self.action_dim)
++
++
++def masked_action_mse(
++    prediction: torch.Tensor,
++    target: torch.Tensor,
++    mask: torch.Tensor,
++) -> torch.Tensor:
++    squared = (prediction - target).square().mean(dim=-1)
++    denominator = mask.sum().clamp_min(1.0)
++    return (squared * mask).sum() / denominator
++
+diff --git a/boundarybc/pipeline.py b/boundarybc/pipeline.py
+new file mode 100644
+index 0000000..b7798ac
+--- /dev/null
++++ b/boundarybc/pipeline.py
+@@ -0,0 +1,166 @@
++from __future__ import annotations
++
++import argparse
++import json
++import os
++import platform
++import subprocess
++import sys
++from pathlib import Path
++
++from boundarybc.checkpoint import atomic_write_json
++from boundarybc.config import load_config
++from boundarybc.libero_runtime import configure_headless_runtime
++from boundarybc.provenance import verify_locked_inputs
++from boundarybc.reporting import build_baseline_gate_report
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(description="Run the locked BoundaryBC-S health gate on PAI")
++    parser.add_argument("--config", required=True)
++    parser.add_argument("--run-id", required=True)
++    parser.add_argument("--dataset-root", required=True)
++    parser.add_argument("--checkpoint-root", required=True)
++    parser.add_argument("--log-root", required=True)
++    parser.add_argument("--device", default="cuda:0")
++    return parser.parse_args()
++
++
++def main() -> None:
++    args = parse_args()
++    config = load_config(args.config)
++    project_root = config.path.parents[1]
++    configure_headless_runtime(project_root)
++    _validate_paths(args, project_root)
++    locked_inputs = verify_locked_inputs(config, dataset_root=args.dataset_root)
++    manifest_path = Path(args.log_root) / args.run_id / "run_manifest.json"
++    manifest_path.parent.mkdir(parents=True, exist_ok=True)
++    atomic_write_json(
++        manifest_path,
++        {
++            "schema_version": 1,
++            "protocol_id": config.protocol_id,
++            "config_sha256": config.sha256,
++            "run_id": args.run_id,
++            "project_root": str(project_root),
++            "git_commit": _git(project_root, "rev-parse", "HEAD"),
++            "git_head_tree": _git(project_root, "rev-parse", "HEAD^{tree}"),
++            "git_status_porcelain": _git(project_root, "status", "--porcelain"),
++            "python": platform.python_version(),
++            "torch": config.raw["runtime"]["torch"],
++            "cuda": config.raw["runtime"]["cuda_runtime"],
++            "requested_device": args.device,
++            "uid": os.getuid(),
++            "gid": os.getgid(),
++            "dataset_root": str(Path(args.dataset_root).resolve()),
++            "checkpoint_root": str(Path(args.checkpoint_root).resolve()),
++            "log_root": str(Path(args.log_root).resolve()),
++            "pai_probe_created": False,
++            "locked_inputs": locked_inputs,
++        },
++    )
++    _require_leon_owner(manifest_path)
++    print(json.dumps({"event": "RUN_MANIFEST", "path": str(manifest_path)}), flush=True)
++    for task in config.tasks:
++        for seed in config.training_seeds:
++            _run_worker(args, phase="train", task_key=task.key, model_seed=seed)
++    for task in config.tasks:
++        for seed in config.training_seeds:
++            _run_worker(args, phase="evaluate", task_key=task.key, model_seed=seed)
++    report_path, report = build_baseline_gate_report(
++        config,
++        run_id=args.run_id,
++        log_root=args.log_root,
++    )
++    print(
++        json.dumps(
++            {
++                "event": "BASELINE_GATE_COMPLETE",
++                "decision": report["decision"],
++                "path": str(report_path),
++            },
++            sort_keys=True,
++        ),
++        flush=True,
++    )
++
++
++def _validate_paths(args: argparse.Namespace, project_root: Path) -> None:
++    new_root = Path("/mnt/cpfs/zbl-cpfs-new")
++    dataset_root = Path(args.dataset_root).resolve()
++    checkpoint_root = Path(args.checkpoint_root).resolve()
++    log_root = Path(args.log_root).resolve()
++    if not project_root.is_relative_to(new_root / "USERS" / "leon" / "code"):
++        raise RuntimeError(f"project root violates the new storage contract: {project_root}")
++    if not dataset_root.is_relative_to(new_root / "dataset" / "leon"):
++        raise RuntimeError(f"dataset root violates the new storage contract: {dataset_root}")
++    if not checkpoint_root.is_relative_to(new_root / "CKPT" / "leon"):
++        raise RuntimeError(f"checkpoint root violates the new storage contract: {checkpoint_root}")
++    if not log_root.is_relative_to(new_root / "USERS" / "leon" / "logs"):
++        raise RuntimeError(f"log root violates the new storage contract: {log_root}")
++    for path in (dataset_root, checkpoint_root, log_root):
++        if not path.exists():
++            raise FileNotFoundError(path)
++
++
++def _git(project_root: Path, *args: str) -> str:
++    return subprocess.check_output(
++        ["git", "-C", str(project_root), *args],
++        text=True,
++    ).strip()
++
++
++def _run_worker(
++    args: argparse.Namespace,
++    *,
++    phase: str,
++    task_key: str,
++    model_seed: int,
++) -> None:
++    command = [
++        sys.executable,
++        "-m",
++        "boundarybc.worker",
++        phase,
++        "--config",
++        str(Path(args.config).resolve()),
++        "--run-id",
++        args.run_id,
++        "--task-key",
++        task_key,
++        "--model-seed",
++        str(model_seed),
++        "--dataset-root",
++        str(Path(args.dataset_root).resolve()),
++        "--checkpoint-root",
++        str(Path(args.checkpoint_root).resolve()),
++        "--log-root",
++        str(Path(args.log_root).resolve()),
++        "--device",
++        args.device,
++    ]
++    print(
++        json.dumps(
++            {
++                "event": "WORKER_START",
++                "phase": phase,
++                "task_key": task_key,
++                "model_seed": model_seed,
++            },
++            sort_keys=True,
++        ),
++        flush=True,
++    )
++    subprocess.run(command, check=True)
++
++
++def _require_leon_owner(path: Path) -> None:
++    stat = path.lstat()
++    if (stat.st_uid, stat.st_gid) != (2254, 2254):
++        raise RuntimeError(
++            f"persistent artifact is not Leon-owned: {path} -> {stat.st_uid}:{stat.st_gid}"
++        )
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/boundarybc/preflight.py b/boundarybc/preflight.py
+new file mode 100644
+index 0000000..1f97201
+--- /dev/null
++++ b/boundarybc/preflight.py
+@@ -0,0 +1,96 @@
++from __future__ import annotations
++
++import argparse
++import json
++import os
++from pathlib import Path
++
++from boundarybc.checkpoint import atomic_write_json, discover_complete_checkpoints
++from boundarybc.config import load_config
++
++
++LEON_UID = 2254
++LEON_GID = 2254
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(description="Validate the PAI run identity and resume inventory")
++    parser.add_argument("--config", required=True)
++    parser.add_argument("--run-id", required=True)
++    parser.add_argument("--checkpoint-run-dir", required=True)
++    parser.add_argument("--log-run-dir", required=True)
++    parser.add_argument("--cache-run-dir", required=True)
++    return parser.parse_args()
++
++
++def main() -> None:
++    args = parse_args()
++    config = load_config(args.config)
++    if (os.getuid(), os.getgid()) != (LEON_UID, LEON_GID):
++        raise RuntimeError(
++            f"workload identity must be {LEON_UID}:{LEON_GID}, got {os.getuid()}:{os.getgid()}"
++        )
++    write_paths = tuple(
++        Path(value).resolve()
++        for value in (args.checkpoint_run_dir, args.log_run_dir, args.cache_run_dir)
++    )
++    for directory in write_paths:
++        _ownership_probe(directory)
++
++    resume_inventory: dict[str, list[int]] = {}
++    model_root = write_paths[0] / "models"
++    for task in config.tasks:
++        for seed in config.training_seeds:
++            key = f"{task.key}/seed_{seed}"
++            checkpoints = discover_complete_checkpoints(model_root / task.key / f"seed_{seed}")
++            resume_inventory[key] = [step for step, _ in checkpoints]
++    auto_resume = any(resume_inventory.values())
++    artifact = write_paths[1] / "launcher_preflight.json"
++    atomic_write_json(
++        artifact,
++        {
++            "schema_version": 1,
++            "event": "PAI_LAUNCHER_PREFLIGHT_COMPLETE",
++            "run_id": args.run_id,
++            "protocol_id": config.protocol_id,
++            "config_sha256": config.sha256,
++            "uid": os.getuid(),
++            "gid": os.getgid(),
++            "write_paths": [str(path) for path in write_paths],
++            "auto_resume": auto_resume,
++            "resume_inventory": resume_inventory,
++            "pai_automatic_fault_tolerance": False,
++        },
++    )
++    _require_owner(artifact)
++    print(f"RUN_ID={args.run_id}", flush=True)
++    print(f"AUTO_RESUME={int(auto_resume)}", flush=True)
++    print(f"RESUME_STEP_MAP={json.dumps(resume_inventory, sort_keys=True)}", flush=True)
++    print(f"RESUME_DIR={model_root}", flush=True)
++    print("PAI_AUTO_FAULT_TOLERANCE=0", flush=True)
++    print(f"FIRST_ARTIFACT={artifact}", flush=True)
++    print(f"FIRST_ARTIFACT_OWNER={LEON_UID}:{LEON_GID}", flush=True)
++
++
++def _ownership_probe(directory: Path) -> None:
++    if not directory.is_dir() or not os.access(directory, os.W_OK):
++        raise RuntimeError(f"persistent run directory is not writable: {directory}")
++    probe = directory / f".leon_owner_probe.{os.getpid()}"
++    descriptor = os.open(probe, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
++    os.close(descriptor)
++    try:
++        _require_owner(probe)
++    finally:
++        probe.unlink()
++
++
++def _require_owner(path: Path) -> None:
++    stat = path.lstat()
++    if (stat.st_uid, stat.st_gid) != (LEON_UID, LEON_GID):
++        raise RuntimeError(
++            f"artifact ownership mismatch for {path}: {stat.st_uid}:{stat.st_gid}"
++        )
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/boundarybc/provenance.py b/boundarybc/provenance.py
+new file mode 100644
+index 0000000..5dfd2ab
+--- /dev/null
++++ b/boundarybc/provenance.py
+@@ -0,0 +1,138 @@
++from __future__ import annotations
++
++import hashlib
++from pathlib import Path
++from typing import Any
++
++import h5py
++import mujoco
++import numpy as np
++import robosuite
++import scipy
++import torch
++import torchvision
++import yaml
++
++from boundarybc.checkpoint import sha256_file
++from boundarybc.config import ExperimentConfig
++from boundarybc.data import official_demo_path
++from boundarybc.libero_runtime import task_bddl_path, task_init_states_path
++
++
++def verify_locked_inputs(
++    config: ExperimentConfig,
++    *,
++    dataset_root: str | Path,
++) -> dict[str, Any]:
++    """Hash and version-check every mutable external input before training."""
++
++    expected_runtime = config.raw["runtime"]
++    actual_runtime: dict[str, Any] = {
++        "python": _python_version(),
++        "torch": str(torch.__version__),
++        "torchvision": str(torchvision.__version__),
++        "cuda_runtime": str(torch.version.cuda),
++        "cudnn": torch.backends.cudnn.version(),
++        "numpy": str(np.__version__),
++        "h5py": str(h5py.__version__),
++        "mujoco": str(mujoco.__version__),
++        "robosuite": str(robosuite.__version__),
++        "scipy": str(scipy.__version__),
++        "pyyaml": str(yaml.__version__),
++    }
++    if actual_runtime != expected_runtime:
++        raise RuntimeError(
++            f"runtime version lock mismatch: expected={expected_runtime}, actual={actual_runtime}"
++        )
++
++    task_inputs: dict[str, Any] = {}
++    suite = str(config.raw["benchmark"]["suite"])
++    for task in config.tasks:
++        raw_task = config.raw["tasks"][task.key]
++        demo = official_demo_path(dataset_root, suite, task.name).resolve()
++        bddl = task_bddl_path(config, task).resolve()
++        init_states = task_init_states_path(config, task).resolve()
++        demo_record = _verify_file(
++            demo,
++            expected_bytes=int(raw_task["demo_file_bytes"]),
++            expected_sha256=str(raw_task["demo_file_sha256"]),
++        )
++        bddl_record = _verify_file(bddl, expected_sha256=str(raw_task["bddl_sha256"]))
++        init_record = _verify_file(
++            init_states,
++            expected_sha256=str(raw_task["init_states_sha256"]),
++        )
++        task_inputs[task.key] = {
++            "demo": demo_record,
++            "bddl": bddl_record,
++            "init_states": init_record,
++        }
++
++    asset_expected = config.raw["assets"]
++    asset_root = Path(asset_expected["root"]).resolve()
++    asset_actual = hash_asset_tree(asset_root)
++    for key in ("files", "bytes", "tree_manifest_sha256"):
++        if asset_actual[key] != asset_expected[key]:
++            raise RuntimeError(
++                f"asset tree lock mismatch for {key}: "
++                f"expected={asset_expected[key]!r}, actual={asset_actual[key]!r}"
++            )
++    return {
++        "runtime": actual_runtime,
++        "tasks": task_inputs,
++        "assets": {"root": str(asset_root), **asset_actual},
++    }
++
++
++def hash_asset_tree(root: str | Path) -> dict[str, int | str]:
++    """Match `find | sort | sha256sum | sha256sum` with absolute filenames."""
++
++    root = Path(root).resolve()
++    if not root.is_dir():
++        raise FileNotFoundError(root)
++    files = sorted(
++        (path for path in root.rglob("*") if path.is_file() and not path.is_symlink()),
++        key=lambda path: path.relative_to(root).as_posix(),
++    )
++    manifest_digest = hashlib.sha256()
++    total_bytes = 0
++    for path in files:
++        size = path.stat().st_size
++        total_bytes += size
++        line = f"{sha256_file(path)}  {path}\n"
++        manifest_digest.update(line.encode("utf-8"))
++    return {
++        "files": len(files),
++        "bytes": total_bytes,
++        "tree_manifest_sha256": manifest_digest.hexdigest(),
++    }
++
++
++def _verify_file(
++    path: Path,
++    *,
++    expected_sha256: str,
++    expected_bytes: int | None = None,
++) -> dict[str, int | str]:
++    if not path.is_file():
++        raise FileNotFoundError(path)
++    if expected_bytes is not None and path.stat().st_size != expected_bytes:
++        raise RuntimeError(
++            f"file size lock mismatch: {path}; expected={expected_bytes}, actual={path.stat().st_size}"
++        )
++    actual_sha256 = sha256_file(path)
++    if actual_sha256 != expected_sha256:
++        raise RuntimeError(
++            f"file hash lock mismatch: {path}; expected={expected_sha256}, actual={actual_sha256}"
++        )
++    return {
++        "path": str(path),
++        "bytes": path.stat().st_size,
++        "sha256": actual_sha256,
++    }
++
++
++def _python_version() -> str:
++    import platform
++
++    return platform.python_version()
+diff --git a/boundarybc/replay_worker.py b/boundarybc/replay_worker.py
+new file mode 100644
+index 0000000..1919b66
+--- /dev/null
++++ b/boundarybc/replay_worker.py
+@@ -0,0 +1,98 @@
++from __future__ import annotations
++
++import argparse
++import json
++from pathlib import Path
++
++import numpy as np
++import torch
++
++from boundarybc.config import load_config
++from boundarybc.data import ProprioNormalizer, official_demo_path
++from boundarybc.libero_runtime import (
++    configure_headless_runtime,
++    deterministic_short_replay_check,
++    load_task_init_states,
++    make_offscreen_env,
++    observation_tensors,
++)
++from boundarybc.training import make_model
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(description="Fresh-process LIBERO replay and EGL/CUDA smoke")
++    parser.add_argument("--config", required=True)
++    parser.add_argument("--dataset-root", required=True)
++    parser.add_argument("--task-key", required=True)
++    parser.add_argument("--device", default="cuda:0")
++    return parser.parse_args()
++
++
++def main() -> None:
++    args = parse_args()
++    config = load_config(args.config)
++    configure_headless_runtime(config.path.parents[1])
++    task = config.task(args.task_key)
++    demo_path = official_demo_path(
++        args.dataset_root,
++        str(config.raw["benchmark"]["suite"]),
++        task.name,
++    )
++    replay = deterministic_short_replay_check(
++        config,
++        task,
++        demo_path,
++        demo_key="demo_0",
++        state_index=30,
++        horizon=4,
++        gpu_device_id=0,
++    )
++    eval_order = _egl_before_cuda_policy_step(config, task, torch.device(args.device))
++    print(
++        json.dumps(
++            {
++                "event": "REPLAY_WORKER_COMPLETE",
++                "task_key": task.key,
++                "replay": replay,
++                "egl_before_cuda_policy_step": eval_order,
++            },
++            sort_keys=True,
++        ),
++        flush=True,
++    )
++
++
++def _egl_before_cuda_policy_step(config, task, device: torch.device) -> dict[str, object]:
++    model = make_model(config)
++    normalizer = ProprioNormalizer(
++        mean=np.zeros(15, dtype=np.float32),
++        std=np.ones(15, dtype=np.float32),
++    )
++    init_state = load_task_init_states(config, task)[0]
++    env = make_offscreen_env(config, task, gpu_device_id=0)
++    try:
++        env.seed(0)
++        env.reset()
++        observation = env.set_init_state(init_state)
++        # This is intentionally the first CUDA compute-context initialization
++        # in the worker, after EGL is alive.
++        model = model.to(device).eval()
++        image, proprio = observation_tensors(observation, normalizer, device=device)
++        with torch.inference_mode(), torch.autocast(
++            device_type=device.type,
++            dtype=torch.bfloat16,
++            enabled=device.type == "cuda",
++        ):
++            chunk = model(image, proprio)
++        observation, _, _, _ = env.step(chunk[0, 0].float().cpu().numpy())
++        return {
++            "device": torch.cuda.get_device_name(device) if device.type == "cuda" else str(device),
++            "prediction_shape": list(chunk.shape),
++            "post_step_image_shape": list(np.asarray(observation["agentview_image"]).shape),
++        }
++    finally:
++        env.close()
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/boundarybc/reporting.py b/boundarybc/reporting.py
+new file mode 100644
+index 0000000..7bed4a7
+--- /dev/null
++++ b/boundarybc/reporting.py
+@@ -0,0 +1,136 @@
++from __future__ import annotations
++
++import json
++from pathlib import Path
++from typing import Any
++
++import numpy as np
++
++from boundarybc.checkpoint import atomic_write_json
++from boundarybc.config import ExperimentConfig
++from boundarybc.evaluation import evaluation_result_path
++
++
++def build_baseline_gate_report(
++    config: ExperimentConfig,
++    *,
++    run_id: str,
++    log_root: str | Path,
++) -> tuple[Path, dict[str, Any]]:
++    task_reports: dict[str, Any] = {}
++    all_pass = True
++    bootstrap_replicates = int(config.raw["stage1_go_thresholds"]["paired_bootstrap_replicates"])
++    for task in config.tasks:
++        matrix = np.zeros((len(config.training_seeds), 50), dtype=np.float64)
++        seed_rates: dict[str, float] = {}
++        for seed_index, seed in enumerate(config.training_seeds):
++            path = evaluation_result_path(log_root, run_id, task.key, seed)
++            records = _read_records(path)
++            if set(records) != set(range(50)):
++                raise RuntimeError(f"missing evaluation episodes: {path}")
++            values = np.asarray([bool(records[index]["success"]) for index in range(50)], dtype=np.float64)
++            matrix[seed_index] = values
++            seed_rates[str(seed)] = float(values.mean())
++        rate = float(matrix.mean())
++        low, high = paired_seed_episode_bootstrap(
++            matrix,
++            replicates=bootstrap_replicates,
++            seed=1601800 + len(task_reports),
++        )
++        passed = task.baseline_success_min <= rate <= task.baseline_success_max
++        all_pass = all_pass and passed
++        task_reports[task.key] = {
++            "task_name": task.name,
++            "role": task.role,
++            "success_rate": rate,
++            "confidence_interval_95": [low, high],
++            "seed_success_rates": seed_rates,
++            "required_range": [task.baseline_success_min, task.baseline_success_max],
++            "passed": passed,
++        }
++    protocol_deviation = bool(config.raw["data"]["protocol_deviation"])
++    decision = "BASELINE_GATE_PASS_CONTINUE_STAGE1" if all_pass else "NO_GO_BASELINE_GATE"
++    report = {
++        "schema_version": 1,
++        "protocol_id": config.protocol_id,
++        "config_sha256": config.sha256,
++        "run_id": run_id,
++        "decision": decision,
++        "baseline_gate_passed": all_pass,
++        "task_results": task_reports,
++        "data_protocol_deviation": protocol_deviation,
++        "stage1_go_permitted_from_this_pilot": False,
++        "stage1_go_block_reason": (
++            "The official 200-demo/episode-seed protocol is unresolved."
++            if protocol_deviation
++            else "Stage-1 adaptive arms have not yet been evaluated."
++        ),
++        "adaptive_implementation_authorized_by_gate": all_pass,
++    }
++    output_directory = Path(log_root) / run_id / "reports"
++    json_path = output_directory / "baseline_gate.json"
++    atomic_write_json(json_path, report)
++    markdown_path = output_directory / "baseline_gate.md"
++    markdown_path.parent.mkdir(parents=True, exist_ok=True)
++    markdown_path.write_text(_baseline_markdown(report), encoding="utf-8")
++    return json_path, report
++
++
++def paired_seed_episode_bootstrap(
++    matrix: np.ndarray,
++    *,
++    replicates: int,
++    seed: int,
++) -> tuple[float, float]:
++    if matrix.ndim != 2 or matrix.shape[1] != 50:
++        raise ValueError(f"expected seed x 50 matrix, got {matrix.shape}")
++    rng = np.random.default_rng(seed)
++    estimates = np.empty(replicates, dtype=np.float64)
++    for index in range(replicates):
++        seed_indices = rng.integers(0, matrix.shape[0], size=matrix.shape[0])
++        episode_indices = rng.integers(0, matrix.shape[1], size=matrix.shape[1])
++        estimates[index] = matrix[np.ix_(seed_indices, episode_indices)].mean()
++    return float(np.quantile(estimates, 0.025)), float(np.quantile(estimates, 0.975))
++
++
++def _read_records(path: Path) -> dict[int, dict[str, Any]]:
++    records: dict[int, dict[str, Any]] = {}
++    with path.open("r", encoding="utf-8") as handle:
++        for line in handle:
++            if line.strip():
++                value = json.loads(line)
++                episode_id = int(value["episode_id"])
++                if episode_id in records and records[episode_id] != value:
++                    raise RuntimeError(f"conflicting duplicate episode {episode_id}: {path}")
++                records[episode_id] = value
++    return records
++
++
++def _baseline_markdown(report: dict[str, Any]) -> str:
++    lines = [
++        "# R16-P18 LIBERO Stage-1 baseline gate",
++        "",
++        f"Decision: **{report['decision']}**",
++        "",
++        "| Task | Success | 95% paired bootstrap CI | Required | Gate |",
++        "|---|---:|---:|---:|---|",
++    ]
++    for task in report["task_results"].values():
++        low, high = task["confidence_interval_95"]
++        minimum, maximum = task["required_range"]
++        lines.append(
++            f"| {task['task_name']} | {task['success_rate']:.1%} | "
++            f"[{low:.1%}, {high:.1%}] | [{minimum:.0%}, {maximum:.0%}] | "
++            f"{'PASS' if task['passed'] else 'FAIL'} |"
++        )
++    lines.extend(
++        [
++            "",
++            "This is a baseline health gate, not an R16-P18 result. The adaptive selector and effect model must remain unimplemented until this gate passes.",
++            "",
++            "The pilot cannot return Stage-1 GO because official LIBERO provides only 50 demonstrations per exact task and no original episode-seed field; the requested 200-demo protocol remains unresolved.",
++            "",
++        ]
++    )
++    return "\n".join(lines)
++
+diff --git a/boundarybc/smoke.py b/boundarybc/smoke.py
+new file mode 100644
+index 0000000..0949555
+--- /dev/null
++++ b/boundarybc/smoke.py
+@@ -0,0 +1,161 @@
++from __future__ import annotations
++
++import argparse
++import json
++import platform
++import subprocess
++import sys
++from pathlib import Path
++
++import torch
++
++from boundarybc.checkpoint import atomic_write_json
++from boundarybc.config import load_config
++from boundarybc.data import (
++    discover_episodes,
++    fit_proprio_normalizer,
++    load_task_arrays,
++    make_batch,
++    official_demo_path,
++    split_episode_records,
++)
++from boundarybc.libero_runtime import configure_headless_runtime
++from boundarybc.model import masked_action_mse
++from boundarybc.provenance import verify_locked_inputs
++from boundarybc.training import make_model
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(description="One-GPU, batch-one R16-P18 dev14 smoke")
++    parser.add_argument("--config", required=True)
++    parser.add_argument("--dataset-root", required=True)
++    parser.add_argument("--output", required=True)
++    parser.add_argument("--device", default="cuda:0")
++    return parser.parse_args()
++
++
++def main() -> None:
++    args = parse_args()
++    config = load_config(args.config)
++    configure_headless_runtime(config.path.parents[1])
++    device = torch.device(args.device)
++    provenance = verify_locked_inputs(config, dataset_root=args.dataset_root)
++    task_results: dict[str, dict[str, object]] = {}
++    suite = str(config.raw["benchmark"]["suite"])
++    # Establish every EGL context before any CUDA compute context is created.
++    for task in config.tasks:
++        demo_path = official_demo_path(args.dataset_root, suite, task.name)
++        records = discover_episodes(demo_path)
++        split = split_episode_records(records)
++        replay_worker = _run_replay_worker(
++            config_path=config.path,
++            dataset_root=args.dataset_root,
++            task_key=task.key,
++            device=args.device,
++        )
++        replay = replay_worker["replay"]
++        if float(replay["state_repeat_max_abs"]) > 1e-9:
++            raise RuntimeError(f"non-deterministic state replay: {replay}")
++        if int(replay["image_repeat_max_abs"]) > 1 or float(replay["image_repeat_mae"]) > 0.001:
++            raise RuntimeError(f"non-deterministic image replay: {replay}")
++        if float(replay["alignment_proprio_max_abs"]) > 0.003:
++            raise RuntimeError(f"state/observation alignment mismatch: {replay}")
++        if float(replay["alignment_image_mae"]) > 2.0:
++            raise RuntimeError(f"state/observation image mismatch: {replay}")
++        task_results[task.key] = {
++            "task_name": task.name,
++            "episodes": len(records),
++            "split_counts": {key: len(value) for key, value in split.items()},
++            "replay": replay,
++            "egl_before_cuda_policy_step": replay_worker["egl_before_cuda_policy_step"],
++        }
++        print(json.dumps({"event": "SMOKE_REPLAY_COMPLETE", "task": task.key}, sort_keys=True), flush=True)
++
++    for task in config.tasks:
++        if device.type == "cuda" and not torch.cuda.is_available():
++            raise RuntimeError("CUDA smoke requested but CUDA is unavailable")
++        demo_path = official_demo_path(args.dataset_root, suite, task.name)
++        records = discover_episodes(demo_path)
++        arrays = load_task_arrays(demo_path, records[:1], action_horizon=8)
++        normalizer = fit_proprio_normalizer(arrays.proprio)
++        batch = make_batch(
++            arrays,
++            torch.tensor([0]),
++            normalizer,
++            device=device,
++            augment=True,
++        )
++        model = make_model(config).to(device)
++        model.train()
++        use_bf16 = device.type == "cuda"
++        with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=use_bf16):
++            microtokens = model.encode_microtokens(batch["images"])
++            prediction = model(batch["images"], batch["proprio"])
++            loss = masked_action_mse(prediction, batch["actions"], batch["mask"])
++        loss.backward()
++        if microtokens.shape != (1, 64, 128) or prediction.shape != (1, 8, 7):
++            raise RuntimeError(
++                f"model contract mismatch: microtokens={microtokens.shape}, prediction={prediction.shape}"
++            )
++        task_results[task.key].update({
++            "first_episode_frames": len(arrays),
++            "microtokens": list(microtokens.shape),
++            "prediction": list(prediction.shape),
++            "loss": float(loss.detach().cpu()),
++        })
++        del model, arrays, batch, prediction, loss, microtokens
++        if device.type == "cuda":
++            torch.cuda.empty_cache()
++        print(json.dumps({"event": "SMOKE_TASK_COMPLETE", "task": task.key}, sort_keys=True), flush=True)
++    result = {
++        "schema_version": 1,
++        "event": "DEV14_ONE_GPU_SMOKE_COMPLETE",
++        "protocol_id": config.protocol_id,
++        "config_sha256": config.sha256,
++        "python": platform.python_version(),
++        "torch": str(torch.__version__),
++        "cuda": str(torch.version.cuda),
++        "device": torch.cuda.get_device_name(device) if device.type == "cuda" else str(device),
++        "batch_size": 1,
++        "gpu_count": 1 if device.type == "cuda" else 0,
++        "provenance": provenance,
++        "tasks": task_results,
++        "adaptive_components_implemented": False,
++    }
++    output = Path(args.output)
++    atomic_write_json(output, result)
++    print(json.dumps({"event": result["event"], "output": str(output)}, sort_keys=True), flush=True)
++
++
++def _run_replay_worker(
++    *,
++    config_path: Path,
++    dataset_root: str,
++    task_key: str,
++    device: str,
++) -> dict[str, object]:
++    command = [
++        sys.executable,
++        "-m",
++        "boundarybc.replay_worker",
++        "--config",
++        str(config_path),
++        "--dataset-root",
++        str(Path(dataset_root).resolve()),
++        "--task-key",
++        task_key,
++        "--device",
++        device,
++    ]
++    completed = subprocess.run(command, check=True, text=True, capture_output=True)
++    lines = [line for line in completed.stdout.splitlines() if line.strip()]
++    if not lines:
++        raise RuntimeError(f"replay worker emitted no result for {task_key}")
++    result = json.loads(lines[-1])
++    if result.get("event") != "REPLAY_WORKER_COMPLETE":
++        raise RuntimeError(f"unexpected replay worker result for {task_key}: {result}")
++    return result
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/boundarybc/training.py b/boundarybc/training.py
+new file mode 100644
+index 0000000..a208005
+--- /dev/null
++++ b/boundarybc/training.py
+@@ -0,0 +1,402 @@
++from __future__ import annotations
++
++import json
++import math
++import os
++import random
++import time
++from pathlib import Path
++from typing import Any
++
++import numpy as np
++import torch
++
++from boundarybc.checkpoint import (
++    atomic_write_json,
++    capture_rng_state,
++    latest_complete_checkpoint,
++    load_complete_checkpoint,
++    restore_rng_state,
++    save_complete_checkpoint,
++    save_final_model,
++    validate_final_model,
++)
++from boundarybc.config import ExperimentConfig
++from boundarybc.data import (
++    ProprioNormalizer,
++    discover_episodes,
++    fit_proprio_normalizer,
++    load_task_arrays,
++    make_batch,
++    official_demo_path,
++    split_episode_records,
++)
++from boundarybc.model import BoundaryBCS, masked_action_mse
++
++
++def model_directory(checkpoint_root: str | Path, run_id: str, task_key: str, seed: int) -> Path:
++    return Path(checkpoint_root) / run_id / "models" / task_key / f"seed_{seed}"
++
++
++def final_model_path(checkpoint_root: str | Path, run_id: str, task_key: str, seed: int) -> Path:
++    return model_directory(checkpoint_root, run_id, task_key, seed) / "final.pt"
++
++
++def train_one_model(
++    config: ExperimentConfig,
++    *,
++    task_key: str,
++    model_seed: int,
++    run_id: str,
++    dataset_root: str | Path,
++    checkpoint_root: str | Path,
++    log_root: str | Path,
++    device: torch.device,
++) -> Path:
++    if model_seed not in config.training_seeds:
++        raise ValueError(f"model seed {model_seed} is not preregistered")
++    task = config.task(task_key)
++    directory = model_directory(checkpoint_root, run_id, task_key, model_seed)
++    final_path = final_model_path(checkpoint_root, run_id, task_key, model_seed)
++    if validate_final_model(final_path):
++        print(json.dumps({"event": "MODEL_ALREADY_COMPLETE", "path": str(final_path)}), flush=True)
++        return final_path
++    directory.mkdir(parents=True, exist_ok=True)
++    log_directory = Path(log_root) / run_id
++    log_directory.mkdir(parents=True, exist_ok=True)
++    metrics_path = log_directory / f"train_{task_key}_seed_{model_seed}.jsonl"
++
++    hdf5_path = official_demo_path(dataset_root, config.raw["benchmark"]["suite"], task.name)
++    records = discover_episodes(hdf5_path)
++    split = split_episode_records(records)
++    train_arrays = load_task_arrays(
++        hdf5_path,
++        split["train"],
++        action_horizon=int(config.raw["model"]["action_horizon"]),
++    )
++    validation_arrays = load_task_arrays(
++        hdf5_path,
++        split["validation"],
++        action_horizon=int(config.raw["model"]["action_horizon"]),
++    )
++    normalizer = fit_proprio_normalizer(train_arrays.proprio)
++    _set_seed(model_seed)
++    model = make_model(config).to(device)
++    training = config.raw["training"]
++    optimizer = torch.optim.AdamW(
++        model.parameters(),
++        lr=float(training["learning_rate"]),
++        weight_decay=float(training["weight_decay"]),
++    )
++    optimizer_steps = int(training["optimizer_steps"])
++    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
++        optimizer,
++        T_max=optimizer_steps,
++        eta_min=float(training["learning_rate"]) * 0.05,
++    )
++    batch_generator = torch.Generator(device="cpu")
++    batch_generator.manual_seed(model_seed ^ 0x5A17)
++    global_step = 0
++    latest = latest_complete_checkpoint(directory)
++    split_identities = {
++        name: [record.identity for record in subset]
++        for name, subset in split.items()
++    }
++    if latest is not None:
++        checkpoint = load_complete_checkpoint(latest, map_location=device)
++        _validate_resume(
++            checkpoint,
++            config=config,
++            run_id=run_id,
++            task_key=task_key,
++            model_seed=model_seed,
++            split_identities=split_identities,
++        )
++        model.load_state_dict(checkpoint["model"])
++        optimizer.load_state_dict(checkpoint["optimizer"])
++        scheduler.load_state_dict(checkpoint["scheduler"])
++        restore_rng_state(checkpoint["rng"])
++        batch_generator.set_state(checkpoint["batch_generator_state"])
++        global_step = int(checkpoint["global_step"])
++        if global_step >= optimizer_steps:
++            raise RuntimeError("complete final model is missing for an already-finished checkpoint")
++        print(
++            json.dumps(
++                {
++                    "event": "AUTO_RESUME",
++                    "run_id": run_id,
++                    "task_key": task_key,
++                    "model_seed": model_seed,
++                    "checkpoint": str(latest),
++                    "restored_global_step": global_step,
++                },
++                sort_keys=True,
++            ),
++            flush=True,
++        )
++    else:
++        print(
++            json.dumps(
++                {
++                    "event": "AUTO_RESUME",
++                    "run_id": run_id,
++                    "task_key": task_key,
++                    "model_seed": model_seed,
++                    "checkpoint": None,
++                    "restored_global_step": 0,
++                },
++                sort_keys=True,
++            ),
++            flush=True,
++        )
++
++    batch_size = int(training["batch_size"])
++    validation_interval = int(training["validation_interval"])
++    checkpoint_interval = int(training["complete_checkpoint_interval"])
++    use_bf16 = training.get("precision") == "bf16" and device.type == "cuda"
++    start_time = time.perf_counter()
++    model.train()
++    while global_step < optimizer_steps:
++        indices = torch.randint(
++            len(train_arrays),
++            (batch_size,),
++            generator=batch_generator,
++        )
++        batch = make_batch(
++            train_arrays,
++            indices,
++            normalizer,
++            device=device,
++            augment=True,
++        )
++        optimizer.zero_grad(set_to_none=True)
++        with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=use_bf16):
++            prediction = model(batch["images"], batch["proprio"])
++            loss = masked_action_mse(prediction, batch["actions"], batch["mask"])
++        if not torch.isfinite(loss):
++            raise FloatingPointError(f"non-finite loss at step {global_step + 1}: {loss}")
++        loss.backward()
++        gradient_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 10.0)
++        optimizer.step()
++        scheduler.step()
++        global_step += 1
++        record: dict[str, Any] = {
++            "event": "TRAIN_STEP",
++            "run_id": run_id,
++            "task_key": task_key,
++            "model_seed": model_seed,
++            "global_step": global_step,
++            "loss": float(loss.detach().cpu()),
++            "gradient_norm": float(gradient_norm.detach().cpu()),
++            "learning_rate": float(optimizer.param_groups[0]["lr"]),
++            "elapsed_seconds": time.perf_counter() - start_time,
++        }
++        if global_step == 1 or global_step % 10 == 0:
++            print(json.dumps(record, sort_keys=True), flush=True)
++        if global_step == 1 or global_step % 50 == 0:
++            _append_jsonl(metrics_path, record)
++        if global_step % validation_interval == 0 or global_step == optimizer_steps:
++            validation_loss = evaluate_validation_loss(
++                model,
++                validation_arrays,
++                normalizer,
++                device=device,
++                use_bf16=use_bf16,
++            )
++            validation_record = {
++                "event": "VALIDATION",
++                "run_id": run_id,
++                "task_key": task_key,
++                "model_seed": model_seed,
++                "global_step": global_step,
++                "validation_loss": validation_loss,
++            }
++            print(json.dumps(validation_record, sort_keys=True), flush=True)
++            _append_jsonl(metrics_path, validation_record)
++            model.train()
++        if global_step % checkpoint_interval == 0 or global_step == optimizer_steps:
++            payload = _checkpoint_payload(
++                model=model,
++                optimizer=optimizer,
++                scheduler=scheduler,
++                normalizer=normalizer,
++                config=config,
++                run_id=run_id,
++                task_key=task_key,
++                task_name=task.name,
++                model_seed=model_seed,
++                global_step=global_step,
++                batch_generator=batch_generator,
++                split_identities=split_identities,
++            )
++            save_complete_checkpoint(
++                directory,
++                step=global_step,
++                payload=payload,
++                keep_last=3,
++            )
++
++    payload = _checkpoint_payload(
++        model=model,
++        optimizer=optimizer,
++        scheduler=scheduler,
++        normalizer=normalizer,
++        config=config,
++        run_id=run_id,
++        task_key=task_key,
++        task_name=task.name,
++        model_seed=model_seed,
++        global_step=global_step,
++        batch_generator=batch_generator,
++        split_identities=split_identities,
++    )
++    save_final_model(final_path, payload)
++    atomic_write_json(
++        directory / "training_summary.json",
++        {
++            "schema_version": 1,
++            "run_id": run_id,
++            "task_key": task_key,
++            "task_name": task.name,
++            "model_seed": model_seed,
++            "global_step": global_step,
++            "config_sha256": config.sha256,
++            "train_frames": len(train_arrays),
++            "validation_frames": len(validation_arrays),
++            "final_model": str(final_path),
++        },
++    )
++    print(json.dumps({"event": "MODEL_COMPLETE", "path": str(final_path)}), flush=True)
++    return final_path
++
++
++@torch.inference_mode()
++def evaluate_validation_loss(
++    model: BoundaryBCS,
++    arrays: Any,
++    normalizer: ProprioNormalizer,
++    *,
++    device: torch.device,
++    use_bf16: bool,
++    batch_size: int = 128,
++) -> float:
++    model.eval()
++    numerator = 0.0
++    denominator = 0.0
++    for start in range(0, len(arrays), batch_size):
++        stop = min(len(arrays), start + batch_size)
++        indices = torch.arange(start, stop, dtype=torch.int64)
++        batch = make_batch(
++            arrays,
++            indices,
++            normalizer,
++            device=device,
++            augment=False,
++        )
++        with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=use_bf16):
++            prediction = model(batch["images"], batch["proprio"])
++            squared = (prediction - batch["actions"]).square().mean(dim=-1)
++        numerator += float((squared * batch["mask"]).sum().cpu())
++        denominator += float(batch["mask"].sum().cpu())
++    return numerator / max(denominator, 1.0)
++
++
++def make_model(config: ExperimentConfig) -> BoundaryBCS:
++    model = config.raw["model"]
++    return BoundaryBCS(
++        proprio_dim=int(model["proprio_dim"]),
++        hidden_dim=int(model["hidden_dim"]),
++        action_dim=int(config.raw["benchmark"]["action_dim"]),
++        action_horizon=int(model["action_horizon"]),
++        transformer_layers=int(model["transformer_layers"]),
++        transformer_heads=int(model["transformer_heads"]),
++    )
++
++
++def _checkpoint_payload(
++    *,
++    model: BoundaryBCS,
++    optimizer: torch.optim.Optimizer,
++    scheduler: torch.optim.lr_scheduler.LRScheduler,
++    normalizer: ProprioNormalizer,
++    config: ExperimentConfig,
++    run_id: str,
++    task_key: str,
++    task_name: str,
++    model_seed: int,
++    global_step: int,
++    batch_generator: torch.Generator,
++    split_identities: dict[str, list[str]],
++) -> dict[str, Any]:
++    return {
++        "schema_version": 1,
++        "run_id": run_id,
++        "task_key": task_key,
++        "task_name": task_name,
++        "model_seed": model_seed,
++        "global_step": global_step,
++        "config_sha256": config.sha256,
++        "config_canonical_json": config.canonical_json(),
++        "split_identities": split_identities,
++        "normalizer": normalizer.as_dict(),
++        "model": model.state_dict(),
++        "optimizer": optimizer.state_dict(),
++        "scheduler": scheduler.state_dict(),
++        "rng": capture_rng_state(),
++        "batch_generator_state": batch_generator.get_state(),
++        "torch_version": torch.__version__,
++        "cuda_version": torch.version.cuda,
++    }
++
++
++def _validate_resume(
++    checkpoint: dict[str, Any],
++    *,
++    config: ExperimentConfig,
++    run_id: str,
++    task_key: str,
++    model_seed: int,
++    split_identities: dict[str, list[str]],
++) -> None:
++    expected = {
++        "run_id": run_id,
++        "task_key": task_key,
++        "model_seed": model_seed,
++        "config_sha256": config.sha256,
++        "split_identities": split_identities,
++    }
++    for key, value in expected.items():
++        if checkpoint.get(key) != value:
++            raise RuntimeError(f"resume contract mismatch for {key}")
++    required = (
++        "model",
++        "optimizer",
++        "scheduler",
++        "rng",
++        "batch_generator_state",
++        "global_step",
++    )
++    missing = [key for key in required if key not in checkpoint]
++    if missing:
++        raise RuntimeError(f"incomplete checkpoint state: {missing}")
++
++
++def _set_seed(seed: int) -> None:
++    random.seed(seed)
++    np.random.seed(seed)
++    torch.manual_seed(seed)
++    if torch.cuda.is_available():
++        torch.cuda.manual_seed_all(seed)
++    torch.backends.cudnn.benchmark = False
++    torch.backends.cudnn.deterministic = True
++
++
++def _append_jsonl(path: Path, value: dict[str, Any]) -> None:
++    path.parent.mkdir(parents=True, exist_ok=True)
++    encoded = json.dumps(value, sort_keys=True) + "\n"
++    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
++    try:
++        os.write(descriptor, encoded.encode("utf-8"))
++        os.fsync(descriptor)
++    finally:
++        os.close(descriptor)
+diff --git a/boundarybc/worker.py b/boundarybc/worker.py
+new file mode 100644
+index 0000000..a1733f9
+--- /dev/null
++++ b/boundarybc/worker.py
+@@ -0,0 +1,59 @@
++from __future__ import annotations
++
++import argparse
++
++import torch
++
++from boundarybc.config import load_config
++from boundarybc.evaluation import evaluate_one_model
++from boundarybc.libero_runtime import configure_headless_runtime
++from boundarybc.training import train_one_model
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(description="Isolated BoundaryBC-S train/eval worker")
++    parser.add_argument("phase", choices=("train", "evaluate"))
++    parser.add_argument("--config", required=True)
++    parser.add_argument("--run-id", required=True)
++    parser.add_argument("--task-key", required=True)
++    parser.add_argument("--model-seed", required=True, type=int)
++    parser.add_argument("--dataset-root", required=True)
++    parser.add_argument("--checkpoint-root", required=True)
++    parser.add_argument("--log-root", required=True)
++    parser.add_argument("--device", default="cuda:0")
++    return parser.parse_args()
++
++
++def main() -> None:
++    args = parse_args()
++    config = load_config(args.config)
++    configure_headless_runtime(config.path.parents[1])
++    device = torch.device(args.device)
++    if args.phase == "train":
++        if device.type == "cuda" and not torch.cuda.is_available():
++            raise RuntimeError("CUDA training was requested but CUDA is unavailable")
++        train_one_model(
++            config,
++            task_key=args.task_key,
++            model_seed=args.model_seed,
++            run_id=args.run_id,
++            dataset_root=args.dataset_root,
++            checkpoint_root=args.checkpoint_root,
++            log_root=args.log_root,
++            device=device,
++        )
++    else:
++        evaluate_one_model(
++            config,
++            task_key=args.task_key,
++            model_seed=args.model_seed,
++            run_id=args.run_id,
++            checkpoint_root=args.checkpoint_root,
++            log_root=args.log_root,
++            device=device,
++            gpu_device_id=0,
++        )
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/configs/dev14_smoke_evidence.yaml b/configs/dev14_smoke_evidence.yaml
+new file mode 100644
+index 0000000..38bcaaa
+--- /dev/null
++++ b/configs/dev14_smoke_evidence.yaml
+@@ -0,0 +1,60 @@
++schema_version: 1
++protocol_id: R16-P18-LIBERO-STAGE1-PILOT-V1
++smoke_id: dev14-smoke-20260812-v4
++completed_at_date_utc: "2026-08-12"
++scope: dev14_one_gpu_batch_one_only
++pai_probe_created: false
++
++runtime:
++  python_executable: /mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sim/bin/python
++  device: NVIDIA A800-SXM4-80GB
++  gpu_count: 1
++  batch_size: 1
++  precision: bf16
++
++inputs:
++  config: configs/r16_p18_libero_stage1.yaml
++  config_sha256: f07ddc8a47cdd1fc43fca3919dbf73d67e6a4a914a09fcff91801269e7b23426
++  dataset_path: /mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO
++  output: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/dev14-smoke-20260812-v4/smoke_result.json
++  output_sha256: bf06ef75966094346f4530a1c49c232a07117420bd3c7e36c955fb355d5b3b98
++  output_owner_uid_gid: "2254:2254"
++
++checks:
++  locked_input_hashes: pass
++  episode_identity_split_40_5_5: pass
++  visual_microtokens_1x64x128: pass
++  active_uniform_tokens: 16
++  action_chunk_1x8x7: pass
++  forward_backward_all_tasks: pass
++  egl_before_cuda_policy_step_all_tasks: pass
++  fresh_process_state_replay_max_abs_all_tasks: 0.0
++  fresh_process_render_repeat_max_lsb: 1
++  fresh_process_render_repeat_max_mae: 0.00006103515625
++  state_to_observation_index_rule: states[t]_to_obs[t-1]
++  adaptive_components_implemented: false
++
++checkpoint_tests:
++  pytest_cases: 4
++  result: pass
++  covered:
++    - empty_checkpoint_branch
++    - partial_checkpoint_ignored
++    - latest_complete_selected
++    - latest_three_retained
++    - model_optimizer_scheduler_rng_global_step_required
++    - rng_round_trip
++
++handoff:
++  wrapper: scripts/pai_r16_p18_bootstrap.sh
++  leon_launcher: scripts/pai_r16_p18_leon.sh
++  resume_semantics: complete_state_application_autoresume
++  checkpoint_output: /mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/<run_id>
++  log_output: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/<run_id>
++  identity_mechanism: bounded_root_bootstrap_then_setpriv_2254_2254
++  pai_automatic_fault_tolerance: false_on_dedicated_pool
++  expected_platform_restarts: 0
++  launcher_attempts: 1
++  first_work_gate_training: persisted_optimizer_step_and_loss
++  first_work_gate_evaluation: persisted_completed_rollout
++  limitation: This smoke does not validate the formal PAI resource or full 3000-step workload.
+diff --git a/configs/egl/10_nvidia.json b/configs/egl/10_nvidia.json
+new file mode 100644
+index 0000000..4b36753
+--- /dev/null
++++ b/configs/egl/10_nvidia.json
+@@ -0,0 +1,6 @@
++{
++  "file_format_version": "1.0.0",
++  "ICD": {
++    "library_path": "libEGL_nvidia.so.0"
++  }
++}
+diff --git a/configs/libero/config.yaml b/configs/libero/config.yaml
+new file mode 100644
+index 0000000..5f71425
+--- /dev/null
++++ b/configs/libero/config.yaml
+@@ -0,0 +1,6 @@
++assets: /mnt/cpfs/zbl-cpfs-new/USERS/leon/code/LIBERO-original/libero/libero/assets
++bddl_files: /mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero/bddl_files
++benchmark_root: /mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero
++datasets: /mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO
++init_states: /mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/libero/libero/init_files
++
+diff --git a/configs/r16_p18_libero_stage1.yaml b/configs/r16_p18_libero_stage1.yaml
+new file mode 100644
+index 0000000..c51dd9c
+--- /dev/null
++++ b/configs/r16_p18_libero_stage1.yaml
+@@ -0,0 +1,139 @@
++protocol_id: R16-P18-LIBERO-STAGE1-PILOT-V1
++locked_at_utc: "2026-08-12T22:00:00Z"
++source_wiki_token: RCkKwlcyGi0TAAkw0Zwc62bFnMb
++decision_scope: stage1_only
++
++benchmark:
++  name: LIBERO
++  suite: libero_goal
++  libero_commit: 2319dbd914673f6ef34a00584536212b10e10395
++  control_mode: OSC_POSE
++  observation_mode: agentview_rgb_plus_proprio
++  image_size: [128, 128]
++  action_dim: 7
++  task_horizon: 300
++  wait_steps: 10
++
++runtime:
++  python: 3.11.11
++  torch: 2.12.1+cu130
++  torchvision: 0.27.1+cu130
++  cuda_runtime: "13.0"
++  cudnn: 92000
++  numpy: 2.4.6
++  h5py: 3.16.0
++  mujoco: 3.6.0
++  robosuite: 1.4.0
++  scipy: 1.17.1
++  pyyaml: 6.0.3
++
++assets:
++  root: /mnt/cpfs/zbl-cpfs-new/USERS/leon/code/LIBERO-original/libero/libero/assets
++  files: 585
++  bytes: 422313213
++  tree_manifest_sha256: 39b115a50b590dfa061d36439702eddf99c178a0fcfeab90c5c60afcc6c05a35
++
++tasks:
++  push_plate:
++    name: push_the_plate_to_the_front_of_the_stove
++    role: boundary_push
++    baseline_success_min: 0.40
++    baseline_success_max: 0.90
++    demo_file_bytes: 762855139
++    demo_file_sha256: 36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6
++    bddl_sha256: 26f22f8ad39a4b2b344b049115c45661a877fa0b4821fb78246725e7e87d8c0b
++    init_states_sha256: 794beed679b18bbd7d9fb851c81877a974915ad63addff2d5ac5af0607fafac9
++  bottle_rack:
++    name: put_the_wine_bottle_on_the_rack
++    role: constrained_placement
++    baseline_success_min: 0.25
++    baseline_success_max: 0.80
++    demo_file_bytes: 878958730
++    demo_file_sha256: f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e
++    bddl_sha256: 3d3ee18139056aa3780572cde17b1c50dc20ae0d299403f65e514e8471ba0e8e
++    init_states_sha256: fa09aa4ade871c1c6be3dd8c93eb3437ea15190fd7dc73b8c986c8d2d3cfb062
++  bowl_plate:
++    name: put_the_bowl_on_the_plate
++    role: smooth_negative_control
++    baseline_success_min: 0.80
++    baseline_success_max: 1.00
++    demo_file_bytes: 468246288
++    demo_file_sha256: e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406
++    bddl_sha256: 358b7781437e412c67d6a7648c1c28796b6b1bf117a25e61316cb8dfeb940e5b
++    init_states_sha256: ef3466ffad734754dc40eba1f6f5712e37aa46b9692c595e0da34f16d3a0c668
++
++data:
++  requested_successful_demos_per_task: 200
++  available_official_successful_demos_per_task: 50
++  protocol_deviation: true
++  deviation_reason: >-
++    Official LIBERO exposes 50 successful demonstrations for each exact task and
++    does not store the original episode seed. This pilot uses all 50 without
++    duplicating or relabeling augmented trajectories as independent episodes.
++  episode_identity: sha256_of_demo_init_state
++  split_by_identity_count:
++    train: 40
++    validation: 5
++    test: 5
++  split_order: lexicographic_sha256
++
++model:
++  name: BoundaryBC-S
++  visual_backbone: resnet18_layer3_random_init
++  micro_feature_map: [8, 8]
++  micro_feature_dim: 128
++  baseline_visual_tokens: 16
++  proprio_dim: 15
++  transformer_layers: 2
++  transformer_heads: 4
++  hidden_dim: 128
++  action_horizon: 8
++  execute_horizon: 4
++
++training:
++  seeds: [16018, 16019, 16020]
++  optimizer: adamw
++  learning_rate: 0.0003
++  weight_decay: 0.0001
++  batch_size: 64
++  precision: bf16
++  optimizer_steps: 3000
++  validation_interval: 250
++  complete_checkpoint_interval: 250
++  checkpoint_retention: latest_3_complete_per_task_seed
++  pai_automatic_fault_tolerance: false
++
++baseline_gate:
++  aggregation: mean_success_across_three_model_seeds_and_50_paired_init_states
++  require_all_tasks: true
++  on_failure: stop_before_adaptive_implementation
++
++stage1_budgets:
++  visual_microtokens: 64
++  active_visual_tokens: 16
++  hidden_full_action_candidates: 49
++  active_action_candidates: 13
++  full_fine_oracle_is_unmatched: true
++
++stage1_go_thresholds:
++  nontrivial_boundary_fraction_min: 0.25
++  boundary_tasks: [push_plate, bottle_rack]
++  regret_relative_drop_vs_uniform_min: 0.15
++  alias_relative_drop_vs_uniform_min: 0.20
++  best_action_recall_absolute_gain_vs_strongest_single_or_independent_min: 0.05
++  regret_relative_drop_vs_strongest_single_or_independent_min: 0.10
++  require_positive_direction_on_both_boundary_tasks: true
++  shuffled_joint_gain_removed_fraction_min: 0.50
++  negative_control_success_drop_max: 0.02
++  closed_loop_success_absolute_gain_min: 0.05
++  closed_loop_failure_relative_drop_min: 0.15
++  require_exact_budget_equality: true
++  paired_bootstrap_replicates: 10000
++  confidence_level: 0.95
++
++stop_rules:
++  stop_after_stage1: true
++  never_auto_start_diffusion_policy: true
++  never_auto_start_dino_wm: true
++  never_auto_start_pi05: true
++  pilot_cannot_return_go_if_data_protocol_deviation_is_unresolved: true
+diff --git a/libero/libero/__init__.py b/libero/libero/__init__.py
+index 3926cfa..a4e47dd 100644
+--- a/libero/libero/__init__.py
++++ b/libero/libero/__init__.py
+@@ -83,6 +83,17 @@ def get_assets_path():
+     if os.path.exists(local_assets_path):
+         _assets_path_cache = local_assets_path
+         return local_assets_path
++
++    # The wheel deliberately omits the large asset tree. Reproducible cluster
++    # runs pin a mounted asset directory in LIBERO's config instead of
++    # downloading mutable assets at runtime.
++    if os.path.exists(config_file):
++        with open(config_file, "r") as f:
++            configured_paths = dict(yaml.load(f.read(), Loader=yaml.FullLoader))
++        configured_assets_path = configured_paths.get("assets")
++        if configured_assets_path and os.path.exists(configured_assets_path):
++            _assets_path_cache = configured_assets_path
++            return configured_assets_path
+     
+     # Otherwise, download from HuggingFace Hub
+     try:
+diff --git a/scripts/pai_r16_p18_bootstrap.sh b/scripts/pai_r16_p18_bootstrap.sh
+new file mode 100755
+index 0000000..118bb47
+--- /dev/null
++++ b/scripts/pai_r16_p18_bootstrap.sh
+@@ -0,0 +1,154 @@
++#!/usr/bin/env bash
++set -euo pipefail
++
++run_id=${1:?run id is required}
++expected_commit=${2:?expected git commit is required}
++expected_config_sha256=${3:?expected config sha256 is required}
++
++case "$run_id" in
++  *[!A-Za-z0-9._-]*|'')
++    echo "[owner-bootstrap] invalid run id: $run_id" >&2
++    exit 50
++    ;;
++esac
++
++leon_uid=2254
++leon_gid=2254
++new_root=/mnt/cpfs/zbl-cpfs-new
++user_root=$new_root/USERS/leon
++data_root=$new_root/dataset/leon
++checkpoint_root=$new_root/CKPT/leon
++public_root=$new_root/SHARE/leon
++project_dir=$user_root/code/r16-p18-libero-stage1-20260812
++checkpoint_run_dir=$checkpoint_root/torch/r16-p18-libero-stage1/$run_id
++log_run_dir=$user_root/logs/r16-p18-libero-stage1/$run_id
++cache_run_dir=$user_root/cache/r16-p18-libero-stage1/$run_id
++leon_launcher=$project_dir/scripts/pai_r16_p18_leon.sh
++sentinel=$user_root/.pai_mount_identity
++expected_sentinel_sha256=b3cc124ffbbebf8a12d52f70555b834f9c62a34ae09ff6ee397d0abbba600ef9
++write_paths=("$checkpoint_run_dir" "$log_run_dir" "$cache_run_dir")
++
++current_uid=$(id -u)
++current_gid=$(id -g)
++if [[ "$current_uid" -ne 0 && "$current_uid:$current_gid" != "$leon_uid:$leon_gid" ]]; then
++  echo "[owner-bootstrap] unexpected identity $current_uid:$current_gid" >&2
++  exit 51
++fi
++for executable in realpath findmnt sha256sum git rg; do
++  command -v "$executable" >/dev/null || {
++    echo "[owner-bootstrap] missing required executable: $executable" >&2
++    exit 52
++  }
++done
++if [[ "$current_uid" -eq 0 ]]; then
++  command -v setpriv >/dev/null || {
++    echo "[owner-bootstrap] setpriv is required" >&2
++    exit 53
++  }
++fi
++
++test -f "$sentinel" && test ! -L "$sentinel" || {
++  echo "[owner-bootstrap] mount identity sentinel is missing or symlinked" >&2
++  exit 54
++}
++actual_sentinel_sha256=$(sha256sum "$sentinel" | awk '{print $1}')
++[[ "$actual_sentinel_sha256" == "$expected_sentinel_sha256" ]] || {
++  echo "[owner-bootstrap] mount identity sentinel hash mismatch" >&2
++  exit 55
++}
++
++for base_root in "$new_root" "$user_root" "$data_root" "$checkpoint_root" "$public_root"; do
++  test -d "$base_root" || {
++    echo "[owner-bootstrap] missing mounted base root: $base_root" >&2
++    exit 56
++  }
++  [[ "$(realpath -e -- "$base_root")" == "$base_root" ]] || {
++    echo "[owner-bootstrap] non-canonical base root: $base_root" >&2
++    exit 57
++  }
++  mount_target=$(findmnt -n -o TARGET -T "$base_root")
++  case "$mount_target" in
++    /mnt/cpfs|/mnt/cpfs/*) ;;
++    *)
++      echo "[owner-bootstrap] unexpected mount target for $base_root: $mount_target" >&2
++      exit 58
++      ;;
++  esac
++done
++
++test -x "$leon_launcher" || {
++  echo "[owner-bootstrap] Leon launcher is not executable: $leon_launcher" >&2
++  exit 59
++}
++test "$(git -C "$project_dir" rev-parse HEAD)" = "$expected_commit" || {
++  echo "[owner-bootstrap] source commit mismatch" >&2
++  exit 60
++}
++test -z "$(git -C "$project_dir" status --porcelain)" || {
++  echo "[owner-bootstrap] source worktree is dirty" >&2
++  exit 61
++}
++actual_config_sha256=$(sha256sum "$project_dir/configs/r16_p18_libero_stage1.yaml" | awk '{print $1}')
++[[ "$actual_config_sha256" == "$expected_config_sha256" ]] || {
++  echo "[owner-bootstrap] locked config hash mismatch" >&2
++  exit 62
++}
++
++assert_scoped_write_path() {
++  local path=$1
++  local resolved
++  [[ -n "$path" && "$path" == /* ]] || exit 63
++  case "$path" in *"/../"*|*/..) exit 64 ;; esac
++  resolved=$(realpath -m -- "$path")
++  [[ "$resolved" == "$path" ]] || exit 65
++  case "$path" in
++    "$checkpoint_root"/torch/r16-p18-libero-stage1/"$run_id"|\
++    "$user_root"/logs/r16-p18-libero-stage1/"$run_id"|\
++    "$user_root"/cache/r16-p18-libero-stage1/"$run_id") ;;
++    *)
++      echo "[owner-bootstrap] write path is outside the exact run scope: $path" >&2
++      exit 66
++      ;;
++  esac
++}
++
++for path in "${write_paths[@]}"; do
++  assert_scoped_write_path "$path"
++  mkdir -p -- "$path"
++  assert_scoped_write_path "$path"
++done
++
++if [[ "$current_uid" -eq 0 ]]; then
++  chown -R --no-dereference "$leon_uid:$leon_gid" -- "${write_paths[@]}"
++fi
++
++runtime_env=(
++  /usr/bin/env -i
++  "PATH=$user_root/envs/libero_sim/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
++  "HOME=$user_root"
++  "USER=leon"
++  "LOGNAME=leon"
++  "PYTHONPATH=$project_dir"
++  "XDG_CACHE_HOME=$cache_run_dir/xdg"
++  "TORCH_HOME=$cache_run_dir/torch"
++  "WANDB_DIR=$log_run_dir/wandb"
++  "WANDB_CACHE_DIR=$cache_run_dir/wandb"
++  "WANDB_API_KEY=${WANDB_API_KEY:?PAI controller must inject WANDB_API_KEY}"
++  "WANDB_ENTITY=${WANDB_ENTITY:?PAI controller must inject WANDB_ENTITY}"
++  "R16_EXPECTED_GIT_COMMIT=$expected_commit"
++  "R16_EXPECTED_CONFIG_SHA256=$expected_config_sha256"
++  "R16_CHECKPOINT_RUN_DIR=$checkpoint_run_dir"
++  "R16_LOG_RUN_DIR=$log_run_dir"
++  "R16_CACHE_RUN_DIR=$cache_run_dir"
++  "OMP_NUM_THREADS=8"
++)
++[[ "$WANDB_ENTITY" == "chen_jian-cj-workspace" ]] || {
++  echo "[owner-bootstrap] W&B entity contract mismatch" >&2
++  exit 67
++}
++
++if [[ "$current_uid" -eq 0 ]]; then
++  exec setpriv --reuid="$leon_uid" --regid="$leon_gid" --clear-groups -- \
++    "${runtime_env[@]}" "$leon_launcher" "$run_id"
++fi
++exec "${runtime_env[@]}" "$leon_launcher" "$run_id"
+diff --git a/scripts/pai_r16_p18_leon.sh b/scripts/pai_r16_p18_leon.sh
+new file mode 100755
+index 0000000..d5ebde1
+--- /dev/null
++++ b/scripts/pai_r16_p18_leon.sh
+@@ -0,0 +1,64 @@
++#!/usr/bin/env bash
++set -euo pipefail
++
++run_id=${1:?run id is required}
++leon_uid=2254
++leon_gid=2254
++new_root=/mnt/cpfs/zbl-cpfs-new
++user_root=$new_root/USERS/leon
++project_dir=$user_root/code/r16-p18-libero-stage1-20260812
++python_bin=$user_root/envs/libero_sim/bin/python
++dataset_root=$new_root/dataset/leon/embodied_benchmark/datasets/LIBERO
++checkpoint_base=$new_root/CKPT/leon/torch/r16-p18-libero-stage1
++log_base=$user_root/logs/r16-p18-libero-stage1
++config=$project_dir/configs/r16_p18_libero_stage1.yaml
++
++[[ "$(id -u):$(id -g)" == "$leon_uid:$leon_gid" ]] || {
++  echo "[owner-preflight] expected $leon_uid:$leon_gid, got $(id -u):$(id -g)" >&2
++  exit 70
++}
++[[ "$(git -C "$project_dir" rev-parse HEAD)" == "${R16_EXPECTED_GIT_COMMIT:?}" ]] || {
++  echo "[preflight] source commit changed after privilege drop" >&2
++  exit 71
++}
++test -z "$(git -C "$project_dir" status --porcelain)" || {
++  echo "[preflight] source worktree is dirty after privilege drop" >&2
++  exit 72
++}
++[[ "$(sha256sum "$config" | awk '{print $1}')" == "${R16_EXPECTED_CONFIG_SHA256:?}" ]] || {
++  echo "[preflight] config hash changed after privilege drop" >&2
++  exit 73
++}
++test -x "$python_bin" && test -d "$dataset_root" || {
++  echo "[preflight] pinned Python or dataset root is missing" >&2
++  exit 74
++}
++
++legacy_re='/mnt/data/'"x2robot_v2|/mnt/data/"'checkpoint|/mnt/'"checkpoint|/mnt/cpfs/"'leon|(^|[^[:alnum:]_])/('"x2robot_v2|x2robot_data|open_data"')(/|$)'
++if rg -n "$legacy_re" "$config" "$project_dir/scripts" "$project_dir/boundarybc"; then
++  echo "[preflight] legacy storage path detected" >&2
++  exit 75
++fi
++
++mkdir -p "$XDG_CACHE_HOME" "$TORCH_HOME" "$WANDB_DIR" "$WANDB_CACHE_DIR"
++"$python_bin" -m boundarybc.preflight \
++  --config "$config" \
++  --run-id "$run_id" \
++  --checkpoint-run-dir "${R16_CHECKPOINT_RUN_DIR:?}" \
++  --log-run-dir "${R16_LOG_RUN_DIR:?}" \
++  --cache-run-dir "${R16_CACHE_RUN_DIR:?}"
++
++first_artifact=$R16_LOG_RUN_DIR/launcher_preflight.json
++[[ "$(stat -c '%u:%g' "$first_artifact")" == "$leon_uid:$leon_gid" ]] || {
++  echo "[owner-check] first persistent artifact is not Leon-owned" >&2
++  exit 76
++}
++
++echo "FINAL_COMMAND=$python_bin -m boundarybc.pipeline --config $config --run-id $run_id"
++exec "$python_bin" -m boundarybc.pipeline \
++  --config "$config" \
++  --run-id "$run_id" \
++  --dataset-root "$dataset_root" \
++  --checkpoint-root "$checkpoint_base" \
++  --log-root "$log_base" \
++  --device cuda:0
+diff --git a/tests/test_stage1_contract.py b/tests/test_stage1_contract.py
+new file mode 100644
+index 0000000..36fb90d
+--- /dev/null
++++ b/tests/test_stage1_contract.py
+@@ -0,0 +1,96 @@
++from __future__ import annotations
++
++import random
++
++import numpy as np
++import torch
++
++from boundarybc.checkpoint import (
++    capture_rng_state,
++    checkpoint_path,
++    discover_complete_checkpoints,
++    latest_complete_checkpoint,
++    load_complete_checkpoint,
++    marker_path,
++    restore_rng_state,
++    save_complete_checkpoint,
++)
++from boundarybc.config import load_config
++from boundarybc.model import BoundaryBCS
++
++
++def test_locked_config_and_visual_action_shapes() -> None:
++    config = load_config("configs/r16_p18_libero_stage1.yaml")
++    assert [task.key for task in config.tasks] == ["push_plate", "bottle_rack", "bowl_plate"]
++    model = BoundaryBCS()
++    model.eval()
++    with torch.inference_mode():
++        image = torch.zeros(1, 3, 128, 128)
++        microtokens = model.encode_microtokens(image)
++        prediction = model(image, torch.zeros(1, 15))
++    assert microtokens.shape == (1, 64, 128)
++    assert model.uniform_tokens(microtokens).shape == (1, 16, 128)
++    assert prediction.shape == (1, 8, 7)
++
++
++def test_complete_checkpoint_discovery_retention_and_partial_ignore(tmp_path) -> None:
++    partial = checkpoint_path(tmp_path, 9)
++    torch.save({"partial": True}, partial)
++    assert latest_complete_checkpoint(tmp_path) is None
++
++    for step in (10, 20, 30, 40):
++        save_complete_checkpoint(
++            tmp_path,
++            step=step,
++            payload=_payload(step),
++            keep_last=3,
++        )
++    complete = discover_complete_checkpoints(tmp_path)
++    assert [step for step, _ in complete] == [20, 30, 40]
++    assert partial.is_file()
++    assert not marker_path(partial).exists()
++    assert latest_complete_checkpoint(tmp_path) == checkpoint_path(tmp_path, 40)
++    loaded = load_complete_checkpoint(checkpoint_path(tmp_path, 40), map_location="cpu")
++    assert loaded["global_step"] == 40
++
++
++def test_checkpoint_rejects_missing_state_and_step_mismatch(tmp_path) -> None:
++    incomplete = _payload(10)
++    del incomplete["optimizer"]
++    try:
++        save_complete_checkpoint(tmp_path, step=10, payload=incomplete)
++    except ValueError as error:
++        assert "optimizer" in str(error)
++    else:
++        raise AssertionError("incomplete payload was accepted")
++    try:
++        save_complete_checkpoint(tmp_path, step=11, payload=_payload(10))
++    except ValueError as error:
++        assert "step mismatch" in str(error)
++    else:
++        raise AssertionError("mismatched global step was accepted")
++
++
++def test_rng_state_round_trip() -> None:
++    random.seed(7)
++    np.random.seed(7)
++    torch.manual_seed(7)
++    state = capture_rng_state()
++    expected = (random.random(), float(np.random.random()), float(torch.rand(())))
++    restore_rng_state(state)
++    actual = (random.random(), float(np.random.random()), float(torch.rand(())))
++    assert actual == expected
++
++
++def _payload(step: int) -> dict[str, object]:
++    return {
++        "run_id": "unit-test",
++        "task_key": "push_plate",
++        "model_seed": 16018,
++        "model": {"weight": torch.tensor([float(step)])},
++        "optimizer": {"state": {}},
++        "scheduler": {"last_epoch": step},
++        "rng": capture_rng_state(),
++        "batch_generator_state": torch.Generator().get_state(),
++        "global_step": step,
++    }

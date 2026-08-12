@@ -1,0 +1,37 @@
+2026-08-12 23:31:16,073 INFO    MainThread:5251 [wandb_setup.py:_flush():76] Current SDK version is 0.16.6
+2026-08-12 23:31:16,073 INFO    MainThread:5251 [wandb_setup.py:_flush():76] Configure stats pid to 5251
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_setup.py:_flush():76] Loading settings from /mnt/cpfs/zbl-cpfs-new/USERS/leon/.config/wandb/settings
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_setup.py:_flush():76] Loading settings from /mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/wandb/settings
+2026-08-12 23:31:16,074 WARNING MainThread:5251 [wandb_setup.py:_flush():76] Unknown environment variable: WANDB_CACHE_DIR
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_setup.py:_flush():76] Loading settings from environment variables: {'root_dir': '/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb', 'api_key': '***REDACTED***', 'entity': 'chen_jian-cj-workspace'}
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2026-08-12 23:31:16,074 WARNING MainThread:5251 [wandb_setup.py:_flush():76] Could not find program at -m boundarybc.worker
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': None, 'program': '-m boundarybc.worker'}
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_setup.py:_flush():76] Applying login settings: {}
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_init.py:_log_setup():521] Logging user logs to /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_233116-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16019-evaluation/logs/debug.log
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_init.py:_log_setup():522] Logging internal logs to /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_233116-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16019-evaluation/logs/debug-internal.log
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_init.py:init():561] calling init triggers
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_init.py:init():568] wandb.init called with sweep_config: {}
+config: {'protocol_id': 'R16-P18-LIBERO-STAGE1-PILOT-V1', 'config_sha256': 'd4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf', 'task_key': 'bowl_plate', 'task_name': 'put_the_bowl_on_the_plate', 'model_seed': 16019, 'training': {'seeds': [16018, 16019, 16020], 'optimizer': 'adamw', 'learning_rate': 0.0003, 'weight_decay': 0.0001, 'batch_size': 64, 'precision': 'bf16', 'optimizer_steps': 3000, 'validation_interval': 250, 'complete_checkpoint_interval': 250, 'checkpoint_retention': 'latest_3_complete_per_task_seed', 'pai_automatic_fault_tolerance': False}, 'model': {'name': 'BoundaryBC-S', 'visual_backbone': 'resnet18_layer3_random_init', 'micro_feature_map': [8, 8], 'micro_feature_dim': 128, 'baseline_visual_tokens': 16, 'proprio_dim': 15, 'transformer_layers': 2, 'transformer_heads': 4, 'hidden_dim': 128, 'action_horizon': 8, 'execute_horizon': 4}}
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_init.py:init():611] starting backend
+2026-08-12 23:31:16,074 INFO    MainThread:5251 [wandb_init.py:init():615] setting up manager
+2026-08-12 23:31:16,079 INFO    MainThread:5251 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2026-08-12 23:31:16,082 INFO    MainThread:5251 [wandb_init.py:init():623] backend started and connected
+2026-08-12 23:31:16,090 INFO    MainThread:5251 [wandb_init.py:init():715] updated telemetry
+2026-08-12 23:31:16,119 INFO    MainThread:5251 [wandb_init.py:init():748] communicating run to backend with 90.0 second timeout
+2026-08-12 23:31:17,339 INFO    MainThread:5251 [wandb_run.py:_on_init():2357] communicating current version
+2026-08-12 23:31:21,731 INFO    MainThread:5251 [wandb_run.py:_on_init():2366] got version response upgrade_message: "wandb version 0.28.2 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2026-08-12 23:31:21,731 INFO    MainThread:5251 [wandb_init.py:init():799] starting run threads in backend
+2026-08-12 23:31:22,479 INFO    MainThread:5251 [wandb_run.py:_console_start():2335] atexit reg
+2026-08-12 23:31:22,479 INFO    MainThread:5251 [wandb_run.py:_redirect():2190] redirect: wrap_raw
+2026-08-12 23:31:22,479 INFO    MainThread:5251 [wandb_run.py:_redirect():2255] Wrapping output streams.
+2026-08-12 23:31:22,479 INFO    MainThread:5251 [wandb_run.py:_redirect():2280] Redirects installed.
+2026-08-12 23:31:22,480 INFO    MainThread:5251 [wandb_init.py:init():842] run started, returning control to user process
+2026-08-12 23:31:22,480 INFO    MainThread:5251 [wandb_run.py:_finish():2064] finishing run chen_jian-cj-workspace/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16019-evaluation
+2026-08-12 23:31:22,480 INFO    MainThread:5251 [wandb_run.py:_atexit_cleanup():2304] got exitcode: 0
+2026-08-12 23:31:22,481 INFO    MainThread:5251 [wandb_run.py:_restore():2287] restore
+2026-08-12 23:31:22,481 INFO    MainThread:5251 [wandb_run.py:_restore():2293] restore done
+2026-08-12 23:31:26,888 INFO    MainThread:5251 [wandb_run.py:_footer_history_summary_info():3936] rendering history
+2026-08-12 23:31:26,888 INFO    MainThread:5251 [wandb_run.py:_footer_history_summary_info():3968] rendering summary
+2026-08-12 23:31:26,961 INFO    MainThread:5251 [wandb_run.py:_footer_sync_info():3895] logging synced files

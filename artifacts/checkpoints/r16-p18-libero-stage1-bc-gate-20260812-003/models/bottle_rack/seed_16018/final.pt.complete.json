@@ -1,0 +1,9 @@
+{
+  "bytes": 39528952,
+  "global_step": 3000,
+  "model_seed": 16018,
+  "run_id": "r16-p18-libero-stage1-bc-gate-20260812-003",
+  "schema_version": 1,
+  "sha256": "ce6c01d6915e787167355be6a3583312a56c75a07b56ff53af029c69e717e833",
+  "task_key": "bottle_rack"
+}

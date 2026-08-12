@@ -1,0 +1,477 @@
+From 80caf4695c3f7947bc6a39c7b22774464ff1ba32 Mon Sep 17 00:00:00 2001
+From: Codex <codex@local>
+Date: Wed, 12 Aug 2026 22:30:56 +0800
+Subject: [PATCH 2/3] Run baseline workers on verified two-GPU carrier
+
+---
+ boundarybc/evaluation.py          | 32 +++++++++++
+ boundarybc/libero_runtime.py      |  6 +--
+ boundarybc/pipeline.py            | 88 ++++++++++++++++++++++++++++---
+ boundarybc/training.py            | 84 +++++++++++++++++++++++++++++
+ boundarybc/worker.py              |  5 +-
+ configs/dev14_smoke_evidence.yaml |  5 ++
+ scripts/pai_r16_p18_leon.sh       | 14 ++++-
+ tests/test_stage1_contract.py     | 12 +++++
+ 8 files changed, 232 insertions(+), 14 deletions(-)
+
+diff --git a/boundarybc/evaluation.py b/boundarybc/evaluation.py
+index 67e768e..0e69e48 100644
+--- a/boundarybc/evaluation.py
++++ b/boundarybc/evaluation.py
+@@ -18,6 +18,7 @@ from boundarybc.libero_runtime import (
+     observation_tensors,
+ )
+ from boundarybc.training import final_model_path, make_model
++from boundarybc.training import _init_wandb_run
+ 
+ 
+ def evaluation_result_path(log_root: str | Path, run_id: str, task_key: str, seed: int) -> Path:
+@@ -111,6 +112,17 @@ def evaluate_one_model(
+                 "wall_seconds": time.perf_counter() - start,
+             }
+             _append_jsonl(result_path, record)
++            if episode_id == 0:
++                atomic_write_json(
++                    result_path.with_suffix(".first_rollout.json"),
++                    {
++                        **record,
++                        "event": "PERSISTED_FIRST_COMPLETED_ROLLOUT",
++                        "result_jsonl": str(result_path),
++                        "uid": os.getuid(),
++                        "gid": os.getgid(),
++                    },
++                )
+             existing[episode_id] = record
+             print(json.dumps(record, sort_keys=True), flush=True)
+     finally:
+@@ -135,6 +147,26 @@ def evaluate_one_model(
+             "result_jsonl": str(result_path),
+         },
+     )
++    wandb_run = _init_wandb_run(
++        config,
++        run_id=run_id,
++        task_key=task_key,
++        task_name=task.name,
++        model_seed=model_seed,
++        job_type="evaluation",
++    )
++    if wandb_run is not None:
++        successes = sum(bool(record["success"]) for record in records.values())
++        wandb_run.log(
++            {
++                "evaluation/episodes": 50,
++                "evaluation/successes": successes,
++                "evaluation/success_rate": successes / 50.0,
++            },
++            step=int(checkpoint["global_step"]) + 1,
++        )
++        wandb_run.summary["evaluation/complete"] = True
++        wandb_run.finish(exit_code=0)
+     print(
+         json.dumps(
+             {
+diff --git a/boundarybc/libero_runtime.py b/boundarybc/libero_runtime.py
+index 85097ed..94c468c 100644
+--- a/boundarybc/libero_runtime.py
++++ b/boundarybc/libero_runtime.py
+@@ -13,15 +13,15 @@ from boundarybc.config import ExperimentConfig, TaskConfig
+ from boundarybc.data import ProprioNormalizer
+ 
+ 
+-def configure_headless_runtime(project_root: str | Path) -> None:
++def configure_headless_runtime(project_root: str | Path, *, gpu_device_id: int = 0) -> None:
+     project_root = Path(project_root).resolve()
+     vendor = project_root / "configs" / "egl" / "10_nvidia.json"
+     libero_config = project_root / "configs" / "libero"
+     os.environ.setdefault("__EGL_VENDOR_LIBRARY_FILENAMES", str(vendor))
+     os.environ.setdefault("MUJOCO_GL", "egl")
+     os.environ.setdefault("PYOPENGL_PLATFORM", "egl")
+-    os.environ.setdefault("MUJOCO_EGL_DEVICE_ID", "0")
+-    os.environ.setdefault("EGL_DEVICE_ID", "0")
++    os.environ.setdefault("MUJOCO_EGL_DEVICE_ID", str(gpu_device_id))
++    os.environ.setdefault("EGL_DEVICE_ID", str(gpu_device_id))
+     os.environ.setdefault("LIBERO_CONFIG_PATH", str(libero_config))
+ 
+ 
+diff --git a/boundarybc/pipeline.py b/boundarybc/pipeline.py
+index b7798ac..90d230f 100644
+--- a/boundarybc/pipeline.py
++++ b/boundarybc/pipeline.py
+@@ -1,6 +1,7 @@
+ from __future__ import annotations
+ 
+ import argparse
++import concurrent.futures
+ import json
+ import os
+ import platform
+@@ -23,6 +24,10 @@ def parse_args() -> argparse.Namespace:
+     parser.add_argument("--checkpoint-root", required=True)
+     parser.add_argument("--log-root", required=True)
+     parser.add_argument("--device", default="cuda:0")
++    parser.add_argument(
++        "--devices",
++        help="Comma-separated independent worker devices; overrides --device",
++    )
+     return parser.parse_args()
+ 
+ 
+@@ -32,6 +37,7 @@ def main() -> None:
+     project_root = config.path.parents[1]
+     configure_headless_runtime(project_root)
+     _validate_paths(args, project_root)
++    devices = _parse_devices(args)
+     locked_inputs = verify_locked_inputs(config, dataset_root=args.dataset_root)
+     manifest_path = Path(args.log_root) / args.run_id / "run_manifest.json"
+     manifest_path.parent.mkdir(parents=True, exist_ok=True)
+@@ -49,7 +55,10 @@ def main() -> None:
+             "python": platform.python_version(),
+             "torch": config.raw["runtime"]["torch"],
+             "cuda": config.raw["runtime"]["cuda_runtime"],
+-            "requested_device": args.device,
++            "requested_devices": list(devices),
++            "worker_parallelism": len(devices),
++            "per_model_batch_size": int(config.raw["training"]["batch_size"]),
++            "data_parallel": False,
+             "uid": os.getuid(),
+             "gid": os.getgid(),
+             "dataset_root": str(Path(args.dataset_root).resolve()),
+@@ -61,12 +70,13 @@ def main() -> None:
+     )
+     _require_leon_owner(manifest_path)
+     print(json.dumps({"event": "RUN_MANIFEST", "path": str(manifest_path)}), flush=True)
+-    for task in config.tasks:
+-        for seed in config.training_seeds:
+-            _run_worker(args, phase="train", task_key=task.key, model_seed=seed)
+-    for task in config.tasks:
+-        for seed in config.training_seeds:
+-            _run_worker(args, phase="evaluate", task_key=task.key, model_seed=seed)
++    units = [
++        (task.key, seed)
++        for task in config.tasks
++        for seed in config.training_seeds
++    ]
++    _run_phase(args, phase="train", units=units, devices=devices)
++    _run_phase(args, phase="evaluate", units=units, devices=devices)
+     report_path, report = build_baseline_gate_report(
+         config,
+         run_id=args.run_id,
+@@ -116,6 +126,7 @@ def _run_worker(
+     phase: str,
+     task_key: str,
+     model_seed: int,
++    device: str,
+ ) -> None:
+     command = [
+         sys.executable,
+@@ -137,7 +148,7 @@ def _run_worker(
+         "--log-root",
+         str(Path(args.log_root).resolve()),
+         "--device",
+-        args.device,
++        device,
+     ]
+     print(
+         json.dumps(
+@@ -146,6 +157,7 @@ def _run_worker(
+                 "phase": phase,
+                 "task_key": task_key,
+                 "model_seed": model_seed,
++                "device": device,
+             },
+             sort_keys=True,
+         ),
+@@ -154,6 +166,66 @@ def _run_worker(
+     subprocess.run(command, check=True)
+ 
+ 
++def _run_phase(
++    args: argparse.Namespace,
++    *,
++    phase: str,
++    units: list[tuple[str, int]],
++    devices: tuple[str, ...],
++) -> None:
++    with concurrent.futures.ThreadPoolExecutor(max_workers=len(devices)) as executor:
++        assignments = _assign_units(units, devices)
++        futures = [
++            executor.submit(
++                _run_device_queue,
++                args,
++                phase=phase,
++                device=device,
++                units=device_units,
++            )
++            for device, device_units in assignments
++        ]
++        for future in futures:
++            future.result()
++
++
++def _run_device_queue(
++    args: argparse.Namespace,
++    *,
++    phase: str,
++    device: str,
++    units: tuple[tuple[str, int], ...],
++) -> None:
++    for task_key, model_seed in units:
++        _run_worker(
++            args,
++            phase=phase,
++            task_key=task_key,
++            model_seed=model_seed,
++            device=device,
++        )
++
++
++def _assign_units(
++    units: list[tuple[str, int]],
++    devices: tuple[str, ...],
++) -> tuple[tuple[str, tuple[tuple[str, int], ...]], ...]:
++    return tuple(
++        (device, tuple(units[index:: len(devices)]))
++        for index, device in enumerate(devices)
++    )
++
++
++def _parse_devices(args: argparse.Namespace) -> tuple[str, ...]:
++    raw = args.devices if args.devices is not None else args.device
++    devices = tuple(item.strip() for item in raw.split(",") if item.strip())
++    if not devices:
++        raise ValueError("at least one worker device is required")
++    if len(set(devices)) != len(devices):
++        raise ValueError(f"duplicate worker devices are forbidden: {devices}")
++    return devices
++
++
+ def _require_leon_owner(path: Path) -> None:
+     stat = path.lstat()
+     if (stat.st_uid, stat.st_gid) != (2254, 2254):
+diff --git a/boundarybc/training.py b/boundarybc/training.py
+index a208005..41d7c30 100644
+--- a/boundarybc/training.py
++++ b/boundarybc/training.py
+@@ -65,6 +65,14 @@ def train_one_model(
+     log_directory = Path(log_root) / run_id
+     log_directory.mkdir(parents=True, exist_ok=True)
+     metrics_path = log_directory / f"train_{task_key}_seed_{model_seed}.jsonl"
++    wandb_run = _init_wandb_run(
++        config,
++        run_id=run_id,
++        task_key=task_key,
++        task_name=task.name,
++        model_seed=model_seed,
++        job_type="train",
++    )
+ 
+     hdf5_path = official_demo_path(dataset_root, config.raw["benchmark"]["suite"], task.name)
+     records = discover_episodes(hdf5_path)
+@@ -195,6 +203,34 @@ def train_one_model(
+             print(json.dumps(record, sort_keys=True), flush=True)
+         if global_step == 1 or global_step % 50 == 0:
+             _append_jsonl(metrics_path, record)
++        if global_step == 1:
++            first_work_path = directory / "FIRST_WORK.json"
++            atomic_write_json(
++                first_work_path,
++                {
++                    "schema_version": 1,
++                    "event": "PERSISTED_OPTIMIZER_STEP_AND_LOSS",
++                    "run_id": run_id,
++                    "config_sha256": config.sha256,
++                    "task_key": task_key,
++                    "model_seed": model_seed,
++                    "global_step": global_step,
++                    "loss": record["loss"],
++                    "learning_rate": record["learning_rate"],
++                    "uid": os.getuid(),
++                    "gid": os.getgid(),
++                },
++            )
++        if wandb_run is not None and (global_step == 1 or global_step % 10 == 0):
++            wandb_run.log(
++                {
++                    "train/global_step": global_step,
++                    "train/loss": record["loss"],
++                    "train/gradient_norm": record["gradient_norm"],
++                    "train/learning_rate": record["learning_rate"],
++                },
++                step=global_step,
++            )
+         if global_step % validation_interval == 0 or global_step == optimizer_steps:
+             validation_loss = evaluate_validation_loss(
+                 model,
+@@ -213,6 +249,14 @@ def train_one_model(
+             }
+             print(json.dumps(validation_record, sort_keys=True), flush=True)
+             _append_jsonl(metrics_path, validation_record)
++            if wandb_run is not None:
++                wandb_run.log(
++                    {
++                        "validation/global_step": global_step,
++                        "validation/loss": validation_loss,
++                    },
++                    step=global_step,
++                )
+             model.train()
+         if global_step % checkpoint_interval == 0 or global_step == optimizer_steps:
+             payload = _checkpoint_payload(
+@@ -267,6 +311,9 @@ def train_one_model(
+         },
+     )
+     print(json.dumps({"event": "MODEL_COMPLETE", "path": str(final_path)}), flush=True)
++    if wandb_run is not None:
++        wandb_run.summary["train/final_global_step"] = global_step
++        wandb_run.finish(exit_code=0)
+     return final_path
+ 
+ 
+@@ -400,3 +447,40 @@ def _append_jsonl(path: Path, value: dict[str, Any]) -> None:
+         os.fsync(descriptor)
+     finally:
+         os.close(descriptor)
++
++
++def _init_wandb_run(
++    config: ExperimentConfig,
++    *,
++    run_id: str,
++    task_key: str,
++    task_name: str,
++    model_seed: int,
++    job_type: str,
++) -> Any | None:
++    entity = os.environ.get("WANDB_ENTITY")
++    api_key_present = bool(os.environ.get("WANDB_API_KEY"))
++    if entity is None and not api_key_present:
++        return None
++    if entity != "chen_jian-cj-workspace" or not api_key_present:
++        raise RuntimeError("W&B requires the exact entity contract and a nonempty injected key")
++    import wandb
++
++    return wandb.init(
++        entity=entity,
++        project="r16-p18-libero-stage1",
++        id=f"{run_id}-{task_key}-seed-{model_seed}-{job_type}",
++        name=f"{task_key}-seed-{model_seed}-{job_type}",
++        group=run_id,
++        job_type=job_type,
++        resume="allow",
++        config={
++            "protocol_id": config.protocol_id,
++            "config_sha256": config.sha256,
++            "task_key": task_key,
++            "task_name": task_name,
++            "model_seed": model_seed,
++            "training": config.raw["training"],
++            "model": config.raw["model"],
++        },
++    )
+diff --git a/boundarybc/worker.py b/boundarybc/worker.py
+index a1733f9..dd4f1cc 100644
+--- a/boundarybc/worker.py
++++ b/boundarybc/worker.py
+@@ -27,8 +27,9 @@ def parse_args() -> argparse.Namespace:
+ def main() -> None:
+     args = parse_args()
+     config = load_config(args.config)
+-    configure_headless_runtime(config.path.parents[1])
+     device = torch.device(args.device)
++    gpu_device_id = int(device.index or 0) if device.type == "cuda" else 0
++    configure_headless_runtime(config.path.parents[1], gpu_device_id=gpu_device_id)
+     if args.phase == "train":
+         if device.type == "cuda" and not torch.cuda.is_available():
+             raise RuntimeError("CUDA training was requested but CUDA is unavailable")
+@@ -51,7 +52,7 @@ def main() -> None:
+             checkpoint_root=args.checkpoint_root,
+             log_root=args.log_root,
+             device=device,
+-            gpu_device_id=0,
++            gpu_device_id=gpu_device_id,
+         )
+ 
+ 
+diff --git a/configs/dev14_smoke_evidence.yaml b/configs/dev14_smoke_evidence.yaml
+index 38bcaaa..fa500a8 100644
+--- a/configs/dev14_smoke_evidence.yaml
++++ b/configs/dev14_smoke_evidence.yaml
+@@ -1,6 +1,7 @@
+ schema_version: 1
+ protocol_id: R16-P18-LIBERO-STAGE1-PILOT-V1
+ smoke_id: dev14-smoke-20260812-v4
++smoke_source_commit: 2ecad26d8b6616d4bf613938e2a956abce4dde70
+ completed_at_date_utc: "2026-08-12"
+ scope: dev14_one_gpu_batch_one_only
+ pai_probe_created: false
+@@ -55,6 +56,10 @@ handoff:
+   pai_automatic_fault_tolerance: false_on_dedicated_pool
+   expected_platform_restarts: 0
+   launcher_attempts: 1
++  pai_worker_shape: 1_worker_2xa800_verified_carrier
++  pai_execution: two_independent_single_gpu_model_workers
++  per_model_batch_size: 64
++  data_parallel: false
+   first_work_gate_training: persisted_optimizer_step_and_loss
+   first_work_gate_evaluation: persisted_completed_rollout
+   limitation: This smoke does not validate the formal PAI resource or full 3000-step workload.
+diff --git a/scripts/pai_r16_p18_leon.sh b/scripts/pai_r16_p18_leon.sh
+index d5ebde1..cf836ef 100755
+--- a/scripts/pai_r16_p18_leon.sh
++++ b/scripts/pai_r16_p18_leon.sh
+@@ -33,6 +33,18 @@ test -x "$python_bin" && test -d "$dataset_root" || {
+   echo "[preflight] pinned Python or dataset root is missing" >&2
+   exit 74
+ }
++test "${PAI_CANARY_EXPECTED_GPUS:-}" = 2 || {
++  echo "[preflight] expected the verified 2xA800 carrier" >&2
++  exit 77
++}
++test "${WANDB_ENTITY:-}" = chen_jian-cj-workspace && test -n "${WANDB_API_KEY:-}" || {
++  echo "[preflight] exact W&B secret contract was not injected" >&2
++  exit 78
++}
++test "$(nvidia-smi --query-gpu=name --format=csv,noheader | grep -c '^NVIDIA A800')" = 2 || {
++  echo "[preflight] exact 2xA800 runtime inventory is absent" >&2
++  exit 79
++}
+ 
+ legacy_re='/mnt/data/'"x2robot_v2|/mnt/data/"'checkpoint|/mnt/'"checkpoint|/mnt/cpfs/"'leon|(^|[^[:alnum:]_])/('"x2robot_v2|x2robot_data|open_data"')(/|$)'
+ if rg -n "$legacy_re" "$config" "$project_dir/scripts" "$project_dir/boundarybc"; then
+@@ -61,4 +73,4 @@ exec "$python_bin" -m boundarybc.pipeline \
+   --dataset-root "$dataset_root" \
+   --checkpoint-root "$checkpoint_base" \
+   --log-root "$log_base" \
+-  --device cuda:0
++  --devices cuda:0,cuda:1
+diff --git a/tests/test_stage1_contract.py b/tests/test_stage1_contract.py
+index 36fb90d..c2655a5 100644
+--- a/tests/test_stage1_contract.py
++++ b/tests/test_stage1_contract.py
+@@ -17,6 +17,7 @@ from boundarybc.checkpoint import (
+ )
+ from boundarybc.config import load_config
+ from boundarybc.model import BoundaryBCS
++from boundarybc.pipeline import _assign_units
+ 
+ 
+ def test_locked_config_and_visual_action_shapes() -> None:
+@@ -82,6 +83,17 @@ def test_rng_state_round_trip() -> None:
+     assert actual == expected
+ 
+ 
++def test_two_gpu_assignments_never_share_a_device_queue() -> None:
++    units = [(f"task-{index}", index) for index in range(9)]
++    assignments = _assign_units(units, ("cuda:0", "cuda:1"))
++    assert assignments == (
++        ("cuda:0", tuple(units[0::2])),
++        ("cuda:1", tuple(units[1::2])),
++    )
++    flattened = [unit for _, assigned in assignments for unit in assigned]
++    assert sorted(flattened) == sorted(units)
++
++
+ def _payload(step: int) -> dict[str, object]:
+     return {
+         "run_id": "unit-test",

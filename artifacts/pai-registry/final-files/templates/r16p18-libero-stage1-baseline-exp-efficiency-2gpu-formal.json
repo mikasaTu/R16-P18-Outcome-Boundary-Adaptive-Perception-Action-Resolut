@@ -1,0 +1,149 @@
+{
+  "schema_version": 2,
+  "kind": "pytorchjob",
+  "name_prefix": "r16p18-libero-stage1-baseline",
+  "description": "Formal R16-P18 Stage-1 BoundaryBC-S necessary-condition baseline gate on three locked LIBERO-GOAL tasks; two independent one-GPU model workers on the verified 2xA800 carrier; stop before effect predictor or adaptive arms unless all preregistered baseline ranges pass",
+  "resource_alias": "exp-efficiency-r16p18-libero-2gpu",
+  "workspace_id": "179169",
+  "provenance": {
+    "contract_source_job_id": "dlcfp1szuc2cgqfp",
+    "resource_source_job_id": "dlc1j2p8ui63ulps",
+    "submission_method": "cli_create",
+    "pai_clone_performed": false,
+    "source_role": "readback_reference"
+  },
+  "network": {},
+  "storage": {
+    "data_sources": [
+      {"id": "d-mkixtohdn75dp8x9tb", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon", "options": ""},
+      {"id": "d-lg9t2b6xajpukeqqeb", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/SHARE/leon", "options": ""},
+      {"id": "d-36p023eg0f2vuqny8y", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon", "options": ""},
+      {"id": "d-ejgj2ej7io1t2t32uc", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon", "options": ""},
+      {"id": "d-7fi8hehav247qi6x5o", "version": "v1", "mount_path": "/mnt/cpfs/zbl-cpfs-new/Models/", "options": ""}
+    ],
+    "output_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1"
+  },
+  "worker": {
+    "count": 1,
+    "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+    "gpu": 2,
+    "cpu": 12,
+    "memory": "200Gi",
+    "shared_memory": "200Gi"
+  },
+  "runtime": {
+    "command_file": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry-r16-p18-20260812/launchers/r16_p18_libero_stage1_baseline.sh",
+    "identity_mechanism": "controller_inline_bootstrap_then_setpriv",
+    "uid": 2254,
+    "gid": 2254,
+    "pod_env": {},
+    "secret_env_names": [],
+    "write_paths": [
+      "{{ARTIFACT_DIR}}",
+      "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/{{RUN_ID}}"
+    ],
+    "output_mode": "resume",
+    "create_artifact_dir": true,
+    "recursive_repair": false,
+    "payload_transport": "base64"
+  },
+  "fault_tolerance": {
+    "aimaster_args": "",
+    "maximum_platform_restarts": 0,
+    "expected_platform_restarts": 0,
+    "launcher_attempts": 1,
+    "retry_sleep_seconds": 30,
+    "pai_automatic_fault_tolerance": false
+  },
+  "evidence": {
+    "kind": "r16p18_libero_stage1_boundarybc_baseline_formal_training_evaluation",
+    "resource_contract": "dedicated_2gpu_v1",
+    "workload_type": "training_and_rollout_evaluation",
+    "task_id": "r16p18-libero-stage1-boundarybc-baseline-20260812",
+    "model_id": "boundarybc-s-resnet18-h8-e4-three-seeds",
+    "success_gate": "persisted_step_loss_completed_rollout_and_baseline_gate",
+    "validation_method": "static+dev14_one_gpu_batch_one_smoke",
+    "validation_status": "passed_no_pai_gpu_probe",
+    "pai_probe_created": false,
+    "first_work_evidence_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1/{{RUN_ID}}/models/push_plate/seed_16018/FIRST_WORK.json",
+    "evaluation_first_work_evidence_path": "{{ARTIFACT_DIR}}/evaluation/push_plate/seed_16018.first_rollout.json",
+    "completed_evidence_path": "{{ARTIFACT_DIR}}/reports/baseline_gate.json",
+    "contract_ready": true,
+    "mount_contract": "exact_five_new_root_sources_from_live_readback",
+    "source_commit": "20d65a9ab7ff42662496c093e14531904cf1fe31",
+    "source_tree": "b87468210362a81a5d3754630f1ff804f79577e4",
+    "libero_source_commit": "2319dbd914673f6ef34a00584536212b10e10395",
+    "config_sha256": "d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf",
+    "project_launcher_sha256": "506f6a98490c3eca7dad8096a550c46e694629192a1deb7a03c8c102e116574f",
+    "registry_launcher_sha256": "4a82f8350bae72832e560dfe0543c0da4fd1ab551771ab4e9fbc23f207ea5afa",
+    "dev14_smoke_result_sha256": "8a5cb0c1c3f5b68f45f34c7e75227086d61e34bd709a54003875b2c2a6658fb2",
+    "formal_python_sha256": "89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48fc4f961a",
+    "formal_torch": "2.5.1+cu124",
+    "formal_cuda": "12.4",
+    "overlay_manifest_sha256": "64dfffdaf464d1a37be19b038cca919a252dba573eb2d0f8aa442b91a4099459",
+    "overlay_file_count": 1688,
+    "demo_sha256": {
+      "push_plate": "36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6",
+      "bottle_rack": "f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e",
+      "bowl_plate": "e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406"
+    },
+    "requested_demos_per_task": 200,
+    "available_official_demos_per_task": 50,
+    "data_protocol_deviation": true,
+    "split_by_stable_init_state_identity": [40, 5, 5],
+    "tasks": [
+      "push_the_plate_to_the_front_of_the_stove",
+      "put_the_wine_bottle_on_the_rack",
+      "put_the_bowl_on_the_plate"
+    ],
+    "model_seeds": [16018, 16019, 16020],
+    "optimizer_steps_per_model": 3000,
+    "batch_size_per_model": 64,
+    "checkpoint_cadence_steps": 250,
+    "checkpoint_retention": "latest_3_complete_per_task_seed",
+    "checkpoint_contract": "model_optimizer_scheduler_rng_batch_generator_global_step",
+    "full_state_resume": true,
+    "gpu_execution": "two_independent_single_gpu_model_queues",
+    "closed_loop_episodes_per_task_seed": 50,
+    "total_models": 9,
+    "total_closed_loop_episodes": 450,
+    "baseline_ranges": {
+      "push_plate": [0.40, 0.90],
+      "bottle_rack": [0.25, 0.80],
+      "bowl_plate": [0.80, 1.00]
+    },
+    "adaptive_components_implemented_before_gate": false,
+    "pilot_can_return_stage1_go": false,
+    "stop_after_baseline_failure": true,
+    "stop_after_stage1": true,
+    "superseded_terminal_jobs": [
+      {
+        "run_id": "r16-p18-libero-stage1-bc-gate-20260812-002",
+        "job_id": "dlc1eloj62mdzw2y",
+        "expected_status": "Failed",
+        "expected_purpose": "formal-training"
+      }
+    ],
+    "wandb_mode": "online_exact_entity_grouped_by_pai_run",
+    "experiment_scope": "necessary_condition_baseline_gate_then_conditional_stage1_only",
+    "expected_first_work_uid": 2254,
+    "expected_first_work_gid": 2254
+  },
+  "submission": {
+    "priority": 9,
+    "disable_ecs_stock_check": false,
+    "job_reserved_policy": "",
+    "job_reserved_minutes": 0,
+    "job_max_running_time_minutes": 0,
+    "tags": {
+      "managed_by": "pai-job-registry",
+      "purpose": "formal-training",
+      "task": "r16p18-libero-stage1-boundarybc-baseline-20260812",
+      "model": "boundarybc-s-resnet18-h8-e4-three-seeds",
+      "dataset": "libero-goal-three-task-50-demo-pilot",
+      "hardware": "2xa800-dedicated",
+      "resource_pool": "exp-efficiency",
+      "experiment_role": "stage1-necessary-condition-baseline-gate"
+    }
+  }
+}

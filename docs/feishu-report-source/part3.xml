@@ -1,0 +1,68 @@
+<h2>7. 调用与时延核算</h2>
+<h3>7.1 Push</h3>
+<ul>
+  <li>150 episodes；6967 policy calls，平均 46.447 calls/episode。</li>
+  <li>27,673 executed environment steps，平均 184.49 steps/episode。</li>
+  <li>纯 inference 合计 24.480 秒，平均 3.514 ms/policy call。</li>
+  <li>episode wall time 平均 3.935 秒，中位数 3.261 秒，P95 6.547 秒。</li>
+</ul>
+<h3>7.2 Bottle</h3>
+<ul>
+  <li>150 episodes；6069 policy calls，平均 40.460 calls/episode。</li>
+  <li>24,023 executed environment steps，平均 160.15 steps/episode。</li>
+  <li>纯 inference 合计 21.655 秒，平均 3.568 ms/policy call。</li>
+  <li>episode wall time 平均 3.373 秒，中位数 3.254 秒，P95 4.254 秒。</li>
+</ul>
+<h3>7.3 Bowl</h3>
+<ul>
+  <li>150 episodes；4613 policy calls，平均 30.753 calls/episode。</li>
+  <li>18,228 executed environment steps，平均 121.52 steps/episode。</li>
+  <li>纯 inference 合计 16.789 秒，平均 3.639 ms/policy call。</li>
+  <li>episode wall time 平均 2.667 秒，中位数 2.191 秒，P95 6.252 秒。</li>
+</ul>
+<h3>7.4 总计</h3>
+<ul>
+  <li>450 episodes；17,649 policy calls；69,924 executed steps。</li>
+  <li>纯 inference 合计 62.923 秒，平均 3.565 ms/call。</li>
+  <li>episode wall time 求和 1496.265 秒，平均 3.325 秒，P95 6.436 秒。该求和跨两张 GPU 的并行队列，不等同于 PAI 作业墙钟时间。</li>
+  <li>Baseline 阶段没有 effect-model call 或 action-atlas call；这些组件依 gate 规则没有实现。</li>
+</ul>
+
+<h2>8. GO / NO-GO 与停止范围</h2>
+<p><b>正式决策：NO_GO_BASELINE_GATE。</b></p>
+<ol>
+  <li>Push 满足非平凡区间。</li>
+  <li>Bottle 为 98.0%，超过 80% 上限，baseline gate 失败。</li>
+  <li>Bowl 负控满足下限。</li>
+  <li>由于 require_all_tasks=true，自适应实现授权为 false。</li>
+</ol>
+<p>因此以下内容均未执行，也没有结果：96-state bank、adaptive visual selector、49-candidate hidden fine atlas、13-candidate budgeted atlas、local effect predictor、uniform/random/visual-only/action-only/independent/joint/shuffled/full-fine arms、state-bank alias rate、best-action recall、outcome regret、boundary F1/AUROC、coupling gain、ID/geometry OOD/visual-nuisance OOD。</p>
+<p>没有启动 Diffusion Policy、DINO-WM 或 π0.5。当前报告不能声称 R16-P18 idea 已验证、已接受或已被拒绝；它只说明当前 LIBERO 三任务配置不具备继续检验该 idea 的 baseline 必要条件。</p>
+
+<h2>9. 执行异常与审计轨迹</h2>
+<ul>
+  <li>run-id 后缀 001 在 CreateJob 前被本地权限合同拒绝，没有创建 PAI 作业、没有 GPU 消耗。</li>
+  <li>首个正式 JobId dlc1eloj62mdzw2y 在任何训练步之前失败。根因是容器初始 cwd=/root，降权后 GNU find 无法恢复 cwd；这不是模型或指标结果。</li>
+  <li>修复仅在冻结 launcher 中先切换到锁定项目目录；数据、模型、seed、预算和阈值未变。修复后的 JobId dlcnouq6igkhfyub 成功完成。</li>
+  <li>只有在替代作业写出真实 global_step=1、loss=0.3117666 的持久证据后，才用官方 OpenAPI 两阶段协议删除旧 Failed 服务行；GetJob 与 ListJobs 均证明其已 absent，CPFS checkpoint、日志和 registry 诊断全部保留。</li>
+</ul>
+
+<h2>10. 核心证据与哈希</h2>
+<ul>
+  <li>baseline_gate.json SHA256：20d64ae8cec3e5405f79b678710189b0799e3ed4b87614e7e32ab6fd7295b5fd。</li>
+  <li>run_manifest.json SHA256：d3ec8cb14033472fe89d3319ee108f82225bb272de1c1f7db9226d690d64d0cc。</li>
+  <li>monitor-result.json SHA256：2237738c102184521467d34fae470a474f5ff07326ae47425a4f5cda899f12e0。</li>
+  <li>artifact-evidence.json SHA256：c538d8231071fe5136033696791e6e75db5604dbfd6872ca3c4894ef45eb6b50。</li>
+  <li>旧作业清理 evidence SHA256：af7e9c47591cad08a1da6fd6c0902fde24301a5a3550eab230a2da700a217c14。</li>
+  <li>所有上述证据文件均为 2254:2254、mode 0600。</li>
+</ul>
+
+<h2>11. 后续建议（本次未执行）</h2>
+<ol>
+  <li>不要事后放宽 Bottle 的 80% 上限。应新建独立预注册，替换为更难且有足够失败余量的 constrained-placement 任务。</li>
+  <li>用官方 pipeline 生成每任务 200 条互不重复、带 episode seed 的成功演示，或明确降低数据要求并重新预注册；不能把复制或增强样本当作独立 episode。</li>
+  <li>在新协议中先复查 Push 的跨 seed 稳定性，再重新执行 baseline gate。</li>
+  <li>只有新 gate 全部通过，才实现 state bank、effect predictor 与 matched adaptive arms，并继续使用原定 16 visual tokens、13 action candidates 和严格相等 call budgets。</li>
+</ol>
+
+<p><b>一句话结论：</b>当前 LIBERO pilot 的 Small-BC 基线可运行且证据完整，但 Bottle 任务 98% 造成 ceiling，故预注册结论为 NO_GO_BASELINE_GATE；Stage-1 联合 outcome-boundary 假设尚未被检验。</p>

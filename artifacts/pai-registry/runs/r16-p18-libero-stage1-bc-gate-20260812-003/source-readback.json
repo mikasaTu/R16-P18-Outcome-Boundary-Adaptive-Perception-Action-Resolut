@@ -1,0 +1,156 @@
+{
+  "checked_at_utc": "2026-08-12T15:05:50Z",
+  "complete": true,
+  "roles": {
+    "contract": {
+      "checks": {
+        "data_sources": true,
+        "empty_driver": true,
+        "exact_job_object": true,
+        "job_id": true,
+        "no_user_vpc": true,
+        "single_worker_spec": true,
+        "source_contract_worker_count": true,
+        "source_contract_worker_cpu": true,
+        "source_contract_worker_gpu": true,
+        "source_contract_worker_image": true,
+        "source_contract_worker_memory": true,
+        "source_contract_worker_shared_memory": true,
+        "workspace_id": true
+      },
+      "complete": true,
+      "data_sources": [
+        [
+          "d-36p023eg0f2vuqny8y",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/CKPT/leon",
+          ""
+        ],
+        [
+          "d-7fi8hehav247qi6x5o",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/Models/",
+          ""
+        ],
+        [
+          "d-ejgj2ej7io1t2t32uc",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/dataset/leon",
+          ""
+        ],
+        [
+          "d-lg9t2b6xajpukeqqeb",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/SHARE/leon",
+          ""
+        ],
+        [
+          "d-mkixtohdn75dp8x9tb",
+          "v1",
+          "/mnt/cpfs/zbl-cpfs-new/USERS/leon",
+          ""
+        ]
+      ],
+      "job_id": "dlcfp1szuc2cgqfp",
+      "job_spec_count": 1,
+      "resource_id": "quotakzri8a5wqcp",
+      "settings": {
+        "aimaster_args": "",
+        "aimaster_enabled": false,
+        "driver": "",
+        "oversold_type": "ForbiddenQuotaOverSold"
+      },
+      "status": "Failed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "ef25369c7379685b6f6e90c443e0e0d9f3881fd4f3a406247db88a71d528ef9e",
+      "worker": {
+        "cpu": "92",
+        "gpu": "8",
+        "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+        "memory": "1600Gi",
+        "pod_count": 1,
+        "shared_memory": "1600Gi"
+      },
+      "worker_spec_count": 1
+    },
+    "resource": {
+      "checks": {
+        "aimaster_reference_args": true,
+        "aimaster_reference_enabled": true,
+        "exact_job_object": true,
+        "job_id": true,
+        "oversold_type": true,
+        "resource_id": true,
+        "single_worker_spec": true,
+        "source_resource_worker_count": true,
+        "source_resource_worker_cpu": true,
+        "source_resource_worker_gpu": true,
+        "source_resource_worker_image": true,
+        "source_resource_worker_memory": true,
+        "source_resource_worker_shared_memory": true,
+        "succeeded_reference": true,
+        "workspace_id": true
+      },
+      "complete": true,
+      "data_sources": [
+        [
+          "d-4wtl4ihdmplrea1kxb",
+          "v1",
+          "/mnt/cpfs/Models/",
+          ""
+        ],
+        [
+          "d-5vax2ylrpm4ef7d1h4",
+          "v1",
+          "/mnt/cpfs/leon/",
+          ""
+        ],
+        [
+          "d-bass3dq57qv4sjxh24",
+          "v1",
+          "/mnt/cpfs/open_data/",
+          ""
+        ],
+        [
+          "d-qdoxbmohnf1ni1vmqj",
+          "v1",
+          "/mnt/checkpoint/leon/",
+          ""
+        ],
+        [
+          "d-rde06o704ukhghyunr",
+          "v1",
+          "/mnt/cpfs/x2robot_data/zhengwei/",
+          ""
+        ],
+        [
+          "d-u06av4om42e7pwrl49",
+          "v1",
+          "/mnt/cpfs/share/",
+          ""
+        ]
+      ],
+      "job_id": "dlc1j2p8ui63ulps",
+      "job_spec_count": 1,
+      "resource_id": "quotakzri8a5wqcp",
+      "settings": {
+        "aimaster_args": "",
+        "aimaster_enabled": false,
+        "driver": "",
+        "oversold_type": "ForbiddenQuotaOverSold"
+      },
+      "status": "Succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "535fbb0f742967085d999c6a27689c74562d7934a40d6ce30630ad194e794691",
+      "worker": {
+        "cpu": "12",
+        "gpu": "2",
+        "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+        "memory": "200Gi",
+        "pod_count": 1,
+        "shared_memory": "200Gi"
+      },
+      "worker_spec_count": 1
+    }
+  }
+}

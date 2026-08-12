@@ -1,0 +1,8 @@
+[OK] Using config file from [/workspace/leon/.dlc/config]
+[OK] Job Events for [dlcnouq6igkhfyub]
+2026-08-12 23:06:03 Restart policy in pod template will be overwritten by restart policy in replica spec
+2026-08-12 23:06:03 Created pod: dlcnouq6igkhfyub-master-0
+2026-08-12 23:06:03 PyTorchJob dlcnouq6igkhfyub has been successfully scheduled and is now entering the preparation phase.
+2026-08-12 23:06:52 PyTorchJob dlcnouq6igkhfyub is running.
+2026-08-12 23:06:52 PyTorchJob dlcnouq6igkhfyub is running.
+2026-08-12 23:08:03 PyTorchJob dlcnouq6igkhfyub is running.

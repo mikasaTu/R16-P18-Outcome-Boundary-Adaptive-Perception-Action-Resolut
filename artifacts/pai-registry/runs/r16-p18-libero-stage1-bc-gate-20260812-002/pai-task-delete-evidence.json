@@ -1,0 +1,31 @@
+{
+  "absence": {
+    "complete": true,
+    "getjob_absent": true,
+    "getjob_code": "OperationForbidden",
+    "getjob_http_status": 403,
+    "getjob_operation_forbidden": true,
+    "getjob_response_sha256": "e5abd9954d5d6ffe39958b9df33c1330fdf1bd644b6eb8392e40d64b9fb5c5e7",
+    "getjob_tombstone": false,
+    "getjob_valid_json_object": true,
+    "listjobs": {
+      "http_status": 200,
+      "matching_job_count": 0,
+      "response_sha256": "dc0963eb2ad6b47913af459d89b1e6917b19fc65a125212f84adec480bd89742",
+      "total_count": 0
+    },
+    "listjobs_absent": true
+  },
+  "complete": true,
+  "cpfs_and_registry_evidence_preserved": true,
+  "delete_request_id": "019FF685-97CD-538E-8EE2-D9A869B37932",
+  "deleted_at_utc": "2026-08-12T15:09:40Z",
+  "expected_purpose": "formal-training",
+  "job_id": "dlc1eloj62mdzw2y",
+  "performed_by_gid": 2254,
+  "performed_by_uid": 2254,
+  "pre_delete_status": "Failed",
+  "run_id": "r16-p18-libero-stage1-bc-gate-20260812-002",
+  "schema_version": 1,
+  "workspace_id": "179169"
+}

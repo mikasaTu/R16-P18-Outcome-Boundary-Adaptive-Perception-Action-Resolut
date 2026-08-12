@@ -1,0 +1,152 @@
+{
+  "Accessibility": "PRIVATE",
+  "ClusterId": "asi_cn-wulanchabu_pai-serverless_prd01.1294336768262632",
+  "CodeSource": {
+    "CodeSourceId": "",
+    "MountPath": ""
+  },
+  "CredentialConfig": {
+    "AliyunEnvRoleKey": "",
+    "EnableCredentialInject": false
+  },
+  "DataSources": [
+    {
+      "DataSourceId": "d-rde06o704ukhghyunr",
+      "DataSourceVersion": "v1",
+      "MountPath": "/mnt/cpfs/x2robot_data/zhengwei/",
+      "Options": "",
+      "Uri": ""
+    },
+    {
+      "DataSourceId": "d-4wtl4ihdmplrea1kxb",
+      "DataSourceVersion": "v1",
+      "MountPath": "/mnt/cpfs/Models/",
+      "Options": "",
+      "Uri": ""
+    },
+    {
+      "DataSourceId": "d-u06av4om42e7pwrl49",
+      "DataSourceVersion": "v1",
+      "MountPath": "/mnt/cpfs/share/",
+      "Options": "",
+      "Uri": ""
+    },
+    {
+      "DataSourceId": "d-bass3dq57qv4sjxh24",
+      "DataSourceVersion": "v1",
+      "MountPath": "/mnt/cpfs/open_data/",
+      "Options": "",
+      "Uri": ""
+    },
+    {
+      "DataSourceId": "d-5vax2ylrpm4ef7d1h4",
+      "DataSourceVersion": "v1",
+      "MountPath": "/mnt/cpfs/leon/",
+      "Options": "",
+      "Uri": ""
+    },
+    {
+      "DataSourceId": "d-qdoxbmohnf1ni1vmqj",
+      "DataSourceVersion": "v1",
+      "MountPath": "/mnt/checkpoint/leon/",
+      "Options": "",
+      "Uri": ""
+    }
+  ],
+  "DisplayName": "simple_evl_pi05_1",
+  "Duration": 12560,
+  "ElasticSpec": {
+    "AIMasterDockerImage": "",
+    "AIMasterType": "",
+    "ElasticStrategy": "",
+    "EnableAIMaster": false,
+    "EnableElasticInference": false,
+    "EnableElasticTraining": false,
+    "EnablePsJobElasticPS": false,
+    "EnablePsJobElasticWorker": false,
+    "EnablePsResourceEstimate": false,
+    "MaxParallelism": 0,
+    "MinParallelism": 0,
+    "PSMaxParallelism": 0,
+    "PSMinParallelism": 0
+  },
+  "EnabledDebugger": false,
+  "GmtCreateTime": "2026-06-27T10:43:20Z",
+  "GmtFinishTime": "2026-06-27T14:12:40Z",
+  "GmtRunningTime": "2026-06-27T10:44:15Z",
+  "GmtSubmittedTime": "2026-06-27T10:43:24Z",
+  "GmtSuccessedTime": "2026-06-27T14:12:40Z",
+  "JobId": "dlc1j2p8ui63ulps",
+  "JobSpecs": [
+    {
+      "AssignNodeSpec": {
+        "AntiAffinityNodeNames": "",
+        "EnableAssignNode": false,
+        "NodeNames": ""
+      },
+      "EcsSpec": "",
+      "Image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+      "ImageConfig": {
+        "Auth": "",
+        "DockerRegistry": "",
+        "Password": "",
+        "Username": ""
+      },
+      "PodCount": 1,
+      "ResourceConfig": {
+        "CPU": "12",
+        "GPU": "2",
+        "GPUType": "",
+        "Memory": "200Gi",
+        "SharedMemory": "200Gi"
+      },
+      "Type": "Worker"
+    }
+  ],
+  "JobType": "PyTorchJob",
+  "Pods": [
+    {
+      "GmtCreateTime": "2026-06-27T10:43:25Z",
+      "GmtFinishTime": "2026-06-27T14:12:39Z",
+      "GmtStartTime": "2026-06-27T10:44:13Z",
+      "Ip": "26.40.189.215",
+      "PodId": "dlc1j2p8ui63ulps-master-0",
+      "PodUid": "5c516405-3d8d-40b0-b922-dc42c8c9669b",
+      "Status": "Succeeded",
+      "Type": "master"
+    }
+  ],
+  "Priority": 9,
+  "ReasonCode": "JobSucceeded",
+  "ReasonMessage": "PyTorchJob dlc1j2p8ui63ulps is successfully completed.",
+  "RequestId": "019FF67A-30E2-5DD1-BD3D-11BF2046C628",
+  "ResourceId": "quotakzri8a5wqcp",
+  "ResourceLevel": "L0",
+  "Settings": {
+    "BusinessUserId": "",
+    "Caller": "",
+    "DisableEcsStockCheck": false,
+    "Driver": "",
+    "EnableDistributedTaskAssigment": false,
+    "EnableErrorMonitoringInAIMaster": false,
+    "EnableOssAppend": false,
+    "EnablePreemptibleJob": false,
+    "EnableRDMA": true,
+    "EnableTideResource": false,
+    "ErrorMonitoringArgs": "",
+    "JobReservedMinutes": 0,
+    "JobReservedPolicy": "",
+    "OversoldType": "ForbiddenQuotaOverSold",
+    "PipelineId": "",
+    "QueueId": "",
+    "Tags": {
+      "CloneFromJobID": "dlc1m4jdhmec354h"
+    }
+  },
+  "Status": "Succeeded",
+  "ThirdpartyLibDir": "",
+  "UserCommand": "bash -lc 'POLICY=pi05 DATA_LEVELS=\"level-0 level-1\" EVAL_NUM_EPISODES=10 SAVE_VIDEO=1 EVAL_TIMEOUT=300m TASK=G1WholebodyLocomotionPickBetweenTablesTeleop-v0 CKPT_STEP=40000 SIMPLE_ISAAC_ACTIVE_GPU=0 PI05_SERVER_GPU=1 bash /mnt/cpfs/leon/code/SIMPLE/data/evals_decoupled_wbc/simple_pai_eval.sh'",
+  "UserId": "204304175653577039",
+  "WorkspaceId": "179169",
+  "WorkspaceName": "pai_52fx2u56uu44ih8p7z"
+}

@@ -1,0 +1,1 @@
+{"train/global_step": 3000, "train/loss": 0.009486895985901356, "train/gradient_norm": 0.16116581857204437, "train/learning_rate": 1.4999999999999999e-05, "_timestamp": 1786547577.6154408, "_runtime": 61.19273090362549, "_step": 3000, "validation/global_step": 3000, "validation/loss": 0.04695266517156701, "train/final_global_step": 3000, "_wandb": {"runtime": 55}}

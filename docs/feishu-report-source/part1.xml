@@ -1,0 +1,33 @@
+<h1>R16-P18 LIBERO Stage-1 初步验证（Baseline Gate）</h1>
+<p><b>最终决策：NO_GO_BASELINE_GATE</b></p>
+<p>报告日期：2026-08-12（UTC）。协议：R16-P18-LIBERO-STAGE1-PILOT-V1。正式 PAI 作业 <b>dlcnouq6igkhfyub</b> 已以 Succeeded 终态完成。</p>
+<p>本次结果只回答“当前 LIBERO 任务与 Small-BC 基线是否满足进入 R16-P18 自适应实验的必要条件”。它不是 R16-P18 联合分辨率方法的结果，不能据此称该 idea 已验证、已接受或已被否证。</p>
+
+<h2>1. 结论摘要</h2>
+<ul>
+  <li>9 个 BoundaryBC-S 模型全部完成：3 个任务 × 3 个训练 seed × 3000 optimizer steps。</li>
+  <li>450 个闭环回合全部完成：每个任务、每个模型 seed 均为 50 回合；无缺失或冲突重复。</li>
+  <li>Push 任务聚合成功率 80.0%，在预注册区间 40%–90% 内，PASS。</li>
+  <li>Bottle 任务聚合成功率 98.0%，超过预注册上限 80%，FAIL；该任务对当前基线过易，缺少可辨识的提升空间。</li>
+  <li>Bowl 负控聚合成功率 88.7%，达到预注册下限 80%，PASS。</li>
+  <li>由于三个任务必须同时通过，baseline gate 失败。依停止规则，没有实现 effect predictor、96-state bank 或任何 adaptive arm。</li>
+  <li>另有数据协议偏差：官方 LIBERO 对每个精确任务仅提供 50 条成功演示，且没有原始 episode seed 字段；因此即使 baseline gate 通过，本 pilot 也不允许返回 Stage-1 GO。</li>
+</ul>
+
+<h2>2. 对 idea 的理解</h2>
+<p>核心假设是：在视觉 token 数、动作候选数、policy call、effect-model call、动作机会与 timeout 都严格相同的预算下，围绕预测的任务结果边界，同时分配视觉分辨率与动作分辨率，应优于 uniform、random adaptive、visual-only、action-only 以及独立组合的 visual+action。</p>
+<p>这里的“结果边界”不是普通图像边缘，而是局部动作结果发生离散变化或高敏感变化的区域，例如接触建立、碰撞、任务进度跃迁、短时成功和可恢复性变化。方法的必要机制是让视觉证据与动作候选共同聚焦这些边界，同时在测试时禁止使用 simulator privileged state。</p>
+<p>该实验只是必要条件 falsifier，不是最终策略实验，也不是 world model、Diffusion Policy、DINO-WM 或 π0.5 实验。旧的“先完整读取高分辨率 outcome surface 再选择预算”的路径会泄漏隐藏标签，因此不允许使用。</p>
+
+<h2>3. LIBERO 适配与预注册任务</h2>
+<ul>
+  <li><b>push_the_plate_to_the_front_of_the_stove</b>：boundary push；基线合格区间 40%–90%。</li>
+  <li><b>put_the_wine_bottle_on_the_rack</b>：constrained placement；基线合格区间 25%–80%。</li>
+  <li><b>put_the_bowl_on_the_plate</b>：smooth negative control；基线合格区间 80%–100%。</li>
+</ul>
+<p>Gate 使用三个模型 seed 与每 seed 50 个固定 init state 的总体点估计；95% paired bootstrap CI 用于不确定性报告，不替代预注册点估计判据。三个任务必须全部通过，才允许实现自适应 Stage-1。</p>
+
+<h2>4. 数据协议与偏差</h2>
+<p>原计划要求每任务 200 条成功演示并按 episode seed 做 160/20/20 划分。官方 LIBERO 对上述每个精确任务实际只有 50 条成功演示，HDF5 中保留 init state，但不含原始 episode seed。</p>
+<p>本 pilot 没有复制演示，也没有把数据增强轨迹伪装成独立 episode。每条演示以 init state 的 SHA256 作为稳定身份，按哈希字典序做 40/5/5 的 train/validation/test 划分。这是预先记录的重大协议偏差，也是本 pilot 永远不能返回 Stage-1 GO 的独立原因。</p>
+<p>在观察任何训练结果之前，正式 runtime 从开发机 CUDA 13 环境改锁为已在 PAI carrier 上验证的 CUDA 12.4 环境；模型、数据、seed、预算和阈值均未改变。</p>

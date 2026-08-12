@@ -1,0 +1,7 @@
+sentinel=pai-job-registry-new-cpfs
+mount_path=/mnt/cpfs/zbl-cpfs-new
+cpfs_id=cpfs-29001v2qz7p5ag7gckzsw
+workspace_id=179169
+contract_source_job_id=dlcfp1szuc2cgqfp
+expected_uid=2254
+expected_gid=2254

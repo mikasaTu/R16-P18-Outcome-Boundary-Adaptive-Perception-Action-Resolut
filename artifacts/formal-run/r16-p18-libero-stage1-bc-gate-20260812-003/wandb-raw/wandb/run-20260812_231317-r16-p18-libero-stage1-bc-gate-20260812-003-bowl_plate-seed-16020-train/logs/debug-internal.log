@@ -1,0 +1,1500 @@
+2026-08-12 23:13:17,990 INFO    StreamThr :2541 [internal.py:wandb_internal():86] W&B internal server running at pid: 2541, started at: 2026-08-12 23:13:17.989515
+2026-08-12 23:13:17,991 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status
+2026-08-12 23:13:17,999 INFO    WriterThread:2541 [datastore.py:open_for_write():87] open: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/run-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train.wandb
+2026-08-12 23:13:17,999 DEBUG   SenderThread:2541 [sender.py:send():379] send: header
+2026-08-12 23:13:18,026 DEBUG   SenderThread:2541 [sender.py:send():379] send: run
+2026-08-12 23:13:18,029 INFO    SenderThread:2541 [sender.py:_setup_resume():749] checking resume status for chen_jian-cj-workspace/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train
+2026-08-12 23:13:19,256 INFO    SenderThread:2541 [dir_watcher.py:__init__():211] watching files in: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files
+2026-08-12 23:13:19,256 INFO    SenderThread:2541 [sender.py:_start_run_threads():1124] run started: r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train with start time 1786547597.990926
+2026-08-12 23:13:19,276 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: check_version
+2026-08-12 23:13:19,276 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: check_version
+2026-08-12 23:13:24,276 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: keepalive
+2026-08-12 23:13:24,276 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:13:24,340 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: run_start
+2026-08-12 23:13:24,344 DEBUG   HandlerThread:2541 [system_info.py:__init__():26] System info init
+2026-08-12 23:13:24,344 DEBUG   HandlerThread:2541 [system_info.py:__init__():41] System info init done
+2026-08-12 23:13:24,344 INFO    HandlerThread:2541 [system_monitor.py:start():194] Starting system monitor
+2026-08-12 23:13:24,344 INFO    SystemMonitor:2541 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2026-08-12 23:13:24,344 INFO    HandlerThread:2541 [system_monitor.py:probe():214] Collecting system info
+2026-08-12 23:13:24,345 INFO    SystemMonitor:2541 [interfaces.py:start():190] Started cpu monitoring
+2026-08-12 23:13:24,345 INFO    SystemMonitor:2541 [interfaces.py:start():190] Started disk monitoring
+2026-08-12 23:13:24,346 INFO    SystemMonitor:2541 [interfaces.py:start():190] Started gpu monitoring
+2026-08-12 23:13:24,346 INFO    SystemMonitor:2541 [interfaces.py:start():190] Started memory monitoring
+2026-08-12 23:13:24,347 INFO    SystemMonitor:2541 [interfaces.py:start():190] Started network monitoring
+2026-08-12 23:13:24,360 DEBUG   HandlerThread:2541 [system_info.py:probe():150] Probing system
+2026-08-12 23:13:24,363 DEBUG   HandlerThread:2541 [system_info.py:_probe_git():135] Probing git
+2026-08-12 23:13:24,392 DEBUG   HandlerThread:2541 [system_info.py:_probe_git():143] Probing git done
+2026-08-12 23:13:24,392 DEBUG   HandlerThread:2541 [system_info.py:probe():198] Probing system done
+2026-08-12 23:13:24,392 DEBUG   HandlerThread:2541 [system_monitor.py:probe():223] {'os': 'Linux-5.10.134-013.9.kangaroo.al8.x86_64-x86_64-with-glibc2.35', 'python': '3.11.11', 'heartbeatAt': '2026-08-12T15:13:24.360968', 'startedAt': '2026-08-12T15:13:17.962143', 'docker': None, 'cuda': None, 'args': ('train', '--config', '/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/configs/r16_p18_libero_stage1.yaml', '--run-id', 'r16-p18-libero-stage1-bc-gate-20260812-003', '--task-key', 'bowl_plate', '--model-seed', '16020', '--dataset-root', '/mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO', '--checkpoint-root', '/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1', '--log-root', '/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1', '--device', 'cuda:0'), 'state': 'running', 'program': '-m boundarybc.worker', 'codePathLocal': None, 'git': {'remote': 'https://github.com/huggingface/lerobot-libero.git', 'commit': '20d65a9ab7ff42662496c093e14531904cf1fe31'}, 'email': 'codex@local', 'root': '/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812', 'host': 'dlcnouq6igkhfyub-master-0', 'username': 'leon', 'executable': '/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python', 'cpu_count': 12, 'cpu_count_logical': 12, 'cpu_freq': {'current': 2900.0, 'min': 0.0, 'max': 0.0}, 'cpu_freq_per_core': [{'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}, {'current': 2900.0, 'min': 0.0, 'max': 0.0}], 'disk': {'/': {'total': 590.5128479003906, 'used': 0.00034332275390625}}, 'gpu': 'NVIDIA A800-SXM4-80GB', 'gpu_count': 2, 'gpu_devices': [{'name': 'NVIDIA A800-SXM4-80GB', 'memory_total': 85899345920}, {'name': 'NVIDIA A800-SXM4-80GB', 'memory_total': 85899345920}], 'memory': {'total': 200.0}}
+2026-08-12 23:13:24,392 INFO    HandlerThread:2541 [system_monitor.py:probe():224] Finished collecting system info
+2026-08-12 23:13:24,392 INFO    HandlerThread:2541 [system_monitor.py:probe():227] Publishing system info
+2026-08-12 23:13:24,393 INFO    HandlerThread:2541 [system_monitor.py:probe():229] Finished publishing system info
+2026-08-12 23:13:24,418 DEBUG   SenderThread:2541 [sender.py:send():379] send: files
+2026-08-12 23:13:24,419 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2026-08-12 23:13:24,923 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: python_packages
+2026-08-12 23:13:24,923 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: python_packages
+2026-08-12 23:13:24,924 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: stop_status
+2026-08-12 23:13:24,924 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: stop_status
+2026-08-12 23:13:24,927 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: internal_messages
+2026-08-12 23:13:25,233 DEBUG   SenderThread:2541 [sender.py:send():379] send: telemetry
+2026-08-12 23:13:25,262 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-metadata.json
+2026-08-12 23:13:25,262 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/requirements.txt
+2026-08-12 23:13:25,978 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:25,978 DEBUG   SenderThread:2541 [sender.py:send():379] send: telemetry
+2026-08-12 23:13:26,010 INFO    wandb-upload_0:2541 [upload_job.py:push():131] Uploaded file /tmp/tmpiy72ul3lwandb/ke8w3ah3-wandb-metadata.json
+2026-08-12 23:13:26,120 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:26,121 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:26,121 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:26,122 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:26,263 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:26,263 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:26,274 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:26,274 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:26,274 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:26,276 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:26,437 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:26,438 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:26,438 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:26,439 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:26,584 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:26,585 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:26,585 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:26,586 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:26,728 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:26,729 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:26,729 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:26,731 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:26,872 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:26,872 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:26,873 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:26,874 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:27,032 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:27,032 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:27,032 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:27,033 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:27,189 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:27,189 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:27,189 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:27,190 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:27,263 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:27,334 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:27,334 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:27,334 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:27,335 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:27,478 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:27,478 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:27,478 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:27,480 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:27,615 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:27,616 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:27,616 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:27,617 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:27,754 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:27,754 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:27,754 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:27,756 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:27,892 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:27,892 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:27,893 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:27,894 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:28,030 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:28,030 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:28,031 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:28,032 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:28,199 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:28,200 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:28,200 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:28,201 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:28,264 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:28,264 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:28,352 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:28,352 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:28,352 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:28,353 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:28,501 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:28,501 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:28,501 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:28,503 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:28,640 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:28,640 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:28,640 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:28,642 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:28,777 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:28,778 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:28,778 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:28,779 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:28,919 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:28,920 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:28,920 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:28,923 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:29,070 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:29,071 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:29,071 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:29,072 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:29,214 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:29,215 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:29,215 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:29,216 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:29,264 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:29,362 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:29,363 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:29,363 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:29,363 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:13:29,364 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:29,512 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:29,512 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:29,512 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:29,513 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:29,659 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:29,659 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:29,660 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:29,661 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:29,697 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:30,085 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:30,085 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:30,086 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:30,087 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:30,243 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:30,243 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:30,243 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:30,245 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:30,265 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:30,265 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:30,407 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:30,407 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:30,407 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:30,408 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:30,566 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:30,566 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:30,566 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:30,568 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:30,715 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:30,715 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:30,715 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:30,717 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:30,858 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:30,859 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:30,859 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:30,860 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:31,007 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:31,007 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:31,007 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:31,009 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:31,151 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:31,151 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:31,151 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:31,152 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:31,265 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:31,308 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:31,309 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:31,309 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:31,310 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:31,467 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:31,472 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:31,472 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:31,474 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:31,622 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:31,623 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:31,623 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:31,624 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:31,768 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:31,768 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:31,768 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:31,769 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:31,916 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:31,917 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:31,917 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:31,919 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:32,067 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:32,068 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:32,068 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:32,069 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:32,232 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:32,232 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:32,233 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:32,234 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:32,265 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:32,265 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:32,381 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:32,382 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:32,382 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:32,384 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:32,538 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:32,539 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:32,539 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:32,540 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:32,694 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:32,695 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:32,695 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:32,696 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:32,847 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:32,848 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:32,848 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:32,849 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:32,999 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:32,999 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:32,999 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:33,001 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:33,141 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:33,141 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:33,142 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:33,143 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:33,266 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:33,290 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:33,290 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:33,290 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:33,291 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:33,431 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:33,431 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:33,431 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:33,432 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:33,579 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:33,579 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:33,579 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:33,580 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:33,726 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:33,726 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:33,727 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:33,728 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:33,748 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:34,236 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:34,237 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:34,237 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:34,239 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:34,266 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:34,266 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:34,377 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:34,378 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:13:34,378 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:34,378 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:34,379 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:34,515 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:34,516 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:34,516 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:34,517 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:34,654 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:34,654 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:34,654 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:34,656 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:34,797 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:34,798 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:34,798 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:34,800 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:34,942 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:34,944 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:34,944 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:34,945 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:35,080 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:35,081 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:35,081 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:35,082 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:35,222 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:35,222 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:35,222 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:35,224 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:35,266 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:35,371 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:35,371 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:35,371 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:35,372 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:35,531 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:35,532 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:35,532 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:35,534 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:35,671 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:35,671 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:35,672 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:35,673 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:35,818 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:35,818 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:35,819 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:35,820 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:35,979 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:35,979 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:35,979 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:35,981 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:36,129 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:36,129 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:36,129 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:36,132 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:36,267 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:36,267 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:36,288 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:36,288 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:36,289 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:36,290 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:36,450 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:36,450 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:36,450 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:36,452 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:36,600 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:36,600 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:36,600 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:36,602 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:36,745 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:36,746 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:36,746 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:36,747 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:36,887 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:36,888 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:36,888 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:36,890 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:37,048 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:37,048 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:37,049 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:37,050 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:37,195 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:37,195 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:37,195 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:37,196 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:37,267 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:37,337 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:37,337 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:37,337 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:37,338 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:37,482 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:37,483 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:37,483 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:37,484 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:37,625 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:37,638 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:37,638 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:37,640 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:37,770 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:37,770 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:37,770 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:37,772 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:37,792 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:38,269 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:38,269 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:38,299 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:38,300 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:38,300 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:38,302 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:38,441 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:38,442 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:38,442 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:38,443 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:38,591 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:38,591 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:38,591 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:38,593 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:38,746 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:38,746 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:38,746 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:38,747 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:38,890 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:38,891 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:38,891 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:38,893 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:39,027 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:39,028 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:39,028 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:39,029 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:39,164 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:39,165 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:39,165 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:39,166 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:39,269 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:39,302 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:39,303 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:39,303 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:39,304 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:39,443 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:39,444 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:13:39,444 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:39,444 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:39,445 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:39,588 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:39,589 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:39,589 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:39,591 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:39,726 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:39,726 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:39,726 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:39,727 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:39,864 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:39,864 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:39,864 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:39,865 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:39,924 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: stop_status
+2026-08-12 23:13:39,924 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: stop_status
+2026-08-12 23:13:39,925 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: internal_messages
+2026-08-12 23:13:40,043 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:40,139 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:40,270 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:40,270 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:40,270 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:40,271 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:40,271 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:40,271 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:40,271 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:40,273 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:40,286 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:40,286 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:40,286 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:40,288 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:40,445 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:40,445 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:40,445 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:40,446 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:40,585 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:40,585 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:40,585 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:40,587 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:40,722 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:40,723 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:40,723 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:40,724 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:40,862 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:40,862 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:40,862 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:40,864 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:41,015 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:41,015 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:41,016 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:41,017 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:41,174 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:41,174 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:41,174 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:41,175 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:41,271 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:41,320 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:41,320 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:41,320 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:41,321 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:41,485 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:41,485 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:41,485 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:41,487 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:41,634 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:41,634 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:41,635 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:41,636 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:41,783 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:41,784 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:41,784 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:41,787 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:41,806 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:42,272 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:42,272 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:42,561 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:42,562 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:42,562 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:42,563 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:42,704 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:42,705 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:42,705 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:42,706 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:42,850 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:42,850 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:42,850 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:42,852 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:42,989 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:42,990 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:42,990 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:42,991 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:43,140 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:43,140 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:43,140 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:43,142 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:43,272 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:43,279 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:43,279 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:43,279 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:43,280 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:43,427 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:43,428 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:43,428 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:43,429 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:43,568 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:43,569 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:43,569 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:43,570 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:43,709 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:43,710 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:43,710 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:43,711 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:43,867 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:43,868 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:43,868 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:43,869 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:44,029 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:44,034 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:44,034 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:44,036 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:44,181 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:44,182 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:44,182 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:44,183 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:44,273 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:44,273 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:44,323 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:44,324 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:44,324 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:44,325 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:44,464 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:44,464 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:13:44,464 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:44,465 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:44,466 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:44,614 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:44,614 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:44,614 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:44,616 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:44,761 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:44,761 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:44,761 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:44,762 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:44,907 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:44,908 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:44,908 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:44,909 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:45,053 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:45,053 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:45,053 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:45,054 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:45,193 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:45,193 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:45,193 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:45,194 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:45,273 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:45,687 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:45,688 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:45,688 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:45,690 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:45,828 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:45,828 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:45,828 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:45,858 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:45,967 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:45,967 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:45,967 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:45,968 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:46,105 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:46,106 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:46,106 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:46,107 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:46,249 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:46,250 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:46,250 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:46,251 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:46,273 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:46,273 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:46,410 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:46,410 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:46,410 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:46,412 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:46,434 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:47,056 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:47,056 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:47,056 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:47,058 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:47,203 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:47,203 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:47,204 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:47,205 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:47,274 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:47,348 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:47,349 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:47,349 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:47,350 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:47,501 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:47,501 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:47,501 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:47,502 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:47,645 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:47,645 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:47,645 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:47,647 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:47,788 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:47,788 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:47,788 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:47,789 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:47,948 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:47,948 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:47,948 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:47,949 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:48,098 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:48,099 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:48,099 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:48,100 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:48,245 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:48,246 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:48,246 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:48,247 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:48,274 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:48,274 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:48,399 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:48,400 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:48,400 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:48,402 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:48,542 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:48,542 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:48,543 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:48,558 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:48,694 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:48,694 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:48,694 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:48,695 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:48,836 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:48,837 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:48,837 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:48,838 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:48,975 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:48,976 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:48,976 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:48,977 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:49,126 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:49,126 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:49,126 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:49,128 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:49,266 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:49,266 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:49,266 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:49,267 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:49,274 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:49,410 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:49,410 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:49,410 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:49,412 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:49,553 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:49,555 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:13:49,698 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:49,846 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:49,900 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:49,900 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:49,901 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:49,901 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:49,901 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:49,902 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:49,902 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:49,902 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:49,903 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:50,003 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:50,003 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:50,003 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:50,005 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:50,154 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:50,155 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:50,155 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:50,156 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:50,275 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/config.yaml
+2026-08-12 23:13:50,275 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:50,275 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:50,294 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:50,295 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:50,295 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:50,326 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:50,449 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:50,454 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:50,454 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:50,456 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:50,602 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:50,602 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:50,602 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:50,604 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:50,624 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:51,202 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:51,203 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:51,203 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:51,266 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:51,275 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:51,344 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:51,345 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:51,345 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:51,346 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:51,500 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:51,501 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:51,501 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:51,502 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:51,670 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:51,670 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:51,670 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:51,671 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:52,002 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:52,002 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:52,002 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:52,004 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:52,150 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:52,151 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:52,151 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:52,152 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:52,275 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:52,276 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:52,295 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:52,295 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:52,296 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:52,297 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:52,445 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:52,445 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:52,446 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:52,447 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:52,591 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:52,592 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:52,592 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:52,593 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:52,745 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:52,746 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:52,746 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:52,747 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:52,885 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:52,885 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:52,885 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:52,887 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:53,023 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:53,023 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:53,023 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:53,024 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:53,164 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:53,164 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:53,165 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:53,166 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:53,276 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:53,303 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:53,303 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:53,304 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:53,305 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:53,451 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:53,451 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:53,451 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:53,453 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:53,590 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:53,590 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:53,591 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:53,592 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:53,736 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:53,736 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:53,736 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:53,737 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:53,888 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:53,888 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:53,888 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:53,889 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:54,033 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:54,033 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:54,033 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:54,034 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:54,186 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:54,186 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:54,186 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:54,188 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:54,276 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:54,276 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:54,331 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:54,332 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:54,332 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:54,333 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:54,478 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:54,479 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:54,479 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:54,480 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:54,639 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:54,639 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:54,639 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:54,641 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:54,792 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:54,792 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:54,793 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:54,794 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:54,924 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: stop_status
+2026-08-12 23:13:54,924 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: stop_status
+2026-08-12 23:13:54,924 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: internal_messages
+2026-08-12 23:13:54,955 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:54,978 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:55,277 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:55,302 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:55,302 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:55,302 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:13:55,303 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:55,607 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:55,608 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:55,608 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:55,609 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:55,753 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:55,754 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:55,754 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:55,755 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:55,891 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:55,891 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:55,891 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:55,893 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:56,028 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:56,028 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:56,029 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:56,030 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:56,173 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:56,174 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:56,174 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:56,176 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:56,277 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:56,278 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:56,312 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:56,313 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:56,313 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:56,314 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:56,458 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:56,459 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:56,459 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:56,460 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:56,607 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:56,607 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:56,607 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:56,608 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:56,754 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:56,754 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:56,754 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:56,755 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:56,905 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:56,905 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:56,905 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:56,907 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:57,073 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:57,077 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:57,078 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:57,079 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:57,217 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:57,218 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:57,218 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:57,219 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:57,278 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:57,357 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:57,357 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:57,357 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:57,358 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:57,495 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:57,495 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:57,495 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:57,497 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:57,645 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:57,645 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:57,645 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:57,647 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:57,795 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:57,796 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:57,796 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:57,797 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:57,944 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:57,944 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:57,944 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:57,946 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:58,082 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:58,082 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:58,082 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:58,084 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:58,231 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:58,231 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:58,231 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:58,232 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:58,278 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:58,278 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:13:58,396 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:58,397 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:58,397 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:58,398 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:58,545 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:58,546 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:58,546 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:58,547 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:58,694 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:58,696 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:58,696 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:58,697 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:58,834 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:58,835 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:58,835 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:58,836 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:58,974 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:58,974 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:58,974 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:58,976 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:59,117 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:59,117 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:59,118 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:59,119 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:59,140 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:59,279 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:13:59,679 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:59,680 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:59,680 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:59,681 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:59,817 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:59,818 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:59,818 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:59,819 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:13:59,964 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:13:59,965 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:13:59,965 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:13:59,966 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:00,114 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:00,114 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:00,114 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:00,116 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:00,265 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:00,266 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:00,266 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:00,268 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:00,279 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:00,280 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:00,416 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:00,416 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:14:00,416 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:00,417 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:00,418 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:00,577 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:00,577 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:00,578 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:00,579 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:00,721 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:00,722 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:00,722 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:00,723 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:00,865 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:00,866 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:00,866 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:00,867 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:01,014 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:01,015 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:01,015 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:01,017 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:01,165 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:01,166 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:01,166 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:01,167 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:01,280 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:01,308 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:01,308 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:01,309 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:01,310 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:01,463 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:01,464 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:01,464 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:01,465 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:01,607 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:01,608 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:01,608 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:01,609 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:01,871 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:01,872 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:01,872 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:01,873 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:02,021 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:02,022 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:02,022 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:02,023 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:02,166 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:02,167 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:02,167 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:02,168 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:02,280 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:02,280 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:02,312 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:02,312 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:02,313 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:02,314 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:02,455 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:02,455 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:02,456 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:02,457 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:02,610 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:02,611 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:02,611 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:02,613 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:02,756 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:02,756 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:02,757 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:02,758 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:02,895 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:02,896 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:02,896 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:02,897 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:03,044 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:03,045 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:03,045 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:03,046 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:03,195 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:03,196 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:03,196 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:03,197 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:03,280 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:03,343 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:03,344 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:03,344 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:03,345 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:03,366 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:04,278 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:04,279 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:04,279 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:04,281 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:04,281 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:04,281 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:04,422 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:04,423 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:04,423 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:04,424 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:04,580 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:04,581 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:04,581 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:04,582 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:04,730 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:04,731 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:04,731 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:04,732 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:04,876 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:04,877 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:04,877 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:04,879 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:05,025 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:05,026 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:05,026 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:05,027 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:05,167 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:05,168 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:05,168 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:05,171 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:05,281 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:05,321 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:05,322 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:05,322 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:05,323 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:05,482 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:14:05,482 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:05,483 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:05,483 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:05,484 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:05,644 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:05,644 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:05,644 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:05,646 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:05,817 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:05,817 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:05,817 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:05,819 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:05,971 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:05,972 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:05,972 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:05,973 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:06,123 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:06,123 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:06,123 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:06,125 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:06,274 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:06,275 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:06,275 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:06,276 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:06,282 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:06,282 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:06,440 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:06,441 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:06,441 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:06,442 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:06,593 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:06,593 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:06,594 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:06,595 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:06,745 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:06,746 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:06,746 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:06,748 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:06,891 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:06,892 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:06,892 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:06,893 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:07,031 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:07,032 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:07,032 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:07,034 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:07,183 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:07,183 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:07,183 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:07,186 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:07,282 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:07,326 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:07,326 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:07,326 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:07,351 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:07,476 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:07,477 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:07,477 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:07,478 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:07,618 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:07,619 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:07,619 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:07,620 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:07,762 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:07,763 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:07,763 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:07,764 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:07,916 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:07,917 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:07,917 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:07,919 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:07,938 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:08,283 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:08,283 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:08,654 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:08,655 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:08,655 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:08,656 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:08,805 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:08,806 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:08,806 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:08,807 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:08,951 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:08,952 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:08,952 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:08,953 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:09,107 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:09,108 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:09,108 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:09,109 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:09,279 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:09,279 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:09,280 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:09,281 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:09,283 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:09,428 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:09,429 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:09,429 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:09,430 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:09,568 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:09,569 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:09,569 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:09,570 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:09,707 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:09,708 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:09,708 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:09,709 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:09,848 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:09,850 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:09,850 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:09,851 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:09,924 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: stop_status
+2026-08-12 23:14:09,924 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: stop_status
+2026-08-12 23:14:09,926 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: internal_messages
+2026-08-12 23:14:10,017 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:10,158 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:10,216 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:10,217 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:10,219 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:10,219 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:10,219 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:10,221 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:10,284 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:10,284 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:10,310 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:10,315 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:10,315 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:10,316 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:10,457 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:10,458 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:10,458 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:10,459 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:10,609 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:10,610 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:10,610 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:10,610 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:14:10,612 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:10,763 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:10,763 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:10,764 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:10,766 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:10,902 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:10,903 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:10,903 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:10,904 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:11,046 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:11,046 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:11,046 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:11,048 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:11,193 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:11,194 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:11,194 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:11,195 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:11,284 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:11,344 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:11,344 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:11,344 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:11,346 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:11,520 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:11,520 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:11,520 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:11,522 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:11,672 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:11,673 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:11,673 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:11,674 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:11,833 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:11,833 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:11,834 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:11,834 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:11,996 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:11,997 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:11,997 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:11,998 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:12,150 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:12,151 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:12,151 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:12,152 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:12,285 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:12,285 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:12,306 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:12,306 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:12,306 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:12,308 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:12,841 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:13,286 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:13,551 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:13,552 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:13,552 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:13,553 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:13,689 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:13,689 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:13,689 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:13,691 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:13,831 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:13,831 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:13,832 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:13,833 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:13,992 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:13,993 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:13,993 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:13,994 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:14,145 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:14,145 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:14,145 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:14,147 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:14,287 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:14,287 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:14,289 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:14,289 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:14,289 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:14,290 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:14,438 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:14,439 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:14,439 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:14,440 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:14,583 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:14,583 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:14,583 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:14,584 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:14,729 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:14,729 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:14,729 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:14,731 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:14,883 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:14,884 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:14,884 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:14,886 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:15,030 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:15,031 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:15,031 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:15,032 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:15,176 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:15,176 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:15,177 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:15,178 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:15,287 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:15,336 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:15,337 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:15,337 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:15,338 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:15,493 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:15,493 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:15,493 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:15,495 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:15,635 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:14:15,641 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:15,641 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:15,641 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:15,643 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:15,779 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:15,779 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:15,779 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:15,780 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:15,915 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:15,916 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:15,916 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:15,918 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:16,061 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:16,061 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:16,061 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:16,154 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:16,205 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:16,205 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:16,205 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:16,206 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:16,287 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:16,287 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:16,349 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:16,349 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:16,349 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:16,351 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:16,500 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:16,500 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:16,500 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:16,501 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:16,649 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:16,649 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:16,649 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:16,651 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:16,791 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:16,791 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:16,791 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:16,793 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:16,929 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:16,929 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:16,929 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:16,931 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:17,082 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:17,083 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:17,083 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:17,084 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:17,105 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: partial_history
+2026-08-12 23:14:17,288 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:17,673 DEBUG   SenderThread:2541 [sender.py:send():379] send: telemetry
+2026-08-12 23:14:17,673 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:17,674 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:17,674 DEBUG   SenderThread:2541 [sender.py:send():379] send: telemetry
+2026-08-12 23:14:17,674 DEBUG   SenderThread:2541 [sender.py:send():379] send: exit
+2026-08-12 23:14:17,674 INFO    SenderThread:2541 [sender.py:send_exit():586] handling exit code: 0
+2026-08-12 23:14:17,674 INFO    SenderThread:2541 [sender.py:send_exit():588] handling runtime: 53
+2026-08-12 23:14:17,675 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:17,676 INFO    SenderThread:2541 [sender.py:send_exit():594] send defer
+2026-08-12 23:14:17,676 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:17,676 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 0
+2026-08-12 23:14:17,676 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:17,676 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 0
+2026-08-12 23:14:17,676 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 1
+2026-08-12 23:14:17,676 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:17,676 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 1
+2026-08-12 23:14:17,676 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:17,676 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 1
+2026-08-12 23:14:17,676 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 2
+2026-08-12 23:14:17,676 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:17,676 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 2
+2026-08-12 23:14:17,676 INFO    HandlerThread:2541 [system_monitor.py:finish():203] Stopping system monitor
+2026-08-12 23:14:17,677 DEBUG   SystemMonitor:2541 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2026-08-12 23:14:17,677 DEBUG   SystemMonitor:2541 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2026-08-12 23:14:17,677 DEBUG   SystemMonitor:2541 [system_monitor.py:_start():183] Publishing last batch of metrics
+2026-08-12 23:14:17,677 INFO    HandlerThread:2541 [interfaces.py:finish():202] Joined cpu monitor
+2026-08-12 23:14:17,677 INFO    HandlerThread:2541 [interfaces.py:finish():202] Joined disk monitor
+2026-08-12 23:14:17,681 INFO    HandlerThread:2541 [interfaces.py:finish():202] Joined gpu monitor
+2026-08-12 23:14:17,682 INFO    HandlerThread:2541 [interfaces.py:finish():202] Joined memory monitor
+2026-08-12 23:14:17,682 INFO    HandlerThread:2541 [interfaces.py:finish():202] Joined network monitor
+2026-08-12 23:14:17,682 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:17,682 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 2
+2026-08-12 23:14:17,682 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 3
+2026-08-12 23:14:17,682 DEBUG   SenderThread:2541 [sender.py:send():379] send: stats
+2026-08-12 23:14:17,682 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:17,682 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 3
+2026-08-12 23:14:17,682 DEBUG   SenderThread:2541 [sender.py:send():379] send: history
+2026-08-12 23:14:17,682 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: summary_record
+2026-08-12 23:14:17,684 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:17,684 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:17,684 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 3
+2026-08-12 23:14:17,684 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 4
+2026-08-12 23:14:17,684 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:17,684 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 4
+2026-08-12 23:14:17,684 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:17,684 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 4
+2026-08-12 23:14:17,684 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 5
+2026-08-12 23:14:17,684 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:17,684 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 5
+2026-08-12 23:14:17,684 DEBUG   SenderThread:2541 [sender.py:send():379] send: summary
+2026-08-12 23:14:17,684 INFO    SenderThread:2541 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2026-08-12 23:14:17,685 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:17,685 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 5
+2026-08-12 23:14:17,685 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 6
+2026-08-12 23:14:17,685 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:17,685 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 6
+2026-08-12 23:14:17,685 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:17,685 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 6
+2026-08-12 23:14:17,687 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: status_report
+2026-08-12 23:14:18,039 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 7
+2026-08-12 23:14:18,039 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:18,039 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 7
+2026-08-12 23:14:18,039 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:18,039 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 7
+2026-08-12 23:14:18,289 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/config.yaml
+2026-08-12 23:14:18,289 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:18,289 INFO    Thread-12 :2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:18,673 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: poll_exit
+2026-08-12 23:14:19,521 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 8
+2026-08-12 23:14:19,521 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: poll_exit
+2026-08-12 23:14:19,521 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:19,521 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 8
+2026-08-12 23:14:19,521 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:19,521 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 8
+2026-08-12 23:14:19,521 INFO    SenderThread:2541 [job_builder.py:build():318] Attempting to build job artifact
+2026-08-12 23:14:19,522 INFO    SenderThread:2541 [job_builder.py:_get_source_type():455] is repo sourced job
+2026-08-12 23:14:19,522 WARNING SenderThread:2541 [job_builder.py:_log_if_verbose():210] No program path found, not creating job artifact. See https://docs.wandb.ai/guides/launch/create-job
+2026-08-12 23:14:19,522 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 9
+2026-08-12 23:14:19,522 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:19,522 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 9
+2026-08-12 23:14:19,522 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:19,522 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 9
+2026-08-12 23:14:19,522 INFO    SenderThread:2541 [dir_watcher.py:finish():358] shutting down directory watcher
+2026-08-12 23:14:19,674 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: poll_exit
+2026-08-12 23:14:20,290 INFO    SenderThread:2541 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:20,290 INFO    SenderThread:2541 [dir_watcher.py:finish():388] scan: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files
+2026-08-12 23:14:20,290 INFO    SenderThread:2541 [dir_watcher.py:finish():402] scan save: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-metadata.json wandb-metadata.json
+2026-08-12 23:14:20,290 INFO    SenderThread:2541 [dir_watcher.py:finish():402] scan save: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/config.yaml config.yaml
+2026-08-12 23:14:20,290 INFO    SenderThread:2541 [dir_watcher.py:finish():402] scan save: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/requirements.txt requirements.txt
+2026-08-12 23:14:20,290 INFO    SenderThread:2541 [dir_watcher.py:finish():402] scan save: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json wandb-summary.json
+2026-08-12 23:14:20,292 INFO    SenderThread:2541 [dir_watcher.py:finish():402] scan save: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log output.log
+2026-08-12 23:14:20,293 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 10
+2026-08-12 23:14:20,293 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: poll_exit
+2026-08-12 23:14:20,294 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:20,294 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 10
+2026-08-12 23:14:20,296 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:20,296 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 10
+2026-08-12 23:14:20,296 INFO    SenderThread:2541 [file_pusher.py:finish():172] shutting down file pusher
+2026-08-12 23:14:20,674 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: poll_exit
+2026-08-12 23:14:20,674 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: poll_exit
+2026-08-12 23:14:21,018 INFO    wandb-upload_0:2541 [upload_job.py:push():131] Uploaded file /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/config.yaml
+2026-08-12 23:14:21,674 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: poll_exit
+2026-08-12 23:14:21,675 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: poll_exit
+2026-08-12 23:14:21,946 INFO    wandb-upload_2:2541 [upload_job.py:push():131] Uploaded file /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/wandb-summary.json
+2026-08-12 23:14:22,399 INFO    wandb-upload_3:2541 [upload_job.py:push():131] Uploaded file /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/output.log
+2026-08-12 23:14:22,485 INFO    wandb-upload_1:2541 [upload_job.py:push():131] Uploaded file /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/files/requirements.txt
+2026-08-12 23:14:22,675 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: poll_exit
+2026-08-12 23:14:22,675 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: poll_exit
+2026-08-12 23:14:22,686 INFO    Thread-11 (_thread_body):2541 [sender.py:transition_state():614] send defer: 11
+2026-08-12 23:14:22,686 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:22,686 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 11
+2026-08-12 23:14:22,686 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:22,686 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 11
+2026-08-12 23:14:22,686 INFO    SenderThread:2541 [file_pusher.py:join():178] waiting for file pusher
+2026-08-12 23:14:22,687 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 12
+2026-08-12 23:14:22,687 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:22,687 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 12
+2026-08-12 23:14:22,687 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:22,687 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 12
+2026-08-12 23:14:22,687 INFO    SenderThread:2541 [file_stream.py:finish():614] file stream finish called
+2026-08-12 23:14:23,625 INFO    SenderThread:2541 [file_stream.py:finish():618] file stream finish is done
+2026-08-12 23:14:23,625 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 13
+2026-08-12 23:14:23,625 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:23,625 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 13
+2026-08-12 23:14:23,625 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:23,625 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 13
+2026-08-12 23:14:23,625 INFO    SenderThread:2541 [sender.py:transition_state():614] send defer: 14
+2026-08-12 23:14:23,626 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: defer
+2026-08-12 23:14:23,626 INFO    HandlerThread:2541 [handler.py:handle_request_defer():172] handle defer: 14
+2026-08-12 23:14:23,626 DEBUG   SenderThread:2541 [sender.py:send():379] send: final
+2026-08-12 23:14:23,626 DEBUG   SenderThread:2541 [sender.py:send():379] send: footer
+2026-08-12 23:14:23,626 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: defer
+2026-08-12 23:14:23,626 INFO    SenderThread:2541 [sender.py:send_request_defer():610] handle sender defer: 14
+2026-08-12 23:14:23,626 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: poll_exit
+2026-08-12 23:14:23,626 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: poll_exit
+2026-08-12 23:14:23,627 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: internal_messages
+2026-08-12 23:14:23,627 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: server_info
+2026-08-12 23:14:23,627 DEBUG   SenderThread:2541 [sender.py:send_request():406] send_request: server_info
+2026-08-12 23:14:23,668 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: get_summary
+2026-08-12 23:14:23,668 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: sampled_history
+2026-08-12 23:14:23,868 DEBUG   HandlerThread:2541 [handler.py:handle_request():146] handle_request: shutdown
+2026-08-12 23:14:23,868 INFO    HandlerThread:2541 [handler.py:finish():866] shutting down handler
+2026-08-12 23:14:24,627 INFO    WriterThread:2541 [datastore.py:close():296] close: /mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1/r16-p18-libero-stage1-bc-gate-20260812-003/wandb/wandb/run-20260812_231317-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train/run-r16-p18-libero-stage1-bc-gate-20260812-003-bowl_plate-seed-16020-train.wandb
+2026-08-12 23:14:24,867 INFO    SenderThread:2541 [sender.py:finish():1546] shutting down sender
+2026-08-12 23:14:24,867 INFO    SenderThread:2541 [file_pusher.py:finish():172] shutting down file pusher
+2026-08-12 23:14:24,867 INFO    SenderThread:2541 [file_pusher.py:join():178] waiting for file pusher

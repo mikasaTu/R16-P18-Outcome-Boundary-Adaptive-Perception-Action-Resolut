@@ -1,0 +1,129 @@
+{
+    "os": "Linux-5.10.134-013.9.kangaroo.al8.x86_64-x86_64-with-glibc2.35",
+    "python": "3.11.11",
+    "heartbeatAt": "2026-08-12T15:12:02.762150",
+    "startedAt": "2026-08-12T15:11:56.387039",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "train",
+        "--config",
+        "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812/configs/r16_p18_libero_stage1.yaml",
+        "--run-id",
+        "r16-p18-libero-stage1-bc-gate-20260812-003",
+        "--task-key",
+        "bowl_plate",
+        "--model-seed",
+        "16019",
+        "--dataset-root",
+        "/mnt/cpfs/zbl-cpfs-new/dataset/leon/embodied_benchmark/datasets/LIBERO",
+        "--checkpoint-root",
+        "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-libero-stage1",
+        "--log-root",
+        "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-libero-stage1",
+        "--device",
+        "cuda:1"
+    ],
+    "state": "running",
+    "program": "-m boundarybc.worker",
+    "codePathLocal": null,
+    "git": {
+        "remote": "https://github.com/huggingface/lerobot-libero.git",
+        "commit": "20d65a9ab7ff42662496c093e14531904cf1fe31"
+    },
+    "email": "codex@local",
+    "root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/r16-p18-libero-stage1-20260812",
+    "host": "dlcnouq6igkhfyub-master-0",
+    "username": "leon",
+    "executable": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python",
+    "cpu_count": 12,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 2900.0,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2900.0,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 590.5128479003906,
+            "used": 0.000377655029296875
+        }
+    },
+    "gpu": "NVIDIA A800-SXM4-80GB",
+    "gpu_count": 2,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA A800-SXM4-80GB",
+            "memory_total": 85899345920
+        },
+        {
+            "name": "NVIDIA A800-SXM4-80GB",
+            "memory_total": 85899345920
+        }
+    ],
+    "memory": {
+        "total": 200.0
+    }
+}

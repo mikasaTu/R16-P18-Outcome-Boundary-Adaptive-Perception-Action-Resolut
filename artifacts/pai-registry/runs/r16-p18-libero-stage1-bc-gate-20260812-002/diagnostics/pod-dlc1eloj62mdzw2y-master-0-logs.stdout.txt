@@ -1,0 +1,3 @@
+[OK] Using config file from [/workspace/leon/.dlc/config]
+[OK] Pod logs for [dlc1eloj62mdzw2y]-[dlc1eloj62mdzw2y-master-0]
+find: Failed to restore initial working directory: /root: Permission denied

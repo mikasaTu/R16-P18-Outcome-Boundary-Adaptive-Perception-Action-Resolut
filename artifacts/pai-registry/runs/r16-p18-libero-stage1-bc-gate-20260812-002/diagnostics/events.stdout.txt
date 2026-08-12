@@ -1,0 +1,11 @@
+[OK] Using config file from [/workspace/leon/.dlc/config]
+[OK] Job Events for [dlc1eloj62mdzw2y]
+2026-08-12 22:59:08 Restart policy in pod template will be overwritten by restart policy in replica spec
+2026-08-12 22:59:08 Created pod: dlc1eloj62mdzw2y-master-0
+2026-08-12 22:59:08 PyTorchJob dlc1eloj62mdzw2y has been successfully scheduled and is now entering the preparation phase.
+2026-08-12 22:59:08 PyTorchJob dlc1eloj62mdzw2y has been successfully scheduled and is now entering the preparation phase.
+2026-08-12 22:59:55 PyTorchJob dlc1eloj62mdzw2y is running.
+2026-08-12 22:59:55 PyTorchJob dlc1eloj62mdzw2y is running.
+2026-08-12 23:00:25 Pod: t1699749014527917.dlc1eloj62mdzw2y-master-0 exited with code 1
+2026-08-12 23:00:25 job dlc1eloj62mdzw2y 1 Master pods failed with non-retryable exitcode: [{Timestamp:1786546825 Pods:map[Master:[0]] Reason:1}]
+2026-08-12 23:00:25 {"overview":"PyTorchJob dlc1eloj62mdzw2y failed because 1 Master replica(s) failed.","content":[{"time":"1786546825","pods":{"Master":[0]},"reason":"1"}]}

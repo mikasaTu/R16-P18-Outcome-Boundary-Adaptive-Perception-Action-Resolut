@@ -1,0 +1,343 @@
+#!/usr/bin/env python3
+"""Store the two W&B values for all future PAI-DLC registry submissions."""
+
+from __future__ import annotations
+
+import argparse
+import base64
+import getpass
+import json
+import os
+from pathlib import Path
+import re
+import stat
+import tempfile
+from typing import Any
+import urllib.error
+import urllib.request
+
+
+EXPECTED_UID = 2254
+EXPECTED_GID = 2254
+LEON_HOME = Path("/workspace/leon")
+CONFIG_DIR = LEON_HOME / ".pai-secrets"
+CONFIG_PATH = CONFIG_DIR / "wandb.json"
+ROOT = Path(__file__).resolve().parents[1]
+POLICY_PATH = ROOT / "config" / "wandb.json"
+EXPECTED_ENTITY = "chen_jian-cj-workspace"
+FORBIDDEN_VIEWERS = {"shiyanpei0826"}
+WRITABLE_ROLES = {"admin", "member"}
+GRAPHQL_URL = "https://api.wandb.ai/graphql"
+VIEWER_QUERY = """
+query ViewerIdentity {
+  viewer {
+    id
+    username
+    entity
+  }
+}
+"""
+ENTITY_MEMBER_QUERY = """
+query VerifyEntityMember($entityName: String!, $viewerId: ID!) {
+  entity(name: $entityName) {
+    id
+    name
+    member(id: $viewerId) {
+      username
+      role
+      pending
+    }
+  }
+}
+"""
+
+
+class Refused(RuntimeError):
+    pass
+
+
+def load_entity_policy() -> dict[str, Any]:
+    try:
+        policy_document = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise Refused("W&B entity policy is missing or invalid") from exc
+    access = policy_document.get("entity_access")
+    if not isinstance(access, dict):
+        raise Refused("W&B entity-access policy is missing")
+    if access.get("required_entity") != EXPECTED_ENTITY:
+        raise Refused("W&B required entity drifted from explicit user intent")
+    if access.get("graphql_url") != GRAPHQL_URL:
+        raise Refused("W&B GraphQL endpoint drifted")
+    if set(access.get("forbidden_viewers", [])) != FORBIDDEN_VIEWERS:
+        raise Refused("W&B forbidden-viewer policy drifted")
+    if set(access.get("writable_roles", [])) != WRITABLE_ROLES:
+        raise Refused("W&B writable-role policy drifted")
+    if access.get("verify_on_setup") is not True:
+        raise Refused("W&B setup verification must remain enabled")
+    if access.get("verify_before_create_job") is not True:
+        raise Refused("W&B pre-CreateJob verification must remain enabled")
+    if access.get("allow_identity_inference") is not False:
+        raise Refused("W&B identity inference must remain disabled")
+    credential_source = policy_document.get("credential_source")
+    if not isinstance(credential_source, dict):
+        raise Refused("W&B credential-source policy is missing")
+    if Path(str(credential_source.get("active_config_path", ""))) != CONFIG_PATH:
+        raise Refused("W&B active credential path drifted")
+    if credential_source.get("allow_transient_environment") is not False:
+        raise Refused("transient W&B environment credentials must remain disabled")
+    if credential_source.get("allow_history_session_cache_recovery") is not False:
+        raise Refused("historical W&B credential recovery must remain disabled")
+    return access
+
+
+def validate_values(api_key: str, entity: str) -> None:
+    if not api_key or any(char in api_key for char in "\r\n\x00"):
+        raise Refused("WANDB_API_KEY is empty or invalid")
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,127}", entity):
+        raise Refused("WANDB_ENTITY is empty or invalid")
+    if entity != EXPECTED_ENTITY:
+        raise Refused(
+            "WANDB_ENTITY must exactly match the explicit user value "
+            f"{EXPECTED_ENTITY}; viewer/default-team substitution is forbidden"
+        )
+
+
+def graphql(
+    api_key: str,
+    query: str,
+    variables: dict[str, Any],
+    timeout_seconds: int = 15,
+) -> dict[str, Any]:
+    authorization = base64.b64encode(f"api:{api_key}".encode("utf-8")).decode(
+        "ascii"
+    )
+    body = json.dumps(
+        {"query": query, "variables": variables},
+        ensure_ascii=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    request = urllib.request.Request(
+        GRAPHQL_URL,
+        data=body,
+        headers={
+            "Authorization": f"Basic {authorization}",
+            "Content-Type": "application/json",
+            "User-Agent": "pai-job-registry-wandb-setup-gate/1",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
+            status_code = int(getattr(response, "status", response.getcode()))
+            response_body = response.read(1024 * 1024 + 1)
+    except urllib.error.HTTPError as exc:
+        raise Refused(
+            f"W&B GraphQL HTTP request failed with status {exc.code}"
+        ) from exc
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        raise Refused("W&B GraphQL request failed") from exc
+    if status_code != 200:
+        raise Refused(f"W&B GraphQL returned HTTP status {status_code}")
+    if len(response_body) > 1024 * 1024:
+        raise Refused("W&B GraphQL response is unexpectedly large")
+    try:
+        payload = json.loads(response_body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise Refused("W&B GraphQL response is not valid JSON") from exc
+    if not isinstance(payload, dict):
+        raise Refused("W&B GraphQL response is not an object")
+    if payload.get("errors"):
+        raise Refused("W&B GraphQL returned one or more errors")
+    data = payload.get("data")
+    if not isinstance(data, dict):
+        raise Refused("W&B GraphQL response has no data object")
+    return data
+
+
+def verify_entity_access(api_key: str, entity: str) -> dict[str, Any]:
+    load_entity_policy()
+    validate_values(api_key, entity)
+    viewer_data = graphql(api_key, VIEWER_QUERY, {})
+    viewer = viewer_data.get("viewer")
+    if not isinstance(viewer, dict):
+        raise Refused("W&B viewer identity is missing")
+    viewer_id = str(viewer.get("id") or "")
+    viewer_username = str(viewer.get("username") or "")
+    if not viewer_id or not viewer_username:
+        raise Refused("W&B viewer id or username is missing")
+    if viewer_username in FORBIDDEN_VIEWERS:
+        raise Refused("W&B viewer identity is explicitly forbidden")
+
+    entity_data = graphql(
+        api_key,
+        ENTITY_MEMBER_QUERY,
+        {"entityName": entity, "viewerId": viewer_id},
+    )
+    entity_node = entity_data.get("entity")
+    if not isinstance(entity_node, dict):
+        raise Refused("the exact requested W&B entity does not exist or is inaccessible")
+    if entity_node.get("name") != entity:
+        raise Refused("W&B returned a different entity than the explicit user entity")
+    member = entity_node.get("member")
+    if not isinstance(member, dict):
+        raise Refused("W&B viewer is not a member of the exact requested entity")
+    if member.get("username") != viewer_username:
+        raise Refused("W&B entity membership does not match the authenticated viewer")
+    if member.get("pending") is not False:
+        raise Refused("W&B entity membership is pending or indeterminate")
+    role = str(member.get("role") or "").lower()
+    if role not in WRITABLE_ROLES:
+        raise Refused("W&B entity membership is not write-capable")
+    return {
+        "entity": entity,
+        "viewer_username": viewer_username,
+        "membership_role": role,
+        "pending": False,
+        "identity_inference_used": False,
+    }
+
+
+def require_private_directory(path: Path) -> None:
+    before = os.lstat(path)
+    if (
+        not stat.S_ISDIR(before.st_mode)
+        or stat.S_ISLNK(before.st_mode)
+        or before.st_uid != EXPECTED_UID
+        or before.st_gid != EXPECTED_GID
+        or stat.S_IMODE(before.st_mode) != 0o700
+    ):
+        raise Refused(
+            f"private directory must be {EXPECTED_UID}:{EXPECTED_GID} "
+            f"mode 0700: {path}"
+        )
+    descriptor = os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        opened = os.fstat(descriptor)
+        if opened.st_dev != before.st_dev or opened.st_ino != before.st_ino:
+            raise Refused(f"private directory changed while opening: {path}")
+    finally:
+        os.close(descriptor)
+
+
+def prepare_config_directory() -> None:
+    home = os.lstat(LEON_HOME)
+    if (
+        not stat.S_ISDIR(home.st_mode)
+        or stat.S_ISLNK(home.st_mode)
+        or home.st_uid != EXPECTED_UID
+        or home.st_gid != EXPECTED_GID
+    ):
+        raise Refused(
+            f"Leon home must be a real {EXPECTED_UID}:{EXPECTED_GID} directory: "
+            f"{LEON_HOME}"
+        )
+    try:
+        os.mkdir(CONFIG_DIR, 0o700)
+    except FileExistsError:
+        pass
+    require_private_directory(CONFIG_DIR)
+
+
+def validate_existing_target(replace: bool) -> None:
+    try:
+        before = os.lstat(CONFIG_PATH)
+    except FileNotFoundError:
+        return
+    if not replace:
+        raise Refused(f"W&B config already exists; rerun with --replace: {CONFIG_PATH}")
+    if (
+        not stat.S_ISREG(before.st_mode)
+        or stat.S_ISLNK(before.st_mode)
+        or before.st_uid != EXPECTED_UID
+        or before.st_gid != EXPECTED_GID
+        or stat.S_IMODE(before.st_mode) != 0o600
+    ):
+        raise Refused(
+            f"existing W&B config must be {EXPECTED_UID}:{EXPECTED_GID} "
+            f"mode 0600 regular file: {CONFIG_PATH}"
+        )
+
+
+def write_config(api_key: str, entity: str, replace: bool) -> dict[str, Any]:
+    validate_values(api_key, entity)
+    access = verify_entity_access(api_key, entity)
+    prepare_config_directory()
+    validate_existing_target(replace)
+    body = (
+        json.dumps(
+            {
+                "WANDB_API_KEY": api_key,
+                "WANDB_ENTITY": entity,
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        ).encode("utf-8")
+        + b"\n"
+    )
+    descriptor, temporary = tempfile.mkstemp(
+        prefix=".wandb.json.",
+        dir=str(CONFIG_DIR),
+    )
+    try:
+        os.fchmod(descriptor, 0o600)
+        with os.fdopen(descriptor, "wb") as handle:
+            descriptor = -1
+            handle.write(body)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, CONFIG_PATH)
+        temporary = ""
+        directory_fd = os.open(
+            CONFIG_DIR,
+            os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+        )
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+        if temporary and os.path.exists(temporary):
+            os.unlink(temporary)
+    return access
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--replace",
+        action="store_true",
+        help="replace an existing valid private W&B config",
+    )
+    return parser
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    if os.getuid() != EXPECTED_UID or os.getgid() != EXPECTED_GID:
+        raise Refused(
+            f"run as numeric Leon {EXPECTED_UID}:{EXPECTED_GID}, "
+            f"not {os.getuid()}:{os.getgid()}"
+        )
+    if not os.isatty(0):
+        raise Refused("run in an interactive terminal; piped secret input is forbidden")
+    api_key = getpass.getpass("WANDB_API_KEY (hidden): ")
+    entity = getpass.getpass("WANDB_ENTITY (hidden): ")
+    access = write_config(api_key, entity, replace=args.replace)
+    print(
+        f"W&B config saved: {CONFIG_PATH} "
+        f"owner={EXPECTED_UID}:{EXPECTED_GID} mode=0600 "
+        "keys=WANDB_API_KEY,WANDB_ENTITY "
+        f"entity={access['entity']} membership_role={access['membership_role']} "
+        "identity_inference_used=false"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except Refused as exc:
+        print(f"REFUSED: {exc}", file=os.sys.stderr)
+        raise SystemExit(2)

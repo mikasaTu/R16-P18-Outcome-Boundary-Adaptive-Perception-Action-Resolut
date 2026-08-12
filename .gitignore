@@ -16,3 +16,7 @@ logs/
 *.mp4
 libero.egg-info/
 .vscode/
+
+# Archive the raw W&B evidence, including nested directories named wandb/logs.
+!artifacts/formal-run/**/wandb-raw/
+!artifacts/formal-run/**/wandb-raw/**

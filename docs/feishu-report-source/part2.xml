@@ -1,0 +1,67 @@
+<h2>5. 冻结实现与可复现性</h2>
+<h3>5.1 BoundaryBC-S 基线</h3>
+<ul>
+  <li>输入：128×128 agent-view RGB 与 15 维 proprio。</li>
+  <li>视觉骨干：random-init ResNet18 layer3，输出 8×8、128 维 feature map，共 64 个 microtoken；基线固定均匀使用 16 个视觉 token，不含 adaptive selector。</li>
+  <li>策略：2-layer、4-head、hidden size 128；action dim 7，action horizon 8，execute horizon 4；LIBERO OSC_POSE 控制。</li>
+  <li>训练：AdamW，batch size 64，BF16，3000 steps，seed 16018/16019/16020；每 250 steps 验证并写完整可恢复 checkpoint，只保留最新 3 个完整 checkpoint。</li>
+  <li>完整 checkpoint 包含 model、optimizer、scheduler、RNG、batch generator 与 global step；partial checkpoint 被忽略。</li>
+</ul>
+
+<h3>5.2 Runtime 与来源锁定</h3>
+<ul>
+  <li>项目 source commit：20d65a9ab7ff42662496c093e14531904cf1fe31；tree：b87468210362a81a5d3754630f1ff804f79577e4。</li>
+  <li>LIBERO commit：2319dbd914673f6ef34a00584536212b10e10395。</li>
+  <li>配置 SHA256：d4344c056e1c7682cec9deabd0c82888bd6ec29d6d473b9a1870a262aeaa64bf。</li>
+  <li>资产：585 files，422,313,213 bytes，tree manifest SHA256 39b115a50b590dfa061d36439702eddf99c178a0fcfeab90c5c60afcc6c05a35。</li>
+  <li>正式环境：Python 3.11.11，PyTorch 2.5.1+cu124，torchvision 0.20.1+cu124，CUDA 12.4，cuDNN 90100，MuJoCo 3.6.0，robosuite 1.4.0，NumPy 1.26.4。</li>
+  <li>演示文件 SHA256：Push 36b4e1bced49d2f4ff6b2fce6b1596a63978e14199e2513cd0df71e127bf47a6；Bottle f9092aa70734fc4083e97fc58c3ba25f87c614d18326182ddc7a455f0ab4da2e；Bowl e69528b0cf10dfc59b20698e12ec2affc03f3887309034d3eb74cac3ec929406。</li>
+</ul>
+
+<h3>5.3 开发机 smoke 与状态恢复</h3>
+<ul>
+  <li>在开发机仅做 1×A800、batch 1 smoke；三个任务均完成 EGL-before-CUDA、policy step 与 forward/backward。</li>
+  <li>新鲜环境中的物理 state restore 与短时 replay 三任务误差为 0；GPU raster 对 Push/Bowl 完全一致，Bottle 最大 1 LSB、MAE 0.000061，低于预注册容差。</li>
+  <li>proprio 对齐最大误差不超过 0.001827。</li>
+  <li>smoke 明确记录 adaptive_components_implemented=false；未创建 PAI GPU probe。</li>
+</ul>
+
+<h3>5.4 PAI 执行合同</h3>
+<ul>
+  <li>正式 JobId：dlcnouq6igkhfyub；run-id：r16-p18-libero-stage1-bc-gate-20260812-003；终态 Succeeded；PAI duration 1580 秒（26 分 20 秒）。</li>
+  <li>资源：1 worker、2×NVIDIA A800、12 CPU、200 GiB memory、200 GiB shared memory；两条独立单卡模型队列，不使用 data parallel，单模型 batch 仍为 64。</li>
+  <li>AIMaster 关闭，PAI 自动容错关闭，maximum platform restarts=0；终态只观察到一个成功 PodUID。</li>
+  <li>五个新 CPFS 挂载、resource quota、UserCommand、secret 名称、W&amp;B 实体与 JobId 均由 controller exact readback 验证。</li>
+  <li>W&amp;B 写入门禁在 CreateJob 前验证 entity=chen_jian-cj-workspace、membership role=admin、identity inference=false。</li>
+</ul>
+
+<h2>6. Baseline Gate 结果</h2>
+<h3>6.1 Push：PASS</h3>
+<ul>
+  <li>seed 16018：48/50，96%。</li>
+  <li>seed 16019：25/50，50%。</li>
+  <li>seed 16020：47/50，94%。</li>
+  <li>聚合：120/150，80.0%；95% paired bootstrap CI：[52.0%, 98.0%]；要求：[40%, 90%]。</li>
+</ul>
+<p>该任务点估计合格，但 seed 方差极大，是后续新协议需要单独审计的稳定性风险。</p>
+
+<h3>6.2 Bottle：FAIL</h3>
+<ul>
+  <li>seed 16018：48/50，96%。</li>
+  <li>seed 16019：50/50，100%。</li>
+  <li>seed 16020：49/50，98%。</li>
+  <li>聚合：147/150，98.0%；95% paired bootstrap CI：[94.0%, 100.0%]；要求：[25%, 80%]。</li>
+</ul>
+<p>失败原因是任务过易，而不是基线失效。只有约 2 个百分点的失败余量，无法为联合 outcome-boundary adaptation 提供预注册要求的非平凡提升空间。</p>
+
+<h3>6.3 Bowl 负控：PASS</h3>
+<ul>
+  <li>seed 16018：47/50，94%。</li>
+  <li>seed 16019：40/50，80%。</li>
+  <li>seed 16020：46/50，92%。</li>
+  <li>聚合：133/150，88.7%；95% paired bootstrap CI：[78.0%, 97.3%]；要求：[80%, 100%]。</li>
+</ul>
+<p>按预注册规则，gate 依据聚合点估计，因此该任务 PASS；CI 下界低于 80% 作为不确定性信息保留，不进行事后改判。</p>
+
+<h3>6.4 独立复算</h3>
+<p>独立读取 9 个 JSONL，验证每个文件恰好包含 episode_id 0–49，无缺失和冲突重复。重新执行 10,000 次 paired seed/episode bootstrap 后，三组 CI 与正式 baseline_gate.json 完全一致。全任务合计 400/450，88.9%；该总数不是 gate 判据，仅作完整性摘要。</p>

@@ -1,0 +1,14 @@
+{
+  "action": "DeleteJob",
+  "api_path": "/api/v1/jobs/dlc1eloj62mdzw2y",
+  "api_version": "2020-12-03",
+  "expected_purpose": "formal-training",
+  "http_status": 200,
+  "received_at_utc": "2026-08-12T15:09:38Z",
+  "response": {
+    "JobId": "dlc1eloj62mdzw2y",
+    "RequestId": "019FF685-97CD-538E-8EE2-D9A869B37932"
+  },
+  "response_sha256": "7dcdaba01b9c0309b05a324b00c8b5c31db17ddb383e25463b3b926aa70cfc41",
+  "schema_version": 1
+}

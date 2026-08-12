@@ -1,0 +1,109 @@
+{
+  "checks": {
+    "aimaster_args": true,
+    "aimaster_enabled": true,
+    "data_sources": true,
+    "disable_ecs_stock_check": true,
+    "display_name": true,
+    "empty_driver": true,
+    "empty_network": true,
+    "job_max_running_time_minutes": true,
+    "job_reserved_minutes": true,
+    "job_reserved_policy": true,
+    "job_type": true,
+    "oversold_type": true,
+    "pod_env": true,
+    "priority": true,
+    "resource_id": true,
+    "single_worker_spec": true,
+    "tags": true,
+    "user_command": true,
+    "worker_count": true,
+    "worker_cpu": true,
+    "worker_gpu": true,
+    "worker_image": true,
+    "worker_memory": true,
+    "worker_shared_memory": true,
+    "workspace_id": true
+  },
+  "complete": true,
+  "observed": {
+    "data_sources": [
+      [
+        "d-36p023eg0f2vuqny8y",
+        "v1",
+        "/mnt/cpfs/zbl-cpfs-new/CKPT/leon",
+        ""
+      ],
+      [
+        "d-7fi8hehav247qi6x5o",
+        "v1",
+        "/mnt/cpfs/zbl-cpfs-new/Models",
+        ""
+      ],
+      [
+        "d-ejgj2ej7io1t2t32uc",
+        "v1",
+        "/mnt/cpfs/zbl-cpfs-new/dataset/leon",
+        ""
+      ],
+      [
+        "d-lg9t2b6xajpukeqqeb",
+        "v1",
+        "/mnt/cpfs/zbl-cpfs-new/SHARE/leon",
+        ""
+      ],
+      [
+        "d-mkixtohdn75dp8x9tb",
+        "v1",
+        "/mnt/cpfs/zbl-cpfs-new/USERS/leon",
+        ""
+      ]
+    ],
+    "display_name": "r16p18-lib-r16-p18-libero-stage1-bc-gate-20260812-003-n25d901c4",
+    "job_max_running_time_minutes": 0,
+    "pod_env": {
+      "WANDB_API_KEY": "<redacted>",
+      "WANDB_ENTITY": "<redacted>"
+    },
+    "priority": 9,
+    "resource_id": "quotakzri8a5wqcp",
+    "settings": {
+      "aimaster_args": null,
+      "aimaster_enabled": null,
+      "disable_ecs_stock_check": false,
+      "driver": "",
+      "job_reserved_minutes": null,
+      "job_reserved_policy": null,
+      "oversold_type": "ForbiddenQuotaOverSold",
+      "tags": {
+        "contract_source_job_id": "dlcfp1szuc2cgqfp",
+        "dataset": "libero-goal-three-task-50-demo-pilot",
+        "experiment_role": "stage1-necessary-condition-baseline-gate",
+        "hardware": "2xa800-dedicated",
+        "managed_by": "pai-job-registry",
+        "model": "boundarybc-s-resnet18-h8-e4-three-seeds",
+        "nonce": "25d901c48ff3056238c762be85cbfcf6",
+        "purpose": "formal-training",
+        "resource_pool": "exp-efficiency",
+        "run_id": "r16-p18-libero-stage1-bc-gate-20260812-003",
+        "task": "r16p18-libero-stage1-boundarybc-baseline-20260812"
+      }
+    },
+    "user_command_sha256": "14a6149e8c1cf4156f7adacbe9fc4192724278a5dea44c49fac03b7b54309e98",
+    "worker_spec": {
+      "EcsSpec": "",
+      "Image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+      "PodCount": 1,
+      "ResourceConfig": {
+        "CPU": "12",
+        "GPU": "2",
+        "GPUType": "",
+        "Memory": "200Gi",
+        "SharedMemory": "200Gi"
+      },
+      "Type": "Worker"
+    },
+    "workspace_id": "179169"
+  }
+}
