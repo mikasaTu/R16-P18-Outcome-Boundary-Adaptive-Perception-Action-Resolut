@@ -1,0 +1,7 @@
+{
+  "name": "ResNet18_Weights.IMAGENET1K_V1",
+  "source_url": "https://download.pytorch.org/models/resnet18-f37072fd.pth",
+  "cache_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/cache/r16-p18-maniskill-act-boundary-screen-v1/torch/hub/checkpoints/resnet18-f37072fd.pth",
+  "bytes": 46830571,
+  "sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+}

@@ -1,0 +1,52 @@
+{
+  "count": 2,
+  "output": {
+    "episodes": 2,
+    "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PickCube-v1/smoke/trajectory.h5",
+    "h5_sha256": "c2d3cff7645e50b2cc59f411cdd04b1462ffea839c5f89b27fb5681489b77686",
+    "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PickCube-v1/smoke/trajectory.json",
+    "json_sha256": "79b29e424da5127c069cc0833b4055d17dc0fe9be2dee6270b410f201baaa638"
+  },
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "scope": "integration_smoke_only",
+  "selected": [
+    {
+      "control_mode": "pd_joint_pos",
+      "elapsed_steps": 85,
+      "episode_seed": 689,
+      "initial_state_sha256": "bc151dc4ac2bf716850c9156eee2f5024cb1291a5db68ea9083006a336377b88",
+      "reset_kwargs": {
+        "options": {},
+        "seed": 689
+      },
+      "selection_key": "0007203a659233bab4375e4694924ee2d2345ea7e5b8be6497eeda2838316640",
+      "selection_rank": 0,
+      "source_episode_id": 688,
+      "source_success": true,
+      "source_trajectory_sha256": "87ffb9a2b3809357f652f5e81c974242ffcf39a3a0730dfa08424ac8ef5110a9",
+      "split": "smoke",
+      "split_index": 0,
+      "task_id": "PickCube-v1"
+    },
+    {
+      "control_mode": "pd_joint_pos",
+      "elapsed_steps": 76,
+      "episode_seed": 282,
+      "initial_state_sha256": "4aaf5760f2457d9d1c41f893e8c36ebe1527cb4af73cc3a7e7ea2b2f5c20ad83",
+      "reset_kwargs": {
+        "options": {},
+        "seed": 282
+      },
+      "selection_key": "00379685c8a0f27609458b70d7dba75c34fdd0f4ed58f446d9147c4c7f245c5b",
+      "selection_rank": 1,
+      "source_episode_id": 281,
+      "source_success": true,
+      "source_trajectory_sha256": "20ebb4e4acb2cbebd338dd325cd38fe67aa1d238d64cf14394fc70b1fcddddeb",
+      "split": "smoke",
+      "split_index": 1,
+      "task_id": "PickCube-v1"
+    }
+  ],
+  "source_h5": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/official_demos/PickCube-v1/motionplanning/trajectory.h5",
+  "task_id": "PickCube-v1"
+}

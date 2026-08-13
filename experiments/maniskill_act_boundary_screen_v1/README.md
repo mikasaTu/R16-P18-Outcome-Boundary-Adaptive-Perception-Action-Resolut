@@ -22,3 +22,9 @@ replayed RGB trajectories, checkpoints, and simulator state banks live under
 the pinned CPFS paths recorded in `environment_lock.json`; Git contains their
 manifests, SHA256 digests, summaries, and the code needed to reproduce them.
 
+Implemented protocol components currently include deterministic 300-trajectory
+selection and integrity verification, official trajectory-to-RGB replay,
+official ACT architecture/data imports with split-aware validation-only
+checkpoint selection, complete-state checkpoint/resume, fixed-seed closed-loop
+evaluation with contact accounting, and a two-GPU PAI matrix launcher. The
+oracle state-bank and boundary atlases remain gated on the ACT baseline result.
