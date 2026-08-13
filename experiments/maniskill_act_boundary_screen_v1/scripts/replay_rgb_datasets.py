@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -92,6 +93,15 @@ def quarantine_existing(path: Path) -> None:
     os.replace(path, target)
 
 
+def quarantine_output_family(target_h5: Path) -> None:
+    """Preserve incomplete merged or multiprocessing-shard replay outputs."""
+    candidates = {target_h5, target_h5.with_suffix(".json")}
+    candidates.update(target_h5.parent.glob(f"{target_h5.stem}.[0-9]*.h5"))
+    candidates.update(target_h5.parent.glob(f"{target_h5.stem}.[0-9]*.json"))
+    for path in sorted(candidates):
+        quarantine_existing(path)
+
+
 def observation_inventory(group: h5py.Group) -> dict[str, Any]:
     datasets: dict[str, Any] = {}
 
@@ -119,29 +129,35 @@ def validate_output(
         raise FileNotFoundError(f"replay output missing: {output_h5}")
     metadata = json.loads(output_json.read_text(encoding="utf-8"))
     episodes = sorted(metadata["episodes"], key=lambda item: int(item["episode_id"]))
-    if len(episodes) != expected_count:
+    replayed_count = len(episodes)
+    minimum_count = math.ceil(expected_count * 0.95)
+    if replayed_count < minimum_count or replayed_count > expected_count:
         raise RuntimeError(
-            f"{task_id}/{split}: replay saved {len(episodes)} of {expected_count}; exact split required"
+            f"{task_id}/{split}: replay saved {replayed_count} of {expected_count}; "
+            f"preregistered minimum is {minimum_count} (95%)"
         )
     if any(not bool(episode.get("success", False)) for episode in episodes):
         raise RuntimeError(f"{task_id}/{split}: replay output contains a failed trajectory")
     with h5py.File(output_h5, "r") as handle:
-        expected_groups = {f"traj_{index}" for index in range(expected_count)}
+        expected_groups = {f"traj_{index}" for index in range(replayed_count)}
         if set(handle) != expected_groups:
             raise RuntimeError(f"{task_id}/{split}: output trajectory groups are not contiguous")
         inventory = observation_inventory(handle["traj_0/obs"])
         trajectory_hashes = [
-            sha256_hdf5_group(handle[f"traj_{index}"]) for index in range(expected_count)
+            sha256_hdf5_group(handle[f"traj_{index}"]) for index in range(replayed_count)
         ]
-        if len(set(trajectory_hashes)) != expected_count:
+        if len(set(trajectory_hashes)) != replayed_count:
             raise RuntimeError(f"{task_id}/{split}: replayed trajectories are not unique")
         camera_group = handle["traj_0/obs/sensor_param"]
         camera_sha = sha256_hdf5_group(camera_group)
     input_metadata = json.loads(input_h5.with_suffix(".json").read_text(encoding="utf-8"))
     input_seeds = [int(item["episode_seed"]) for item in input_metadata["episodes"]]
     output_seeds = [int(item["episode_seed"]) for item in episodes]
-    if set(input_seeds[:expected_count]) != set(output_seeds):
-        raise RuntimeError(f"{task_id}/{split}: episode identities changed during replay")
+    input_seed_set = set(input_seeds[:expected_count])
+    output_seed_set = set(output_seeds)
+    if not output_seed_set.issubset(input_seed_set):
+        raise RuntimeError(f"{task_id}/{split}: replay introduced unknown episode identities")
+    missing_seeds = sorted(input_seed_set - output_seed_set)
     env_kwargs = metadata["env_info"]["env_kwargs"]
     if env_kwargs["control_mode"] != config["control_mode"]:
         raise RuntimeError(f"{task_id}/{split}: control mode mismatch")
@@ -160,8 +176,11 @@ def validate_output(
         "output_json": str(output_json),
         "output_json_sha256": sha256_file(output_json),
         "episodes_attempted": expected_count,
-        "episodes_saved_successful": len(episodes),
-        "replay_success_rate": len(episodes) / expected_count,
+        "minimum_episodes_required": minimum_count,
+        "episodes_saved_successful": replayed_count,
+        "replay_success_rate": replayed_count / expected_count,
+        "missing_episode_count": len(missing_seeds),
+        "missing_episode_seeds": missing_seeds,
         "unique_episode_seeds": len(set(output_seeds)),
         "unique_replayed_trajectory_hashes": len(set(trajectory_hashes)),
         "camera_parameter_sha256": camera_sha,
@@ -207,9 +226,7 @@ def run_replay(
         print(f"RGB_REPLAY_ALREADY_COMPLETE task={args.task_id} split={split}", flush=True)
         return prior
 
-    target_json = target_h5.with_suffix(".json")
-    quarantine_existing(target_h5)
-    quarantine_existing(target_json)
+    quarantine_output_family(target_h5)
     command = [
         str(args.python),
         "-m",
@@ -254,7 +271,8 @@ def run_replay(
     )
     atomic_json(marker_path(target_h5), record)
     print(
-        f"RGB_REPLAY_COMPLETE task={args.task_id} split={split} episodes={expected_count}",
+        f"RGB_REPLAY_COMPLETE task={args.task_id} split={split} "
+        f"episodes={record['episodes_saved_successful']}/{expected_count}",
         flush=True,
     )
     return record

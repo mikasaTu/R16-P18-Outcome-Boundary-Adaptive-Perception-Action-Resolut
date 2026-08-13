@@ -35,3 +35,9 @@ missing or mismatched library instead of downloading simulator code at run
 time. The launcher also enters the pinned project checkout before starting
 official replay so CPU multiprocessing workers never inherit `/root` as their
 working directory.
+
+RGB replay follows the frozen data gate exactly: at least 95% of each locked
+split must replay successfully. Every saved episode must still be successful,
+seed-identifiable, unique, and an exact subset of the selected raw split;
+missing episode seeds are reported explicitly. Incomplete multiprocessing
+shards are quarantined before a retry and are never counted as demonstrations.
