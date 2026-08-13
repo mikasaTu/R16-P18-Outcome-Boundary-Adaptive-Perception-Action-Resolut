@@ -24,6 +24,9 @@ EXPECTED_PER_STATE_ACCOUNTING = {
     "simulator_restores": 93,
     "simulator_steps": 372,
 }
+ORACLE_CONTRACT = (
+    SCRIPT_DIR.parent / "action_atlas" / "oracle_implementation_contract.json"
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -51,7 +54,9 @@ def paired_state_ci(values: np.ndarray) -> list[float]:
     ]
 
 
-def load_state_rows(summary: Mapping[str, Any]) -> list[dict[str, Any]]:
+def load_state_rows(
+    summary: Mapping[str, Any], source_bindings: Mapping[str, Any]
+) -> list[dict[str, Any]]:
     rows = []
     for item in summary["surface_files"]:
         path = Path(item["path"])
@@ -62,6 +67,12 @@ def load_state_rows(summary: Mapping[str, Any]) -> list[dict[str, Any]]:
         row = json.loads(path.read_text(encoding="utf-8"))
         if row.get("status") != "ORACLE_STATE_COMPLETE":
             raise RuntimeError(f"incomplete oracle state: {path}")
+        if row.get("source_bindings") != source_bindings:
+            raise RuntimeError(f"oracle state source binding mismatch: {path}")
+        if row.get("implementation_contract_sha256") != sha256_file(
+            ORACLE_CONTRACT
+        ):
+            raise RuntimeError(f"oracle state implementation binding mismatch: {path}")
         rows.append(row)
     rows.sort(key=lambda row: row["bank_id"])
     if len(rows) != EXPECTED_STATES:
@@ -84,6 +95,38 @@ def summarize_task(oracle_root: Path, task_id: str) -> dict[str, Any]:
             or int(summary.get("states", -1)) != EXPECTED_STATES
         ):
             raise RuntimeError(f"invalid oracle summary: {path}")
+        state_manifest_path = Path(summary["state_bank_manifest"])
+        state_manifest = json.loads(
+            state_manifest_path.read_text(encoding="utf-8")
+        )
+        state_h5 = Path(state_manifest["state_bank_h5"])
+        train_h5 = Path(summary["train_h5"])
+        checkpoint = Path(summary["source_bindings"]["selected_checkpoint_path"])
+        expected_bindings = {
+            "oracle_evaluator_sha256": sha256_file(
+                SCRIPT_DIR / "evaluate_oracle_atlas.py"
+            ),
+            "state_bank_manifest_sha256": sha256_file(state_manifest_path),
+            "state_bank_h5_sha256": sha256_file(state_h5),
+            "train_h5_sha256": sha256_file(train_h5),
+            "selected_checkpoint_step": int(summary["selected_checkpoint_step"]),
+            "selected_checkpoint_sha256": sha256_file(checkpoint),
+            "selected_checkpoint_path": str(checkpoint),
+        }
+        if (
+            summary.get("source_bindings") != expected_bindings
+            or summary.get("state_bank_manifest_sha256")
+            != expected_bindings["state_bank_manifest_sha256"]
+            or state_manifest.get("state_bank_h5_sha256")
+            != expected_bindings["state_bank_h5_sha256"]
+            or summary.get("train_h5_sha256")
+            != expected_bindings["train_h5_sha256"]
+            or summary.get("selected_checkpoint_sha256")
+            != expected_bindings["selected_checkpoint_sha256"]
+            or summary.get("implementation_contract_sha256")
+            != sha256_file(ORACLE_CONTRACT)
+        ):
+            raise RuntimeError(f"oracle source binding mismatch: {path}")
         for key, per_state in EXPECTED_PER_STATE_ACCOUNTING.items():
             observed = int(summary["accounting"][key])
             expected = EXPECTED_STATES * per_state
@@ -92,8 +135,11 @@ def summarize_task(oracle_root: Path, task_id: str) -> dict[str, Any]:
                     f"oracle accounting mismatch {task_id}/{model_seed}/{key}: "
                     f"{observed} != {expected}"
                 )
-        rows = load_state_rows(summary)
+        rows = load_state_rows(summary, expected_bindings)
         order = [row["bank_id"] for row in rows]
+        manifest_order = sorted(row["bank_id"] for row in state_manifest["states"])
+        if order != manifest_order:
+            raise RuntimeError(f"oracle/state-bank identities differ: {task_id}")
         if bank_order is None:
             bank_order = order
         elif order != bank_order:

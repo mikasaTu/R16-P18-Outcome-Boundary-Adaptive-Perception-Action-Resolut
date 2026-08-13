@@ -136,12 +136,15 @@ def state_file_valid(
     model_seed: int,
     bank_id: str,
     source_bindings: Mapping[str, Any],
+    expected_sha256: str | None = None,
 ) -> bool:
     if not path.is_file():
         return False
     try:
         row = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
+        return False
+    if expected_sha256 is not None and sha256_file(path) != expected_sha256:
         return False
     return bool(
         row.get("protocol_id") == PROTOCOL_ID
@@ -435,12 +438,28 @@ def main() -> None:
         args.task_id, args.model_seed, args.run_dir, env_policy, device
     )
     source_bindings = {
+        "oracle_evaluator_sha256": sha256_file(Path(__file__).resolve()),
         "state_bank_manifest_sha256": sha256_file(args.state_bank_manifest),
         "state_bank_h5_sha256": state_manifest["state_bank_h5_sha256"],
         "train_h5_sha256": sha256_file(args.train_h5),
         "selected_checkpoint_step": int(selection["selected"]["step"]),
         "selected_checkpoint_sha256": sha256_file(checkpoint_path),
+        "selected_checkpoint_path": str(checkpoint_path),
     }
+    prior_surface_hashes: dict[str, str] = {}
+    prior_summary_path = args.output_dir / "summary.json"
+    if prior_summary_path.is_file():
+        try:
+            prior_summary = json.loads(
+                prior_summary_path.read_text(encoding="utf-8")
+            )
+            if prior_summary.get("source_bindings") == source_bindings:
+                prior_surface_hashes = {
+                    str(item["bank_id"]): str(item["sha256"])
+                    for item in prior_summary.get("surface_files", [])
+                }
+        except (KeyError, OSError, TypeError, ValueError):
+            prior_surface_hashes = {}
     started = time.time()
     try:
         with h5py.File(state_h5_path, "r") as state_source:
@@ -456,6 +475,7 @@ def main() -> None:
                     args.model_seed,
                     bank_id,
                     source_bindings,
+                    prior_surface_hashes.get(bank_id),
                 ):
                     print(
                         f"ORACLE_RESUME task={args.task_id} seed={args.model_seed} "
@@ -531,6 +551,7 @@ def main() -> None:
         "training_action_chunks": int(len(training_chunks)),
         "selected_checkpoint_step": int(selection["selected"]["step"]),
         "selected_checkpoint_sha256": sha256_file(checkpoint_path),
+        "source_bindings": source_bindings,
         "surface_files": index_rows,
         "metrics": {
             "action_boundary_density": float(np.mean(action_density)),

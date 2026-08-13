@@ -46,6 +46,7 @@ TOLERANCES = {
     "object_rotation_rad": 1e-3,
     "normalized_progress": 1e-4,
 }
+PHASE_CONTRACT = SCRIPT_DIR.parent / "state_bank" / "phase_contract.json"
 
 
 def parse_args() -> argparse.Namespace:
@@ -335,6 +336,11 @@ def main() -> None:
                         "stable_states_required": STATES_PER_PHASE,
                         "source_test_h5": str(args.test_h5),
                         "source_test_h5_sha256": sha256_file(args.test_h5),
+                        "source_test_json_sha256": sha256_file(
+                            args.test_h5.with_suffix(".json")
+                        ),
+                        "builder_sha256": sha256_file(Path(__file__).resolve()),
+                        "phase_contract_sha256": sha256_file(PHASE_CONTRACT),
                         "candidate_predicates_or_tolerances_changed": False,
                         "accepted_before_failure": [
                             {
@@ -388,6 +394,8 @@ def main() -> None:
             "source_test_h5": str(args.test_h5),
             "source_test_h5_sha256": sha256_file(args.test_h5),
             "source_test_json_sha256": sha256_file(args.test_h5.with_suffix(".json")),
+            "builder_sha256": sha256_file(Path(__file__).resolve()),
+            "phase_contract_sha256": sha256_file(PHASE_CONTRACT),
             "state_bank_h5": str(h5_path),
             "state_bank_h5_sha256": sha256_file(h5_path),
             "state_count": len(public_rows),

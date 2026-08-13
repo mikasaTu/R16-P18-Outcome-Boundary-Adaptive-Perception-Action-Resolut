@@ -14,10 +14,14 @@ from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
-from protocol_common import MODEL_SEEDS, PROTOCOL_ID, write_json  # noqa: E402
+from protocol_common import MODEL_SEEDS, PROTOCOL_ID, sha256_file, write_json  # noqa: E402
 
 
 NEGATIVE_CONTROL = "PushCube-v1"
+PHASE_CONTRACT = SCRIPT_DIR.parent / "state_bank" / "phase_contract.json"
+ORACLE_CONTRACT = (
+    SCRIPT_DIR.parent / "action_atlas" / "oracle_implementation_contract.json"
+)
 
 
 @dataclass(frozen=True)
@@ -48,34 +52,121 @@ def selected_h5(root: Path, task_id: str, split: str) -> Path:
     return values[0]
 
 
-def state_bank_terminal(path: Path, task_id: str) -> bool:
+def state_bank_terminal(path: Path, task_id: str, test_h5: Path) -> bool:
     if not path.is_file():
         return False
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return False
-    return bool(
+    if not bool(
         value.get("protocol_id") == PROTOCOL_ID
         and value.get("task_id") == task_id
         and value.get("status") in {"STATE_BANK_COMPLETE", "STATE_BANK_GATE_FAIL"}
-    )
+    ):
+        return False
+    try:
+        common_valid = bool(
+            value.get("source_test_h5") == str(test_h5)
+            and value.get("source_test_h5_sha256") == sha256_file(test_h5)
+            and value.get("source_test_json_sha256")
+            == sha256_file(test_h5.with_suffix(".json"))
+            and value.get("builder_sha256")
+            == sha256_file(SCRIPT_DIR / "build_state_bank.py")
+            and value.get("phase_contract_sha256") == sha256_file(PHASE_CONTRACT)
+        )
+        if not common_valid:
+            return False
+        if value["status"] == "STATE_BANK_GATE_FAIL":
+            return True
+        state_h5 = Path(value["state_bank_h5"])
+        return bool(
+            state_h5.is_file()
+            and value.get("state_bank_h5_sha256") == sha256_file(state_h5)
+            and int(value.get("state_count", -1)) == 64
+            and value.get("phase_counts")
+            == {
+                "free_space": 16,
+                "pre_contact_or_pre_grasp": 16,
+                "contact_insertion_or_placement": 16,
+                "near_completion": 16,
+            }
+            and int(value.get("restoration_repeats", -1)) == 3
+            and int(value.get("rollout_steps", -1)) == 4
+        )
+    except (KeyError, OSError, TypeError, ValueError):
+        return False
 
 
-def oracle_complete(path: Path, task_id: str, model_seed: int) -> bool:
+def oracle_complete(
+    path: Path,
+    task_id: str,
+    model_seed: int,
+    state_manifest_path: Path,
+    train_h5: Path,
+    run_dir: Path,
+) -> bool:
     if not path.is_file():
         return False
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return False
-    return bool(
+    if not bool(
         value.get("protocol_id") == PROTOCOL_ID
         and value.get("status") == "ORACLE_ATLAS_COMPLETE"
         and value.get("task_id") == task_id
         and int(value.get("model_seed", -1)) == model_seed
         and int(value.get("states", -1)) == 64
-    )
+    ):
+        return False
+    try:
+        state_manifest = json.loads(
+            state_manifest_path.read_text(encoding="utf-8")
+        )
+        state_h5 = Path(state_manifest["state_bank_h5"])
+        selection_path = run_dir / "checkpoint_selection.json"
+        selection = json.loads(selection_path.read_text(encoding="utf-8"))
+        checkpoint = Path(selection["selected"]["path"]) / "checkpoint.pt"
+        expected_bindings = {
+            "oracle_evaluator_sha256": sha256_file(
+                SCRIPT_DIR / "evaluate_oracle_atlas.py"
+            ),
+            "state_bank_manifest_sha256": sha256_file(state_manifest_path),
+            "state_bank_h5_sha256": state_manifest["state_bank_h5_sha256"],
+            "train_h5_sha256": sha256_file(train_h5),
+            "selected_checkpoint_step": int(selection["selected"]["step"]),
+            "selected_checkpoint_sha256": sha256_file(checkpoint),
+            "selected_checkpoint_path": str(checkpoint),
+        }
+        surface_files = value.get("surface_files", [])
+        surfaces_valid = bool(
+            len(surface_files) == 64
+            and all(
+                Path(item["path"]).is_file()
+                and sha256_file(Path(item["path"])) == item["sha256"]
+                and Path(item["path"]).stat().st_size == int(item["bytes"])
+                for item in surface_files
+            )
+        )
+        return bool(
+            selection.get("test_metrics_used") is False
+            and state_h5.is_file()
+            and sha256_file(state_h5) == state_manifest["state_bank_h5_sha256"]
+            and selection["selected"].get("checkpoint_sha256")
+            == expected_bindings["selected_checkpoint_sha256"]
+            and value.get("source_bindings") == expected_bindings
+            and value.get("state_bank_manifest_sha256")
+            == expected_bindings["state_bank_manifest_sha256"]
+            and value.get("train_h5_sha256") == expected_bindings["train_h5_sha256"]
+            and value.get("selected_checkpoint_sha256")
+            == expected_bindings["selected_checkpoint_sha256"]
+            and value.get("implementation_contract_sha256")
+            == sha256_file(ORACLE_CONTRACT)
+            and surfaces_valid
+        )
+    except (KeyError, OSError, TypeError, ValueError):
+        return False
 
 
 def execute(jobs: list[Job], args: argparse.Namespace, phase: str) -> list[dict[str, Any]]:
@@ -184,7 +275,10 @@ def state_bank_jobs(
     jobs = []
     for task_id in active_tasks:
         output_dir = args.state_bank_root / task_id
-        if state_bank_terminal(output_dir / "state_bank_manifest.json", task_id):
+        test_h5 = selected_h5(args.selected_raw_root, task_id, "test")
+        if state_bank_terminal(
+            output_dir / "state_bank_manifest.json", task_id, test_h5
+        ):
             continue
         jobs.append(
             Job(
@@ -195,7 +289,7 @@ def state_bank_jobs(
                     "--task-id",
                     task_id,
                     "--test-h5",
-                    str(selected_h5(args.selected_raw_root, task_id, "test")),
+                    str(test_h5),
                     "--output-dir",
                     str(output_dir),
                     "--device",
@@ -210,9 +304,18 @@ def oracle_jobs(args: argparse.Namespace, active_tasks: list[str]) -> list[Job]:
     jobs = []
     for task_id in active_tasks:
         state_manifest = args.state_bank_root / task_id / "state_bank_manifest.json"
+        train_h5 = selected_h5(args.selected_raw_root, task_id, "train")
         for model_seed in MODEL_SEEDS:
+            run_dir = args.checkpoint_root / task_id / f"seed_{model_seed}"
             output_dir = args.oracle_root / task_id / f"seed_{model_seed}"
-            if oracle_complete(output_dir / "summary.json", task_id, model_seed):
+            if oracle_complete(
+                output_dir / "summary.json",
+                task_id,
+                model_seed,
+                state_manifest,
+                train_h5,
+                run_dir,
+            ):
                 continue
             jobs.append(
                 Job(
@@ -225,9 +328,9 @@ def oracle_jobs(args: argparse.Namespace, active_tasks: list[str]) -> list[Job]:
                         "--model-seed",
                         str(model_seed),
                         "--run-dir",
-                        str(args.checkpoint_root / task_id / f"seed_{model_seed}"),
+                        str(run_dir),
                         "--train-h5",
-                        str(selected_h5(args.selected_raw_root, task_id, "train")),
+                        str(train_h5),
                         "--state-bank-manifest",
                         str(state_manifest),
                         "--output-dir",
