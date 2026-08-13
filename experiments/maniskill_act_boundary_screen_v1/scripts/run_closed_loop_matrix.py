@@ -14,7 +14,13 @@ from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
-from protocol_common import FORMAL_TASKS, MODEL_SEEDS, PROTOCOL_ID, write_json  # noqa: E402
+from protocol_common import (  # noqa: E402
+    FORMAL_TASKS,
+    MODEL_SEEDS,
+    PROTOCOL_ID,
+    sha256_file,
+    write_json,
+)
 
 
 @dataclass(frozen=True)
@@ -35,18 +41,61 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def valid_completion(path: Path, task_id: str, model_seed: int) -> bool:
-    if not path.is_file():
+def valid_completion(
+    output_dir: Path,
+    run_dir: Path,
+    seed_manifest: Path,
+    task_id: str,
+    model_seed: int,
+) -> bool:
+    summary_path = output_dir / "summary.json"
+    episodes_path = output_dir / "episodes.jsonl"
+    selection_path = run_dir / "checkpoint_selection.json"
+    if not summary_path.is_file() or not episodes_path.is_file():
         return False
-    value = json.loads(path.read_text(encoding="utf-8"))
-    return bool(
-        value.get("status") == "EVALUATION_COMPLETE"
-        and value.get("protocol_id") == PROTOCOL_ID
-        and value.get("task_id") == task_id
-        and int(value.get("model_seed", -1)) == model_seed
-        and int(value.get("episodes", -1)) == 100
-        and value.get("test_metrics_used_for_selection") is False
-    )
+    try:
+        value = json.loads(summary_path.read_text(encoding="utf-8"))
+        selection = json.loads(selection_path.read_text(encoding="utf-8"))
+        seed_bank = json.loads(seed_manifest.read_text(encoding="utf-8"))[
+            "formal_tasks"
+        ][task_id]["closed_loop_test_seeds"]
+        rows = [
+            json.loads(line)
+            for line in episodes_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        selected = selection["selected"]
+        checkpoint_path = Path(selected["path"]) / "checkpoint.pt"
+        expected_bindings = {
+            "evaluator_sha256": sha256_file(
+                SCRIPT_DIR / "evaluate_official_act_protocol.py"
+            ),
+            "seed_manifest_sha256": sha256_file(seed_manifest),
+            "checkpoint_selection_sha256": sha256_file(selection_path),
+            "selected_checkpoint_step": int(selected["step"]),
+            "selected_checkpoint_sha256": selected["checkpoint_sha256"],
+        }
+        row_seeds = [int(row["episode_seed"]) for row in rows]
+        return bool(
+            value.get("status") == "EVALUATION_COMPLETE"
+            and value.get("protocol_id") == PROTOCOL_ID
+            and value.get("task_id") == task_id
+            and int(value.get("model_seed", -1)) == model_seed
+            and int(value.get("episodes", -1)) == 100
+            and value.get("test_metrics_used_for_selection") is False
+            and selection.get("test_metrics_used") is False
+            and value.get("selected_checkpoint") == selected
+            and value.get("source_bindings") == expected_bindings
+            and value.get("episodes_jsonl_sha256") == sha256_file(episodes_path)
+            and checkpoint_path.is_file()
+            and sha256_file(checkpoint_path) == selected["checkpoint_sha256"]
+            and len(rows) == 100
+            and row_seeds == [int(seed) for seed in seed_bank]
+            and len(set(row_seeds)) == 100
+            and all(int(row["model_seed"]) == model_seed for row in rows)
+        )
+    except (KeyError, OSError, TypeError, ValueError):
+        return False
 
 
 def jobs(args: argparse.Namespace) -> list[Job]:
@@ -55,7 +104,13 @@ def jobs(args: argparse.Namespace) -> list[Job]:
         for model_seed in MODEL_SEEDS:
             run_dir = args.checkpoint_root / task_id / f"seed_{model_seed}"
             output_dir = args.evaluation_root / task_id / f"seed_{model_seed}"
-            if valid_completion(output_dir / "summary.json", task_id, model_seed):
+            if valid_completion(
+                output_dir,
+                run_dir,
+                args.seed_manifest,
+                task_id,
+                model_seed,
+            ):
                 continue
             result.append(
                 Job(
@@ -173,6 +228,8 @@ def main() -> None:
             str(SCRIPT_DIR / "summarize_baseline.py"),
             "--evaluation-root",
             str(args.evaluation_root),
+            "--seed-manifest",
+            str(args.seed_manifest),
             "--output",
             str(baseline_output),
         ],

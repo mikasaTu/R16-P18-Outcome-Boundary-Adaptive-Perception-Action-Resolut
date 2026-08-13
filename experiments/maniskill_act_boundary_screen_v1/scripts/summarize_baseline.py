@@ -16,6 +16,7 @@ from protocol_common import (  # noqa: E402
     FORMAL_TASKS,
     MODEL_SEEDS,
     PROTOCOL_ID,
+    sha256_file,
     write_json,
 )
 
@@ -29,6 +30,7 @@ BOOTSTRAP_SEED = 16018
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--evaluation-root", type=Path, required=True)
+    parser.add_argument("--seed-manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     return parser.parse_args()
 
@@ -63,7 +65,12 @@ def paired_episode_bootstrap(success: np.ndarray) -> list[float]:
     ]
 
 
-def summarize_task(evaluation_root: Path, task_id: str) -> dict[str, Any]:
+def summarize_task(
+    evaluation_root: Path,
+    task_id: str,
+    expected_episode_seeds: list[int],
+    seed_manifest_sha256: str,
+) -> dict[str, Any]:
     seed_rows: list[list[dict[str, Any]]] = []
     seed_summaries: list[dict[str, Any]] = []
     fixed_seed_order: list[int] | None = None
@@ -79,10 +86,19 @@ def summarize_task(evaluation_root: Path, task_id: str) -> dict[str, Any]:
             or int(summary.get("model_seed", -1)) != model_seed
             or int(summary.get("episodes", -1)) != 100
             or summary.get("test_metrics_used_for_selection") is not False
+            or summary.get("fixed_test_seed_manifest_sha256")
+            != seed_manifest_sha256
+            or summary.get("source_bindings", {}).get("seed_manifest_sha256")
+            != seed_manifest_sha256
+            or summary.get("episodes_jsonl_sha256") != sha256_file(episodes_path)
         ):
             raise RuntimeError(f"invalid evaluation summary: {summary_path}")
         rows = sorted(load_episodes(episodes_path), key=lambda row: row["episode_seed"])
         seed_order = [int(row["episode_seed"]) for row in rows]
+        if seed_order != sorted(int(seed) for seed in expected_episode_seeds):
+            raise RuntimeError(
+                f"closed-loop identities differ from frozen seed bank: {task_id}"
+            )
         if fixed_seed_order is None:
             fixed_seed_order = seed_order
         elif seed_order != fixed_seed_order:
@@ -144,7 +160,24 @@ def summarize_task(evaluation_root: Path, task_id: str) -> dict[str, Any]:
 
 def main() -> None:
     args = parse_args()
-    tasks = {task_id: summarize_task(args.evaluation_root, task_id) for task_id in FORMAL_TASKS}
+    seed_manifest = json.loads(args.seed_manifest.read_text(encoding="utf-8"))
+    if seed_manifest.get("protocol_id") != PROTOCOL_ID:
+        raise RuntimeError("fixed seed manifest protocol mismatch")
+    seed_manifest_sha256 = sha256_file(args.seed_manifest)
+    tasks = {
+        task_id: summarize_task(
+            args.evaluation_root,
+            task_id,
+            [
+                int(seed)
+                for seed in seed_manifest["formal_tasks"][task_id][
+                    "closed_loop_test_seeds"
+                ]
+            ],
+            seed_manifest_sha256,
+        )
+        for task_id in FORMAL_TASKS
+    }
     positive_pass = {}
     for task_id in POSITIVE_TASKS:
         value = tasks[task_id]

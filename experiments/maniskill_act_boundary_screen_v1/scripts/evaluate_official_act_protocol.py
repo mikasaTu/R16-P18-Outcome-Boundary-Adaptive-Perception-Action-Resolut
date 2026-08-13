@@ -358,6 +358,18 @@ def main() -> None:
         "test_metrics_used_for_selection": False,
         "fixed_test_seed_manifest": str(args.seed_manifest),
         "fixed_test_seed_manifest_sha256": sha256_file(args.seed_manifest),
+        "episodes_jsonl_sha256": sha256_file(episodes_path),
+        "source_bindings": {
+            "evaluator_sha256": sha256_file(Path(__file__).resolve()),
+            "seed_manifest_sha256": sha256_file(args.seed_manifest),
+            "checkpoint_selection_sha256": sha256_file(
+                args.run_dir / "checkpoint_selection.json"
+            ),
+            "selected_checkpoint_step": int(selection["selected"]["step"]),
+            "selected_checkpoint_sha256": selection["selected"][
+                "checkpoint_sha256"
+            ],
+        },
         "contact_metric_schema": "baseline/contact_metric_schema.json",
     }
     atomic_json(args.output_dir / "summary.json", summary)
