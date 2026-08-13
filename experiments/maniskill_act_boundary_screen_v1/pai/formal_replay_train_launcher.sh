@@ -24,6 +24,9 @@ EXPECTED_PYTHON_SHA256=89b2f5166fb529c259aedd43e5f718c60e35d58e630cb40ae6accb48f
 EXPECTED_PACKAGE_LOCK_SHA256=29965e175cc262e8a4250d1f137d3c85c5c59e8612f530b99703bceef30cef59
 EXPECTED_DEMO_ZIP_LOCK_SHA256=003bce4d00456116ce5eeb5220354bae6cb3d85d9aed04dab2af8488058260b3
 EXPECTED_RESNET18_SHA256=f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec
+PHYSX_GPU_LIBRARY=/mnt/cpfs/zbl-cpfs-new/USERS/leon/.sapien/physx/105.1-physx-5.3.1.patch0/libPhysXGpu_64.so
+EXPECTED_PHYSX_GPU_LIBRARY_SHA256=4c582a16509a71faf5592fe9708586dfcc7ab61ae932eabc1ddd81f290818706
+EXPECTED_PHYSX_GPU_LIBRARY_BYTES=236705440
 
 on_error() {
   local status=$?
@@ -37,6 +40,8 @@ for required in git sha256sum nvidia-smi stat realpath awk grep find sort \
     tee sync; do
   command -v "$required" >/dev/null
 done
+cd "$PROJECT_ROOT"
+test "$PWD" = "$PROJECT_ROOT"
 test "$(id -u):$(id -g)" = 2254:2254
 test "${PAI_CANARY_EXPECTED_GPUS:-}" = 2
 [[ "$RUN_ID" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$ ]]
@@ -78,6 +83,8 @@ test "$(sha256sum "$(realpath -e "$PYTHON")" | awk '{print $1}')" = "$EXPECTED_P
 test "$(sha256sum "$EXPERIMENT_ROOT/locks/python-overlay-packages.txt" | awk '{print $1}')" = "$EXPECTED_PACKAGE_LOCK_SHA256"
 test "$(sha256sum "$EXPERIMENT_ROOT/locks/official_demo_zip_sha256.json" | awk '{print $1}')" = "$EXPECTED_DEMO_ZIP_LOCK_SHA256"
 test "$(sha256sum /mnt/cpfs/zbl-cpfs-new/USERS/leon/cache/r16-p18-maniskill-act-boundary-screen-v1/torch/hub/checkpoints/resnet18-f37072fd.pth | awk '{print $1}')" = "$EXPECTED_RESNET18_SHA256"
+test "$(sha256sum "$PHYSX_GPU_LIBRARY" | awk '{print $1}')" = "$EXPECTED_PHYSX_GPU_LIBRARY_SHA256"
+test "$(stat -c %s "$PHYSX_GPU_LIBRARY")" = "$EXPECTED_PHYSX_GPU_LIBRARY_BYTES"
 test "$(nvidia-smi --query-gpu=name --format=csv,noheader | grep -c '^NVIDIA A800')" = 2
 
 export PYTHONPATH="$OVERLAY:$UPSTREAM_ROOT:$ACT_ROOT"

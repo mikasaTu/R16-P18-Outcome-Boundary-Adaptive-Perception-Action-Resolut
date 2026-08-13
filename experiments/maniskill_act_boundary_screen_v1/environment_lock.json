@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "runtime_import_passed_gpu_smoke_pending",
-  "captured_utc": "2026-08-13T07:31:27Z",
+  "captured_utc": "2026-08-13T08:27:36Z",
   "repository": {
     "base_commit": "f9979e55693f02ca29460637486be0b850395cf0",
     "working_branch": "maniskill-act-boundary-screen-v1",
@@ -51,7 +51,9 @@
   },
   "simulator": {
     "sapien": "3.0.0",
-    "physx": "bundled with sapien 3.0.0; runtime capture pending",
+    "physx": "105.1-physx-5.3.1.patch0",
+    "physx_gpu_library_lock": "locks/physx_gpu_library.json",
+    "physx_gpu_library_sha256": "4c582a16509a71faf5592fe9708586dfcc7ab61ae932eabc1ddd81f290818706",
     "camera_configuration_hashes": {},
     "asset_hash_manifest": null,
     "cpu_no_render_diagnostic": "smoke/cpu_no_render_failure.json",

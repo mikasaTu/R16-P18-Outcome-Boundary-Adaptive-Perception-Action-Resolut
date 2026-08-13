@@ -28,3 +28,10 @@ official ACT architecture/data imports with split-aware validation-only
 checkpoint selection, complete-state checkpoint/resume, fixed-seed closed-loop
 evaluation with contact accounting, and a two-GPU PAI matrix launcher. The
 oracle state-bank and boundary atlases remain gated on the ACT baseline result.
+
+The SAPIEN PhysX GPU shared library is downloaded before PAI execution and
+content-addressed in `locks/physx_gpu_library.json`; formal jobs reject a
+missing or mismatched library instead of downloading simulator code at run
+time. The launcher also enters the pinned project checkout before starting
+official replay so CPU multiprocessing workers never inherit `/root` as their
+working directory.

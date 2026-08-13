@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-08-13T08:27:36Z",
+  "provider": "sapien-sim/physx-precompiled",
+  "physx_version": "105.1-physx-5.3.1.patch0",
+  "platform": "linux-x86_64",
+  "archive": {
+    "url": "https://github.com/sapien-sim/physx-precompiled/releases/download/105.1-physx-5.3.1.patch0/linux-so.zip",
+    "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/cache/r16-p18-maniskill-act-boundary-screen-v1/assets/physx/105.1-physx-5.3.1.patch0/linux-so.zip",
+    "sha256": "167a01aad7381afef963b89169968c289e7b653880a7a823c116d87ee5c00fc6",
+    "bytes": 77938378
+  },
+  "library": {
+    "name": "libPhysXGpu_64.so",
+    "installed_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/.sapien/physx/105.1-physx-5.3.1.patch0/libPhysXGpu_64.so",
+    "sha256": "4c582a16509a71faf5592fe9708586dfcc7ab61ae932eabc1ddd81f290818706",
+    "bytes": 236705440,
+    "owner_uid": 2254,
+    "owner_gid": 2254,
+    "mode": "0500"
+  },
+  "incomplete_predecessor": {
+    "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/.sapien/physx/105.1-physx-5.3.1.patch0.incomplete-dlchujle248oy1o7",
+    "policy": "quarantined_and_preserved_for_audit"
+  }
+}
