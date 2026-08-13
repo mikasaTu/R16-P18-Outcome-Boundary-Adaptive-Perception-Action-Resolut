@@ -47,3 +47,18 @@ def test_evaluation_launcher_is_two_gpu_secret_free_and_fixed_seed() -> None:
     assert 'SEED_MANIFEST="$EXPERIMENT_ROOT/manifests/data_selection_summary.json"' in launcher
     assert "WANDB_API_KEY" not in launcher
     assert "--track" not in launcher
+
+
+def test_oracle_launcher_is_two_gpu_resumable_and_uses_fixed_cpfs_roots() -> None:
+    launcher = (ROOT / "pai" / "formal_stage2_oracle_launcher.sh").read_text(
+        encoding="utf-8"
+    )
+    assert 'cd "$PROJECT_ROOT"' in launcher
+    assert 'test "${PAI_CANARY_EXPECTED_GPUS:-}" = 2' in launcher
+    assert '--gpu-count 2' in launcher
+    assert 'STATE_BANK_ROOT="$DATA_ROOT/state_bank"' in launcher
+    assert 'ORACLE_ROOT="$DATA_ROOT/oracle_atlas"' in launcher
+    assert 'BASELINE_GATE="$CHECKPOINT_ROOT/baseline_evaluation/baseline_gate.json"' in launcher
+    assert 'test -s "$ARTIFACT_DIR/FIRST_REAL_WORK.json"' in launcher
+    assert "WANDB_API_KEY" not in launcher
+    assert "--track" not in launcher

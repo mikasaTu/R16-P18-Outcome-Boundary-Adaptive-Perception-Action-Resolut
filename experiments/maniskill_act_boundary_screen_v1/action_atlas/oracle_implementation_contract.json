@@ -1,0 +1,79 @@
+{
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "contract_version": "stage2_oracle_atlas_impl1",
+  "frozen_before_formal_baseline_results": true,
+  "short_horizon_simulator": {
+    "backend": "physx_cpu",
+    "rgb_render_backend": "sapien_cuda",
+    "policy_inference_device": "cuda",
+    "all_candidate_arms_use_the_same_backend": true
+  },
+  "action_atlas": {
+    "executed_chunk_steps": 4,
+    "training_chunk_padding": "repeat final source action",
+    "gripper_dimensions": {
+      "PullCubeTool-v1": [6],
+      "PushT-v1": [],
+      "StackCube-v1": [3],
+      "PushCube-v1": [3]
+    },
+    "neighbor_distance": "L2 over first-four non-gripper coordinates divided by coordinatewise training standard deviation clipped below at 0.001",
+    "neighbor_count": 256,
+    "pca": "SVD of standardized residuals around the frozen ACT base chunk; first two right singular vectors; one grid unit equals the sample standard deviation of neighbor scores on that direction",
+    "grid_levels": [-1.0, -0.5, 0.0, 0.5, 1.0],
+    "candidate_clipping": "clip every physical action coordinate to the environment action-space bounds after adding the residual",
+    "gripper_policy": "copy the frozen ACT base chunk exactly",
+    "tie_break": "lexicographic grid index"
+  },
+  "outcome": {
+    "object_translation_scale_m": 0.01,
+    "object_rotation_scale_rad": 0.17453292519943295,
+    "progress_scale": 0.05,
+    "continuous_effect_distance": "root mean square of scaled object translation, object rotation, and normalized progress-delta differences",
+    "categorical_class": [
+      "short_horizon_success",
+      "intended_contact",
+      "unintended_contact",
+      "collision",
+      "recoverable"
+    ],
+    "recoverable": "short_horizon_success OR (no collision AND no unintended contact AND normalized progress delta >= -0.05)",
+    "boundary": "categorical class differs OR continuous effect distance >= 1.0",
+    "alias": "categorical class equal AND continuous effect distance < 0.25",
+    "utility": "100*short_success + 10*clip(progress_delta,-1,1) + 2*intended_contact - 5*unintended_contact - 5*collision + recoverable - 0.01*scaled_residual_norm"
+  },
+  "visual_atlas": {
+    "camera_scope": "all RGB cameras in frozen observation order",
+    "tile_grid": [4, 4],
+    "intervention_order": [
+      "local_low_resolution",
+      "local_blur",
+      "conditional_mean"
+    ],
+    "local_low_resolution": "downsample tile to 2x2 and bilinearly upsample to the original tile extent",
+    "local_blur": "Gaussian kernel 9 sigma 3 applied to the full image, copied only into the selected tile",
+    "conditional_mean": "replace tile by the per-camera per-channel mean of its one-pixel outside ring",
+    "policy_seed": 16018,
+    "action_ranking_proxy": "nearest 5x5 physical action cell to the intervened first-four action chunk in the same standardized non-gripper coordinates",
+    "realized_outcome": "execute the intervened frozen-ACT first four actions from the exact restored state",
+    "important_pair": "nearest action-cell identity changes OR realized categorical class changes OR realized continuous effect distance from the unmodified base is at least 1.0"
+  },
+  "joint_probe": {
+    "visual_selection": "for each tile retain the intervention with maximum raw first-four action-chunk L2 change, ties by intervention_order; select four distinct tiles by descending retained change, ties by tile index",
+    "action_selection": "five cells by descending original-state outcome utility, ties by grid index",
+    "joint_action": "add each selected original PCA-cell residual to the visually intervened frozen-ACT base chunk and execute four steps from the exact restored state",
+    "joint_boundary": "at least one selected visual intervention changes the utility-maximizing identity among the same five physical PCA cells",
+    "coarse_uniform_cells": "Cartesian product of grid indices [0,2,4]",
+    "full_fine_cells": "all 25 cells",
+    "oracle_candidate_cells": "the five privileged utility-ranked cells",
+    "best_action_recall": "full-fine best identity is present in the evaluated candidate set",
+    "outcome_regret": "full-fine best utility minus candidate-set best utility"
+  },
+  "statistics": {
+    "bootstrap": "paired percentile over frozen state identity",
+    "replicates": 10000,
+    "seed": 16018,
+    "confidence_level": 0.95
+  },
+  "thresholds_changed": false
+}

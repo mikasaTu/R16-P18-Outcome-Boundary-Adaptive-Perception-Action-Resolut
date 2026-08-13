@@ -138,7 +138,12 @@ class ContactTracker:
 
     def predicates(self) -> tuple[torch.Tensor, torch.Tensor]:
         base = self.base
-        table = base.table_scene.table
+        table_builder = getattr(base, "table_scene", None)
+        if table_builder is None:
+            table_builder = getattr(base, "scene_builder", None)
+        if table_builder is None or not hasattr(table_builder, "table"):
+            raise RuntimeError(f"unable to resolve task table for {self.task_id}")
+        table = table_builder.table
         robot_table = pair_contact(base, self.all_links, table, self.threshold)
         if self.task_id == "PullCubeTool-v1":
             intended = pair_contact(

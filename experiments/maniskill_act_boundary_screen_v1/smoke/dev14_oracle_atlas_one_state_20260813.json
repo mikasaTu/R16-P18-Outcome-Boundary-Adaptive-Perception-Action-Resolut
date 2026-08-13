@@ -1,0 +1,55 @@
+{
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "scope": "dev14_one_state_full_oracle_atlas_smoke_not_scientific",
+  "status": "PASS_AFTER_SERIAL_CPU_RESTORE_FIX",
+  "task_id": "PushCube-v1",
+  "model_seed": 16018,
+  "source_trajectory_id": 0,
+  "episode_seed": 11,
+  "source_timestep": 54,
+  "phase": "near_completion",
+  "selected_checkpoint_step": 25000,
+  "initial_failed_attempt": {
+    "status": "EXPECTED_INTERFACE_CONSTRAINT",
+    "cause": "ManiSkill PhysX CPU prohibits num_envs greater than one",
+    "scientific_data_produced": false,
+    "resolution": "serial exact restore in one pinned CPU simulator for every candidate"
+  },
+  "passed_metrics": {
+    "action_boundary_density": 0.0,
+    "visual_boundary_density": 0.8125,
+    "joint_boundary": false,
+    "coarse_best_action_recall": 1.0,
+    "coarse_outcome_regret": 0.0,
+    "oracle_best_action_recall": 1.0,
+    "oracle_outcome_regret": 0.0
+  },
+  "accounting": {
+    "logical_policy_inputs": 49,
+    "batched_policy_invocations": 2,
+    "effect_model_calls": 0,
+    "action_atlas": {
+      "simulator_restores": 25,
+      "simulator_steps": 100,
+      "action_opportunities": 25
+    },
+    "visual_atlas": {
+      "simulator_restores": 48,
+      "simulator_steps": 192,
+      "action_opportunities": 48
+    },
+    "joint_probe": {
+      "simulator_restores": 20,
+      "simulator_steps": 80,
+      "action_opportunities": 20
+    },
+    "total_simulator_restores": 93,
+    "total_simulator_steps": 372
+  },
+  "short_horizon_sim_backend": "physx_cpu",
+  "rgb_render_backend": "sapien_cuda",
+  "policy_inference_device": "cuda",
+  "counts_toward_formal_oracle_gate": false,
+  "negative_control_single_state_is_not_a_density_estimate": true,
+  "scientific_claim_allowed": false
+}

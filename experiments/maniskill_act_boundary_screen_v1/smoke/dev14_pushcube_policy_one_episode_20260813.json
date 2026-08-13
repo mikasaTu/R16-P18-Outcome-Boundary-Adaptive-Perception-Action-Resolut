@@ -1,0 +1,25 @@
+{
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "scope": "dev14_one_episode_smoke_not_scientific",
+  "status": "PASS",
+  "task_id": "PushCube-v1",
+  "model_seed": 16018,
+  "episode_seed": 150151793,
+  "selected_checkpoint": {
+    "step": 25000,
+    "validation_loss": 0.010457397036585495,
+    "checkpoint_sha256": "a527af3bb60de1beb8ac9f9482b08b49fcfab7d0cd4340ecda9d5139a419f865"
+  },
+  "episode_length": 100,
+  "success_once": true,
+  "success_at_end": true,
+  "first_success_step": 63,
+  "intended_contact_events": 1,
+  "unintended_contact_events": 8,
+  "collisions": 8,
+  "policy_calls": 100,
+  "action_opportunities": 100,
+  "policy_latency_seconds": 1.751387894153595,
+  "counts_toward_formal_baseline": false,
+  "scientific_claim_allowed": false
+}

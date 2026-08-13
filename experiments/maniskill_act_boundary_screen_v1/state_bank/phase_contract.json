@@ -1,0 +1,68 @@
+{
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "contract_version": "heldout_phase_predicate_sha256_v1_impl1",
+  "frozen_before_formal_baseline_results": true,
+  "source_split": "test",
+  "states_per_task": 64,
+  "states_per_stratum": 16,
+  "strata": [
+    "free_space",
+    "pre_contact_or_pre_grasp",
+    "contact_insertion_or_placement",
+    "near_completion"
+  ],
+  "candidate_requirements": {
+    "minimum_recorded_actions_remaining": 4,
+    "source_episode_successful": true,
+    "source_state_and_next_four_actions_present": true
+  },
+  "short_horizon_simulator": {
+    "backend": "physx_cpu",
+    "render_backend_when_rgb_is_required": "sapien_cuda",
+    "reason": "the preregistered full-state 1e-4 repeat tolerance is satisfied by pinned PhysX CPU; a pre-formal-result interface smoke found PhysX CUDA full-state drift while task outcomes remained stable",
+    "thresholds_unchanged": true
+  },
+  "contact_label": {
+    "threshold_newtons": 0.0001,
+    "method": "one_recorded_action_from_exact_recorded_state_then_query_pinned_simulator_contacts",
+    "next_state_restore_after_label": true,
+    "simulator_fields_are_labels_only": true
+  },
+  "success_label": {
+    "method": "official_replayed_hdf5_success_after_action_t_maps_to_state_t_plus_1"
+  },
+  "primary_predicates": {
+    "near_completion": "official success occurs at the current state or within the next four recorded actions",
+    "contact_insertion_or_placement": "intended contact is active at the current state and near_completion is false",
+    "pre_contact_or_pre_grasp": "intended contact is inactive now and becomes active within the next four recorded actions, with near_completion false",
+    "free_space": "intended contact is inactive now and for the next four recorded actions, no success occurs within four actions, and timestep/trajectory_length <= 0.50"
+  },
+  "fixed_temporal_fallback": {
+    "purpose": "populate a named task phase only when fewer than 16 unique-trajectory primary candidates survive restoration",
+    "priority_after_primary": true,
+    "near_completion": "0.80 <= timestep/trajectory_length <= 1.00",
+    "contact_insertion_or_placement": "0.50 <= timestep/trajectory_length < 0.80",
+    "pre_contact_or_pre_grasp": "0.25 <= timestep/trajectory_length < 0.50",
+    "free_space": "0.00 <= timestep/trajectory_length < 0.25",
+    "fallback_usage_must_be_reported": true
+  },
+  "selection": {
+    "candidate_order": "primary_before_fixed_temporal_fallback_then_ascending_sha256",
+    "sha256_payload": "task_id + source_trajectory_id + timestep",
+    "maximum_states_per_source_trajectory_per_stratum": 1,
+    "cross_stratum_state_reuse": false,
+    "unstable_candidate_policy": "exclude_with_reason_then_take_next_candidate_in_frozen_order"
+  },
+  "restoration": {
+    "repeats": 3,
+    "rollout_steps": 4,
+    "actions": "the same next four recorded source actions",
+    "controller_reset_after_exact_state_restore": true,
+    "max_absolute_state": 0.0001,
+    "object_translation_m": 0.0001,
+    "object_rotation_rad": 0.001,
+    "normalized_progress": 0.0001,
+    "categorical_outcomes_exact": true
+  },
+  "insufficient_stable_states_policy": "fail_state_bank_gate_for_task_without_changing_predicates_or_tolerances"
+}

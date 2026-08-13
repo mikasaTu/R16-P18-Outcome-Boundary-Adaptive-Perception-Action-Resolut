@@ -27,7 +27,20 @@ selection and integrity verification, official trajectory-to-RGB replay,
 official ACT architecture/data imports with split-aware validation-only
 checkpoint selection, complete-state checkpoint/resume, fixed-seed closed-loop
 evaluation with contact accounting, and a two-GPU PAI matrix launcher. The
-oracle state-bank and boundary atlases remain gated on the ACT baseline result.
+state-bank/oracle code now also includes frozen held-out phase selection,
+three-repeat exact restoration, 5x5 local PCA action surfaces, 48 visual
+interventions, a 4x5 joint probe, paired state bootstrap, exact call/restore
+accounting, and restart-safe two-GPU PAI orchestration. Execution remains gated
+on the ACT baseline result; these components do not authorize Stage-3 by
+themselves.
+
+The formal short-horizon counterfactual backend is pinned to PhysX CPU. A
+pre-formal-result development smoke showed that PhysX CUDA preserved task
+outcomes but violated the preregistered full-state repeat tolerance, whereas
+PhysX CPU repeated exactly. Candidate rollouts therefore restore serially in
+one CPU simulator; SAPIEN CUDA still renders RGB and the frozen ACT runs on an
+A800. No scientific threshold was loosened, and the backend comparison is
+stored as non-scientific smoke evidence.
 
 The SAPIEN PhysX GPU shared library is downloaded before PAI execution and
 content-addressed in `locks/physx_gpu_library.json`; formal jobs reject a

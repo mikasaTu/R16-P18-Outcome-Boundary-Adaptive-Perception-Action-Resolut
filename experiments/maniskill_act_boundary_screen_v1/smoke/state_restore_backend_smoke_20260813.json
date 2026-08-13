@@ -1,0 +1,41 @@
+{
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "scope": "dev14_single_source_trajectory_interface_smoke_not_scientific",
+  "status": "CPU_PASS_CUDA_FULL_STATE_FAIL",
+  "generated_at_utc": "2026-08-13T18:27:19Z",
+  "task_id": "PushCube-v1",
+  "source_test_h5": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushCube-v1/test/trajectory.rgb.pd_ee_delta_pos.physx_cpu.h5",
+  "source_test_h5_sha256": "6a958f85dd3a6c384520202f749437388fa003308e52c35cf4cd4bf02017e5ba",
+  "source_trajectory_id": 0,
+  "episode_seed": 11,
+  "audited_timestep": 54,
+  "phase": "near_completion",
+  "restore_repeats": 3,
+  "rollout_steps": 4,
+  "physx_cuda": {
+    "stable": false,
+    "initial_restore_max_abs": 2.384185791015625e-07,
+    "short_replay_final_state_max_abs": 0.02494955062866211,
+    "object_translation_repeat_max_m": 1.4889005386506552e-07,
+    "object_rotation_repeat_max_rad": 1.2098326825117633e-06,
+    "normalized_progress_repeat_max": 4.76837158203125e-07,
+    "categorical_outcomes_exact": true,
+    "exclusion_reasons": [
+      "short_replay_state_tolerance"
+    ]
+  },
+  "physx_cpu": {
+    "stable": true,
+    "initial_restore_max_abs": 1.4901161193847656e-08,
+    "short_replay_final_state_max_abs": 0.0,
+    "object_translation_repeat_max_m": 0.0,
+    "object_rotation_repeat_max_rad": 0.0,
+    "normalized_progress_repeat_max": 0.0,
+    "categorical_outcomes_exact": true,
+    "exclusion_reasons": []
+  },
+  "decision": "freeze_physx_cpu_for_all_stage2_short_horizon_state_bank_and_atlas_candidates",
+  "preregistered_tolerances_changed": false,
+  "counts_toward_formal_state_bank_or_oracle_gate": false,
+  "scientific_claim_allowed": false
+}
