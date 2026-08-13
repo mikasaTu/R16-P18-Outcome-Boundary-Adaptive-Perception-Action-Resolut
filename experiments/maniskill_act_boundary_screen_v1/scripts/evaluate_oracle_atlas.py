@@ -130,7 +130,13 @@ def logical_nearest_cell(
     return int(np.argmin(distances))
 
 
-def state_file_valid(path: Path, task_id: str, model_seed: int, bank_id: str) -> bool:
+def state_file_valid(
+    path: Path,
+    task_id: str,
+    model_seed: int,
+    bank_id: str,
+    source_bindings: Mapping[str, Any],
+) -> bool:
     if not path.is_file():
         return False
     try:
@@ -145,6 +151,7 @@ def state_file_valid(path: Path, task_id: str, model_seed: int, bank_id: str) ->
         and row.get("bank_id") == bank_id
         and row.get("implementation_contract_sha256")
         == sha256_file(IMPLEMENTATION_CONTRACT)
+        and row.get("source_bindings") == source_bindings
     )
 
 
@@ -159,6 +166,7 @@ def evaluate_state(
     env_policy: Any,
     env_rollout: Any,
     device: torch.device,
+    source_bindings: Mapping[str, Any],
 ) -> dict[str, Any]:
     episode_seed = int(state_metadata["episode_seed"])
     random.seed(16018)
@@ -355,6 +363,7 @@ def evaluate_state(
         "source_trajectory_id": int(state_metadata["source_trajectory_id"]),
         "source_timestep": int(state_metadata["timestep"]),
         "implementation_contract_sha256": sha256_file(IMPLEMENTATION_CONTRACT),
+        "source_bindings": dict(source_bindings),
         "action_atlas": {
             "cells": action_cells,
             "neighbor_indices": [int(value) for value in atlas["neighbor_indices"]],
@@ -425,6 +434,13 @@ def main() -> None:
     agent, selection, checkpoint_path = load_policy(
         args.task_id, args.model_seed, args.run_dir, env_policy, device
     )
+    source_bindings = {
+        "state_bank_manifest_sha256": sha256_file(args.state_bank_manifest),
+        "state_bank_h5_sha256": state_manifest["state_bank_h5_sha256"],
+        "train_h5_sha256": sha256_file(args.train_h5),
+        "selected_checkpoint_step": int(selection["selected"]["step"]),
+        "selected_checkpoint_sha256": sha256_file(checkpoint_path),
+    }
     started = time.time()
     try:
         with h5py.File(state_h5_path, "r") as state_source:
@@ -434,7 +450,13 @@ def main() -> None:
             for index, state_metadata in enumerate(state_rows):
                 bank_id = state_metadata["bank_id"]
                 output_path = states_dir / f"{bank_id}.json"
-                if state_file_valid(output_path, args.task_id, args.model_seed, bank_id):
+                if state_file_valid(
+                    output_path,
+                    args.task_id,
+                    args.model_seed,
+                    bank_id,
+                    source_bindings,
+                ):
                     print(
                         f"ORACLE_RESUME task={args.task_id} seed={args.model_seed} "
                         f"state={index + 1}/{len(state_rows)} bank_id={bank_id}",
@@ -452,6 +474,7 @@ def main() -> None:
                     env_policy=env_policy,
                     env_rollout=env_rollout,
                     device=device,
+                    source_bindings=source_bindings,
                 )
                 write_json(output_path, row)
                 print(

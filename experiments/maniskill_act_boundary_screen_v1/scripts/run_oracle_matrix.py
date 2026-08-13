@@ -105,20 +105,6 @@ def execute(jobs: list[Job], args: argparse.Namespace, phase: str) -> list[dict[
                 text=True,
             )
             active[process.pid] = (job, process, handle, gpu, started)
-            first_real_work = args.artifact_dir / "FIRST_REAL_WORK.json"
-            if not first_real_work.exists():
-                write_json(
-                    first_real_work,
-                    {
-                        "protocol_id": PROTOCOL_ID,
-                        "status": "FIRST_REAL_WORK",
-                        "phase": phase,
-                        "job": job.name,
-                        "gpu": gpu,
-                        "pid": process.pid,
-                        "started_at_unix": started,
-                    },
-                )
             print(
                 f"ORACLE_START phase={phase} name={job.name} gpu={gpu} pid={process.pid}",
                 flush=True,
@@ -147,6 +133,22 @@ def execute(jobs: list[Job], args: argparse.Namespace, phase: str) -> list[dict[
                 f"ORACLE_FINISH phase={phase} name={job.name} gpu={gpu} exit={exit_code}",
                 flush=True,
             )
+            first_real_work = args.artifact_dir / "FIRST_REAL_WORK.json"
+            if exit_code == 0 and not first_real_work.exists():
+                write_json(
+                    first_real_work,
+                    {
+                        "protocol_id": PROTOCOL_ID,
+                        "status": "FIRST_REAL_WORK",
+                        "evidence_scope": "completed_simulator_subtask",
+                        "phase": phase,
+                        "job": job.name,
+                        "gpu": gpu,
+                        "started_at_unix": started,
+                        "completed_at_unix": record["finished_at_unix"],
+                        "log": record["log"],
+                    },
+                )
             if exit_code != 0:
                 for other_pid, (_, other, other_handle, _, _) in active.items():
                     if other_pid != pid and other.poll() is None:
@@ -286,18 +288,6 @@ def main() -> None:
     args.artifact_dir.mkdir(parents=True, exist_ok=True)
     args.state_bank_root.mkdir(parents=True, exist_ok=True)
     args.oracle_root.mkdir(parents=True, exist_ok=True)
-    first_real_work = args.artifact_dir / "FIRST_REAL_WORK.json"
-    if not first_real_work.exists():
-        write_json(
-            first_real_work,
-            {
-                "protocol_id": PROTOCOL_ID,
-                "status": "FIRST_REAL_WORK",
-                "phase": "orchestrator_validation_and_resume_scan",
-                "active_tasks": active_tasks,
-                "started_at_unix": time.time(),
-            },
-        )
     state_processes = execute(state_bank_jobs(args, active_tasks), args, "state_bank")
     state_status = {
         task_id: json.loads(
@@ -307,6 +297,22 @@ def main() -> None:
         )["status"]
         for task_id in active_tasks
     }
+    first_real_work = args.artifact_dir / "FIRST_REAL_WORK.json"
+    if not first_real_work.exists() and all(
+        status in {"STATE_BANK_COMPLETE", "STATE_BANK_GATE_FAIL"}
+        for status in state_status.values()
+    ):
+        write_json(
+            first_real_work,
+            {
+                "protocol_id": PROTOCOL_ID,
+                "status": "FIRST_REAL_WORK",
+                "evidence_scope": "validated_resumed_state_bank_artifacts",
+                "active_tasks": active_tasks,
+                "state_bank_status": state_status,
+                "validated_at_unix": time.time(),
+            },
+        )
     oracle_processes: list[dict[str, Any]] = []
     if all(status == "STATE_BANK_COMPLETE" for status in state_status.values()):
         oracle_processes = execute(oracle_jobs(args, active_tasks), args, "oracle_atlas")
