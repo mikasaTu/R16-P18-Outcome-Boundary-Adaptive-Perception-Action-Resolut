@@ -34,3 +34,16 @@ def test_launcher_pins_cwd_and_physx_gpu_library() -> None:
     ]["sha256"]
     assert "WANDB_API_KEY" not in launcher
     assert "--track" not in launcher
+
+
+def test_evaluation_launcher_is_two_gpu_secret_free_and_fixed_seed() -> None:
+    launcher = (ROOT / "pai" / "formal_baseline_evaluation_launcher.sh").read_text(
+        encoding="utf-8"
+    )
+    assert 'cd "$PROJECT_ROOT"' in launcher
+    assert 'test "${PAI_CANARY_EXPECTED_GPUS:-}" = 2' in launcher
+    assert '--gpu-count 2' in launcher
+    assert '--num-envs 20' in launcher
+    assert 'SEED_MANIFEST="$EXPERIMENT_ROOT/manifests/data_selection_summary.json"' in launcher
+    assert "WANDB_API_KEY" not in launcher
+    assert "--track" not in launcher
