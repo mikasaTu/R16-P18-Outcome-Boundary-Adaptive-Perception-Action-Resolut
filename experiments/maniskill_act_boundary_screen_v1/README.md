@@ -41,3 +41,6 @@ split must replay successfully. Every saved episode must still be successful,
 seed-identifiable, unique, and an exact subset of the selected raw split;
 missing episode seeds are reported explicitly. Incomplete multiprocessing
 shards are quarantined before a retry and are never counted as demonstrations.
+The frozen retry budget is nine for CPU control-mode conversion tasks and
+three for PushT state replay; retries preserve the same selected trajectory,
+episode seed, and initial simulator state.

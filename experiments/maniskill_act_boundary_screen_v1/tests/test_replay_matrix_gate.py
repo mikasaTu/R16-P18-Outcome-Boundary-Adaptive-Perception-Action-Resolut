@@ -11,7 +11,7 @@ import pytest
 SCRIPT_DIR = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPT_DIR))
 from protocol_common import SPLIT_COUNTS  # noqa: E402
-from run_formal_matrix import TASKS, validate_replay_gate  # noqa: E402
+from run_formal_matrix import TASKS, replay_jobs, validate_replay_gate  # noqa: E402
 
 
 def write_summaries(root: Path, saved: dict[str, int] | None = None) -> None:
@@ -60,3 +60,20 @@ def test_matrix_gate_rejects_one_split_below_preregistered_minimum(
     write_summaries(tmp_path, {"train": 189, "validation": 48, "test": 48})
     with pytest.raises(RuntimeError, match="formal replay gate failed|split gate"):
         validate_replay_gate(argparse.Namespace(selected_raw_root=tmp_path))
+
+
+def test_replay_retry_budget_is_task_pinned(tmp_path: Path) -> None:
+    jobs = replay_jobs(
+        argparse.Namespace(selected_raw_root=tmp_path, python=Path("/pinned/python"))
+    )
+    observed = {}
+    for job in jobs:
+        task_id = job.name.removeprefix("replay_")
+        retry_index = job.command.index("--max-retry") + 1
+        observed[task_id] = int(job.command[retry_index])
+    assert observed == {
+        "PegInsertionSide-v1": 9,
+        "PushT-v1": 3,
+        "StackCube-v1": 9,
+        "PushCube-v1": 9,
+    }

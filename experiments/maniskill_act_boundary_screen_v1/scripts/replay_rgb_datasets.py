@@ -299,6 +299,7 @@ def main() -> None:
         "protocol_id": PROTOCOL_ID,
         "status": "PASS",
         "task_id": args.task_id,
+        "maximum_retries_per_trajectory": args.max_retry,
         "splits": records,
         "episodes_attempted": sum(item["episodes_attempted"] for item in records),
         "episodes_saved_successful": sum(

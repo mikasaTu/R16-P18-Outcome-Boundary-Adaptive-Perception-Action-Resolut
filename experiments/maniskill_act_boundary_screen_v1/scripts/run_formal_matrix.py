@@ -22,18 +22,22 @@ TASKS = {
     "PegInsertionSide-v1": {
         "control_mode": "pd_ee_delta_pose",
         "total_iterations": 100_000,
+        "replay_max_retry": 9,
     },
     "PushT-v1": {
         "control_mode": "pd_ee_delta_pose",
         "total_iterations": 100_000,
+        "replay_max_retry": 3,
     },
     "StackCube-v1": {
         "control_mode": "pd_ee_delta_pos",
         "total_iterations": 30_000,
+        "replay_max_retry": 9,
     },
     "PushCube-v1": {
         "control_mode": "pd_ee_delta_pos",
         "total_iterations": 30_000,
+        "replay_max_retry": 9,
     },
 }
 SEEDS = (16018, 16019, 16020)
@@ -233,7 +237,7 @@ def replay_jobs(args: argparse.Namespace) -> list[Job]:
                     "--python",
                     str(args.python),
                     "--max-retry",
-                    "3",
+                    str(TASKS[task_id]["replay_max_retry"]),
                 ],
             )
         )
