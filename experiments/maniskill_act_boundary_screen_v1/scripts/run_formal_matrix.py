@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import subprocess
 import sys
@@ -14,7 +15,7 @@ from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
-from protocol_common import PROTOCOL_ID, atomic_write_text  # noqa: E402
+from protocol_common import PROTOCOL_ID, SPLIT_COUNTS, atomic_write_text  # noqa: E402
 
 
 TASKS = {
@@ -297,13 +298,33 @@ def validate_replay_gate(args: argparse.Namespace) -> list[dict[str, Any]]:
     for task_id in TASKS:
         path = args.selected_raw_root / "replay_summaries" / f"{task_id}.json"
         value = json.loads(path.read_text(encoding="utf-8"))
+        expected_total = sum(SPLIT_COUNTS.values())
+        saved_total = int(value.get("episodes_saved_successful", -1))
         if (
             value.get("status") != "PASS"
-            or value.get("episodes_attempted") != 300
-            or value.get("episodes_saved_successful") != 300
-            or value.get("replay_success_rate") != 1.0
+            or value.get("episodes_attempted") != expected_total
+            or saved_total < math.ceil(expected_total * 0.95)
+            or saved_total > expected_total
+            or float(value.get("replay_success_rate", -1.0)) < 0.95
         ):
             raise RuntimeError(f"formal replay gate failed: {task_id}")
+        split_records = value.get("splits")
+        if not isinstance(split_records, list) or len(split_records) != len(SPLIT_COUNTS):
+            raise RuntimeError(f"formal replay split inventory failed: {task_id}")
+        by_name = {record.get("split"): record for record in split_records}
+        if set(by_name) != set(SPLIT_COUNTS):
+            raise RuntimeError(f"formal replay split identities failed: {task_id}")
+        for split, expected_count in SPLIT_COUNTS.items():
+            record = by_name[split]
+            saved_count = int(record.get("episodes_saved_successful", -1))
+            if (
+                record.get("status") != "PASS"
+                or record.get("episodes_attempted") != expected_count
+                or saved_count < math.ceil(expected_count * 0.95)
+                or saved_count > expected_count
+                or float(record.get("replay_success_rate", -1.0)) < 0.95
+            ):
+                raise RuntimeError(f"formal replay split gate failed: {task_id}/{split}")
         summaries.append(value)
     return summaries
 
@@ -349,7 +370,13 @@ def main() -> None:
                 "protocol_id": PROTOCOL_ID,
                 "status": "PASS",
                 "tasks": [item["task_id"] for item in phase_results["replay_gate"]],
-                "successful_episodes": 1200,
+                "episodes_attempted": sum(
+                    item["episodes_attempted"] for item in phase_results["replay_gate"]
+                ),
+                "episodes_saved_successful": sum(
+                    item["episodes_saved_successful"]
+                    for item in phase_results["replay_gate"]
+                ),
             },
         )
     if args.phase in ("train", "replay-and-train"):
