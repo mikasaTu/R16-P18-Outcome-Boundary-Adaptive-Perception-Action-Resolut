@@ -138,7 +138,67 @@ def jobs(args: argparse.Namespace) -> list[Job]:
     return result
 
 
-def execute(all_jobs: list[Job], args: argparse.Namespace) -> list[dict[str, Any]]:
+def persist_first_real_work(
+    args: argparse.Namespace, *, not_before_unix: float = 0.0
+) -> bool:
+    destination = args.artifact_dir / "FIRST_REAL_WORK.json"
+    if destination.is_file():
+        return True
+    for task_id in FORMAL_TASKS:
+        for model_seed in MODEL_SEEDS:
+            marker = (
+                args.evaluation_root
+                / task_id
+                / f"seed_{model_seed}"
+                / "FIRST_REAL_ROLLOUT_BATCH.json"
+            )
+            if not marker.is_file():
+                continue
+            try:
+                value = json.loads(marker.read_text(encoding="utf-8"))
+                valid = bool(
+                    value.get("protocol_id") == PROTOCOL_ID
+                    and value.get("status")
+                    == "FIRST_REAL_ROLLOUT_BATCH_COMPLETE"
+                    and value.get("task_id") == task_id
+                    and int(value.get("model_seed", -1)) == model_seed
+                    and int(value.get("episode_count", -1)) > 0
+                    and len(value.get("episode_seeds", []))
+                    == int(value.get("episode_count", -1))
+                    and float(value.get("completed_at_unix", -1.0))
+                    >= not_before_unix
+                    and value.get("evaluator_sha256")
+                    == sha256_file(SCRIPT_DIR / "evaluate_official_act_protocol.py")
+                )
+            except (OSError, TypeError, ValueError, json.JSONDecodeError):
+                valid = False
+            if not valid:
+                continue
+            write_json(
+                destination,
+                {
+                    "protocol_id": PROTOCOL_ID,
+                    "status": "FIRST_REAL_WORK",
+                    "evidence_scope": "completed_closed_loop_rollout_batch",
+                    "task_id": task_id,
+                    "model_seed": model_seed,
+                    "rollout_batch_marker": str(marker),
+                    "rollout_batch_marker_sha256": sha256_file(marker),
+                    "episode_count": int(value["episode_count"]),
+                    "episode_seeds": [int(seed) for seed in value["episode_seeds"]],
+                    "observed_at_unix": time.time(),
+                },
+            )
+            return True
+    return False
+
+
+def execute(
+    all_jobs: list[Job],
+    args: argparse.Namespace,
+    *,
+    first_work_not_before_unix: float,
+) -> list[dict[str, Any]]:
     if not 1 <= args.gpu_count <= 2:
         raise ValueError("this protocol permits one or two GPUs only")
     pending = deque(all_jobs)
@@ -148,6 +208,7 @@ def execute(all_jobs: list[Job], args: argparse.Namespace) -> list[dict[str, Any
     logs = args.artifact_dir / "logs"
     logs.mkdir(parents=True, exist_ok=True)
     while pending or active:
+        persist_first_real_work(args, not_before_unix=first_work_not_before_unix)
         while pending and free_gpus:
             gpu = free_gpus.popleft()
             job = pending.popleft()
@@ -207,6 +268,7 @@ def execute(all_jobs: list[Job], args: argparse.Namespace) -> list[dict[str, Any
             active.pop(pid)
         if active and not finished:
             time.sleep(5)
+    persist_first_real_work(args, not_before_unix=first_work_not_before_unix)
     return records
 
 
@@ -220,7 +282,14 @@ def main() -> None:
         raise RuntimeError("visible GPU count differs from the fixed evaluation matrix")
     args.artifact_dir.mkdir(parents=True, exist_ok=True)
     args.evaluation_root.mkdir(parents=True, exist_ok=True)
-    processes = execute(jobs(args), args)
+    matrix_started_at = time.time()
+    processes = execute(
+        jobs(args),
+        args,
+        first_work_not_before_unix=matrix_started_at,
+    )
+    if not persist_first_real_work(args, not_before_unix=matrix_started_at):
+        raise RuntimeError("missing first real closed-loop rollout evidence")
     baseline_output = args.evaluation_root / "baseline_gate.json"
     subprocess.run(
         [

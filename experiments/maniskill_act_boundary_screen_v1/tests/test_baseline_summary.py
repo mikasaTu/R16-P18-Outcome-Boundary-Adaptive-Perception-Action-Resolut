@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -11,7 +13,7 @@ SCRIPT_DIR = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPT_DIR))
 from summarize_baseline import paired_episode_bootstrap  # noqa: E402
 from protocol_common import PROTOCOL_ID, sha256_file  # noqa: E402
-from run_closed_loop_matrix import valid_completion  # noqa: E402
+from run_closed_loop_matrix import persist_first_real_work, valid_completion  # noqa: E402
 
 
 def test_paired_bootstrap_is_deterministic_and_degenerate_for_constant_data() -> None:
@@ -110,3 +112,47 @@ def test_completed_evaluation_is_bound_to_checkpoint_seed_bank_and_episodes(
     assert not valid_completion(
         output_dir, run_dir, seed_manifest, task_id, model_seed
     )
+
+
+def test_first_rollout_batch_is_promoted_to_immutable_run_evidence(
+    tmp_path: Path,
+) -> None:
+    evaluation_root = tmp_path / "evaluation"
+    artifact_dir = tmp_path / "artifact"
+    marker = (
+        evaluation_root
+        / "PushCube-v1"
+        / "seed_16018"
+        / "FIRST_REAL_ROLLOUT_BATCH.json"
+    )
+    marker.parent.mkdir(parents=True)
+    artifact_dir.mkdir()
+    marker.write_text(
+        json.dumps(
+            {
+                "protocol_id": PROTOCOL_ID,
+                "status": "FIRST_REAL_ROLLOUT_BATCH_COMPLETE",
+                "task_id": "PushCube-v1",
+                "model_seed": 16018,
+                "episode_count": 2,
+                "episode_seeds": [11, 12],
+                "evaluator_sha256": sha256_file(
+                    SCRIPT_DIR / "evaluate_official_act_protocol.py"
+                ),
+                "completed_at_unix": time.time(),
+            }
+        ),
+        encoding="utf-8",
+    )
+    args = argparse.Namespace(
+        evaluation_root=evaluation_root,
+        artifact_dir=artifact_dir,
+    )
+
+    assert persist_first_real_work(args)
+    value = json.loads(
+        (artifact_dir / "FIRST_REAL_WORK.json").read_text(encoding="utf-8")
+    )
+    assert value["evidence_scope"] == "completed_closed_loop_rollout_batch"
+    assert value["episode_seeds"] == [11, 12]
+    assert value["rollout_batch_marker_sha256"] == sha256_file(marker)

@@ -108,6 +108,7 @@ PY
   --gpu-count 2 \
   --num-envs 20
 
+test -s "$ARTIFACT_DIR/FIRST_REAL_WORK.json"
 test -s "$ARTIFACT_DIR/EVALUATION_MATRIX_COMPLETE.json"
 test -s "$EVALUATION_ROOT/baseline_gate.json"
 test "$(stat -c '%u:%g' "$ARTIFACT_DIR/EVALUATION_MATRIX_COMPLETE.json")" = 2254:2254

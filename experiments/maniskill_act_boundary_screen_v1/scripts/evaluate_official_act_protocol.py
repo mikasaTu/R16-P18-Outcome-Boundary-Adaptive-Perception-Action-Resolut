@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import random
@@ -16,7 +17,12 @@ import torch
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
-from protocol_common import PROTOCOL_ID, atomic_write_text, sha256_file  # noqa: E402
+from protocol_common import (  # noqa: E402
+    PROTOCOL_ID,
+    atomic_write_text,
+    canonical_json,
+    sha256_file,
+)
 
 import train_rgbd as official_act  # noqa: E402
 from mani_skill.vector.wrappers.gymnasium import ManiSkillVectorEnv  # noqa: E402
@@ -292,8 +298,11 @@ def main() -> None:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     episodes_path = args.output_dir / "episodes.jsonl"
+    first_batch_path = args.output_dir / "FIRST_REAL_ROLLOUT_BATCH.json"
     if episodes_path.exists():
         episodes_path.unlink()
+    if first_batch_path.exists():
+        first_batch_path.unlink()
     seed_manifest = json.loads(args.seed_manifest.read_text(encoding="utf-8"))
     seeds = seed_manifest["formal_tasks"][args.task_id]["closed_loop_test_seeds"]
     if len(seeds) != 100 or len(set(seeds)) != 100:
@@ -319,6 +328,23 @@ def main() -> None:
                 record["selected_checkpoint_step"] = selection["selected"]["step"]
                 append_jsonl(episodes_path, record)
             all_records.extend(batch)
+            if start == 0:
+                first_batch = {
+                    "protocol_id": PROTOCOL_ID,
+                    "status": "FIRST_REAL_ROLLOUT_BATCH_COMPLETE",
+                    "task_id": args.task_id,
+                    "model_seed": args.model_seed,
+                    "episode_count": len(batch),
+                    "episode_seeds": [int(item["episode_seed"]) for item in batch],
+                    "records_sha256": hashlib.sha256(canonical_json(batch)).hexdigest(),
+                    "selected_checkpoint_step": int(selection["selected"]["step"]),
+                    "selected_checkpoint_sha256": selection["selected"][
+                        "checkpoint_sha256"
+                    ],
+                    "evaluator_sha256": sha256_file(Path(__file__).resolve()),
+                    "completed_at_unix": time.time(),
+                }
+                atomic_json(first_batch_path, first_batch)
             print(
                 f"EVAL_PROGRESS task={args.task_id} model_seed={args.model_seed} episodes={len(all_records)}/100",
                 flush=True,

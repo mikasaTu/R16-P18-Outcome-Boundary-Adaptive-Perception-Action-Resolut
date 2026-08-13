@@ -45,6 +45,7 @@ def test_evaluation_launcher_is_two_gpu_secret_free_and_fixed_seed() -> None:
     assert '--gpu-count 2' in launcher
     assert '--num-envs 20' in launcher
     assert 'SEED_MANIFEST="$EXPERIMENT_ROOT/manifests/data_selection_summary.json"' in launcher
+    assert 'test -s "$ARTIFACT_DIR/FIRST_REAL_WORK.json"' in launcher
     assert "WANDB_API_KEY" not in launcher
     assert "--track" not in launcher
 
