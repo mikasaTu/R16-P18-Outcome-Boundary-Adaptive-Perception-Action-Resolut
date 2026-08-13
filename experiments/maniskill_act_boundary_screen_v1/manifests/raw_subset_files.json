@@ -1,0 +1,113 @@
+{
+  "files": [
+    {
+      "episodes": 200,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PegInsertionSide-v1/train/trajectory.h5",
+      "h5_sha256": "98bef1a3fa0205b1599a58a5d206d7226b3f962937124e2db42108f7e36f66f5",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PegInsertionSide-v1/train/trajectory.json",
+      "json_sha256": "889b6bdb56fded9e20088a7228cfcfe21f394a26a252ced9def52e38b6f6058c",
+      "split": "train",
+      "task_id": "PegInsertionSide-v1"
+    },
+    {
+      "episodes": 50,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PegInsertionSide-v1/validation/trajectory.h5",
+      "h5_sha256": "cfdac37954fae645acbbc855906c17ada822c80ecf4590f0d806f4e96ab6970e",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PegInsertionSide-v1/validation/trajectory.json",
+      "json_sha256": "4808fad8a33d07227d114d4d18fcad74c5701e203cf0eb012118fe56ac0aff55",
+      "split": "validation",
+      "task_id": "PegInsertionSide-v1"
+    },
+    {
+      "episodes": 50,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PegInsertionSide-v1/test/trajectory.h5",
+      "h5_sha256": "98ad8531ece7fa1491cde6273a79ede2090eae780bb76fedd6ec7b6a80b0cbad",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PegInsertionSide-v1/test/trajectory.json",
+      "json_sha256": "ac67bf0bff315b72457dc7414167e390dd7807d4c5e2da740a76cad3c5249af5",
+      "split": "test",
+      "task_id": "PegInsertionSide-v1"
+    },
+    {
+      "episodes": 200,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushT-v1/train/trajectory.h5",
+      "h5_sha256": "ba743b84d64477e125cc9ac429ff8128adc7ec10f88bc8e143d229b15f0ee294",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushT-v1/train/trajectory.json",
+      "json_sha256": "d2e866eae52434858ca9dc3dcdbc317f17bee1487634b82d8d7ef9e08b4981f4",
+      "split": "train",
+      "task_id": "PushT-v1"
+    },
+    {
+      "episodes": 50,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushT-v1/validation/trajectory.h5",
+      "h5_sha256": "0734b898541078d9799e1be6f53de1709b54566f4b5d148dc621a251bb26efd3",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushT-v1/validation/trajectory.json",
+      "json_sha256": "53303082830c2a532b19ac998f8c112f7c79ae20ae9493b30d575c54a16ac41d",
+      "split": "validation",
+      "task_id": "PushT-v1"
+    },
+    {
+      "episodes": 50,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushT-v1/test/trajectory.h5",
+      "h5_sha256": "dd6792beea7473df163868572df349a6885c124f0b1a19d037cafe95a2b80a8d",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushT-v1/test/trajectory.json",
+      "json_sha256": "90366658bb24c2dd69c8ef002388aea97c854ea0fedcc3dca46d8573a31da69e",
+      "split": "test",
+      "task_id": "PushT-v1"
+    },
+    {
+      "episodes": 200,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/StackCube-v1/train/trajectory.h5",
+      "h5_sha256": "ffa945e2f608f35f1d6d4ac6d7d36a65706a2f01d08b56cf765e0cbe6d95fdee",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/StackCube-v1/train/trajectory.json",
+      "json_sha256": "62356c3f970082ef49c9fe96e1f3b4184897114eb8a34697a775a8ff6533bf9a",
+      "split": "train",
+      "task_id": "StackCube-v1"
+    },
+    {
+      "episodes": 50,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/StackCube-v1/validation/trajectory.h5",
+      "h5_sha256": "c304aab223bef819695038bf8065228c6d52abc2b334e5244ad7ba09ec201840",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/StackCube-v1/validation/trajectory.json",
+      "json_sha256": "828ba44c3b7de32ee35b88bbdd576318a4744b918f4d1b0b071b7aec8d6eef73",
+      "split": "validation",
+      "task_id": "StackCube-v1"
+    },
+    {
+      "episodes": 50,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/StackCube-v1/test/trajectory.h5",
+      "h5_sha256": "d1e72151016e53b1e9c6ce35766105a4a83b2d682634e2eb743ec230808fa079",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/StackCube-v1/test/trajectory.json",
+      "json_sha256": "6a72863516e4cb21e1ae57d8948f9902961f8a23957804f53771f42af8238beb",
+      "split": "test",
+      "task_id": "StackCube-v1"
+    },
+    {
+      "episodes": 200,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushCube-v1/train/trajectory.h5",
+      "h5_sha256": "d7cda66e52cf6807ad4de78d68c8f5a03855e3b35381dc0695650f888136bfde",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushCube-v1/train/trajectory.json",
+      "json_sha256": "78f0189712cf2d5c45c469c414b9e2b78fee33e21f06425117d069b253c64ac8",
+      "split": "train",
+      "task_id": "PushCube-v1"
+    },
+    {
+      "episodes": 50,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushCube-v1/validation/trajectory.h5",
+      "h5_sha256": "62c53b2fabca085e09560a1ac51f8a5af13c3b9353f222f79b66969e13c371ea",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushCube-v1/validation/trajectory.json",
+      "json_sha256": "758cf39419ad53bfb9daa53ee3cc1923d89d0ef5c040bb4d6d6f1c65dbe412d2",
+      "split": "validation",
+      "task_id": "PushCube-v1"
+    },
+    {
+      "episodes": 50,
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushCube-v1/test/trajectory.h5",
+      "h5_sha256": "90781cb2bd45e80fddbf6ec11e8c56d7c44789ea3a334d572d227cf07f07c374",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PushCube-v1/test/trajectory.json",
+      "json_sha256": "adb0ff3ee3a1a4c893c0e32781ec402ca925dcb5862f10e0c9a732b5ece6251f",
+      "split": "test",
+      "task_id": "PushCube-v1"
+    }
+  ],
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1"
+}

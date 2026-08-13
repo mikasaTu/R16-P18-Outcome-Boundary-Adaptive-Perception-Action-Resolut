@@ -1,0 +1,19 @@
+{
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "captured_utc": "2026-08-13T07:31:27Z",
+  "status": "FAIL_NATIVE_SEGFAULT",
+  "scope": "diagnostic_only_not_formal_result",
+  "task_id": "PickCube-v1",
+  "configuration": {
+    "num_envs": 1,
+    "obs_mode": "state",
+    "control_mode": "pd_joint_pos",
+    "sim_backend": "physx_cpu",
+    "render_backend": "none",
+    "cuda_visible_devices": ""
+  },
+  "exit_code": 139,
+  "faulthandler_top_frame": "mani_skill/utils/building/actors/common.py:87 build_cube -> sapien.render.RenderMaterial",
+  "interpretation": "SAPIEN still constructs visual materials for the task even when observations and rendering are disabled. A GPU/Vulkan-backed smoke is required; no protocol threshold or task selection was changed.",
+  "follow_up": "Retry only on an unoccupied GPU with explicit simulation and render device selection."
+}

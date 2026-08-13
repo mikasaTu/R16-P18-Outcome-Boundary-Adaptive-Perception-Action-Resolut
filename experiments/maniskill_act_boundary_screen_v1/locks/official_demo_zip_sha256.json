@@ -1,0 +1,26 @@
+{
+  "repository": "haosulab/ManiSkill_Demonstrations",
+  "revision": "d674485bbffdd533914e52d272fdda34c0515608",
+  "files": {
+    "PegInsertionSide-v1.zip": {
+      "bytes": 29475456,
+      "sha256": "7d61e4319a0395b220574f1e26ea65bd4ad1406387fb3debfbea96a2ddbb6a9c"
+    },
+    "PickCube-v1.zip": {
+      "bytes": 36590010,
+      "sha256": "b2d4afb30fa309755862b98c342e6ee18918253c93f3bbac16ed6670748f26d8"
+    },
+    "PushCube-v1.zip": {
+      "bytes": 24573577,
+      "sha256": "1ce24408bf93658501faaa0ef164a0cdc29539cc412612a413fac746697eeab2"
+    },
+    "PushT-v1.zip": {
+      "bytes": 35715188,
+      "sha256": "c2960e5d5dcc99d04fb4506b8a6bb8d8232b54f75e9f4fd0462189256f84e851"
+    },
+    "StackCube-v1.zip": {
+      "bytes": 43486191,
+      "sha256": "f9b7d34b9aa418a04aa8e4322d4dea5aa27e8ae81757f60b210c1ffc54bf9c1b"
+    }
+  }
+}

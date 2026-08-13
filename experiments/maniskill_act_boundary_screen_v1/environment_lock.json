@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "status": "preregistration_frozen_environment_capture_pending",
-  "captured_utc": null,
+  "status": "runtime_import_passed_gpu_smoke_pending",
+  "captured_utc": "2026-08-13T07:31:27Z",
   "repository": {
     "base_commit": "f9979e55693f02ca29460637486be0b850395cf0",
     "working_branch": "maniskill-act-boundary-screen-v1",
@@ -30,7 +30,18 @@
     "torch": "2.5.1+cu124",
     "torchvision": "0.20.1+cu124",
     "cuda_runtime": "12.4",
-    "package_lock_sha256": null
+    "nvidia_driver": "580.95.05",
+    "kernel": "Linux 5.10.134-013.9.kangaroo.al8.x86_64 x86_64",
+    "package_lock": "locks/python-overlay-packages.txt",
+    "package_lock_sha256": "29965e175cc262e8a4250d1f137d3c85c5c59e8612f530b99703bceef30cef59",
+    "validated_imports": {
+      "mani_skill": "3.0.1 source checkout",
+      "official_act": "examples/baselines/act/train_rgbd.py",
+      "sapien": "3.0.0",
+      "mplib": "0.1.1",
+      "diffusers": "0.26.3",
+      "huggingface_hub": "0.25.2"
+    }
   },
   "persistent_paths": {
     "dataset_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1",
@@ -39,10 +50,12 @@
     "cache_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/cache/r16-p18-maniskill-act-boundary-screen-v1"
   },
   "simulator": {
-    "sapien": null,
-    "physx": null,
+    "sapien": "3.0.0",
+    "physx": "bundled with sapien 3.0.0; runtime capture pending",
     "camera_configuration_hashes": {},
-    "asset_hash_manifest": null
+    "asset_hash_manifest": null,
+    "cpu_no_render_diagnostic": "smoke/cpu_no_render_failure.json",
+    "gpu_smoke_status": "pending_unoccupied_gpu"
   },
   "pai": {
     "registry": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry",
@@ -54,4 +67,3 @@
     "pai_probe_created": false
   }
 }
-
