@@ -1,0 +1,51 @@
+{
+  "accepted_result_scope": "formal_training_start_and_first_complete_checkpoint_only",
+  "baseline_gate_result_available": false,
+  "first_complete_checkpoints": {
+    "PushCube-v1/seed_16018": {
+      "complete_marker_sha256": "1087b9ec20697b6a0b9871db4f456785c20373ac1cbe10485ae66c8f144c79f1",
+      "global_iteration": 5000,
+      "payload_sha256": "fb31b6cbd718bf162c23bdf1ca7fe3ece05ecdd147d7917c182f4b6fb9c544e1",
+      "validation_loss": 0.015211056392010383
+    },
+    "PushCube-v1/seed_16019": {
+      "complete_marker_sha256": "e4e689a0b0c0d3733b3c65a455c529f8303aa435d8dc0f38cf1ea24991460ab5",
+      "global_iteration": 5000,
+      "payload_sha256": "2dc5d76eb5ee46f38371f8cfd6f9fa61734b62ece6ae53843b1a6ecfbef4a16d",
+      "validation_loss": 0.01339172419137407
+    }
+  },
+  "first_real_work": {
+    "artifact_sha256": "c23fe7e976e9092e20a513648ab0dddc76f15bef1e8d8c179d003ddc76860633",
+    "global_iteration": 1,
+    "loss": 68.74104309082031,
+    "model_seed": 16018,
+    "status": "persisted_real_optimizer_step_and_loss",
+    "task_id": "PushCube-v1"
+  },
+  "observed_utc": "2026-08-13T10:43:36Z",
+  "oracle_probe_result_available": false,
+  "pai_contract": {
+    "aimaster_enabled": false,
+    "automatic_platform_restarts": 0,
+    "elastic_enabled": false,
+    "gpu_count": 2,
+    "gpu_model": "NVIDIA A800",
+    "gid": 2254,
+    "preemptible": false,
+    "uid": 2254,
+    "wandb_secret_injected": false
+  },
+  "pai_job_id": "dlc106yxoqy3aa7b",
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "replay_gate": {
+    "episodes_attempted": 1200,
+    "episodes_saved_successful": 1184,
+    "matrix_complete_sha256": "949247b33d8b123ec118f2b4a6f8dde6586e3cfaf4ff7c34a19c828359b68a8b",
+    "status": "PASS"
+  },
+  "run_id": "r16p18-msact-v1-20260813o",
+  "source_commit": "f7c6f178142801b84c4d011152958f419df71b7a",
+  "status": "FORMAL_TRAINING_IN_PROGRESS",
+  "thresholds_changed_after_results": false
+}
