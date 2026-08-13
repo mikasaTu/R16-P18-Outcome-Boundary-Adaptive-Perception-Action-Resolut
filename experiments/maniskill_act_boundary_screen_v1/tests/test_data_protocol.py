@@ -5,15 +5,18 @@ from pathlib import Path
 
 import h5py
 import numpy as np
+import pytest
 
 
 SCRIPT_DIR = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPT_DIR))
 from protocol_common import (  # noqa: E402
     closed_loop_seeds,
+    replay_count_bounds,
     selection_key,
     sha256_hdf5_group,
     sha256_initial_state,
+    validate_replayed_split_count,
 )
 
 
@@ -55,3 +58,18 @@ def test_closed_loop_seeds_are_unique_and_disjoint() -> None:
     assert len(seeds) == 100
     assert len(set(seeds)) == 100
     assert not forbidden.intersection(seeds)
+
+
+def test_replayed_split_count_uses_frozen_95_percent_gate() -> None:
+    assert replay_count_bounds("train") == (190, 200)
+    assert replay_count_bounds("validation") == (48, 50)
+    for split, accepted in (("train", (190, 200)), ("validation", (48, 50))):
+        for observed in accepted:
+            validate_replayed_split_count(split, observed)
+
+
+def test_replayed_split_count_rejects_below_gate_and_overflow() -> None:
+    with pytest.raises(RuntimeError, match="outside frozen gate"):
+        validate_replayed_split_count("train", 189)
+    with pytest.raises(RuntimeError, match="outside frozen gate"):
+        validate_replayed_split_count("validation", 51)

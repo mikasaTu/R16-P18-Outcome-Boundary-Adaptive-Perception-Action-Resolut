@@ -20,6 +20,24 @@ FORMAL_TASKS = (
 RETIRED_FORMAL_TASKS = ("PegInsertionSide-v1",)
 MODEL_SEEDS = (16018, 16019, 16020)
 SPLIT_COUNTS = {"train": 200, "validation": 50, "test": 50}
+MIN_REPLAY_SUCCESS_RATE = 0.95
+
+
+def replay_count_bounds(split: str) -> tuple[int, int]:
+    """Return the inclusive trajectory-count bounds allowed by the frozen gate."""
+
+    expected = SPLIT_COUNTS[split]
+    minimum = int(np.ceil(expected * MIN_REPLAY_SUCCESS_RATE))
+    return minimum, expected
+
+
+def validate_replayed_split_count(split: str, observed: int) -> None:
+    minimum, maximum = replay_count_bounds(split)
+    if not minimum <= observed <= maximum:
+        raise RuntimeError(
+            f"{split} replay count outside frozen gate: "
+            f"observed={observed}, allowed=[{minimum}, {maximum}]"
+        )
 
 
 def canonical_json(value: Any) -> bytes:

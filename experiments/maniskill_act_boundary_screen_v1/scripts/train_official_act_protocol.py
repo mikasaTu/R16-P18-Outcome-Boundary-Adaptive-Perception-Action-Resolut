@@ -29,7 +29,13 @@ from torch.utils.data import DataLoader, Sampler
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
-from protocol_common import PROTOCOL_ID, atomic_write_text, canonical_json, sha256_file  # noqa: E402
+from protocol_common import (  # noqa: E402
+    PROTOCOL_ID,
+    atomic_write_text,
+    canonical_json,
+    sha256_file,
+    validate_replayed_split_count,
+)
 
 try:
     import train_rgbd as official_act
@@ -56,6 +62,8 @@ class TrainConfig:
     train_json_sha256: str
     validation_h5_sha256: str
     validation_json_sha256: str
+    train_trajectory_count: int
+    validation_trajectory_count: int
     total_iterations: int
     batch_size: int
     validation_batch_size: int
@@ -168,6 +176,16 @@ def preflight_summary(args: argparse.Namespace, config: TrainConfig) -> dict[str
 def make_train_config(args: argparse.Namespace) -> TrainConfig:
     train_h5_sha, train_json_sha = dataset_digests(args.train_h5)
     val_h5_sha, val_json_sha = dataset_digests(args.validation_h5)
+    train_trajectory_count = len(
+        json.loads(args.train_h5.with_suffix(".json").read_text(encoding="utf-8"))["episodes"]
+    )
+    validation_trajectory_count = len(
+        json.loads(args.validation_h5.with_suffix(".json").read_text(encoding="utf-8"))[
+            "episodes"
+        ]
+    )
+    validate_replayed_split_count("train", train_trajectory_count)
+    validate_replayed_split_count("validation", validation_trajectory_count)
     return TrainConfig(
         protocol_id=PROTOCOL_ID,
         upstream_commit=UPSTREAM_COMMIT,
@@ -180,6 +198,8 @@ def make_train_config(args: argparse.Namespace) -> TrainConfig:
         train_json_sha256=train_json_sha,
         validation_h5_sha256=val_h5_sha,
         validation_json_sha256=val_json_sha,
+        train_trajectory_count=train_trajectory_count,
+        validation_trajectory_count=validation_trajectory_count,
         total_iterations=args.total_iterations,
         batch_size=args.batch_size,
         validation_batch_size=args.validation_batch_size,
@@ -496,9 +516,18 @@ def main() -> None:
     validation_dataset = official_act.SmallDemoDataset_ACTPolicy(
         str(cli.validation_h5), official_args.num_queries, num_traj=None, include_depth=False
     )
-    if train_dataset.num_traj != 200 or validation_dataset.num_traj != 50:
+    validate_replayed_split_count("train", train_dataset.num_traj)
+    validate_replayed_split_count("validation", validation_dataset.num_traj)
+    if (
+        train_dataset.num_traj != config.train_trajectory_count
+        or validation_dataset.num_traj != config.validation_trajectory_count
+    ):
         raise RuntimeError(
-            f"identity split mismatch: train={train_dataset.num_traj}, validation={validation_dataset.num_traj}"
+            "HDF5/JSON identity split mismatch: "
+            f"train_h5={train_dataset.num_traj}, "
+            f"train_json={config.train_trajectory_count}, "
+            f"validation_h5={validation_dataset.num_traj}, "
+            f"validation_json={config.validation_trajectory_count}"
         )
     space_holder = make_space_holder(train_dataset)
     agent = official_act.Agent(space_holder, official_args).to(device)
