@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "status": "preregistration_frozen_environment_capture_pending",
+  "captured_utc": null,
+  "repository": {
+    "base_commit": "f9979e55693f02ca29460637486be0b850395cf0",
+    "working_branch": "maniskill-act-boundary-screen-v1",
+    "mutable_prefix": "experiments/maniskill_act_boundary_screen_v1/"
+  },
+  "maniskill": {
+    "repository": "https://github.com/haosulab/ManiSkill.git",
+    "tag": "v3.0.1",
+    "commit": "a4a4f9272ad64b1564035874b605ceb687b63ed8",
+    "tree": "dc931fb9ea2f7c039623d1d419767fae56f217ae",
+    "checkout": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/ManiSkill-r16p18-v3.0.1",
+    "official_act_entrypoint": "examples/baselines/act/train_rgbd.py"
+  },
+  "official_demos": {
+    "repository": "haosulab/ManiSkill_Demonstrations",
+    "revision": "d674485bbffdd533914e52d272fdda34c0515608",
+    "raw_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/raw_official",
+    "extracted_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/official_demos"
+  },
+  "runtime": {
+    "python": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python",
+    "overlay": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/r16p18-maniskill-act-v301-overlay/site-packages",
+    "python_version": "3.11.11",
+    "uid": 2254,
+    "gid": 2254,
+    "torch": "2.5.1+cu124",
+    "torchvision": "0.20.1+cu124",
+    "cuda_runtime": "12.4",
+    "package_lock_sha256": null
+  },
+  "persistent_paths": {
+    "dataset_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1",
+    "checkpoint_root": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1",
+    "log_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-act-boundary-screen-v1",
+    "cache_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/cache/r16-p18-maniskill-act-boundary-screen-v1"
+  },
+  "simulator": {
+    "sapien": null,
+    "physx": null,
+    "camera_configuration_hashes": {},
+    "asset_hash_manifest": null
+  },
+  "pai": {
+    "registry": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry",
+    "registry_commit": null,
+    "maximum_concurrent_gpus": 2,
+    "runtime_uid": 2254,
+    "runtime_gid": 2254,
+    "automatic_fault_tolerance": null,
+    "pai_probe_created": false
+  }
+}
+

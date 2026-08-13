@@ -1,0 +1,324 @@
+protocol_id: R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1
+protocol_frozen_utc: "2026-08-13T07:09:24Z"
+stage: 2
+scope: maniskill_rgb_act_task_screen_plus_oracle_boundary_existence_probe
+
+immutable_predecessor:
+  github_commit: f9979e55693f02ca29460637486be0b850395cf0
+  git_tree: 701971615717ef2dec9ca693a94268ac1bd6ff0d
+  decision: NO_GO_BASELINE_GATE
+  mutation_policy: no_existing_path_outside_experiment_directory_may_change
+
+repository:
+  required_branch: maniskill-act-boundary-screen-v1
+  mutable_prefix: experiments/maniskill_act_boundary_screen_v1/
+  final_publish_target: main
+
+upstream:
+  repository: https://github.com/haosulab/ManiSkill.git
+  tag: v3.0.1
+  commit: a4a4f9272ad64b1564035874b605ceb687b63ed8
+  tree: dc931fb9ea2f7c039623d1d419767fae56f217ae
+  official_act_entrypoint: examples/baselines/act/train_rgbd.py
+  official_act_package_version: 0.1.0
+  official_demo_repository: haosulab/ManiSkill_Demonstrations
+  official_demo_revision: d674485bbffdd533914e52d272fdda34c0515608
+
+scientific_questions:
+  - enough_independent_reproducible_demonstrations
+  - useful_official_rgb_act_performance_headroom
+  - nontrivial_action_outcome_boundaries
+  - nonadditive_visual_action_interaction
+
+forbidden_in_this_stage:
+  - learned_effect_predictor
+  - final_budgeted_selector
+  - adaptive_token_splitting
+  - adaptive_action_allocation
+  - diffusion_policy
+  - dino_wm
+  - pi0_5
+  - claim_validated_accepted_rejected_or_paper_ready
+
+compute:
+  max_concurrent_gpus: 2
+  local_smoke_gpu_policy: use_only_an_exclusively_idle_gpu
+  never_kill_preempt_or_share_foreign_gpu_process: true
+  pai_runtime_uid: 2254
+  pai_runtime_gid: 2254
+  pai_probe_created: false
+
+tasks:
+  smoke_only:
+    PickCube-v1:
+      source: motionplanning
+      raw_relative_path: PickCube-v1/motionplanning/trajectory.h5
+      target_control_mode: pd_ee_delta_pos
+      replay_backend: physx_cpu
+      replay_state_mode: use_first_env_state
+      observation_mode: rgb
+      max_episode_steps: 100
+  positive_candidates:
+    PegInsertionSide-v1:
+      role: precision_insertion
+      source: motionplanning
+      raw_relative_path: PegInsertionSide-v1/motionplanning/trajectory.h5
+      target_control_mode: pd_ee_delta_pose
+      replay_backend: physx_cpu
+      replay_state_mode: use_first_env_state
+      observation_mode: rgb
+      max_episode_steps: 300
+      total_train_iterations: 100000
+    PushT-v1:
+      role: contact_rich_multimodal
+      source: rl
+      raw_relative_path: PushT-v1/rl/trajectory.none.pd_ee_delta_pose.physx_cuda.h5
+      target_control_mode: pd_ee_delta_pose
+      replay_backend: physx_cuda
+      replay_state_mode: use_env_states
+      observation_mode: rgb
+      max_episode_steps: 150
+      total_train_iterations: 100000
+    StackCube-v1:
+      role: precise_placement_and_release
+      source: motionplanning
+      raw_relative_path: StackCube-v1/motionplanning/trajectory.h5
+      target_control_mode: pd_ee_delta_pos
+      replay_backend: physx_cpu
+      replay_state_mode: use_first_env_state
+      observation_mode: rgb
+      max_episode_steps: 200
+      total_train_iterations: 30000
+  negative_control:
+    PushCube-v1:
+      role: smooth_negative_control
+      source: motionplanning
+      raw_relative_path: PushCube-v1/motionplanning/trajectory.h5
+      target_control_mode: pd_ee_delta_pos
+      replay_backend: physx_cpu
+      replay_state_mode: use_first_env_state
+      observation_mode: rgb
+      max_episode_steps: 100
+      total_train_iterations: 30000
+  fallback_order:
+    - PlugCharger-v1
+    - PullCubeTool-v1
+    - PokeCube-v1
+  fallback_activation_reasons_only:
+    - data_availability
+    - baseline_performance
+    - seed_stability
+    - boundary_density
+
+data_gate:
+  exact_successful_trajectories_per_formal_task: 300
+  split_counts:
+    train: 200
+    validation: 50
+    test: 50
+  require_unique_source_trajectory_id: true
+  require_unique_episode_seed: true
+  require_unique_initial_state_hash: true
+  require_recorded_actions_and_environment_states: true
+  minimum_replay_success_rate: 0.95
+  duplication_or_augmentation_counted_as_new_episode: false
+  split_unit: trajectory_identity
+  selection_algorithm:
+    version: sha256_rank_v1
+    eligibility: source_success_true_and_unique_seed_and_unique_initial_state_hash
+    duplicate_resolution: keep_lexicographically_smallest_source_trajectory_id
+    rank_key: sha256(protocol_id + task_id + source_episode_id + episode_seed + initial_state_sha256)
+    select: first_300_ascending_rank_key
+    assignment: first_200_train_next_50_validation_last_50_test
+  initial_state_hash_algorithm:
+    version: hdf5_state_sha256_v1
+    rule: sha256_of_sorted_dataset_paths_dtype_shape_and_first_timestep_bytes_under_env_states
+  block_if_insufficient: true
+
+closed_loop_evaluation:
+  episodes_per_task_per_model_seed: 100
+  test_seed_algorithm:
+    version: sha256_seed_v1
+    rule: low_31_bits_of_sha256(protocol_id + task_id + closed_loop + index)
+    indices: [0, 99]
+    collision_rule: increment_index_domain_suffix_until_disjoint_from_all_300_demo_seeds
+  identical_test_seeds_across_model_seeds: true
+  checkpoint_selection:
+    metric: deterministic_mean_validation_imitation_loss
+    data: validation_split_only
+    candidate_steps: [5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, 75000, 80000, 85000, 90000, 95000, 100000]
+    task_candidates_limited_to_total_iterations: true
+    direction: minimize
+    tie_break: earliest_step
+    test_metric_may_not_select_checkpoint: true
+  record:
+    - success_once
+    - success_at_end
+    - episode_length
+    - intended_contact_events
+    - unintended_contact_events
+    - collisions
+    - policy_latency_seconds
+    - policy_calls
+
+official_rgb_act:
+  implementation_policy: import_official_architecture_and_dataset_code_from_pinned_checkout
+  protocol_adapter_scope:
+    - explicit_train_validation_identity_split
+    - deterministic_validation_loss_checkpoint_selection
+    - complete_state_checkpoint_and_resume
+    - fixed_closed_loop_test_seeds
+    - required_metric_accounting
+    - frozen_action_chunk_export_hook
+  input: rgb_only
+  depth: false
+  official_resize: [224, 224]
+  backbone: resnet18
+  pretrained_imagenet_weights: ResNet18_Weights.IMAGENET1K_V1
+  batch_size: 256
+  learning_rate: 0.0001
+  backbone_learning_rate: 0.00001
+  weight_decay: 0.0001
+  kl_weight: 10
+  temporal_aggregation: true
+  action_queries: 30
+  encoder_layers: 2
+  decoder_layers: 4
+  feedforward_dim: 512
+  hidden_dim: 256
+  dropout: 0.1
+  attention_heads: 8
+  optimizer: AdamW
+  scheduler: StepLR_at_two_thirds_total_iterations_gamma_0_1
+  ema_power: 0.75
+  model_seeds: [16018, 16019, 16020]
+  complete_checkpoint_interval_iterations: 5000
+  checkpoint_contents:
+    - model
+    - ema_model
+    - optimizer
+    - scheduler
+    - ema_state
+    - python_rng
+    - numpy_rng
+    - torch_cpu_rng
+    - torch_cuda_rng
+    - global_iteration
+    - train_dataset_identity_hash
+    - validation_dataset_identity_hash
+
+baseline_gate:
+  positive_tasks:
+    aggregate_success_inclusive: [0.25, 0.85]
+    maximum_seed_range_percentage_points: 25
+  negative_control:
+    task: PushCube-v1
+    aggregate_success_inclusive: [0.70, 0.98]
+  minimum_passing_positive_tasks: 2
+  PickCube-v1_scientific_task: false
+
+state_bank:
+  states_per_passing_task: 64
+  strata_counts:
+    free_space: 16
+    pre_contact_or_pre_grasp: 16
+    contact_insertion_or_placement: 16
+    near_completion: 16
+  source_split: test
+  selection_version: heldout_phase_predicate_sha256_v1
+  tie_break: ascending_sha256(task_id + source_trajectory_id + timestep)
+  simulator_fields_are_labels_only: true
+  restoration_repeats: 3
+  rollout_steps: 4
+  restore_tolerances:
+    max_absolute_state: 0.0001
+    object_translation_m: 0.0001
+    object_rotation_rad: 0.001
+    normalized_progress: 0.0001
+    categorical_outcomes_exact: true
+
+local_action_atlas:
+  continuous_dimensions: all_non_gripper_action_dimensions_over_first_4_chunk_steps
+  neighbor_count: 256
+  neighborhood: nearest_training_action_chunks_to_base_chunk_by_l2_after_per_dimension_std_scaling
+  pca_directions: 2
+  grid_levels: [-1.0, -0.5, 0.0, 0.5, 1.0]
+  grid_shape: [5, 5]
+  gripper_continuous_grid_policy: keep_base_value
+  gripper_binary_controls_evaluated_separately: true
+  restore_before_every_candidate: true
+  execute_steps: 4
+  adjacent_edges_per_state: 40
+  categorical_outcome_class:
+    - short_horizon_success
+    - intended_contact
+    - unintended_contact
+    - collision
+    - recoverable
+  normalized_effect_scales:
+    generic_object_translation_m: 0.01
+    generic_object_rotation_rad: 0.17453292519943295
+    normalized_progress: 0.05
+    PegInsertionSide-v1_insertion_or_alignment_m: 0.005
+    PushT-v1_goal_coverage: 0.05
+    StackCube-v1_alignment_or_vertical_gap_m: 0.01
+    PushCube-v1_goal_distance_m: 0.01
+  continuous_effect_distance: rms_of_available_scaled_effect_components
+  boundary_rule: categorical_class_changes_or_continuous_effect_distance_gte_1_0
+  action_boundary_density: boundary_adjacent_edges_divided_by_40_then_mean_over_states
+  outcome_alias_rule: same_categorical_class_and_continuous_effect_distance_lt_0_25
+  outcome_utility:
+    formula: 100*short_success + 10*clipped_progress_delta + 2*intended_contact - 5*unintended_contact - 5*collision + recoverable - 0.01*scaled_residual_norm
+    progress_clip: [-1.0, 1.0]
+    tie_break: lexicographic_grid_index
+
+visual_intervention_atlas:
+  camera_policy: every_rgb_camera_in_frozen_observation_order
+  tile_grid: [4, 4]
+  interventions:
+    local_low_resolution:
+      downsample_size: [2, 2]
+      upsample: bilinear
+    local_blur:
+      gaussian_kernel: 9
+      gaussian_sigma: 3.0
+    conditional_mean:
+      rule: per_channel_mean_of_one_pixel_ring_around_tile
+  zero_mask_only: false
+  same_inference_seed_and_other_inputs: true
+  important_tile_rule: changes_action_candidate_ranking_or_realized_task_outcome
+  visual_boundary_density: important_tile_intervention_pairs_divided_by_all_tile_intervention_pairs
+
+joint_probe:
+  selected_visual_tiles: 4
+  visual_tile_rank: maximum_preliminary_action_chunk_l2_change_then_tile_index
+  selected_action_candidates: 5
+  action_candidate_rank: descending_original_state_outcome_utility_then_grid_index
+  combinations_per_state: 20
+  identical_simulator_restore_per_combination: true
+  joint_state_boundary_rule: at_least_one_selected_visual_intervention_changes_best_valid_physical_action_cell
+  joint_coupling_density: joint_boundary_states_divided_by_all_states
+  coarse_uniform_action_indices: cartesian_product_of_levels_minus1_0_plus1
+  full_fine_action_indices: all_25_grid_cells
+  best_action_recall: fraction_states_where_full_fine_best_identity_is_present_in_candidate_set
+  outcome_regret: full_fine_best_utility_minus_candidate_set_best_utility
+
+statistics:
+  confidence_interval: paired_percentile_bootstrap
+  bootstrap_replicates: 10000
+  confidence_level: 0.95
+  bootstrap_seed: 16018
+  task_unit: state_or_fixed_episode_as_appropriate
+
+go_gate:
+  minimum_positive_tasks_passing_act_baseline: 2
+  minimum_positive_tasks_action_boundary_density_gte_0_20: 2
+  minimum_positive_tasks_joint_coupling_density_gte_0_15: 2
+  oracle_condition_any:
+    best_action_recall_improvement_percentage_points_gte: 10
+    outcome_regret_reduction_fraction_gte: 0.15
+  PushCube-v1_joint_boundary_density_lte: 0.10
+  qualitative_direction_minimum_reproducing_model_seeds: 2
+  require_complete_call_and_opportunity_accounting: true
+  allowed_decisions: [GO, NO_GO, REVISE]
+  stop_after_report: true
