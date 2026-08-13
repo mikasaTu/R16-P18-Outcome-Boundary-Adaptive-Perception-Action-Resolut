@@ -104,6 +104,7 @@ def assign_splits(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def build_subset(
+    task_id: str,
     source_h5_path: Path,
     source_metadata: dict[str, Any],
     selected: list[dict[str, Any]],
@@ -146,6 +147,24 @@ def build_subset(
             "source_h5_sha256": sha256_file(source_h5_path),
         }
     )
+    if task_id == "PlugCharger-v1":
+        source_reward_mode = output_metadata["env_info"]["env_kwargs"].get(
+            "reward_mode"
+        )
+        if source_reward_mode != "dense":
+            raise RuntimeError(
+                "PlugCharger metadata adapter expected source reward_mode=dense"
+            )
+        output_metadata["env_info"]["env_kwargs"]["reward_mode"] = "sparse"
+        output_metadata["protocol_metadata_adapter"] = {
+            "version": "plug_charger_reward_mode_v1",
+            "field": "env_info.env_kwargs.reward_mode",
+            "source_value": "dense",
+            "target_value": "sparse",
+            "reason": "ManiSkill-v3.0.1-PlugCharger-supports-none-or-sparse-only",
+            "dynamics_actions_states_changed": False,
+            "rewards_recorded": False,
+        }
     write_json(output_json_path, output_metadata)
     return {
         "h5_path": str(output_h5_path),
@@ -198,8 +217,16 @@ def main() -> None:
             split_items = [item for item in selected if item["split"] == split_name]
             output_h5 = selected_raw_root / task_id / split_name / "trajectory.h5"
             prior = prior_subset_records.get((task_id, split_name))
+            expected_adapter = task_id != "PlugCharger-v1" or (
+                output_h5.with_suffix(".json").is_file()
+                and json.loads(
+                    output_h5.with_suffix(".json").read_text(encoding="utf-8")
+                ).get("protocol_metadata_adapter", {}).get("version")
+                == "plug_charger_reward_mode_v1"
+            )
             if (
                 prior is not None
+                and expected_adapter
                 and Path(prior["h5_path"]) == output_h5
                 and output_h5.is_file()
                 and output_h5.with_suffix(".json").is_file()
@@ -214,7 +241,11 @@ def main() -> None:
                         "task_id": task_id,
                         "split": split_name,
                         **build_subset(
-                            source_h5, source_metadata, split_items, output_h5
+                            task_id,
+                            source_h5,
+                            source_metadata,
+                            split_items,
+                            output_h5,
                         ),
                     }
                 )

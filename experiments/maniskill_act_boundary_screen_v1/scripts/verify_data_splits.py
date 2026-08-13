@@ -111,6 +111,16 @@ def verify_subset_files(
         metadata = load_json(json_path)
         require(metadata["protocol_id"] == PROTOCOL_ID, f"protocol id: {json_path}")
         require(metadata["split"] == record["split"], f"split: {json_path}")
+        if record["task_id"] == "PlugCharger-v1":
+            require(
+                metadata["env_info"]["env_kwargs"]["reward_mode"] == "sparse",
+                f"PlugCharger reward-mode adapter: {json_path}",
+            )
+            require(
+                metadata.get("protocol_metadata_adapter", {}).get("version")
+                == "plug_charger_reward_mode_v1",
+                f"PlugCharger metadata adapter version: {json_path}",
+            )
         episodes = sorted(metadata["episodes"], key=lambda item: int(item["episode_id"]))
         expected_rows = [
             row

@@ -42,6 +42,11 @@
     "observation_mode": "rgb",
     "max_episode_steps": 200,
     "total_train_iterations": 100000,
+    "normalized_effect_scales": {
+      "insertion_or_alignment_m": 0.005,
+      "object_rotation_rad": 0.17453292519943295,
+      "normalized_progress": 0.05
+    },
     "maximum_retries_per_trajectory": 9,
     "official_successful_episodes": 1000,
     "eligible_unique_seed_and_initial_state": 1000,
@@ -49,6 +54,29 @@
     "official_h5_sha256": "bb70ac58432709ef2065c8f917c07b150d65609d1163a697c27f625513484f5f",
     "official_json_sha256": "43c02ca1a3b9c0eced3ed83e4de3215240c81f72e63503e467a4427a72999532",
     "result_observed_before_activation": false
+  },
+  "infrastructure_audits": [
+    {
+      "run_id": "r16p18-msact-v1-20260813j",
+      "pai_job_id": "dlc1uz1ziip9jo0x",
+      "status": "FAILED_BEFORE_FIRST_TRAJECTORY",
+      "scientific_replay_attempts": 0,
+      "cause": "official_demo_reward_mode_dense_is_unsupported_by_pinned_v3.0.1_PlugCharger",
+      "resolution": "metadata_only_adapter_dense_to_sparse",
+      "actions_states_seeds_or_dynamics_changed": false,
+      "threshold_changed": false
+    }
+  ],
+  "metadata_adapters": {
+    "PlugCharger-v1": {
+      "version": "plug_charger_reward_mode_v1",
+      "field": "env_info.env_kwargs.reward_mode",
+      "source_value": "dense",
+      "target_value": "sparse",
+      "rewards_recorded": false,
+      "policy_input_changed": false,
+      "dynamics_actions_states_or_seeds_changed": false
+    }
   },
   "active_formal_tasks": [
     "PlugCharger-v1",

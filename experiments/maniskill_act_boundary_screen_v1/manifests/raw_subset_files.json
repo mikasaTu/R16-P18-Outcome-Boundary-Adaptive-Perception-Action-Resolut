@@ -5,7 +5,7 @@
       "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/train/trajectory.h5",
       "h5_sha256": "ab5b9889ed5d1c61b14126ebe81efb0587a2fcf39a75942c960ed7b673cae374",
       "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/train/trajectory.json",
-      "json_sha256": "62ffa7d821ef733cdb7b6cd676562eaa0725c270d753982d5710ab3769603839",
+      "json_sha256": "463c0eb2a2a4aad1c3f72de183c37b7e4bd6904f3fa339665f81afd0d27b4a32",
       "split": "train",
       "task_id": "PlugCharger-v1"
     },
@@ -14,7 +14,7 @@
       "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/validation/trajectory.h5",
       "h5_sha256": "16e93907b52d53600a5f76e0df8b8b106cfc2804433bf2c1718ec896d84adca5",
       "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/validation/trajectory.json",
-      "json_sha256": "eea8e184c6f1bbee86fb97383a67a6b8922d7691009213e3c11dd250933f5dc1",
+      "json_sha256": "329642ba86799820b2a32c2528a97587b316140d845e0b96b0988530b508a203",
       "split": "validation",
       "task_id": "PlugCharger-v1"
     },
@@ -23,7 +23,7 @@
       "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/test/trajectory.h5",
       "h5_sha256": "2d4b53c5a17c5bce94a791e7df8c727bdad3b71b10973430f7adc79b76c0e4b2",
       "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/test/trajectory.json",
-      "json_sha256": "bcf00385411229408b4497426fdab5c0d99addd15aa98aae9ace9033ca77ecff",
+      "json_sha256": "dd7f526f96ada1074d676a79eacc6d3559a76d962e9c259a75fef6dae6c04d4d",
       "split": "test",
       "task_id": "PlugCharger-v1"
     },

@@ -51,3 +51,11 @@ The preregistered first fallback, `PlugCharger-v1`, was activated for the
 allowed `data_availability` reason before any fallback replay result was
 observed. The immutable decision record is `task_selection.json`; thresholds
 were not changed.
+
+The official PlugCharger archive labels its environment reward mode as
+`dense`, while the pinned v3.0.1 task supports `none` and `sparse`. Replay does
+not record or consume rewards, so a frozen metadata-only adapter changes this
+field to `sparse` in selected subset JSON. It does not alter simulator states,
+actions, seeds, control conversion, policy inputs, or dynamics; both values and
+the zero-trajectory infrastructure failure that exposed the mismatch are
+recorded in `task_selection.json`.
