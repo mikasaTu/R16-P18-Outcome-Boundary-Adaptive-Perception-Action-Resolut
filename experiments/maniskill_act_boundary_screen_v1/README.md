@@ -59,3 +59,16 @@ field to `sparse` in selected subset JSON. It does not alter simulator states,
 actions, seeds, control conversion, policy inputs, or dynamics; both values and
 the zero-trajectory infrastructure failure that exposed the mismatch are
 recorded in `task_selection.json`.
+
+The adapted PlugCharger replay subsequently saved 163/200 training
+trajectories (81.5%) with the frozen nine-retry budget. This is below the
+unchanged 190/200 gate, so PlugCharger was retired. Once the gate was already
+mathematically unreachable—and before any result from the next task—the
+preregistered second fallback `PullCubeTool-v1` was activated. Its official
+source contains 1,000 successful episodes and 937 eligible unique seed/state
+identities; the fixed hash ranking selected 300 with complete 200/50/50 and
+triple-uniqueness checks. Its `pd_ee_delta_pose` RGB replay uses the same
+nine-retry CPU conversion protocol. The evaluation horizon was frozen at 300
+before replay because the official successful-demo elapsed-step 95th
+percentile is 283. The exact decision timeline, failed-output hashes, and PAI
+job identity are recorded in `task_selection.json`.

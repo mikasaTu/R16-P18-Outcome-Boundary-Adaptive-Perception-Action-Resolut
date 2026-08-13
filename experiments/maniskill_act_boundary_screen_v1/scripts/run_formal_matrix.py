@@ -19,7 +19,7 @@ from protocol_common import PROTOCOL_ID, SPLIT_COUNTS, atomic_write_text  # noqa
 
 
 TASKS = {
-    "PlugCharger-v1": {
+    "PullCubeTool-v1": {
         "control_mode": "pd_ee_delta_pose",
         "total_iterations": 100_000,
         "replay_max_retry": 9,
@@ -246,7 +246,7 @@ def replay_jobs(args: argparse.Namespace) -> list[Job]:
 
 def train_jobs(args: argparse.Namespace) -> list[Job]:
     jobs = []
-    for task_id in ("PushCube-v1", "StackCube-v1", "PlugCharger-v1", "PushT-v1"):
+    for task_id in ("PushCube-v1", "StackCube-v1", "PullCubeTool-v1", "PushT-v1"):
         task = TASKS[task_id]
         train_h5 = args.selected_raw_root / task_id / "train" / (
             f"trajectory.rgb.{task['control_mode']}."

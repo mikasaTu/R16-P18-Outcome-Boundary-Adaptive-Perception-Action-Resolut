@@ -2,30 +2,30 @@
   "files": [
     {
       "episodes": 200,
-      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/train/trajectory.h5",
-      "h5_sha256": "ab5b9889ed5d1c61b14126ebe81efb0587a2fcf39a75942c960ed7b673cae374",
-      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/train/trajectory.json",
-      "json_sha256": "463c0eb2a2a4aad1c3f72de183c37b7e4bd6904f3fa339665f81afd0d27b4a32",
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PullCubeTool-v1/train/trajectory.h5",
+      "h5_sha256": "cc95dfbdc2cc6aa9a0d2310c387cab09bfa7a0e9af0b4379b95df7fb58ddae95",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PullCubeTool-v1/train/trajectory.json",
+      "json_sha256": "3267a22b4ecff2f1369500517260bf49d7508bf93351f8214b2cbcfd3d7173b3",
       "split": "train",
-      "task_id": "PlugCharger-v1"
+      "task_id": "PullCubeTool-v1"
     },
     {
       "episodes": 50,
-      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/validation/trajectory.h5",
-      "h5_sha256": "16e93907b52d53600a5f76e0df8b8b106cfc2804433bf2c1718ec896d84adca5",
-      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/validation/trajectory.json",
-      "json_sha256": "329642ba86799820b2a32c2528a97587b316140d845e0b96b0988530b508a203",
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PullCubeTool-v1/validation/trajectory.h5",
+      "h5_sha256": "e4fb40219af903b9bd862cc299b97dd0a367e70787f715aa7f5e449d3653037d",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PullCubeTool-v1/validation/trajectory.json",
+      "json_sha256": "3c43994c01dd15f19f90e80af0c53f78292b67466138e6be8990bcb405af6770",
       "split": "validation",
-      "task_id": "PlugCharger-v1"
+      "task_id": "PullCubeTool-v1"
     },
     {
       "episodes": 50,
-      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/test/trajectory.h5",
-      "h5_sha256": "2d4b53c5a17c5bce94a791e7df8c727bdad3b71b10973430f7adc79b76c0e4b2",
-      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PlugCharger-v1/test/trajectory.json",
-      "json_sha256": "dd7f526f96ada1074d676a79eacc6d3559a76d962e9c259a75fef6dae6c04d4d",
+      "h5_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PullCubeTool-v1/test/trajectory.h5",
+      "h5_sha256": "c315457e05d9f5e79570a4501867150220562c87826fb51c446a7478371df2b7",
+      "json_path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/PullCubeTool-v1/test/trajectory.json",
+      "json_sha256": "c2c2de376b29a379ab0f3280a7a244ade192bebfba4db1d53fe74abb78f01895",
       "split": "test",
-      "task_id": "PlugCharger-v1"
+      "task_id": "PullCubeTool-v1"
     },
     {
       "episodes": 200,

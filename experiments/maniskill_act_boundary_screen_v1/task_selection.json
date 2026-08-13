@@ -1,7 +1,9 @@
 {
   "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
-  "status": "FALLBACK_ACTIVATED_BEFORE_FALLBACK_REPLAY",
-  "decision_utc": "2026-08-13T09:08:42Z",
+  "status": "SECOND_FALLBACK_ACTIVATED_AFTER_MATHEMATICAL_DATA_GATE_FAILURE",
+  "first_fallback_decision_utc": "2026-08-13T09:08:42Z",
+  "second_fallback_decision_utc": "2026-08-13T09:48:27Z",
+  "PlugCharger_final_audit_utc": "2026-08-13T09:52:09Z",
   "frozen_data_gate": {
     "minimum_replay_success_rate": 0.95,
     "minimum_train_saved_episodes": 190,
@@ -30,7 +32,7 @@
     ],
     "failed_rgb_h5_sha256": "bc6240217185efff14d230216e4f54f43914197c16c75fa002baff16bcd4922e"
   },
-  "activated_fallback": {
+  "first_fallback_activation": {
     "task_id": "PlugCharger-v1",
     "fallback_rank": 1,
     "role": "precision_grasp_alignment_and_insertion",
@@ -53,6 +55,56 @@
     "official_zip_sha256": "a0ee94e08b1c88425af7b71eaeb1fb0e5e8c6ae0f3f14936aa53b7c6926e5403",
     "official_h5_sha256": "bb70ac58432709ef2065c8f917c07b150d65609d1163a697c27f625513484f5f",
     "official_json_sha256": "43c02ca1a3b9c0eced3ed83e4de3215240c81f72e63503e467a4427a72999532",
+    "result_observed_before_activation": false
+  },
+  "retired_fallback": {
+    "task_id": "PlugCharger-v1",
+    "fallback_rank": 1,
+    "status": "BLOCKED_DATA_GATE",
+    "activation_reason": "data_availability",
+    "observed_train_attempts": 200,
+    "observed_train_saved_successful": 163,
+    "observed_train_replay_success_rate": 0.815,
+    "minimum_required": 190,
+    "maximum_retries_per_trajectory": 9,
+    "gate_became_mathematically_impossible_before_second_fallback_activation": true,
+    "final_audit_completed_after_second_fallback_activation": true,
+    "run_id": "r16p18-msact-v1-20260813k",
+    "pai_job_id": "dlcgr7oy2wuxomtj",
+    "pai_job_status": "Failed",
+    "failed_rgb_h5_sha256": "12fd261fe6ef0fc1f9cc356fc7d32ce04c18a834c17501e72a59e8c12be46ad6",
+    "failed_rgb_json_sha256": "ff309fc86da2a4d0f4f53606a51c51c5bc5eab5d8ec7a1f867cea74f04b41a10",
+    "replay_log_sha256": "85f5adae9c7c7fe3add28df712cfe3960116279d8b27232ab9d9ba81839b377e",
+    "threshold_changed": false
+  },
+  "activated_fallback": {
+    "task_id": "PullCubeTool-v1",
+    "fallback_rank": 2,
+    "role": "tool_mediated_contact_rich_pull",
+    "source": "official_motionplanning",
+    "official_source_control_mode": "pd_joint_pos",
+    "target_control_mode": "pd_ee_delta_pose",
+    "replay_backend": "physx_cpu",
+    "replay_state_mode": "use_first_env_state",
+    "observation_mode": "rgb",
+    "max_episode_steps": 300,
+    "horizon_basis": "frozen_before_any_PullCubeTool_replay_or_ACT_result; official-success-demonstration elapsed-step p95=283",
+    "total_train_iterations": 100000,
+    "normalized_effect_scales": {
+      "generic_object_translation_m": 0.01,
+      "object_rotation_rad": 0.17453292519943295,
+      "normalized_progress": 0.05
+    },
+    "maximum_retries_per_trajectory": 9,
+    "official_successful_episodes": 1000,
+    "eligible_unique_seed_and_initial_state": 937,
+    "official_zip_sha256": "7c5077f5894d7f1fde1558141d7d287994005358a08662174f0f2fee99c0efcb",
+    "official_h5_sha256": "b60f9da299f49773f20e135405853aea19bf27766bcb6a8bd3ce5959944da8ad",
+    "official_json_sha256": "884fa722db79be2a858707673cef17bebf5c55f378dc04f14322a990f4ea04fd",
+    "selected_successful_episodes": 300,
+    "selected_unique_seeds": 300,
+    "selected_unique_initial_states": 300,
+    "source_and_subset_integrity_status": "PASS",
     "result_observed_before_activation": false
   },
   "infrastructure_audits": [
@@ -79,7 +131,7 @@
     }
   },
   "active_formal_tasks": [
-    "PlugCharger-v1",
+    "PullCubeTool-v1",
     "PushT-v1",
     "StackCube-v1",
     "PushCube-v1"

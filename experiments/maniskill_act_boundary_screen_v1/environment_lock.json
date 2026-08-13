@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "runtime_and_gpu_smoke_passed_fallback_selection_frozen",
+  "status": "runtime_and_gpu_smoke_passed_second_fallback_selection_frozen",
   "captured_utc": "2026-08-13T08:27:36Z",
   "repository": {
     "base_commit": "f9979e55693f02ca29460637486be0b850395cf0",
@@ -21,7 +21,10 @@
     "raw_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/raw_official",
     "extracted_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/official_demos",
     "zip_lock": "locks/official_demo_zip_sha256.json",
-    "active_fallback": "PlugCharger-v1"
+    "active_fallback": "PullCubeTool-v1",
+    "active_fallback_selection_frozen_utc": "2026-08-13T09:48:27Z",
+    "active_fallback_closed_loop_horizon": 300,
+    "horizon_basis": "frozen_before_any_PullCubeTool_replay_or_ACT_result; official-success-demonstration elapsed-step p95=283"
   },
   "runtime": {
     "python": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python",

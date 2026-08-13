@@ -26,7 +26,7 @@ from protocol_common import (
 
 EXPERIMENT_RELATIVE = Path("experiments/maniskill_act_boundary_screen_v1")
 TASK_SOURCES = {
-    "PlugCharger-v1": Path("PlugCharger-v1/motionplanning/trajectory.h5"),
+    "PullCubeTool-v1": Path("PullCubeTool-v1/motionplanning/trajectory.h5"),
     "PushT-v1": Path(
         "PushT-v1/rl/trajectory.none.pd_ee_delta_pose.physx_cuda.h5"
     ),
