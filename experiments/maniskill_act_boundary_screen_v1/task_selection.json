@@ -1,0 +1,60 @@
+{
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "status": "FALLBACK_ACTIVATED_BEFORE_FALLBACK_REPLAY",
+  "decision_utc": "2026-08-13T09:08:42Z",
+  "frozen_data_gate": {
+    "minimum_replay_success_rate": 0.95,
+    "minimum_train_saved_episodes": 190,
+    "threshold_changed_after_results": false
+  },
+  "retired_candidate": {
+    "task_id": "PegInsertionSide-v1",
+    "status": "BLOCKED_DATA_GATE",
+    "activation_reason": "data_availability",
+    "observed_train_attempts": 200,
+    "observed_train_saved_successful": 188,
+    "observed_train_replay_success_rate": 0.94,
+    "retry_audits": [
+      {
+        "run_id": "r16p18-msact-v1-20260813f",
+        "pai_job_id": "dlc110007eyebctm",
+        "maximum_retries_per_trajectory": 3,
+        "result": "188/200"
+      },
+      {
+        "run_id": "r16p18-msact-v1-20260813g",
+        "pai_job_id": "dlc1yupa16hedwwa",
+        "maximum_retries_per_trajectory": 9,
+        "result": "188/200"
+      }
+    ],
+    "failed_rgb_h5_sha256": "bc6240217185efff14d230216e4f54f43914197c16c75fa002baff16bcd4922e"
+  },
+  "activated_fallback": {
+    "task_id": "PlugCharger-v1",
+    "fallback_rank": 1,
+    "role": "precision_grasp_alignment_and_insertion",
+    "source": "official_motionplanning",
+    "official_source_control_mode": "pd_joint_pos",
+    "target_control_mode": "pd_ee_delta_pose",
+    "replay_backend": "physx_cpu",
+    "replay_state_mode": "use_first_env_state",
+    "observation_mode": "rgb",
+    "max_episode_steps": 200,
+    "total_train_iterations": 100000,
+    "maximum_retries_per_trajectory": 9,
+    "official_successful_episodes": 1000,
+    "eligible_unique_seed_and_initial_state": 1000,
+    "official_zip_sha256": "a0ee94e08b1c88425af7b71eaeb1fb0e5e8c6ae0f3f14936aa53b7c6926e5403",
+    "official_h5_sha256": "bb70ac58432709ef2065c8f917c07b150d65609d1163a697c27f625513484f5f",
+    "official_json_sha256": "43c02ca1a3b9c0eced3ed83e4de3215240c81f72e63503e467a4427a72999532",
+    "result_observed_before_activation": false
+  },
+  "active_formal_tasks": [
+    "PlugCharger-v1",
+    "PushT-v1",
+    "StackCube-v1",
+    "PushCube-v1"
+  ],
+  "negative_control": "PushCube-v1"
+}

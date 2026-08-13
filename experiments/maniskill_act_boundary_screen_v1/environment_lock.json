@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "runtime_import_passed_gpu_smoke_pending",
+  "status": "runtime_and_gpu_smoke_passed_fallback_selection_frozen",
   "captured_utc": "2026-08-13T08:27:36Z",
   "repository": {
     "base_commit": "f9979e55693f02ca29460637486be0b850395cf0",
@@ -19,7 +19,9 @@
     "repository": "haosulab/ManiSkill_Demonstrations",
     "revision": "d674485bbffdd533914e52d272fdda34c0515608",
     "raw_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/raw_official",
-    "extracted_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/official_demos"
+    "extracted_root": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/official_demos",
+    "zip_lock": "locks/official_demo_zip_sha256.json",
+    "active_fallback": "PlugCharger-v1"
   },
   "runtime": {
     "python": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python",
@@ -57,7 +59,7 @@
     "camera_configuration_hashes": {},
     "asset_hash_manifest": null,
     "cpu_no_render_diagnostic": "smoke/cpu_no_render_failure.json",
-    "gpu_smoke_status": "pending_unoccupied_gpu"
+    "gpu_smoke_status": "passed_in_pai_replay_runs"
   },
   "pai": {
     "registry": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry",

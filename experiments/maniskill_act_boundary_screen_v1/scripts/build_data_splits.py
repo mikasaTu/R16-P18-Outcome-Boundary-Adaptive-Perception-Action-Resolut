@@ -26,7 +26,7 @@ from protocol_common import (
 
 EXPERIMENT_RELATIVE = Path("experiments/maniskill_act_boundary_screen_v1")
 TASK_SOURCES = {
-    "PegInsertionSide-v1": Path("PegInsertionSide-v1/motionplanning/trajectory.h5"),
+    "PlugCharger-v1": Path("PlugCharger-v1/motionplanning/trajectory.h5"),
     "PushT-v1": Path(
         "PushT-v1/rl/trajectory.none.pd_ee_delta_pose.physx_cuda.h5"
     ),
@@ -163,6 +163,14 @@ def main() -> None:
     manifest_rows: list[dict[str, Any]] = []
     task_summary: dict[str, Any] = {}
     subset_files: list[dict[str, Any]] = []
+    prior_subset_records: dict[tuple[str, str], dict[str, Any]] = {}
+    prior_subset_lock = experiment_root / "manifests/raw_subset_files.json"
+    if prior_subset_lock.is_file():
+        prior_value = json.loads(prior_subset_lock.read_text(encoding="utf-8"))
+        prior_subset_records = {
+            (item["task_id"], item["split"]): item
+            for item in prior_value.get("files", [])
+        }
 
     for task_id in FORMAL_TASKS:
         source_h5 = args.official_root / TASK_SOURCES[task_id]
@@ -189,13 +197,27 @@ def main() -> None:
         for split_name in SPLIT_COUNTS:
             split_items = [item for item in selected if item["split"] == split_name]
             output_h5 = selected_raw_root / task_id / split_name / "trajectory.h5"
-            subset_files.append(
-                {
-                    "task_id": task_id,
-                    "split": split_name,
-                    **build_subset(source_h5, source_metadata, split_items, output_h5),
-                }
-            )
+            prior = prior_subset_records.get((task_id, split_name))
+            if (
+                prior is not None
+                and Path(prior["h5_path"]) == output_h5
+                and output_h5.is_file()
+                and output_h5.with_suffix(".json").is_file()
+                and sha256_file(output_h5) == prior["h5_sha256"]
+                and sha256_file(output_h5.with_suffix(".json"))
+                == prior["json_sha256"]
+            ):
+                subset_files.append(prior)
+            else:
+                subset_files.append(
+                    {
+                        "task_id": task_id,
+                        "split": split_name,
+                        **build_subset(
+                            source_h5, source_metadata, split_items, output_h5
+                        ),
+                    }
+                )
         selected_seeds = [item["episode_seed"] for item in selected]
         task_summary[task_id] = {
             "official_successful_episodes": sum(

@@ -23,7 +23,7 @@ from mani_skill.vector.wrappers.gymnasium import ManiSkillVectorEnv  # noqa: E40
 
 
 TASK_CONFIGS = {
-    "PegInsertionSide-v1": {"control_mode": "pd_ee_delta_pose", "horizon": 300},
+    "PlugCharger-v1": {"control_mode": "pd_ee_delta_pose", "horizon": 200},
     "PushT-v1": {"control_mode": "pd_ee_delta_pose", "horizon": 150},
     "StackCube-v1": {"control_mode": "pd_ee_delta_pos", "horizon": 200},
     "PushCube-v1": {"control_mode": "pd_ee_delta_pos", "horizon": 100},
@@ -140,14 +140,17 @@ class ContactTracker:
         base = self.base
         table = base.table_scene.table
         robot_table = pair_contact(base, self.all_links, table, self.threshold)
-        if self.task_id == "PegInsertionSide-v1":
-            intended = pair_contact(base, self.tool_links, base.peg, self.threshold)
-            intended |= torch.linalg.norm(
-                base.scene.get_pairwise_contact_forces(base.peg, base.box), dim=-1
-            ) > self.threshold
-            unintended = robot_table | pair_contact(
-                base, self.tool_links, base.box, self.threshold
+        if self.task_id == "PlugCharger-v1":
+            intended = pair_contact(
+                base, self.tool_links, base.charger, self.threshold
             )
+            intended |= torch.linalg.norm(
+                base.scene.get_pairwise_contact_forces(
+                    base.charger, base.receptacle
+                ),
+                dim=-1,
+            ) > self.threshold
+            unintended = robot_table
         elif self.task_id == "PushT-v1":
             intended = pair_contact(base, self.tool_links, base.tee, self.threshold)
             unintended = robot_table

@@ -39,6 +39,12 @@ TASK_CONFIGS = {
         "state_flag": "--use-first-env-state",
         "cpu_processes": 4,
     },
+    "PlugCharger-v1": {
+        "control_mode": "pd_ee_delta_pose",
+        "sim_backend": "physx_cpu",
+        "state_flag": "--use-first-env-state",
+        "cpu_processes": 4,
+    },
     "PushT-v1": {
         "control_mode": "pd_ee_delta_pose",
         "sim_backend": "physx_cuda",

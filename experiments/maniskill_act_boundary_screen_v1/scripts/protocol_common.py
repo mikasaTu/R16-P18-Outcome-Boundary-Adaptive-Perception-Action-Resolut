@@ -12,11 +12,12 @@ import numpy as np
 
 PROTOCOL_ID = "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1"
 FORMAL_TASKS = (
-    "PegInsertionSide-v1",
+    "PlugCharger-v1",
     "PushT-v1",
     "StackCube-v1",
     "PushCube-v1",
 )
+RETIRED_FORMAL_TASKS = ("PegInsertionSide-v1",)
 MODEL_SEEDS = (16018, 16019, 16020)
 SPLIT_COUNTS = {"train": 200, "validation": 50, "test": 50}
 

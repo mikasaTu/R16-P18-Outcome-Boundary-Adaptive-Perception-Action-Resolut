@@ -72,7 +72,7 @@ def test_replay_retry_budget_is_task_pinned(tmp_path: Path) -> None:
         retry_index = job.command.index("--max-retry") + 1
         observed[task_id] = int(job.command[retry_index])
     assert observed == {
-        "PegInsertionSide-v1": 9,
+        "PlugCharger-v1": 9,
         "PushT-v1": 3,
         "StackCube-v1": 9,
         "PushCube-v1": 9,

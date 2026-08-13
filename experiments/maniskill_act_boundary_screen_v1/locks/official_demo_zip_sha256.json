@@ -2,6 +2,10 @@
   "repository": "haosulab/ManiSkill_Demonstrations",
   "revision": "d674485bbffdd533914e52d272fdda34c0515608",
   "files": {
+    "PlugCharger-v1.zip": {
+      "bytes": 24303422,
+      "sha256": "a0ee94e08b1c88425af7b71eaeb1fb0e5e8c6ae0f3f14936aa53b7c6926e5403"
+    },
     "PegInsertionSide-v1.zip": {
       "bytes": 29475456,
       "sha256": "7d61e4319a0395b220574f1e26ea65bd4ad1406387fb3debfbea96a2ddbb6a9c"

@@ -4,13 +4,13 @@
   "force_threshold_newtons": 0.0001,
   "event_rule": "count each false-to-true transition of the task-specific pairwise-contact predicate",
   "intended_contact_pairs": {
-    "PegInsertionSide-v1": ["panda_fingers--peg", "peg--box_with_hole"],
+    "PlugCharger-v1": ["panda_fingers--charger", "charger--receptacle"],
     "PushT-v1": ["panda_stick_tcp--tee"],
     "StackCube-v1": ["panda_fingers--cubeA", "cubeA--cubeB"],
     "PushCube-v1": ["panda_fingers--pushed_cube"]
   },
   "unintended_contact_pairs": {
-    "PegInsertionSide-v1": ["robot_links--table", "panda_fingers--box_with_hole"],
+    "PlugCharger-v1": ["robot_links--table"],
     "PushT-v1": ["robot_links--table"],
     "StackCube-v1": ["robot_links--table", "panda_fingers--cubeB"],
     "PushCube-v1": ["robot_links--table"]

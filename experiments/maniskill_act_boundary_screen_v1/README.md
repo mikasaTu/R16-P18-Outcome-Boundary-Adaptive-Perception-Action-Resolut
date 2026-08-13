@@ -44,3 +44,10 @@ shards are quarantined before a retry and are never counted as demonstrations.
 The frozen retry budget is nine for CPU control-mode conversion tasks and
 three for PushT state replay; retries preserve the same selected trajectory,
 episode seed, and initial simulator state.
+
+`PegInsertionSide-v1` was retired after two official RGB replay attempts both
+saved 188/200 training trajectories (94%), below the frozen 95% data gate.
+The preregistered first fallback, `PlugCharger-v1`, was activated for the
+allowed `data_availability` reason before any fallback replay result was
+observed. The immutable decision record is `task_selection.json`; thresholds
+were not changed.
