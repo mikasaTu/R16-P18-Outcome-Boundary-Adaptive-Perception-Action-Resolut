@@ -1,0 +1,30 @@
+{
+  "accepted_scientific_result": false,
+  "complete_checkpoint_persisted": false,
+  "failure_class": "dependency_compatibility_before_first_persisted_metric",
+  "failure_evidence": {
+    "matrix_failure_sha256": "3acb862b207ce1484ca1db8db2231b58e3660e851f639a34a40d3f5811ad5cc5",
+    "pushcube_seed16018_log_sha256": "a031b942d0327e9b0bd1b55cd3d8a4603a32bc42ccf77b7f449e84bac3e14f2e",
+    "pushcube_seed16019_log_sha256": "ed3bbabd77ae52837bfba370101b3240bb9a6ef6a190c78cca60160bdcf302c5"
+  },
+  "first_error": "AttributeError: module transformers has no attribute deepspeed",
+  "pai_job_id": "dlcqh4pvuftvv7kb",
+  "persisted_training_metrics": false,
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "replay_gate": {
+    "episodes_attempted": 1200,
+    "episodes_saved_successful": 1184,
+    "matrix_complete_sha256": "949247b33d8b123ec118f2b4a6f8dde6586e3cfaf4ff7c34a19c828359b68a8b",
+    "status": "PASS",
+    "tasks": [
+      "PullCubeTool-v1",
+      "PushT-v1",
+      "StackCube-v1",
+      "PushCube-v1"
+    ]
+  },
+  "resolution": "Use a non-DeepSpeed EMAModel subclass that preserves the Diffusers update schedule and state semantics while omitting only the unavailable DeepSpeed probe; verify it with unit tests and an official-ACT optimizer-plus-EMA smoke before a fresh run.",
+  "run_id": "r16p18-msact-v1-20260813n",
+  "source_commit": "41e79baaaab396e7f6ad61507445ca7cf35b8f0c",
+  "status": "FAIL_INFRASTRUCTURE_NO_RESULT"
+}

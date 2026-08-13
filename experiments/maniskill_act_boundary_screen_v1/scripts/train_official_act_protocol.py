@@ -24,7 +24,6 @@ import gymnasium as gym
 import numpy as np
 import torch
 import torch.optim as optim
-from diffusers.training_utils import EMAModel
 from torch.utils.data import DataLoader, Sampler
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -36,6 +35,7 @@ from protocol_common import (  # noqa: E402
     sha256_file,
     validate_replayed_split_count,
 )
+from ema_compat import NonDeepSpeedEMAModel  # noqa: E402
 
 try:
     import train_rgbd as official_act
@@ -371,7 +371,7 @@ def save_checkpoint(
     ema_agent: torch.nn.Module,
     optimizer: optim.Optimizer,
     scheduler: optim.lr_scheduler.LRScheduler,
-    ema: EMAModel,
+    ema: NonDeepSpeedEMAModel,
 ) -> Path:
     final_dir = checkpoint_root / f"step_{step:09d}"
     if final_dir.exists():
@@ -555,7 +555,7 @@ def main() -> None:
     scheduler = optim.lr_scheduler.StepLR(
         optimizer, step_size=int((2 / 3) * config.total_iterations), gamma=0.1
     )
-    ema = EMAModel(parameters=agent.parameters(), power=config.ema_power)
+    ema = NonDeepSpeedEMAModel(parameters=agent.parameters(), power=config.ema_power)
 
     checkpoint_root = cli.output_dir / "checkpoints"
     resume_path = discover_resume(checkpoint_root, config_sha)
