@@ -34,11 +34,33 @@ def bootstrap(values: list[float]) -> list[float]:
     data = np.asarray(values, dtype=float)
     rng = np.random.default_rng(16018)
     means = np.empty(10_000)
-    for start in range(0, 10_000, 500):
-        stop = min(10_000, start + 500)
+    for start in range(0, 10_000, 1000):
+        stop = min(10_000, start + 1000)
         indices = rng.integers(0, len(data), size=(stop - start, len(data)))
         means[start:stop] = data[indices].mean(axis=1)
     return [float(np.quantile(means, 0.025)), float(np.quantile(means, 0.975))]
+
+
+def sign_flip_pvalue(values: list[float]) -> float:
+    data = np.asarray(values, dtype=float)
+    rng = np.random.default_rng(16018)
+    observed = float(data.mean())
+    exceed = 0
+    for start in range(0, 10_000, 1000):
+        stop = min(10_000, start + 1000)
+        signs = rng.integers(0, 2, size=(stop - start, len(data))) * 2 - 1
+        exceed += int(np.sum((signs * data[None]).mean(axis=1) >= observed))
+    return float((exceed + 1) / 10_001)
+
+
+def holm(pvalues: dict[str, float]) -> dict[str, float]:
+    ordered = sorted(pvalues.items(), key=lambda item: (item[1], item[0]))
+    result: dict[str, float] = {}
+    running = 0.0
+    for rank, (name, value) in enumerate(ordered):
+        running = max(running, (len(ordered) - rank) * value)
+        result[name] = float(min(1.0, running))
+    return result
 
 
 def frozen_manifest_pass() -> tuple[bool, list[str]]:
@@ -111,7 +133,10 @@ def main() -> None:
     phase = {name: np.mean([row[2] for row in reduced if row[0] == name]) for name in {row[0] for row in reduced}}
     action_gate = bool(np.mean([row[1] for row in reduced]) >= 0.90 and np.mean([row[3] for row in reduced]) >= 0.95 and np.mean([row[2] for row in reduced]) >= 0.20 and phase["placement_contact_near_completion"] - phase["free_space_approach"] >= 0.10)
     # Independent joint allocation and coupling recomputation from raw allocation rows.
-    allocation = [row for row in jsonl(root / "joint_oracle" / "allocation_states.jsonl") if row["weights"] == "primary"]
+    all_allocation = jsonl(root / "joint_oracle" / "allocation_states.jsonl")
+    if len(all_allocation) != 576:
+        problems.append(f"joint_all_weights_count:{len(all_allocation)}")
+    allocation = [row for row in all_allocation if row["weights"] == "primary"]
     if len(allocation) != 192:
         problems.append(f"joint_primary_count:{len(allocation)}")
     state_groups = defaultdict(list)
@@ -119,7 +144,8 @@ def main() -> None:
         state_groups[row["bank_id"]].append(row)
     differences_random, differences_phase, differences_single, coupled = [], [], [], []
     recall_joint, recall_single, regret_joint, regret_single = [], [], [], []
-    j_threshold = float(json.loads((root / "joint_oracle" / "summary.json").read_text())["j_threshold"])
+    joint_summary = json.loads((root / "joint_oracle" / "summary.json").read_text())
+    j_threshold = float(joint_summary["j_threshold"])
     prepared = [
         (
             rows,
@@ -130,31 +156,83 @@ def main() -> None:
         )
         for rows in state_groups.values()
     ]
-    strongest_key = (
-        "visual_only"
-        if np.mean([means["visual_only"] for _, means in prepared])
-        >= np.mean([means["action_only"] for _, means in prepared])
-        else "action_only"
-    )
     for rows, means in prepared:
         differences_random.append(means["joint_adaptive"] - means["random_state"])
         differences_phase.append(means["joint_adaptive"] - means["phase_heuristic"])
-        differences_single.append(means["joint_adaptive"] - means[strongest_key])
-        coupled.append(sum(row["categorical_strictly_better"] for row in rows) >= 2 and np.mean([row["interaction_J"] for row in rows]) >= j_threshold)
+        differences_single.append(means["joint_adaptive"] - means["strongest_single_axis"])
+        coupled.append(
+            sum(row["categorical_strictly_better"] for row in rows) >= 2
+            and np.mean([row["interaction_J"] for row in rows]) >= j_threshold
+            and not any(row["post_success"] for row in rows)
+            and all(row["budget_compliant"] for row in rows)
+        )
         if sum(row["adaptive_selected"] for row in rows) >= 2:
-            single_arm = "FC" if strongest_key == "visual_only" else "CF"
             recall_joint.append(int(sum(row["nearest_native_best_action_recall"]["FF"] for row in rows) >= 2))
-            recall_single.append(int(sum(row["nearest_native_best_action_recall"][single_arm] for row in rows) >= 2))
+            recall_single.append(int(sum(row["nearest_native_best_action_recall"]["strongest_single_axis"] for row in rows) >= 2))
         regret_joint.append(max(0.0, means["full_native_upper"] - means["joint_adaptive"]))
-        regret_single.append(max(0.0, means["full_native_upper"] - means[strongest_key]))
+        regret_single.append(max(0.0, means["full_native_upper"] - means["strongest_single_axis"]))
     recall_pp = 100 * (np.mean(recall_joint) - np.mean(recall_single)) if recall_joint else 0.0
     regret_reduction = (np.mean(regret_single) - np.mean(regret_joint)) / np.mean(regret_single) if np.mean(regret_single) > 0 else 0.0
     positive_random = sum(np.mean([row["allocation_utility"]["joint_adaptive"] - row["allocation_utility"]["random_state"] for row in allocation if row["model_seed"] == seed]) > 0 for seed in MODEL_SEEDS)
     positive_phase = sum(np.mean([row["allocation_utility"]["joint_adaptive"] - row["allocation_utility"]["phase_heuristic"] for row in allocation if row["model_seed"] == seed]) > 0 for seed in MODEL_SEEDS)
     joint_gate = bool(np.mean(coupled) >= 0.15 and (recall_pp >= 10 or regret_reduction >= 0.15) and bootstrap(differences_random)[0] > 0 and bootstrap(differences_phase)[0] > 0 and positive_random >= 2 and positive_phase >= 2)
-    sensitivity_robust = summary["gate_ledger"]["utility_sensitivity_direction_robust"]
-    visual_gain = summary["gate_ledger"]["visual_axis_mean_gain_over_CC"]
-    action_gain = summary["gate_ledger"]["action_axis_mean_gain_over_CC"]
+    sensitivity_robust = all(
+        np.mean([
+            row["allocation_utility"]["joint_adaptive"]
+            - row["allocation_utility"][control]
+            for row in all_allocation
+            if row["weights"] == weights
+        ]) > 0
+        for weights in {row["weights"] for row in all_allocation}
+        for control in ("strongest_single_axis", "random_state", "phase_heuristic")
+    )
+    visual_gain = float(np.mean([
+        row["allocation_utility"]["visual_only"]
+        - row["allocation_utility"]["uniform_coarse"]
+        for row in allocation
+    ]))
+    action_gain = float(np.mean([
+        row["allocation_utility"]["action_only"]
+        - row["allocation_utility"]["uniform_coarse"]
+        for row in allocation
+    ]))
+    # Independently reconstruct the preregistered Holm family from raw states.
+    secondary_controls = ("random_state", "phase_heuristic", "random_tile", "phase_tile")
+    holm_checks = {}
+    for weights in sorted({row["weights"] for row in all_allocation}):
+        groups = defaultdict(list)
+        for row in all_allocation:
+            if row["weights"] == weights:
+                groups[row["bank_id"]].append(row)
+        state_differences = {
+            control: [
+                float(np.mean([
+                    row["allocation_utility"]["joint_adaptive"]
+                    - row["allocation_utility"][control]
+                    for row in rows
+                ]))
+                for bank_id in sorted(groups)
+                for rows in (groups[bank_id],)
+            ]
+            for control in secondary_controls
+        }
+        adjusted = holm({
+            control: sign_flip_pvalue(values)
+            for control, values in state_differences.items()
+        })
+        reported = joint_summary["summaries"][weights]["aggregate_by_state"]["comparisons"]
+        checks = {
+            control: bool(
+                "holm_adjusted_p" in reported[control]
+                and abs(float(reported[control]["holm_adjusted_p"]) - adjusted[control])
+                <= 1e-12
+            )
+            for control in secondary_controls
+        }
+        holm_checks[weights] = checks
+        for control, passed in checks.items():
+            if not passed:
+                problems.append(f"holm_mismatch:{weights}:{control}")
     if not baseline_gate:
         final = "NO_GO_BASELINE_REPAIR"
     elif stopping:
@@ -181,6 +259,9 @@ def main() -> None:
         "restoration_gate": restoration_gate == summary["state_restoration"]["restoration_gate_pass"],
         "action_gate": action_gate == summary["action_boundary"]["action_boundary_gate_pass"],
         "joint_gate": joint_gate == summary["joint_oracle"]["joint_oracle_gate_pass"],
+        "utility_sensitivity": sensitivity_robust == summary["gate_ledger"]["utility_sensitivity_direction_robust"],
+        "visual_axis_gain": bool(np.isclose(visual_gain, summary["gate_ledger"]["visual_axis_mean_gain_over_CC"])),
+        "action_axis_gain": bool(np.isclose(action_gain, summary["gate_ledger"]["action_axis_mean_gain_over_CC"])),
         "final_status": final == summary["final_status"],
     }
     audit_pass = bool(all(comparisons.values()) and frozen_pass and immutable_old and not problems)
@@ -188,7 +269,7 @@ def main() -> None:
         "protocol_id": PROTOCOL_ID,
         "status": "INDEPENDENT_STAGE25_AUDIT_PASS" if audit_pass else "INDEPENDENT_STAGE25_AUDIT_FAIL",
         "audit_pass": audit_pass,
-        "independently_recomputed": {"baseline": base, "baseline_gate": baseline_gate, "stopping": stopping_rows, "stopping_confound": stopping, "restoration_rows": len(restoration_rows), "restoration_gate": restoration_gate, "action_states": len(reduced), "action_gate": action_gate, "joint_states": len(state_groups), "joint_coupling_density": float(np.mean(coupled)), "joint_gate": joint_gate, "final_status": final},
+        "independently_recomputed": {"baseline": base, "baseline_gate": baseline_gate, "stopping": stopping_rows, "stopping_confound": stopping, "restoration_rows": len(restoration_rows), "restoration_gate": restoration_gate, "action_states": len(reduced), "action_gate": action_gate, "joint_states": len(state_groups), "joint_coupling_density": float(np.mean(coupled)), "joint_minus_per_state_strongest_single_axis": float(np.mean(differences_single)), "best_action_recall_improvement_pp": float(recall_pp), "outcome_regret_reduction_fraction": float(regret_reduction), "joint_gate": joint_gate, "utility_sensitivity_direction_robust": sensitivity_robust, "visual_axis_mean_gain_over_CC": visual_gain, "action_axis_mean_gain_over_CC": action_gain, "holm_secondary_checks": holm_checks, "final_status": final},
         "summary_agreement": comparisons,
         "frozen_scientific_manifest_pass": frozen_pass,
         "frozen_manifest_failures": frozen_failures,

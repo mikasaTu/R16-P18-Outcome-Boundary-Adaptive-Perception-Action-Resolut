@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import time
 from typing import Any, Mapping
 
 import h5py
@@ -232,6 +233,10 @@ def rollout_grid(
             "candidate_opportunities": GRID_CANDIDATES,
             "valid_candidates": int(valid.sum()),
             "candidate_repeats": REPEATS,
+            "actual_rollout_simulator_step_calls": 29,
+            "actual_rollout_simulator_step_rows": PADDED_ENVS * 29,
+            "actual_rollout_policy_forward_calls": 20,
+            "actual_rollout_policy_forward_rows": PADDED_ENVS * 20,
             "scientific_simulator_steps": int(valid.sum()) * REPEATS * 29,
             "scientific_policy_calls": int(valid.sum()) * REPEATS * 20,
             "padded_invalid_simulator_steps": int((~valid).sum()) * REPEATS * 29,
@@ -255,9 +260,17 @@ def generate_atlas(
     visual_condition: str = "native",
     tile_index: int | None = None,
 ) -> dict[str, Any]:
+    if device.type == "cuda":
+        torch.cuda.synchronize(device)
+    total_started = time.perf_counter()
+    nominal_started = total_started
     obs, _ = reset_to_state(policy_env, state, episode_seed, 1)
     transformed = transform_observation(obs, visual_condition, tile_index)
     nominal = policy_chunk(agent, transformed, device)[0].detach().cpu().numpy()
+    if device.type == "cuda":
+        torch.cuda.synchronize(device)
+    nominal_seconds = time.perf_counter() - nominal_started
+    grid_started = time.perf_counter()
     action_low = np.broadcast_to(
         np.asarray(policy_env.action_space.low, dtype=np.float64), (4, nominal.shape[-1])
     )
@@ -277,6 +290,8 @@ def generate_atlas(
         action_high,
         radius=radius,
     )
+    grid_seconds = time.perf_counter() - grid_started
+    rollout_started = time.perf_counter()
     rollout = rollout_grid(
         rollout_env,
         agent,
@@ -287,6 +302,16 @@ def generate_atlas(
         visual_condition=visual_condition,
         tile_index=tile_index,
     )
+    rollout["accounting"].update(
+        {
+            "nominal_policy_forward_calls": 1,
+            "nominal_policy_forward_rows": 1,
+        }
+    )
+    if device.type == "cuda":
+        torch.cuda.synchronize(device)
+    rollout_seconds = time.perf_counter() - rollout_started
+    total_seconds = time.perf_counter() - total_started
     result = {
         "visual_condition": visual_condition,
         "tile_index": tile_index,
@@ -295,6 +320,12 @@ def generate_atlas(
         "atlas_center_action_first4": atlas_center.astype(float).tolist(),
         "atlas_gripper_command": float(last_legal_gripper_command),
         "atlas_gripper_source": "state_bank_last_legal_controller_effective_command",
+        "latency_seconds": {
+            "state_restore_transform_and_nominal_policy": nominal_seconds,
+            "pca_grid_construction": grid_seconds,
+            "candidate_rollout": rollout_seconds,
+            "total": total_seconds,
+        },
         "candidates": np.asarray(grid["candidates"]).astype(float).tolist(),
         "valid": rollout["valid"],
         "scaled_residual_norms": grid["scaled_residual_norms"].astype(float).tolist(),

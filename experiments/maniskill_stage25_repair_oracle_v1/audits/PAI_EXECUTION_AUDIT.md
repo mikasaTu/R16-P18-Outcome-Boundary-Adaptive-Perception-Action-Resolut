@@ -28,6 +28,7 @@ never merged into the final namespace.
 | v22 | none | exp-efficiency, 2 A800 | sealed before CreateJob because the resume result root had not been pre-created | none |
 | v23 | none | exp-efficiency, 2 A800 | sealed before CreateJob because the fresh artifact root had been pre-created instead of being registry-owned | none |
 | v24 | `dlcugeneyssp0lsg` | exp-efficiency, 2 A800 | CUDA atlas smoke passed 25/25; intentionally stopped during checkpoint screen after static audit found a guaranteed later batched-action-space scalar conversion error | none; six screen summaries and all partials rejected, smoke retained as non-scientific implementation evidence |
+| v25 | `dlctwi9sawp9cixz` | exp-efficiency, 2 A800 | CUDA atlas smoke passed 25/25; intentionally stopped during checkpoint screen when a complete pre-confirmatory audit found downstream radius-indexing and joint-control/statistical semantic defects | none; all screen partials rejected and no calibration, confirmatory, state-bank, or oracle evidence reused |
 
 ## v11 preserved partials
 
@@ -103,3 +104,21 @@ the remaining evaluation allocation.  It had produced six StackCube seed-16018
 screen summaries only.  Those files are not copied or reused.  The correction
 reads the scalar gripper bounds from `env.single_action_space`; the registry's
 separate fresh artifact/result directory lifecycle is also now respected.
+
+## v25 downstream semantic hardening stop
+
+v25 repeated the corrected CUDA atlas smoke successfully, then entered the
+checkpoint screen. Before any calibration or confirmatory result existed, a
+full downstream code-path audit found that visual calibration indexed the
+three-radius action JSONL before filtering its frozen radius; that the primary
+metric discarded its already-computed per-state strongest FC/CF control in
+favor of a weaker pooled fixed axis; that phase state allocation and phase tile
+selection were combined in one control; and that the frozen Holm secondary
+correction and explicit success-trace/call-latency fields were incomplete.
+
+The job was stopped at 2026-08-14 10:44:04Z. Its partial checkpoint screens
+are implementation progress only and are neither copied nor resumed. The
+corrections are covered by 24 local unit/static tests, including adversarial
+alternating-axis and multi-radius fixtures. A subsequent formal attempt must
+use a new run ID, fresh result namespace, new source commit/tree binding, and a
+fresh CUDA smoke before any result is scientifically eligible.

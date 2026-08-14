@@ -106,10 +106,25 @@ def stopping(root: Path) -> dict[str, Any]:
             rows = read_jsonl(path)
             if len(rows) != 100:
                 raise RuntimeError(f"incomplete stopping arm: {path}")
+            drifts = [
+                row["post_success_object_drift"]
+                for row in rows
+                if row.get("post_success_object_drift") is not None
+            ]
             by_mode_seed[mode][str(seed)] = {
                 key: float(np.mean([row[key] for row in rows]))
                 for key in ("success_once", "success_hold5", "success_at_end", "post_success_loss")
             }
+            by_mode_seed[mode][str(seed)]["post_success_drift_translation_m"] = (
+                float(np.mean([row["translation_m"] for row in drifts]))
+                if drifts
+                else None
+            )
+            by_mode_seed[mode][str(seed)]["post_success_drift_rotation_rad"] = (
+                float(np.mean([row["rotation_rad"] for row in drifts]))
+                if drifts
+                else None
+            )
             indexed[mode].update({(seed, row["episode_seed"]): row for row in rows})
     comparisons = {}
     for mode in modes[1:]:
@@ -211,7 +226,10 @@ def visual_summary(joint: dict) -> dict[str, Any]:
         "joint_minus_random_state": comparisons["random_state"],
         "joint_minus_phase_heuristic": comparisons["phase_heuristic"],
         "joint_minus_random_tile": comparisons["random_tile"],
+        "joint_minus_phase_tile": comparisons["phase_tile"],
         "mean_utility": primary["mean_utility"],
+        "multiple_testing": primary["multiple_testing"],
+        "source_compute_accounting": joint["source_compute_accounting"],
         "physical_outcome_evidence": "each condition executes the selected physical candidate in simulator; no conclusion is based on action-vector distance alone",
         "information_resolution_only": True,
         "wall_clock_compute_matched": False,

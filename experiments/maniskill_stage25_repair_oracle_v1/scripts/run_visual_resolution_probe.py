@@ -58,6 +58,36 @@ def selected_row(path: Path, seed: int) -> dict[str, Any]:
     return value["groups"][f"StackCube-v1/seed_{seed}"]["selected"]
 
 
+def native_rows_at_radius(
+    path: Path,
+    radius: float,
+    expected_bank_ids: set[str],
+) -> dict[str, dict[str, Any]]:
+    """Select exactly one native action-atlas row per state at the frozen radius."""
+    selected: dict[str, dict[str, Any]] = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        row = json.loads(line)
+        if not np.isclose(
+            float(row["atlas"]["radius"]), radius, atol=1e-12, rtol=0.0
+        ):
+            continue
+        bank_id = str(row["bank_id"])
+        if bank_id in selected:
+            raise RuntimeError(
+                f"duplicate native action row at radius {radius}: {bank_id}"
+            )
+        selected[bank_id] = row
+    actual = set(selected)
+    if actual != expected_bank_ids:
+        missing = sorted(expected_bank_ids - actual)
+        unexpected = sorted(actual - expected_bank_ids)
+        raise RuntimeError(
+            "native action rows at frozen radius are incomplete: "
+            f"missing={missing[:5]} unexpected={unexpected[:5]}"
+        )
+    return selected
+
+
 def batch_tiles(observation: Mapping[str, torch.Tensor]) -> dict[str, torch.Tensor]:
     transformed = [transform_observation(observation, "local_fine", tile) for tile in range(16)]
     return {
@@ -112,13 +142,11 @@ def main() -> None:
     state_rows = state_manifest["states"]
     if args.max_states is not None:
         state_rows = state_rows[: args.max_states]
-    native_rows = {
-        row["bank_id"]: row
-        for row in (
-            json.loads(line)
-            for line in args.native_action_jsonl.read_text(encoding="utf-8").splitlines()
-        )
-    }
+    native_rows = native_rows_at_radius(
+        args.native_action_jsonl,
+        radius,
+        {str(row["bank_id"]) for row in state_rows},
+    )
     training_chunks = load_training_chunks(str(args.training_h5))
     h5_path = Path(state_manifest["state_bank_h5"])
     device = torch.device("cuda")
@@ -153,7 +181,18 @@ def main() -> None:
                 obs, _ = reset_to_state(
                     policy_env, state, int(metadata["source_episode_seed"]), 1
                 )
-                tile_chunks = policy_chunk(agent, batch_tiles(obs), device).detach().cpu().numpy()
+                if device.type == "cuda":
+                    torch.cuda.synchronize(device)
+                tile_started = time.perf_counter()
+                tile_chunks = (
+                    policy_chunk(agent, batch_tiles(obs), device)
+                    .detach()
+                    .cpu()
+                    .numpy()
+                )
+                if device.type == "cuda":
+                    torch.cuda.synchronize(device)
+                tile_seconds = time.perf_counter() - tile_started
                 mapped, hidden = map_chunks_to_native(tile_chunks, native)
                 oracle_tile = max(
                     range(16),
@@ -264,7 +303,10 @@ def main() -> None:
                         "random_tile": random_tile,
                         "phase_tile": phase_tile,
                         "policy_calls": 16,
+                        "actual_policy_forward_calls": 1,
+                        "policy_forward_rows": 16,
                         "simulator_calls": 0,
+                        "latency_seconds": tile_seconds,
                         "deployable": False,
                     },
                     "native": native,
@@ -299,6 +341,51 @@ def main() -> None:
     finally:
         policy_env.close()
         rollout_env.close()
+    values = [
+        json.loads(line)
+        for line in raw_path.read_text(encoding="utf-8").splitlines()
+    ]
+    condition_accounting: dict[str, Any] = {}
+    for condition in ("coarse", "oracle_tile", "random_tile", "phase_tile"):
+        atlases = [row["conditions"][condition] for row in values]
+        accounting_keys = sorted(
+            {key for atlas in atlases for key in atlas["accounting"]}
+        )
+        latency_keys = sorted(
+            {key for atlas in atlases for key in atlas["latency_seconds"]}
+        )
+        condition_accounting[condition] = {
+            "atlas_calls": len(atlases),
+            "totals": {
+                key: int(
+                    sum(int(atlas["accounting"].get(key, 0)) for atlas in atlases)
+                )
+                for key in accounting_keys
+            },
+            "latency_seconds_total": {
+                key: float(
+                    sum(
+                        float(atlas["latency_seconds"].get(key, 0.0))
+                        for atlas in atlases
+                    )
+                )
+                for key in latency_keys
+            },
+            "latency_seconds_mean_per_atlas": {
+                key: float(
+                    np.mean(
+                        [
+                            float(atlas["latency_seconds"].get(key, 0.0))
+                            for atlas in atlases
+                        ]
+                    )
+                )
+                for key in latency_keys
+            },
+        }
+    tile_latencies = [
+        float(row["tile_screen"]["latency_seconds"]) for row in values
+    ]
     write_json(
         args.output_dir / "summary.json",
         {
@@ -312,6 +399,15 @@ def main() -> None:
             "raw_sha256": sha256_file(raw_path),
             "action_calibration_freeze_sha256": sha256_file(args.action_calibration_freeze),
             "wall_seconds": time.time() - started,
+            "tile_screen_accounting": {
+                "actual_policy_forward_calls": len(values),
+                "policy_forward_rows": 16 * len(values),
+                "simulator_calls": 0,
+                "latency_seconds_total": float(sum(tile_latencies)),
+                "latency_seconds_mean_per_state": float(np.mean(tile_latencies)),
+            },
+            "condition_accounting": condition_accounting,
+            "wall_clock_compute_claimed_matched": False,
         },
     )
 

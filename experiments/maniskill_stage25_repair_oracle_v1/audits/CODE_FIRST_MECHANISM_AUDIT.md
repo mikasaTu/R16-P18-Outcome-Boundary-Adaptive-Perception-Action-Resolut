@@ -103,3 +103,44 @@ Gate 同时要求 coupling density、recall 或 regret、adaptive-vs-random/phas
 **not tested**
 
 本轮没有训练 effect/boundary predictor，没有 deployable state/tile/action selector，没有新 BC/Diffusion Policy/DINO-WM/π0.5，没有 OOD、跨任务联合机制、端到端 matched latency、真实机器人或论文 acceptance 验证。PushCube 只承担 baseline health diagnostic，不进入 joint oracle。
+
+## 9. v25 后的 pre-confirmatory 反例审计与方向性风险
+
+**confirmed code semantics**
+
+v25 只完成了 CUDA smoke 和少量 checkpoint screen，尚未产生 calibration、
+confirmatory 或 joint evidence。静态反例审计在其运行时发现并主动停止该
+namespace；所有 partial 均拒绝进入正式结论。修复没有查看任何新
+confirmatory outcome，也没有改变冻结阈值、seed、state phase、utility 或
+candidate radius 候选。
+
+审计固定了以下五个会影响解释的实现点：
+
+1. calibration action JSONL 同一 state 有三个 radius。旧视觉代码先按
+   `bank_id` 建 dict，会静默保留最后一个 radius；现在先按冻结 radius
+   筛选，再要求每个 state 恰好一行。旧行为在所选 radius 不是最后一档时
+   会硬失败，不会形成可用机制证据。
+2. raw allocation 已保存逐 state 的 `max(FC, CF)`，但旧 metric 汇总又退回
+   pooled 后选择一个固定 visual/action 轴。轴优势随 state 交替时，固定轴
+   是更弱对照，会夸大 joint gain、recall improvement 或 regret reduction。
+   现在 primary 全程使用逐 state privileged strongest-single-axis，另把最强
+   fixed axis 仅作为描述性字段。
+3. 旧 `phase_heuristic` 同时改变“细化哪些 state”和“使用哪个 phase tile”，
+   不能把差值归因于 state allocation。现在 phase-state control 在其 32 个
+   states 使用与 adaptive 相同的 privileged FF tile；`phase_tile` 在 adaptive
+   的 32 个 states 上单独检验 tile heuristic。旧混合对照可能提高或降低
+   phase utility，但无论方向都使机制归因无效。
+4. preregistration 冻结了 secondary Holm correction，旧输出只有 bootstrap
+   CI。现在四个 secondary controls 使用一侧 paired sign-flip p-value，并在
+   同一 family 做 Holm step-down；独立 audit 从 raw state 重新生成并逐值
+   核对。缺失校正不会改变 primary gate 定义，但会夸大 secondary 证据强度。
+5. success trace 旧字段把 policy 与 neutral action 合并，且只记录接触状态，
+   未记录 onset 与 first-success 后 pose drift。现在逐步保存 executed、policy、
+   neutral 三个字段、两类 onset，以及从 first success pose 到每步/终点的
+   translation/rotation drift。该补充不改变执行动作，只提高 stopping 与
+   physical-instability 的可辨识性。
+
+action/visual atlas 同时增加真实 simulator/policy call 与分阶段 latency 汇总。
+由于 visual tensor 尺寸始终相同，报告仍明确拒绝 wall-clock matched claim。
+24 个 CPU/static tests 含专门反例，确认上述语义；正式 CUDA smoke 仍需在
+新的、哈希绑定的 PAI namespace 中再次通过。

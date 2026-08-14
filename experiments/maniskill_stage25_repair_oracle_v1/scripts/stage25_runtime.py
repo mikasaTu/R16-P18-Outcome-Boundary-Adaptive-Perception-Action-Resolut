@@ -175,7 +175,7 @@ class ContactTracker:
         *,
         count_mask: torch.Tensor | None = None,
         success_seen: torch.Tensor | None = None,
-    ) -> tuple[torch.Tensor, torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         intended_force, unintended_force = self.forces()
         intended = intended_force > self.threshold
         unintended = unintended_force > self.threshold
@@ -208,7 +208,7 @@ class ContactTracker:
             self.success_seen_before_step |= current_success_seen & mask
         self.previous_intended = torch.where(mask, intended, self.previous_intended)
         self.previous_unintended = torch.where(mask, unintended, self.previous_unintended)
-        return intended, unintended
+        return intended, unintended, intended_onset, unintended_onset
 
     def episode_fields(self, index: int) -> dict[str, Any]:
         return {
@@ -228,6 +228,23 @@ def quaternion_distance_rad(first: Sequence[float], second: Sequence[float]) -> 
     q1 /= max(np.linalg.norm(q1), np.finfo(np.float64).eps)
     q2 /= max(np.linalg.norm(q2), np.finfo(np.float64).eps)
     return 2.0 * math.acos(float(np.clip(abs(np.dot(q1, q2)), 0.0, 1.0)))
+
+
+def object_pose_drift(
+    first_position: Sequence[float],
+    first_quaternion: Sequence[float],
+    second_position: Sequence[float],
+    second_quaternion: Sequence[float],
+) -> dict[str, float]:
+    return {
+        "translation_m": float(
+            np.linalg.norm(
+                np.asarray(second_position, dtype=np.float64)
+                - np.asarray(first_position, dtype=np.float64)
+            )
+        ),
+        "rotation_rad": quaternion_distance_rad(first_quaternion, second_quaternion),
+    }
 
 
 def task_snapshot(base: Any, task_id: str) -> dict[str, np.ndarray]:
@@ -338,9 +355,11 @@ def evaluate_policy_batch(
     policy_calls = torch.zeros(count, dtype=torch.int64, device=device)
     policy_latency = torch.zeros(count, dtype=torch.float64, device=device)
     traces: list[list[dict[str, Any]]] = [[] for _ in range(count)]
+    first_success_poses: list[tuple[np.ndarray, np.ndarray] | None] = [None] * count
     agent.eval()
     info: Mapping[str, Any] = {"success": torch.zeros_like(success_once)}
     for timestep in range(horizon):
+        policy_active_for_step = active_policy.clone()
         policy_indices = torch.nonzero(active_policy, as_tuple=False).flatten()
         action = neutral_from_last(last_action)
         if policy_indices.numel():
@@ -364,25 +383,51 @@ def evaluate_policy_batch(
         streak = torch.where(success & current_mask, streak + 1, torch.where(current_mask, 0, streak))
         longest = torch.maximum(longest, streak)
         success_hold5 |= streak >= 5
-        tracker.update(count_mask=current_mask, success_seen=success_once)
+        intended, unintended, intended_onset, unintended_onset = tracker.update(
+            count_mask=current_mask, success_seen=success_once
+        )
         if record_trace:
             snapshot = task_snapshot(base, task_id)
-            intended, unintended = tracker.forces()
+            for index in torch.nonzero(newly, as_tuple=False).flatten().tolist():
+                first_success_poses[index] = (
+                    snapshot["object_position"][index].copy(),
+                    snapshot["object_quaternion"][index].copy(),
+                )
             for index in range(count):
                 if not bool(current_mask[index].item()) and mode.startswith("terminate_"):
                     continue
+                first_pose = first_success_poses[index]
+                drift = (
+                    None
+                    if first_pose is None
+                    else object_pose_drift(
+                        first_pose[0],
+                        first_pose[1],
+                        snapshot["object_position"][index],
+                        snapshot["object_quaternion"][index],
+                    )
+                )
+                executed = action[index].detach().cpu().float().tolist()
+                used_policy = bool(policy_active_for_step[index].item())
                 traces[index].append(
                     {
                         "step": timestep + 1,
+                        "success_predicate": bool(success[index].item()),
                         "success": bool(success[index].item()),
                         "success_streak": int(streak[index].item()),
-                        "policy_active": bool(active_policy[index].item()),
+                        "policy_active": used_policy,
                         "object_position": snapshot["object_position"][index].astype(float).tolist(),
                         "object_quaternion": snapshot["object_quaternion"][index].astype(float).tolist(),
                         "normalized_progress": float(snapshot["normalized_progress"][index]),
                         "intended_contact": bool((intended[index] > 1e-4).item()),
                         "unintended_contact": bool((unintended[index] > 1e-4).item()),
-                        "policy_or_neutral_action": action[index].detach().cpu().float().tolist(),
+                        "intended_contact_onset": bool(intended_onset[index].item()),
+                        "unintended_contact_onset": bool(unintended_onset[index].item()),
+                        "post_success_object_drift": drift,
+                        "executed_action": executed,
+                        "policy_action": executed if used_policy else None,
+                        "neutral_action": None if used_policy else executed,
+                        "policy_or_neutral_action": executed,
                     }
                 )
         if mode == "terminate_first_success":
@@ -427,6 +472,21 @@ def evaluate_policy_batch(
         }
         if record_trace:
             record["trace"] = traces[index]
+            first_pose = first_success_poses[index]
+            record["post_success_object_drift"] = (
+                None
+                if first_pose is None
+                else {
+                    **object_pose_drift(
+                        first_pose[0],
+                        first_pose[1],
+                        final_snapshot["object_position"][index],
+                        final_snapshot["object_quaternion"][index],
+                    ),
+                    "from_step": int(first_success[index].item()),
+                    "to_step": int(episode_length[index].item()),
+                }
+            )
         records.append(record)
     return records
 

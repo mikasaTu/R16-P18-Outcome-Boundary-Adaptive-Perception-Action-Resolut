@@ -82,3 +82,17 @@ def test_parallel_state_bank_reads_unbatched_gripper_bounds() -> None:
     assert "env.single_action_space.high[-1]" in source
     assert "env.action_space.low[-1]" not in source
     assert "env.action_space.high[-1]" not in source
+
+
+def test_success_semantics_trace_keeps_policy_neutral_contact_and_drift_fields() -> None:
+    source = (ROOT / "scripts" / "stage25_runtime.py").read_text(encoding="utf-8")
+    for field in (
+        '"success_predicate"',
+        '"intended_contact_onset"',
+        '"unintended_contact_onset"',
+        '"post_success_object_drift"',
+        '"executed_action"',
+        '"policy_action"',
+        '"neutral_action"',
+    ):
+        assert field in source

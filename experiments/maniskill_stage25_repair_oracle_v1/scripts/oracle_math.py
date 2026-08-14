@@ -263,6 +263,42 @@ def paired_percentile_ci(
     return [float(np.quantile(estimates, 0.025)), float(np.quantile(estimates, 0.975))]
 
 
+def paired_sign_flip_pvalue(
+    differences: Sequence[float], replicates: int = 10_000, seed: int = 16018
+) -> float:
+    """One-sided paired randomization p-value for a positive mean effect."""
+    values = np.asarray(differences, dtype=np.float64)
+    if values.ndim != 1 or values.size == 0:
+        raise ValueError("paired sign-flip test requires a nonempty vector")
+    observed = float(values.mean())
+    rng = np.random.default_rng(seed)
+    exceed = 0
+    for start in range(0, replicates, 1000):
+        stop = min(start + 1000, replicates)
+        signs = rng.integers(0, 2, size=(stop - start, len(values))) * 2 - 1
+        exceed += int(np.sum((signs * values[None]).mean(axis=1) >= observed))
+    return float((exceed + 1) / (replicates + 1))
+
+
+def holm_adjust(pvalues: Mapping[str, float]) -> dict[str, float]:
+    """Holm step-down family-wise-error adjustment with stable name ties."""
+    if not pvalues:
+        return {}
+    ordered = sorted(
+        ((name, float(value)) for name, value in pvalues.items()),
+        key=lambda item: (item[1], item[0]),
+    )
+    adjusted: dict[str, float] = {}
+    running = 0.0
+    count = len(ordered)
+    for rank, (name, value) in enumerate(ordered):
+        if not 0.0 <= value <= 1.0 or not np.isfinite(value):
+            raise ValueError(f"invalid p-value for {name}: {value}")
+        running = max(running, (count - rank) * value)
+        adjusted[name] = float(min(1.0, running))
+    return adjusted
+
+
 def coarse_rgb(rgb: torch.Tensor) -> torch.Tensor:
     if rgb.ndim != 5:
         raise ValueError(f"RGB must be [N,camera,C,H,W], got {rgb.shape}")

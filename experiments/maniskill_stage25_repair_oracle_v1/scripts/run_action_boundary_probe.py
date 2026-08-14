@@ -144,6 +144,12 @@ def main() -> None:
         policy_env.close()
         rollout_env.close()
     values = [json.loads(line) for line in raw_path.read_text(encoding="utf-8").splitlines()]
+    accounting_keys = sorted(
+        {key for row in values for key in row["atlas"]["accounting"]}
+    )
+    latency_keys = sorted(
+        {key for row in values for key in row["atlas"]["latency_seconds"]}
+    )
     summary = {
         "protocol_id": PROTOCOL_ID,
         "status": "ACTION_BOUNDARY_PROBE_COMPLETE",
@@ -160,6 +166,35 @@ def main() -> None:
         "training_h5_sha256": sha256_file(args.training_h5),
         "selected_checkpoint": selected,
         "wall_seconds": time.time() - started,
+        "atlas_accounting": {
+            "atlas_calls": len(values),
+            "totals": {
+                key: int(
+                    sum(int(row["atlas"]["accounting"].get(key, 0)) for row in values)
+                )
+                for key in accounting_keys
+            },
+            "latency_seconds_total": {
+                key: float(
+                    sum(
+                        float(row["atlas"]["latency_seconds"].get(key, 0.0))
+                        for row in values
+                    )
+                )
+                for key in latency_keys
+            },
+            "latency_seconds_mean_per_atlas": {
+                key: float(
+                    np.mean(
+                        [
+                            float(row["atlas"]["latency_seconds"].get(key, 0.0))
+                            for row in values
+                        ]
+                    )
+                )
+                for key in latency_keys
+            },
+        },
     }
     write_json(args.output_dir / "summary.json", summary)
 

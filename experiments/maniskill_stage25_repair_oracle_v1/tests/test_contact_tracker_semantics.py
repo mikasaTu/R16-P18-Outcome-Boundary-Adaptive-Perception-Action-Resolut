@@ -7,7 +7,7 @@ import torch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from stage25_runtime import ContactTracker
+from stage25_runtime import ContactTracker, object_pose_drift
 
 
 def tracker_fixture(sequence: list[tuple[float, float]]) -> ContactTracker:
@@ -34,10 +34,10 @@ def test_contact_onsets_duration_force_and_post_success_are_distinct() -> None:
         [(0.0, 0.0), (2.0, 0.0), (3.0, 0.0), (0.0, 0.0), (0.0, 4.0)]
     )
     tracker.update(success_seen=torch.tensor([False]))
-    tracker.update(success_seen=torch.tensor([False]))
+    _, _, intended_onset, _ = tracker.update(success_seen=torch.tensor([False]))
     tracker.update(success_seen=torch.tensor([True]))
     tracker.update(success_seen=torch.tensor([True]))
-    tracker.update(success_seen=torch.tensor([True]))
+    _, _, _, unintended_onset = tracker.update(success_seen=torch.tensor([True]))
     fields = tracker.episode_fields(0)
     assert fields["intended_contact_onsets"] == 1
     assert fields["unintended_contact_onsets"] == 1
@@ -46,3 +46,15 @@ def test_contact_onsets_duration_force_and_post_success_are_distinct() -> None:
     assert fields["max_intended_contact_force"] == 3.0
     assert fields["max_unintended_contact_force"] == 4.0
     assert fields["post_success_contact_onsets"] == 1
+    assert bool(intended_onset.item()) is True
+    assert bool(unintended_onset.item()) is True
+
+
+def test_object_pose_drift_separates_translation_and_rotation() -> None:
+    drift = object_pose_drift(
+        [0.0, 0.0, 0.0],
+        [1.0, 0.0, 0.0, 0.0],
+        [0.03, 0.04, 0.0],
+        [1.0, 0.0, 0.0, 0.0],
+    )
+    assert drift == {"translation_m": 0.05, "rotation_rad": 0.0}

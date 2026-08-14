@@ -61,6 +61,8 @@ def atlas_diagnostics(
     nominal_high = np.broadcast_to(np.asarray(action_high), nominal.shape)
     return {
         "nominal_action_first4": nominal.astype(float).tolist(),
+        "atlas_center_action_first4": atlas["atlas_center_action_first4"],
+        "atlas_gripper_command": atlas["atlas_gripper_command"],
         "action_space_low": np.asarray(action_low).astype(float).tolist(),
         "action_space_high": np.asarray(action_high).astype(float).tolist(),
         "nominal_below_low": (nominal < nominal_low).astype(int).tolist(),
@@ -165,6 +167,7 @@ def main() -> None:
         "non_null_outcomes": non_null_outcomes,
         "boundary_by_threshold": atlas["boundary_by_threshold"],
         "accounting": atlas["accounting"],
+        "atlas_latency_seconds": atlas["latency_seconds"],
         "diagnostics": atlas_diagnostics(atlas, action_low, action_high),
         "wall_seconds": time.time() - started,
     }

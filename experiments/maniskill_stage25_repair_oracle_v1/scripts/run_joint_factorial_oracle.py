@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Mapping
@@ -18,7 +19,9 @@ from oracle_math import (
     COARSE_INDICES,
     PRIMARY_UTILITY,
     best_valid_index,
+    holm_adjust,
     paired_percentile_ci,
+    paired_sign_flip_pvalue,
     utility,
 )
 
@@ -43,6 +46,13 @@ PHASE_PRIORITY = {
     "free_space_approach": 3,
     "post_success": 4,
 }
+PRIMARY_CONTROL = "strongest_single_axis"
+SECONDARY_CONTROLS = (
+    "random_state",
+    "phase_heuristic",
+    "random_tile",
+    "phase_tile",
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -151,14 +161,20 @@ def allocation_rows(rows: list[dict], seed: int, weights_name: str) -> list[dict
             name: int(nearest_native_index(row, name, arms[name]) == native_best)
             for name in ("CC", "FC", "CF", "FF")
         }
+        recalls["strongest_single_axis"] = recalls[strongest_axis]
         values = {
             "joint_adaptive": arms[selected_arm]["utility"],
             "visual_only": arms["FC"]["utility"] if adaptive else arms["CC"]["utility"],
             "action_only": arms["CF"]["utility"] if adaptive else arms["CC"]["utility"],
             "strongest_single_axis": arms[strongest_axis]["utility"] if adaptive else arms["CC"]["utility"],
             "random_state": arms["FF"]["utility"] if random_selected else arms["CC"]["utility"],
-            "phase_heuristic": arms["phase_FF"]["utility"] if phase_selected else arms["CC"]["utility"],
+            # State-allocation and tile-selection controls are intentionally
+            # separated.  The phase state heuristic receives the same
+            # privileged FF tile as the adaptive arm; phase_FF is evaluated on
+            # the adaptive states as a distinct tile heuristic control.
+            "phase_heuristic": arms["FF"]["utility"] if phase_selected else arms["CC"]["utility"],
             "random_tile": arms["random_FF"]["utility"] if adaptive else arms["CC"]["utility"],
+            "phase_tile": arms["phase_FF"]["utility"] if adaptive else arms["CC"]["utility"],
             "uniform_coarse": arms["CC"]["utility"],
             "uniform_fine": arms["FF"]["utility"],
             "full_native_upper": arms["full_native_upper"]["utility"],
@@ -175,6 +191,7 @@ def allocation_rows(rows: list[dict], seed: int, weights_name: str) -> list[dict
                 "adaptive_selected": adaptive,
                 "random_selected": random_selected,
                 "phase_selected": phase_selected,
+                "strongest_single_axis_arm": strongest_axis if adaptive else "CC",
                 "arms": arms,
                 "allocation_utility": values,
                 "nearest_native_best_action_recall": recalls,
@@ -189,22 +206,38 @@ def allocation_rows(rows: list[dict], seed: int, weights_name: str) -> list[dict
 
 
 def metric_summary(rows: list[dict], j_threshold: float) -> dict[str, Any]:
-    values = lambda name: np.asarray([row["allocation_utility"][name] for row in rows], dtype=float)
+    def values(name: str) -> np.ndarray:
+        return np.asarray(
+            [row["allocation_utility"][name] for row in rows], dtype=float
+        )
+
     joint = values("joint_adaptive")
     visual, action = values("visual_only"), values("action_only")
-    strongest_name = "visual_only" if visual.mean() >= action.mean() else "action_only"
-    strongest = values(strongest_name)
+    best_fixed_axis = "visual_only" if visual.mean() >= action.mean() else "action_only"
+    # The preregistered primary comparison is conservative: at every refined
+    # state it receives whichever of FC and CF was better, rather than choosing
+    # one global axis after aggregation.
+    strongest = values(PRIMARY_CONTROL)
     native = values("full_native_upper")
     joint_regret = np.maximum(0.0, native - joint)
     single_regret = np.maximum(0.0, native - strongest)
-    regret_reduction = float((single_regret.mean() - joint_regret.mean()) / single_regret.mean()) if single_regret.mean() > 0 else 0.0
+    regret_reduction = (
+        float((single_regret.mean() - joint_regret.mean()) / single_regret.mean())
+        if single_regret.mean() > 0
+        else 0.0
+    )
     selected_rows = [row for row in rows if row["adaptive_selected"]]
-    recall_joint = np.mean([row["nearest_native_best_action_recall"]["FF"] for row in selected_rows])
-    strongest_arm = "FC" if strongest_name == "visual_only" else "CF"
-    recall_single = np.mean([
-        row["nearest_native_best_action_recall"][strongest_arm]
-        for row in selected_rows
-    ])
+    if not selected_rows:
+        raise RuntimeError("joint allocation selected no states")
+    recall_joint = np.mean(
+        [row["nearest_native_best_action_recall"]["FF"] for row in selected_rows]
+    )
+    recall_single = np.mean(
+        [
+            row["nearest_native_best_action_recall"][PRIMARY_CONTROL]
+            for row in selected_rows
+        ]
+    )
     coupled = [
         row["categorical_strictly_better"]
         and row["interaction_J"] >= j_threshold
@@ -212,33 +245,119 @@ def metric_summary(rows: list[dict], j_threshold: float) -> dict[str, Any]:
         and row["budget_compliant"]
         for row in rows
     ]
+    controls = (PRIMARY_CONTROL, *SECONDARY_CONTROLS)
+    differences = {control: joint - values(control) for control in controls}
+    raw_pvalues = {
+        control: paired_sign_flip_pvalue(delta)
+        for control, delta in differences.items()
+    }
+    adjusted_secondary = holm_adjust(
+        {control: raw_pvalues[control] for control in SECONDARY_CONTROLS}
+    )
     comparisons = {}
-    for control in ("strongest_single_axis", "random_state", "phase_heuristic", "random_tile"):
-        control_values = strongest if control == "strongest_single_axis" else values(control)
-        differences = joint - control_values
-        comparisons[control] = {
-            "mean_gain": float(differences.mean()),
-            "paired_bootstrap_95_ci": paired_percentile_ci(differences),
-            "positive_fraction": float(np.mean(differences > 0)),
+    for control in controls:
+        delta = differences[control]
+        comparison = {
+            "mean_gain": float(delta.mean()),
+            "paired_bootstrap_95_ci": paired_percentile_ci(delta),
+            "positive_fraction": float(np.mean(delta > 0)),
+            "paired_sign_flip_one_sided_p": raw_pvalues[control],
+            "testing_role": "primary" if control == PRIMARY_CONTROL else "secondary",
         }
+        if control in adjusted_secondary:
+            comparison.update(
+                {
+                    "holm_adjusted_p": adjusted_secondary[control],
+                    "holm_reject_alpha_0_05": adjusted_secondary[control] <= 0.05,
+                    "holm_family": list(SECONDARY_CONTROLS),
+                }
+            )
+        comparisons[control] = comparison
     return {
         "states": len(rows),
-        "mean_utility": {name: float(values(name).mean()) for name in rows[0]["allocation_utility"]},
-        "strongest_single_axis": strongest_name,
+        "mean_utility": {
+            name: float(values(name).mean())
+            for name in rows[0]["allocation_utility"]
+        },
+        "strongest_single_axis": "per_state_privileged_max_FC_CF",
+        "best_fixed_single_axis_for_reporting": best_fixed_axis,
         "comparisons": comparisons,
         "joint_coupling_density": float(np.mean(coupled)),
         "coupled_states": int(sum(coupled)),
         "best_action_recall_joint": float(recall_joint),
         "best_action_recall_strongest_single": float(recall_single),
-        "best_action_recall_improvement_pp": float((recall_joint - recall_single) * 100),
+        "best_action_recall_improvement_pp": float(
+            (recall_joint - recall_single) * 100
+        ),
         "mean_outcome_regret_joint": float(joint_regret.mean()),
         "mean_outcome_regret_strongest_single": float(single_regret.mean()),
         "outcome_regret_reduction_fraction": regret_reduction,
         "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+        "multiple_testing": {
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values",
+            "secondary_family": list(SECONDARY_CONTROLS),
+            "replicates": 10_000,
+            "alpha": 0.05,
+        },
+    }
+
+
+def source_compute_accounting(
+    source: Mapping[int, list[dict[str, Any]]],
+) -> dict[str, Any]:
+    rows = [row for seed_rows in source.values() for row in seed_rows]
+    condition_totals: dict[str, Any] = {}
+    for condition in ("coarse", "oracle_tile", "random_tile", "phase_tile"):
+        atlases = [row["conditions"][condition] for row in rows]
+        accounting_keys = sorted(
+            {key for atlas in atlases for key in atlas["accounting"]}
+        )
+        latency_keys = sorted(
+            {key for atlas in atlases for key in atlas["latency_seconds"]}
+        )
+        condition_totals[condition] = {
+            "atlas_calls": len(atlases),
+            "totals": {
+                key: int(
+                    sum(int(atlas["accounting"].get(key, 0)) for atlas in atlases)
+                )
+                for key in accounting_keys
+            },
+            "latency_seconds_total": {
+                key: float(
+                    sum(
+                        float(atlas["latency_seconds"].get(key, 0.0))
+                        for atlas in atlases
+                    )
+                )
+                for key in latency_keys
+            },
+        }
+    tile_seconds = [
+        float(row["tile_screen"]["latency_seconds"]) for row in rows
+    ]
+    return {
+        "source_state_model_seed_rows": len(rows),
+        "tile_screen": {
+            "actual_policy_forward_calls": sum(
+                int(row["tile_screen"]["actual_policy_forward_calls"])
+                for row in rows
+            ),
+            "policy_forward_rows": sum(
+                int(row["tile_screen"]["policy_forward_rows"]) for row in rows
+            ),
+            "simulator_calls": 0,
+            "latency_seconds_total": float(sum(tile_seconds)),
+        },
+        "condition_atlas": condition_totals,
+        "allocation_and_statistics_effect_model_calls": 0,
+        "allocation_and_statistics_simulator_calls": 0,
+        "native_action_atlas_is_referenced_not_recomputed": True,
     }
 
 
 def main() -> None:
+    started = time.perf_counter()
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
     raw_path = args.output_dir / "allocation_states.jsonl"
@@ -249,6 +368,7 @@ def main() -> None:
         raise RuntimeError("joint calibration is not frozen")
     j_threshold = float(freeze["selected_J_threshold"])
     source = read_rows(args.visual_confirmatory_root)
+    compute_accounting = source_compute_accounting(source)
     all_rows: dict[str, dict[int, list[dict]]] = defaultdict(dict)
     for weights_name in SENSITIVITY_WEIGHTS:
         for seed, rows in source.items():
@@ -326,6 +446,9 @@ def main() -> None:
             "matched_refined_states": 32,
             "matched_abstract_budget": {"local_fine_tiles": 1, "fine_action_candidates": 25, "coarse_action_candidates": 9},
             "wall_clock_compute_claimed_matched": False,
+            "source_compute_accounting": compute_accounting,
+            "offline_allocation_and_statistics_latency_seconds": time.perf_counter()
+            - started,
             "raw_path": str(raw_path),
             "raw_sha256": sha256_file(raw_path),
             "joint_calibration_freeze_sha256": sha256_file(args.joint_calibration_freeze),
