@@ -1,0 +1,11 @@
+{
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "selection_source": "sealed Stage-2.5 v26 checkpoint/final_selection.json",
+  "reselection_forbidden": true,
+  "checkpoints": [
+    {"model_seed": 16018, "step": 10000, "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000010000/checkpoint.pt", "sha256": "ac6aa358e0474c9a4a3b91c0b69635082cac29601b0ff438b56095d80f5bdb41"},
+    {"model_seed": 16019, "step": 15000, "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000015000/checkpoint.pt", "sha256": "be5db19fcc6880f36130fea648fb254796f030fd09c743e21cdbb8bdca9b7662"},
+    {"model_seed": 16020, "step": 30000, "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt", "sha256": "1cd67ccca93b2b5019d26179b0f1deda548527ce41719951a23f086e13b8c565"}
+  ]
+}
+

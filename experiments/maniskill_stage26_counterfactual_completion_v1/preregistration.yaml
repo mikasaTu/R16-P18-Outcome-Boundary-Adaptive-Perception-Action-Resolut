@@ -1,0 +1,178 @@
+protocol_id: R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1
+protocol_version: 1
+protocol_frozen_date_utc: "2026-08-15"
+stage: 2.6
+scope: shared_prefix_causal_stopping_and_observation_history_counterfactual_completion
+
+user_execution_override:
+  frozen_before_confirmatory_results: true
+  run_all_planned_experiments_even_when_a_gate_fails: true
+  gates_and_precedence_unchanged: true
+  downstream_results_cannot_reverse_upstream_failures: true
+  allowed_a800_gpu_count_inclusive: [2, 8]
+
+immutable_predecessor:
+  repository_head: 9b919fb402f0c4b9b7e13bdfd74ff437b3416e0b
+  repository_tree: cf27a580d7fcb237daa504345517e23c8ccedf22
+  experiment_path: experiments/maniskill_stage25_repair_oracle_v1
+  mutation_policy: no_bytes_may_change
+  final_status: REVISE_STOPPING_CONFOUND
+  formal_run_id: r16p18-stage25-oracle-20260814-v26
+
+repository:
+  required_branch: stage26-counterfactual-completion-v1
+  experiment_root: experiments/maniskill_stage26_counterfactual_completion_v1
+  formal_source_must_be_clean_commit: true
+
+environment:
+  task: StackCube-v1
+  control_mode: pd_ee_delta_pos
+  horizon: 200
+  maniskill_tag: v3.0.1
+  maniskill_commit: a4a4f9272ad64b1564035874b605ceb687b63ed8
+  action_queries: 30
+  temporal_aggregation: true
+  model_seeds: [16018, 16019, 16020]
+  selected_checkpoint_steps: {16018: 10000, 16019: 15000, 16020: 30000}
+
+seed_banks:
+  algorithm: sha256_low31_disjoint_v1
+  train_source: 512
+  calibration: 128
+  confirmatory: 200
+  same_order_across_model_seeds: true
+  exclusions:
+    - all_demo_episode_seeds
+    - predecessor_test_seeds
+    - stage25_screen_final_validation_confirmatory_oracle_seeds
+    - every_other_stage26_bank
+
+capsule:
+  required_fields:
+    - full_simulator_state
+    - elapsed_step
+    - current_observation_and_hashes
+    - recent_four_observations_or_frozen_visual_features
+    - act_temporal_aggregation_table_prefix
+    - last_executed_action
+    - last_legal_gripper_command
+    - success_streak_bookkeeping
+    - python_numpy_torch_cpu_cuda_rng_states
+    - task_model_episode_seed
+    - checkpoint_path_and_sha256
+    - source_step_phase_metadata
+    - trace_prefix_sha256
+  successful_episode_capture_types:
+    - first_near_completion
+    - first_success_minus_6
+    - first_success_minus_3
+    - first_success
+    - first_success_plus_3
+    - first_hold5
+  failed_episode_capture_types:
+    - first_near_completion_false_positive
+    - maximum_progress
+  maximum_per_type_per_episode: 1
+
+shared_prefix_fidelity:
+  calibration_states: 64
+  continuation_steps: 10
+  thresholds:
+    executed_action_max_abs: 1.0e-6
+    object_translation_m: 1.0e-5
+    object_rotation_rad: 1.0e-4
+    categorical_agreement: 1.0
+  categorical_fields: [success, contact, grasp, support]
+  failure_status: NO_GO_SHARED_PREFIX_FIDELITY
+
+counterfactual:
+  label_horizon_steps: 20
+  branches:
+    continue_policy: restore_full_act_state_and_continue_temporal_aggregation
+    neutral_hold: zero_arm_delta_hold_last_controller_effective_gripper_no_policy_calls
+    hold_then_reobserve: neutral_two_steps_then_new_observation_and_new_temporal_table
+    terminate_oracle: privileged_diagnostic_only
+  causal_confirmatory_to_original_episode_horizon_from: [first_success, first_hold5]
+  labels: [success_once, success_hold5, success_at_horizon, hold_success_20, continue_success_20, reobserve_success_20, first_success_step]
+
+predictor:
+  privileged_inputs_forbidden: [simulator_success, object_pose, phase, goal_distance, branch_outcome, privileged_contact]
+  inputs: [last4_frozen_act_visual_latents, last4_proprio, last4_executed_actions, base_policy_first5_predicted_actions, gripper_history, temporal_action_consistency]
+  heads: [Q_hold, Q_continue]
+  derived_classes: [NOT_DONE, DONE_ROBUST, DONE_FRAGILE, APPARENT_BUT_UNSTABLE]
+  candidates: [linear_probe, two_layer_mlp, one_layer_small_gru]
+  selection_lexicographic: [not_done_false_stop_lte_0.05, maximize_stop_beneficial_auprc, minimize_ece, fewer_parameters]
+  per_model_seed_same_structure_and_hyperparameters: true
+  secondary_leave_one_model_seed_out: true
+  calibration_threshold_temperature_frozen_before_confirmatory: true
+  decision_rule:
+    conditions: [Q_hold_gte_tau_hold, Q_hold_minus_Q_continue_gte_tau_advantage]
+    consecutive_steps: 2
+    both_low_action: continue_and_label_unstable_or_not_done
+
+closed_loop:
+  confirmatory_episode_seeds: 200
+  paired_across_model_seeds: true
+  arms:
+    - fixed_horizon
+    - fixed_time_matched_stop
+    - random_matched_stop
+    - learned_success_only_classifier
+    - learned_counterfactual_completion_gate
+    - privileged_neutral_after_hold5
+    - privileged_terminate_first_success
+  fixed_random_match_learned_average_stop_rate: true
+  report_unmatched_natural_controls: true
+  confirmatory_tuning_forbidden: true
+
+statistics:
+  closed_loop_unit: episode_seed
+  offline_bootstrap_unit: source_episode
+  paired_bootstrap_replicates: 10000
+  confidence_level: 0.95
+  per_model_seed_and_aggregate: true
+  secondary_holm_correction: true
+
+gates:
+  causal:
+    privileged_end_success_gain_gte: 0.10
+    paired_ci_lower_gt: 0
+    all_three_model_seeds_same_direction: true
+    failure_status: NO_GO_STOPPING_NOT_CAUSAL
+  offline_learnability:
+    stop_beneficial_auprc_gte: 0.60
+    ece_lte: 0.05
+    not_done_false_stop_lte: 0.05
+    done_fragile_recall_gte: 0.60
+    minimum_model_seeds_pass: 2
+    catastrophic_third_seed_forbidden: true
+    failure_status: NO_GO_COMPLETION_NOT_LEARNABLE
+  learned_closed_loop:
+    end_success_gain_gte: 0.08
+    or_recover_privileged_gain_fraction_gte: 0.50
+    paired_ci_lower_gt: 0
+    success_once_reduction_lte: 0.02
+    post_success_loss_relative_reduction_gte: 0.30
+    all_model_seeds_nonnegative: true
+    minimum_clearly_positive_model_seeds: 2
+    policy_calls_lte_fixed: true
+    completion_head_latency_overhead_lte: 0.10
+    pass_status: GO_STOP_NORMALIZED_BASELINE
+    false_stop_with_gain_status: REVISE_EARLY_STOP_FALSE_POSITIVE
+  precedence:
+    - NO_GO_SHARED_PREFIX_FIDELITY
+    - NO_GO_STOPPING_NOT_CAUSAL
+    - NO_GO_COMPLETION_NOT_LEARNABLE
+    - REVISE_EARLY_STOP_FALSE_POSITIVE
+    - GO_STOP_NORMALIZED_BASELINE
+
+audit:
+  independent_decision_implementation: true
+  recompute_from_raw: [rollout_capsules, branch_traces, predictor_logits, closed_loop_episode_rows]
+  tests: [capsule_serialization, act_table_restoration, rng_restoration, branch_prefix_identity, no_privileged_input_static, split_leakage, trace_terminal_pose_recompute, fail_on_overwrite, preemption_resume, compileall]
+
+stage27:
+  create_draft_only_if_final_status: GO_STOP_NORMALIZED_BASELINE
+  draft_factorial: coarse_local_fine_by_fixed_learned_horizon_2x2
+  execution_forbidden: true
+

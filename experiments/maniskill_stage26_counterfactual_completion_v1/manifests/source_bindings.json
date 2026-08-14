@@ -1,0 +1,14 @@
+{
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "repository_head_before_branch": "9b919fb402f0c4b9b7e13bdfd74ff437b3416e0b",
+  "repository_tree_before_branch": "cf27a580d7fcb237daa504345517e23c8ccedf22",
+  "stage25_tree_inventory_sha256": "b7a52cecb93addb2430cfde98caadb05925cd23ba04d1aea2b3a4b8419f412ed",
+  "user_plan_sha256": "3f58f4e7ef6961951eb51852499965626e0b95e6b3a69af5f8ef581324e49bd5",
+  "sealed_stage25_v26": {
+    "formal_run_id": "r16p18-stage25-oracle-20260814-v26",
+    "trace_corrected_summary_sha256": "94b7b795b9c1fe2f6ed84affd771a6f1b2ea29f6a627c38edacf7828c988c3ba",
+    "independent_audit_sha256": "35f0ab027c7faca13d6779a87ab78b2679acc1db1e9ef9adfbf45e20d6b9adec",
+    "terminal_trace_audit_sha256": "e0d1af1fa0a11b79d5ee2a72574eda265e49d22d5a577d4c878cad1d9d116e40"
+  }
+}
+

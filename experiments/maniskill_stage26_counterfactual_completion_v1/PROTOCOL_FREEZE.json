@@ -1,0 +1,32 @@
+{
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "status": "FROZEN_BEFORE_CONFIRMATORY_RESULTS",
+  "frozen_at_utc": "2026-08-15T00:00:00Z",
+  "branch": "stage26-counterfactual-completion-v1",
+  "base_commit": "9b919fb402f0c4b9b7e13bdfd74ff437b3416e0b",
+  "base_tree": "cf27a580d7fcb237daa504345517e23c8ccedf22",
+  "predecessor_path": "experiments/maniskill_stage25_repair_oracle_v1",
+  "predecessor_mutation_forbidden": true,
+  "predecessor_git_inventory_sha256": "b7a52cecb93addb2430cfde98caadb05925cd23ba04d1aea2b3a4b8419f412ed",
+  "user_plan_sha256": "3f58f4e7ef6961951eb51852499965626e0b95e6b3a69af5f8ef581324e49bd5",
+  "bindings": {
+    "preregistration_sha256": "baa4b0c18034142d4ab21e3068fca927b9038dfa7a1237a3864ec33e7b7667d5",
+    "checkpoint_bindings_sha256": "0c75db1963a02840e367c761d5ec319f585a252b0103a012894406e7dad326ad",
+    "seed_banks_sha256": "25a9408684cc3f6b4754b554b7e74db6457157e73132993bc8094db07ec239b8",
+    "source_bindings_sha256": "5e51a4a0ca33554d303e9dd3569fe2bc3af1094c9b9921785759a13db74a6894"
+  },
+  "decision_precedence": [
+    "NO_GO_SHARED_PREFIX_FIDELITY",
+    "NO_GO_STOPPING_NOT_CAUSAL",
+    "NO_GO_COMPLETION_NOT_LEARNABLE",
+    "REVISE_EARLY_STOP_FALSE_POSITIVE",
+    "GO_STOP_NORMALIZED_BASELINE"
+  ],
+  "execution_override": {
+    "run_all_planned_experiments_after_gate_failure": true,
+    "scientific_thresholds_unchanged": true,
+    "downstream_evidence_cannot_reverse_upstream_failure": true
+  },
+  "confirmatory_outputs_present_at_freeze": false
+}
+
