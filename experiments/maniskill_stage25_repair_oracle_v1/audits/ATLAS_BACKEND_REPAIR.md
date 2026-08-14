@@ -29,11 +29,19 @@ the padded rollout backend to the frozen preregistration.  The unit suite passed
 All four development-server GPUs had pre-existing processes, so the agent did
 not share or terminate them.  Instead, the next dedicated two-A800 PAI launcher
 first runs `smoke_action_atlas_cuda.py` in its private artifact directory.  The
-smoke creates 75 CUDA environments, loads a pinned verified StackCube
-checkpoint, constructs one 5x5 atlas, executes all valid candidates with three
-repeats and the full 4+20+5 rollout, and writes a fail-closed non-scientific
-summary.  The formal pipeline starts only after that summary reports
+smoke creates 75 CUDA environments, loads the selected seed-16018 StackCube
+checkpoint, restores a hash-bound real calibration-bank state, constructs one
+5x5 atlas, executes valid candidates with three repeats and the full 4+20+5
+rollout, and writes a fail-closed non-scientific summary.  It requires at least
+90% candidate validity and a real outcome for every valid candidate.  The
+formal pipeline starts only after that summary reports
 `CUDA_ACTION_ATLAS_SMOKE_PASS`.
+
+An initial v19 smoke used an arbitrary 5k checkpoint/initial state and its
+assertion only checked internal count equality; 0 valid candidates therefore
+passed vacuously.  The agent caught this by inspecting the saved accounting,
+stopped v19, rejected that smoke as evidence, and tightened the input and pass
+condition above.  No v19 output is eligible for the final run.
 
 The repair changes no scientific threshold, candidate grid, repeat count,
 action, state bank, phase, seed bank, checkpoint selection rule, utility, or

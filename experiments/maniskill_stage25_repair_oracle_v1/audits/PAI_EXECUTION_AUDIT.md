@@ -22,6 +22,7 @@ never merged into the final namespace.
 | v16 | `dlcec5w5mn3kk7ut` | exp-efficiency, 2 A800 | failed at the first two environment initializations because the safe work-directory change was absent | none; zero completed episodes |
 | v17 | `dlc1nac45mnsov3m` | exp-efficiency, 2 A800 | failed after state-bank construction: restoration audit requested three CPU environments, which ManiSkill rejects | none; zero restoration rows and no downstream oracle output |
 | v18 | `dlct241e2lcsom1a` | exp-efficiency, 2 A800 | intentionally stopped after static audit found the same CPU-vectorization error in the not-yet-reached atlas path | none; first two screen jobs incomplete and zero summaries |
+| v19 | `dlc11nu9e2z0hrl7` | exp-efficiency, 2 A800 | intentionally stopped after the first CUDA atlas smoke was found to pass vacuously with 0/25 valid candidates | none; smoke rejected and formal screen partials not reused |
 
 ## v11 preserved partials
 

@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import ast
+import sys
 from pathlib import Path
 
+import pytest
 import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from smoke_action_atlas_cuda import validate_smoke_atlas
 
 
 def padded_rollout_backends(script_name: str) -> list[str]:
@@ -37,3 +41,10 @@ def test_parallel_atlas_rollouts_use_frozen_formal_cuda_backend() -> None:
     assert protocol["environment"]["formal_sim_backend"] == "physx_cuda"
     assert padded_rollout_backends("run_action_boundary_probe.py") == ["physx_cuda"]
     assert padded_rollout_backends("run_visual_resolution_probe.py") == ["physx_cuda"]
+
+
+def test_cuda_smoke_rejects_vacuous_zero_valid_candidates() -> None:
+    with pytest.raises(RuntimeError, match="inconsistent outcomes"):
+        validate_smoke_atlas(
+            {"valid": [False] * 25, "outcomes": [None] * 25}
+        )
