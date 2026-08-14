@@ -23,6 +23,7 @@ never merged into the final namespace.
 | v17 | `dlc1nac45mnsov3m` | exp-efficiency, 2 A800 | failed after state-bank construction: restoration audit requested three CPU environments, which ManiSkill rejects | none; zero restoration rows and no downstream oracle output |
 | v18 | `dlct241e2lcsom1a` | exp-efficiency, 2 A800 | intentionally stopped after static audit found the same CPU-vectorization error in the not-yet-reached atlas path | none; first two screen jobs incomplete and zero summaries |
 | v19 | `dlc11nu9e2z0hrl7` | exp-efficiency, 2 A800 | intentionally stopped after the first CUDA atlas smoke was found to pass vacuously with 0/25 valid candidates | none; smoke rejected and formal screen partials not reused |
+| v20 | `dlc16dq616en4mnc` | exp-efficiency, 2 A800 | failed closed in the tightened pre-formal atlas smoke because the real selected-checkpoint/state candidate validity was below 90% | none; formal orchestrator never started |
 
 ## v11 preserved partials
 

@@ -40,9 +40,7 @@ def smoke_candidate(path: Path) -> dict:
 
 def validate_smoke_atlas(atlas: dict) -> tuple[np.ndarray, int]:
     valid = np.asarray(atlas["valid"], dtype=bool)
-    non_null_outcomes = sum(
-        outcome is not None for outcome in atlas["outcomes"]
-    )
+    non_null_outcomes = sum(outcome is not None for outcome in atlas["outcomes"])
     if (
         len(valid) != 25
         or int(valid.sum()) != non_null_outcomes
@@ -50,6 +48,37 @@ def validate_smoke_atlas(atlas: dict) -> tuple[np.ndarray, int]:
     ):
         raise RuntimeError("CUDA atlas smoke produced inconsistent outcomes")
     return valid, non_null_outcomes
+
+
+def atlas_diagnostics(
+    atlas: dict, action_low: np.ndarray, action_high: np.ndarray
+) -> dict:
+    candidates = np.asarray(atlas["candidates"], dtype=np.float64)
+    low = np.broadcast_to(np.asarray(action_low), candidates.shape)
+    high = np.broadcast_to(np.asarray(action_high), candidates.shape)
+    nominal = np.asarray(atlas["nominal_action_first4"], dtype=np.float64)
+    nominal_low = np.broadcast_to(np.asarray(action_low), nominal.shape)
+    nominal_high = np.broadcast_to(np.asarray(action_high), nominal.shape)
+    return {
+        "nominal_action_first4": nominal.astype(float).tolist(),
+        "action_space_low": np.asarray(action_low).astype(float).tolist(),
+        "action_space_high": np.asarray(action_high).astype(float).tolist(),
+        "nominal_below_low": (nominal < nominal_low).astype(int).tolist(),
+        "nominal_above_high": (nominal > nominal_high).astype(int).tolist(),
+        "candidate_below_low_count_by_step_dimension": np.sum(
+            candidates < low, axis=0
+        ).astype(int).tolist(),
+        "candidate_above_high_count_by_step_dimension": np.sum(
+            candidates > high, axis=0
+        ).astype(int).tolist(),
+        "candidate_min_by_step_dimension": np.min(candidates, axis=0)
+        .astype(float)
+        .tolist(),
+        "candidate_max_by_step_dimension": np.max(candidates, axis=0)
+        .astype(float)
+        .tolist(),
+        "valid_mask": list(atlas["valid"]),
+    }
 
 
 def main() -> None:
@@ -82,6 +111,8 @@ def main() -> None:
     policy_env = make_env(
         "StackCube-v1", 1, sim_backend="physx_cuda", reconfiguration_freq=0
     )
+    action_low = np.asarray(policy_env.action_space.low).copy()
+    action_high = np.asarray(policy_env.action_space.high).copy()
     started = time.time()
     try:
         agent, _ = load_policy_from_checkpoint(
@@ -106,40 +137,43 @@ def main() -> None:
         policy_env.close()
         rollout_env.close()
 
-    valid, non_null_outcomes = validate_smoke_atlas(atlas)
-    write_json(
-        args.output,
-        {
-            "protocol_id": PROTOCOL_ID,
-            "status": "CUDA_ACTION_ATLAS_SMOKE_PASS",
-            "scientific_evidence": False,
-            "formal_result_reuse_allowed": False,
-            "task_id": "StackCube-v1",
-            "model_seed": 16018,
-            "checkpoint_step": int(candidate["step"]),
-            "checkpoint_sha256": candidate["checkpoint_sha256"],
-            "selected_checkpoints_sha256": sha256_file(
-                args.selected_checkpoints
-            ),
-            "state_bank_manifest_sha256": sha256_file(
-                args.state_bank_manifest
-            ),
-            "state_bank_h5_sha256": state_manifest["state_bank_h5_sha256"],
-            "bank_id": metadata["bank_id"],
-            "state_sha256": metadata["state_sha256"],
-            "training_h5_sha256": sha256_file(args.training_h5),
-            "sim_backend": "physx_cuda",
-            "rollout_envs": PADDED_ENVS,
-            "candidate_opportunities": 25,
-            "candidate_repeats": 3,
-            "valid_candidates": int(valid.sum()),
-            "candidate_validity": float(valid.mean()),
-            "non_null_outcomes": non_null_outcomes,
-            "boundary_by_threshold": atlas["boundary_by_threshold"],
-            "accounting": atlas["accounting"],
-            "wall_seconds": time.time() - started,
-        },
-    )
+    valid = np.asarray(atlas["valid"], dtype=bool)
+    non_null_outcomes = sum(outcome is not None for outcome in atlas["outcomes"])
+    result = {
+        "protocol_id": PROTOCOL_ID,
+        "scientific_evidence": False,
+        "formal_result_reuse_allowed": False,
+        "task_id": "StackCube-v1",
+        "model_seed": 16018,
+        "checkpoint_step": int(candidate["step"]),
+        "checkpoint_sha256": candidate["checkpoint_sha256"],
+        "selected_checkpoints_sha256": sha256_file(args.selected_checkpoints),
+        "state_bank_manifest_sha256": sha256_file(args.state_bank_manifest),
+        "state_bank_h5_sha256": state_manifest["state_bank_h5_sha256"],
+        "bank_id": metadata["bank_id"],
+        "state_sha256": metadata["state_sha256"],
+        "training_h5_sha256": sha256_file(args.training_h5),
+        "sim_backend": "physx_cuda",
+        "rollout_envs": PADDED_ENVS,
+        "candidate_opportunities": 25,
+        "candidate_repeats": 3,
+        "valid_candidates": int(valid.sum()),
+        "candidate_validity": float(valid.mean()),
+        "non_null_outcomes": non_null_outcomes,
+        "boundary_by_threshold": atlas["boundary_by_threshold"],
+        "accounting": atlas["accounting"],
+        "diagnostics": atlas_diagnostics(atlas, action_low, action_high),
+        "wall_seconds": time.time() - started,
+    }
+    try:
+        validate_smoke_atlas(atlas)
+    except RuntimeError as error:
+        result["status"] = "CUDA_ACTION_ATLAS_SMOKE_FAIL"
+        result["failure"] = str(error)
+        write_json(args.output, result)
+        raise
+    result["status"] = "CUDA_ACTION_ATLAS_SMOKE_PASS"
+    write_json(args.output, result)
 
 
 if __name__ == "__main__":

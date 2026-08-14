@@ -43,6 +43,13 @@ passed vacuously.  The agent caught this by inspecting the saved accounting,
 stopped v19, rejected that smoke as evidence, and tightened the input and pass
 condition above.  No v19 output is eligible for the final run.
 
+The tightened v20 smoke then failed before the formal orchestrator began,
+showing that the actual selected-checkpoint/calibration-state atlas did not meet
+the frozen 90% validity requirement.  The next diagnostic revision persists
+the nominal action, action-space bounds, per-step/dimension violation counts,
+candidate extrema, and validity mask even on failure.  This is diagnosis only;
+the threshold remains frozen.
+
 The repair changes no scientific threshold, candidate grid, repeat count,
 action, state bank, phase, seed bank, checkpoint selection rule, utility, or
 statistical decision rule.
