@@ -24,6 +24,7 @@ never merged into the final namespace.
 | v18 | `dlct241e2lcsom1a` | exp-efficiency, 2 A800 | intentionally stopped after static audit found the same CPU-vectorization error in the not-yet-reached atlas path | none; first two screen jobs incomplete and zero summaries |
 | v19 | `dlc11nu9e2z0hrl7` | exp-efficiency, 2 A800 | intentionally stopped after the first CUDA atlas smoke was found to pass vacuously with 0/25 valid candidates | none; smoke rejected and formal screen partials not reused |
 | v20 | `dlc16dq616en4mnc` | exp-efficiency, 2 A800 | failed closed in the tightened pre-formal atlas smoke because the real selected-checkpoint/state candidate validity was below 90% | none; formal orchestrator never started |
+| v21 | `dlca742ruakkxqj7` | exp-efficiency, 2 A800 | failed closed after persisting the atlas diagnostic: 25/25 arm candidates legal, but all inherited the raw ACT gripper overshoot | none; diagnostic-only smoke, formal orchestrator never started |
 
 ## v11 preserved partials
 
@@ -70,3 +71,14 @@ The direct restoration subprocess log SHA-256 is
 The failure occurred during environment construction, before a raw restoration
 row or summary was written.  Consequently v17 is retained as failed audit
 evidence and is not an eligible source for the final Step-4 result.
+
+## v21 atlas diagnostic failure
+
+PAI reports v21 as `Failed` (`JobFailed`) after 127 seconds, with running time
+2026-08-14 10:15:55Z through 10:17:09Z.  The diagnostic JSON records
+`scientific_evidence=false`, `formal_result_reuse_allowed=false`, 0/25 valid
+candidates, and zero scientific simulator/policy calls.  Its per-dimension
+evidence isolates the violation to the unperturbed gripper channel; the three
+arm channels have zero bound violations.  The failure is retained as
+implementation-diagnostic evidence only and is not merged into a subsequent
+run namespace.

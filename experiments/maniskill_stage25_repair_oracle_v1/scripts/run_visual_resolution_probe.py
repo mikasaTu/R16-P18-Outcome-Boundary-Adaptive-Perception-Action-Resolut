@@ -179,6 +179,9 @@ def main() -> None:
                         training_chunks,
                         device,
                         radius=radius,
+                        last_legal_gripper_command=float(
+                            metadata["last_legal_gripper_command"]
+                        ),
                         visual_condition="coarse",
                     ),
                     "oracle_tile": generate_atlas(
@@ -190,6 +193,9 @@ def main() -> None:
                         training_chunks,
                         device,
                         radius=radius,
+                        last_legal_gripper_command=float(
+                            metadata["last_legal_gripper_command"]
+                        ),
                         visual_condition="local_fine",
                         tile_index=oracle_tile,
                     ),
@@ -202,6 +208,9 @@ def main() -> None:
                         training_chunks,
                         device,
                         radius=radius,
+                        last_legal_gripper_command=float(
+                            metadata["last_legal_gripper_command"]
+                        ),
                         visual_condition="local_fine",
                         tile_index=random_tile,
                     ),
@@ -214,6 +223,9 @@ def main() -> None:
                         training_chunks,
                         device,
                         radius=radius,
+                        last_legal_gripper_command=float(
+                            metadata["last_legal_gripper_command"]
+                        ),
                         visual_condition="local_fine",
                         tile_index=phase_tile,
                     ),

@@ -15,6 +15,7 @@ import torch
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
 from common import PHASES, PROTOCOL_ID, canonical_json, sha256_file, write_json
+from oracle_math import effective_gripper_command
 from stage25_runtime import (
     load_policy_from_checkpoint,
     make_env,
@@ -114,6 +115,7 @@ def expert_candidates(
             episode_seed = int(source_row["episode_seed"])
             trajectory = source[f"traj_{episode_id}"]
             states = trajectory["env_states"]
+            actions = trajectory["actions"]
             action_count = int(trajectory["actions"].shape[0])
             # A deterministic coarse scan is sufficient because the selected
             # state is reclassified from simulator geometry after restoration.
@@ -141,7 +143,15 @@ def expert_candidates(
                         state=state,
                         rgb_sha256=hash_rgb(obs, 0),
                         predicates=public_predicates(predicates, 0),
-                        last_gripper=0.0,
+                        last_gripper=(
+                            0.0
+                            if step == 0
+                            else effective_gripper_command(
+                                float(actions[min(step, action_count) - 1, -1]),
+                                float(env.action_space.low[-1]),
+                                float(env.action_space.high[-1]),
+                            )
+                        ),
                         predicate_source="simulator_geometry",
                     )
                 )
@@ -198,7 +208,11 @@ def collect_on_policy(
                             state=state,
                             rgb_sha256=hash_rgb(obs, index),
                             predicates=public_predicates(predicates, index),
-                            last_gripper=float(last_action[index, -1].item()),
+                            last_gripper=effective_gripper_command(
+                                float(last_action[index, -1].item()),
+                                float(env.action_space.low[-1]),
+                                float(env.action_space.high[-1]),
+                            ),
                             predicate_source="simulator_geometry",
                         )
                     )
@@ -216,7 +230,11 @@ def collect_on_policy(
                             state=state,
                             rgb_sha256=hash_rgb(obs, index),
                             predicates=public_predicates(predicates, index),
-                            last_gripper=float(last_action[index, -1].item()),
+                            last_gripper=effective_gripper_command(
+                                float(last_action[index, -1].item()),
+                                float(env.action_space.low[-1]),
+                                float(env.action_space.high[-1]),
+                            ),
                             predicate_source="official_success_hold5",
                         )
                     )

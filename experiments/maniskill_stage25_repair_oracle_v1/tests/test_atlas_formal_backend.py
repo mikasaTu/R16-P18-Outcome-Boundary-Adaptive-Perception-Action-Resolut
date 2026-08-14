@@ -48,3 +48,27 @@ def test_cuda_smoke_rejects_vacuous_zero_valid_candidates() -> None:
         validate_smoke_atlas(
             {"valid": [False] * 25, "outcomes": [None] * 25}
         )
+
+
+def test_every_atlas_call_binds_the_state_bank_legal_gripper() -> None:
+    for script_name in (
+        "run_action_boundary_probe.py",
+        "run_visual_resolution_probe.py",
+        "smoke_action_atlas_cuda.py",
+    ):
+        tree = ast.parse((ROOT / "scripts" / script_name).read_text(encoding="utf-8"))
+        calls = [
+            node
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == "generate_atlas"
+        ]
+        assert calls
+        assert all(
+            any(
+                keyword.arg == "last_legal_gripper_command"
+                for keyword in call.keywords
+            )
+            for call in calls
+        )

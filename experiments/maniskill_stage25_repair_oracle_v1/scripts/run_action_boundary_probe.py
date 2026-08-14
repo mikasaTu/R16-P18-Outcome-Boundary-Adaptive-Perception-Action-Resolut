@@ -104,6 +104,9 @@ def main() -> None:
                         training_chunks,
                         device,
                         radius=float(radius),
+                        last_legal_gripper_command=float(
+                            metadata["last_legal_gripper_command"]
+                        ),
                     )
                     row = {
                         "protocol_id": PROTOCOL_ID,

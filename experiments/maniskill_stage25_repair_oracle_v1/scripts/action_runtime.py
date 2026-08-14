@@ -9,6 +9,7 @@ import torch
 
 from oracle_math import (
     PRIMARY_UTILITY,
+    atlas_center_with_frozen_gripper,
     boundary_density,
     local_pca_grid,
     transform_observation,
@@ -250,6 +251,7 @@ def generate_atlas(
     device: torch.device,
     *,
     radius: float,
+    last_legal_gripper_command: float,
     visual_condition: str = "native",
     tile_index: int | None = None,
 ) -> dict[str, Any]:
@@ -262,8 +264,14 @@ def generate_atlas(
     action_high = np.broadcast_to(
         np.asarray(policy_env.action_space.high, dtype=np.float64), (4, nominal.shape[-1])
     )
+    atlas_center = atlas_center_with_frozen_gripper(
+        nominal[:4],
+        last_legal_gripper_command,
+        action_low,
+        action_high,
+    )
     grid = local_pca_grid(
-        nominal,
+        atlas_center,
         training_chunks,
         action_low,
         action_high,
@@ -284,6 +292,9 @@ def generate_atlas(
         "tile_index": tile_index,
         "radius": float(radius),
         "nominal_action_first4": nominal[:4].astype(float).tolist(),
+        "atlas_center_action_first4": atlas_center.astype(float).tolist(),
+        "atlas_gripper_command": float(last_legal_gripper_command),
+        "atlas_gripper_source": "state_bank_last_legal_controller_effective_command",
         "candidates": np.asarray(grid["candidates"]).astype(float).tolist(),
         "valid": rollout["valid"],
         "scaled_residual_norms": grid["scaled_residual_norms"].astype(float).tolist(),

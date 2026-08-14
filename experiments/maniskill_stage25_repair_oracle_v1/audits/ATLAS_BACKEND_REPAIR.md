@@ -50,6 +50,36 @@ the nominal action, action-space bounds, per-step/dimension violation counts,
 candidate extrema, and validity mask even on failure.  This is diagnosis only;
 the threshold remains frozen.
 
-The repair changes no scientific threshold, candidate grid, repeat count,
-action, state bank, phase, seed bank, checkpoint selection rule, utility, or
-statistical decision rule.
+Run v21 (`dlca742ruakkxqj7`) persisted that diagnostic and failed before the
+formal orchestrator began.  Its 25/25 arm candidates were within `[-1, 1]` at
+all four prefix steps.  The only violations were the unperturbed gripper
+coordinates: raw ACT predictions were `1.00121` through `1.00191`, so all 25
+candidates inherited the same small overshoot and were declared invalid.  The
+failure JSON SHA-256 is
+`7880685b1f92da8317afa70954756cfe524b6f601ed560ba288e6e1b0f52b99a`;
+the runtime log SHA-256 is
+`c0d4758074308ee89190e4a762010cf7ae0a7a946d9eea7654062a8881032409`.
+
+This exposed a semantic implementation defect rather than a PCA/grid defect.
+The frozen atlas varies `all_arm_dimensions_first_four_steps` and the frozen
+state-bank contract stores `last_legal_gripper_command`.  ManiSkill 3.0.1's
+normalized controllers execute `clip(raw, -1, 1)`, but the original state-bank
+builder had stored the pre-controller raw prediction, and the atlas had copied
+the raw nominal gripper into every non-gripper candidate.
+
+The correction now records the controller-effective legal gripper command in
+state-bank metadata and explicitly binds that single command into all 25
+non-gripper candidates.  A stored out-of-range command raises an error; no
+candidate coordinate is silently clipped.  The raw ACT nominal remains in the
+output beside a separately named `atlas_center_action_first4`, so overshoot and
+the exact replacement stay auditable.  Neutral holds likewise retain the
+controller-effective final gripper value.  PCA neighbors, PCA directions,
+candidate arm values, action-space validity checks, radii, thresholds, rollout
+counts, seeds, utilities, and decision rules are unchanged.
+
+The repairs change no scientific threshold, candidate arm grid, repeat count,
+state identity/phase selection, seed bank, checkpoint selection rule, utility,
+or statistical decision rule.  Fifteen unit/static tests pass, including
+explicit rejection of an illegal stored gripper and a call-site contract that
+every atlas binds the state-bank command.  All nine frozen scientific hashes
+continue to verify.

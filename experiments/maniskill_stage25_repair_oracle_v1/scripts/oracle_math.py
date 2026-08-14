@@ -16,6 +16,57 @@ EFFECT_THRESHOLD_CANDIDATES = (0.5, 1.0, 1.5)
 J_THRESHOLD_CANDIDATES = (1.0, 2.0, 5.0)
 
 
+def effective_gripper_command(
+    raw_command: float,
+    low: float = -1.0,
+    high: float = 1.0,
+) -> float:
+    """Return the normalized gripper command that ManiSkill executes.
+
+    ManiSkill's normalized controllers explicitly clip incoming actions before
+    scaling them.  State-bank metadata records this controller-effective value
+    as the last legal gripper command; it must not retain a raw ACT overshoot.
+    """
+    value = float(raw_command)
+    lower = float(low)
+    upper = float(high)
+    if not np.isfinite(value) or not np.isfinite(lower) or not np.isfinite(upper):
+        raise ValueError("gripper command and bounds must be finite")
+    if lower > upper:
+        raise ValueError(f"invalid gripper bounds: {lower} > {upper}")
+    return float(np.clip(value, lower, upper))
+
+
+def atlas_center_with_frozen_gripper(
+    nominal_chunk: np.ndarray,
+    gripper_command: float,
+    action_low: np.ndarray,
+    action_high: np.ndarray,
+) -> np.ndarray:
+    """Build the non-gripper atlas center without clipping a candidate.
+
+    The frozen action atlas perturbs only arm dimensions.  Every candidate
+    therefore shares the state bank's explicit last legal gripper command.
+    Unlike controller preprocessing, this function refuses an illegal stored
+    command rather than clipping it, preserving the candidate-bounds rule.
+    """
+    nominal = np.asarray(nominal_chunk, dtype=np.float64)
+    low = np.broadcast_to(np.asarray(action_low, dtype=np.float64), nominal.shape)
+    high = np.broadcast_to(np.asarray(action_high, dtype=np.float64), nominal.shape)
+    if nominal.ndim != 2 or nominal.shape[1] < 2:
+        raise ValueError(f"nominal chunk must be [H,A>=2], got {nominal.shape}")
+    command = float(gripper_command)
+    if not np.isfinite(command):
+        raise ValueError("frozen gripper command must be finite")
+    if np.any(command < low[:, -1]) or np.any(command > high[:, -1]):
+        raise ValueError(
+            f"frozen gripper command {command} is outside action-space bounds"
+        )
+    center = nominal.copy()
+    center[:, -1] = command
+    return center
+
+
 def local_pca_grid(
     nominal_chunk: np.ndarray,
     training_chunks: np.ndarray,

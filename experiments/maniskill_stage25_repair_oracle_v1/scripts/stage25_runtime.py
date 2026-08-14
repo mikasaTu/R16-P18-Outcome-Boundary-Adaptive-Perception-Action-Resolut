@@ -289,7 +289,9 @@ def temporal_action_for_indices(
 
 def neutral_from_last(last_action: torch.Tensor) -> torch.Tensor:
     neutral = torch.zeros_like(last_action)
-    neutral[:, -1] = last_action[:, -1]
+    # Normalized ManiSkill controllers execute clip(raw, -1, 1).  Retain that
+    # controller-effective legal command when policy calls stop.
+    neutral[:, -1] = torch.clamp(last_action[:, -1], -1.0, 1.0)
     return neutral
 
 

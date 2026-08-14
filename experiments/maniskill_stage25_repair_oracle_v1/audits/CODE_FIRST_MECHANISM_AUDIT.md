@@ -39,6 +39,14 @@ Protocol: `R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1`
 
 每个冻结 state/model seed 首先生成 native observation 下的 nominal ACT chunk。代码在 train split action chunks 中按标准化前 4-step arm action 距离稳定检索 256 个邻居，对 residual 做 SVD，固定符号后取前两个局部 PCA 方向。以 `[-1,-0.5,0,0.5,1]^2` 形成 5×5 nested fine grid；3×3 coarse grid严格取 fine grid 的 `(0,2,4)×(0,2,4)` 子集。越界 candidate 保留原值并标 invalid，不 clip。
 
+所有 candidate 只扰动前三个 arm 坐标，并显式共享 state bank 的
+`last_legal_gripper_command`。这个值是 ManiSkill 控制器实际生效的合法
+归一化夹爪命令；若 metadata 自身越界，代码直接失败而不是裁 candidate。
+raw ACT nominal 与替换后的 atlas center 分字段保存。该区别很重要：v21
+观察到 raw gripper 仅高于上界约 0.12%–0.19%，旧实现却把这一共同的、
+非 PCA 维度问题传播到 25/25 cells，制造了 0% validity。修复不会改变
+任何 arm residual，因此后续 boundary 增减不能归因于扩大或收缩 PCA 网格。
+
 每个 valid candidate 从完全相同 simulator state 恢复，执行 4-step candidate prefix、最多 20 次 base-policy follow-up、再 neutral hold 5 步，并重复 3 次。invalid cells 通过 padding 保持调用形状，但不进入科学 outcome。lattice 只使用 40 条 4-neighbor edge；edge 在 categorical tuple、stable success、recoverability 变化，或标准化 translation/rotation/progress effect distance 达到冻结阈值时算 boundary。汇总单位是 state，不是 edge。
 
 Primary utility 明确由 stable success、clipped progress、support、intended/unintended contact、drop/slip、recoverability 和极小 action-residual penalty 组成。它是 privileged candidate ranking，不是 learned effect model。

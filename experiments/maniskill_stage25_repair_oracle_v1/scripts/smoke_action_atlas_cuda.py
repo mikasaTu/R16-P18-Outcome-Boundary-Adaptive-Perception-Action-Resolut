@@ -132,6 +132,9 @@ def main() -> None:
             training_chunks,
             device,
             radius=0.5,
+            last_legal_gripper_command=float(
+                metadata["last_legal_gripper_command"]
+            ),
         )
     finally:
         policy_env.close()
