@@ -123,6 +123,9 @@ def main() -> None:
         key: float(np.mean([bool(row[key]) for row in records]))
         for key in ("success_once", "success_hold5", "success_at_end", "post_success_loss")
     }
+    successful_steps = [
+        row["first_success_step"] for row in records if row["first_success_step"] >= 0
+    ]
     summary = {
         "protocol_id": PROTOCOL_ID,
         "status": "CHECKPOINT_EVALUATION_COMPLETE",
@@ -138,11 +141,8 @@ def main() -> None:
         "longest_success_streak_mean": float(
             np.mean([row["longest_success_streak"] for row in records])
         ),
-        "first_success_step_mean_successes": float(
-            np.mean(
-                [row["first_success_step"] for row in records if row["first_success_step"] >= 0]
-                or [float("nan")]
-            )
+        "first_success_step_mean_successes": (
+            float(np.mean(successful_steps)) if successful_steps else None
         ),
         "total_policy_calls": int(sum(row["policy_calls"] for row in records)),
         "total_action_opportunities": int(
@@ -163,4 +163,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

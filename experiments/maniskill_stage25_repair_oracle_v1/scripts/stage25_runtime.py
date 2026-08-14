@@ -52,6 +52,9 @@ def make_env(
     sim_backend: str = "physx_cuda",
     reconfiguration_freq: int = 1,
 ) -> Any:
+    # Importing the task package is the explicit Gym registration side effect.
+    import mani_skill.envs  # noqa: F401
+
     task = TASK_CONFIGS[task_id]
     render_backend = "sapien_cuda"
     raw = gym.make(
@@ -141,6 +144,7 @@ class ContactTracker:
         self.max_intended_force = zeros_float.clone()
         self.max_unintended_force = zeros_float.clone()
         self.post_success_onsets = zeros_long.clone()
+        self.success_seen_before_step = zeros_bool.clone()
 
     def forces(self) -> tuple[torch.Tensor, torch.Tensor]:
         base = self.base
@@ -193,10 +197,15 @@ class ContactTracker:
             self.max_unintended_force, torch.where(mask, unintended_force, torch.zeros_like(unintended_force))
         )
         if success_seen is not None:
-            post = success_seen.to(device=intended.device, dtype=torch.bool)
+            current_success_seen = success_seen.to(
+                device=intended.device, dtype=torch.bool
+            )
             self.post_success_onsets += (
-                (intended_onset | unintended_onset) & post
+                (intended_onset | unintended_onset)
+                & self.success_seen_before_step
+                & mask
             ).to(torch.int64)
+            self.success_seen_before_step |= current_success_seen & mask
         self.previous_intended = torch.where(mask, intended, self.previous_intended)
         self.previous_unintended = torch.where(mask, unintended, self.previous_unintended)
         return intended, unintended
@@ -477,4 +486,3 @@ def state_restore_max_abs(
             raise RuntimeError(f"state shape mismatch {path}: {observed.shape} != {expected_array.shape}")
         errors[path] = float(np.max(np.abs(observed - expected_array), initial=0.0))
     return max(errors.values(), default=0.0), errors
-
