@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "evidence_role": "formal_training_completion_and_payload_audit",
+  "status": "FORMAL_TRAINING_ARTIFACT_AUDIT_PASS",
+  "scientific_scope": "training_input_only_no_baseline_or_oracle_result",
+  "formal_training": {
+    "run_id": "r16p18-msact-v1-20260813o",
+    "tasks": [
+      "PullCubeTool-v1",
+      "PushT-v1",
+      "StackCube-v1",
+      "PushCube-v1"
+    ],
+    "model_seeds": [16018, 16019, 16020],
+    "run_count": 12,
+    "source_commit": "f7c6f178142801b84c4d011152958f419df71b7a",
+    "source_tree": "b26e6868230e14e92b054c00cb1720bcb3e5445d",
+    "checkpoint_selection_metric": "deterministic_mean_validation_imitation_loss",
+    "checkpoint_selection_direction": "minimize",
+    "checkpoint_selection_tie_break": "earliest_step",
+    "test_metrics_used_for_selection": false
+  },
+  "pai_terminal_readback": {
+    "job_id": "dlc106yxoqy3aa7b",
+    "pod_uid": "9e3db218-331f-41f3-bb96-ff61e8a2794e",
+    "status": "Succeeded",
+    "reason_code": "JobSucceeded",
+    "created_at_utc": "2026-08-13T10:27:15Z",
+    "running_at_utc": "2026-08-13T10:28:12Z",
+    "finished_at_utc": "2026-08-14T02:25:21Z",
+    "duration_seconds": 57486,
+    "resource_id": "quotakzri8a5wqcp",
+    "pod_count": 1,
+    "cpu": 12,
+    "gpu": 2,
+    "memory": "200Gi",
+    "shared_memory": "200Gi",
+    "image": "dsw-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/pai/modelscope:1.29.0-pytorch2.3.1tensorflow2.16.1-gpu-py311-cu121-ubuntu22.04",
+    "enable_ai_master": false,
+    "enable_elastic_training": false,
+    "oversold_type": "ForbiddenQuotaOverSold",
+    "observed_pod_restarts": 0
+  },
+  "artifact_audit": {
+    "auditor_source_commit": "0eb052f13b2ccba0b7d9fa618cf076d9f1851fba",
+    "auditor_source_tree": "8491f603c5fc6d3e60157b5fc0743e142687080a",
+    "auditor_sha256": "cc3df75c25d57168aced386622a96949e0d45ef2da0fdaccea2f5de11396456d",
+    "completed_at_utc": "2026-08-14T02:28:22Z",
+    "expected_uid": 2254,
+    "expected_gid": 2254,
+    "candidate_checkpoint_count": 156,
+    "all_candidate_payloads_verified": true,
+    "all_training_metrics_finite": true,
+    "all_selections_validation_argmin_with_earliest_tie_break": true,
+    "audit_file": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-act-boundary-screen-v1/pai-train/r16p18-msact-v1-20260813o/FORMAL_TRAINING_ARTIFACT_AUDIT.json",
+      "bytes": 232396,
+      "sha256": "0fb4efaebac08035b40ff867411466c77bd3d8fbdc7961615354f3a257f54d8b",
+      "uid": 2254,
+      "gid": 2254
+    },
+    "matrix_files": {
+      "training_matrix_complete_sha256": "923dd2cd9c664898d3ec41c430505f662798d64618504b96846eaa977a16dc6c",
+      "formal_matrix_result_sha256": "8ac6b18cb7e2e1baa4f9fab644ca3e677adb2a5e5398aa7764931193c0747190",
+      "first_real_work_sha256": "c23fe7e976e9092e20a513648ab0dddc76f15bef1e8d8c179d003ddc76860633",
+      "rgb_replay_matrix_complete_sha256": "949247b33d8b123ec118f2b4a6f8dde6586e3cfaf4ff7c34a19c828359b68a8b"
+    }
+  },
+  "selected_checkpoints": [
+    {
+      "task_id": "PullCubeTool-v1",
+      "model_seed": 16018,
+      "candidate_count": 20,
+      "step": 70000,
+      "validation_loss": 0.008130093424129098,
+      "checkpoint_sha256": "16457149a548ed2b32c26e51cdc15b1e832a2a24c67129effdd3ad5674af33e2"
+    },
+    {
+      "task_id": "PullCubeTool-v1",
+      "model_seed": 16019,
+      "candidate_count": 20,
+      "step": 70000,
+      "validation_loss": 0.008218768688421401,
+      "checkpoint_sha256": "3a82ff343ec08e905a4a26c5152e9ce9ec6f6911e97d116c07a91168f1835fa3"
+    },
+    {
+      "task_id": "PullCubeTool-v1",
+      "model_seed": 16020,
+      "candidate_count": 20,
+      "step": 70000,
+      "validation_loss": 0.008089245682819365,
+      "checkpoint_sha256": "23c8c5c0a67522a60d0ec17964c2dad0399d01b5bf5732f8e94196aedbe81a41"
+    },
+    {
+      "task_id": "PushT-v1",
+      "model_seed": 16018,
+      "candidate_count": 20,
+      "step": 80000,
+      "validation_loss": 0.1933543939848204,
+      "checkpoint_sha256": "5b9ff651d78a155dec8b8d4bda4dba1c1dc7729c6e209673d2e779a099ba5def"
+    },
+    {
+      "task_id": "PushT-v1",
+      "model_seed": 16019,
+      "candidate_count": 20,
+      "step": 85000,
+      "validation_loss": 0.19445023464189992,
+      "checkpoint_sha256": "bdcc4939e56c30252c286faf93e6eb0141b52cd2f1d3ddffee786063f55f348e"
+    },
+    {
+      "task_id": "PushT-v1",
+      "model_seed": 16020,
+      "candidate_count": 20,
+      "step": 5000,
+      "validation_loss": 0.19542469124536258,
+      "checkpoint_sha256": "c21b17f67a4dfe931f365d3d2fbef0fbe49a7f77ba2576718c1efb6f3e88819e"
+    },
+    {
+      "task_id": "StackCube-v1",
+      "model_seed": 16018,
+      "candidate_count": 6,
+      "step": 25000,
+      "validation_loss": 0.03398555132081774,
+      "checkpoint_sha256": "fc59779bd0674c1886ade3535e9e5de64d70db80da61c437c8f98fea49ff9371"
+    },
+    {
+      "task_id": "StackCube-v1",
+      "model_seed": 16019,
+      "candidate_count": 6,
+      "step": 25000,
+      "validation_loss": 0.036551899249161246,
+      "checkpoint_sha256": "794529e0fcee17d7517563c3c126b36e934cee255ffadd080965ede542935feb"
+    },
+    {
+      "task_id": "StackCube-v1",
+      "model_seed": 16020,
+      "candidate_count": 6,
+      "step": 25000,
+      "validation_loss": 0.034599340236705495,
+      "checkpoint_sha256": "338a86ad8ea3cae4a3fc71a496efaf33dd932268e2dff673eb47b328ed0e46ce"
+    },
+    {
+      "task_id": "PushCube-v1",
+      "model_seed": 16018,
+      "candidate_count": 6,
+      "step": 25000,
+      "validation_loss": 0.010457397036585495,
+      "checkpoint_sha256": "a527af3bb60de1beb8ac9f9482b08b49fcfab7d0cd4340ecda9d5139a419f865"
+    },
+    {
+      "task_id": "PushCube-v1",
+      "model_seed": 16019,
+      "candidate_count": 6,
+      "step": 25000,
+      "validation_loss": 0.009698826568836477,
+      "checkpoint_sha256": "9a2a8a34a06007e36142689492b80b3c9d764ebc713bd2b28129f67e7cf64e4f"
+    },
+    {
+      "task_id": "PushCube-v1",
+      "model_seed": 16020,
+      "candidate_count": 6,
+      "step": 30000,
+      "validation_loss": 0.009861066224522194,
+      "checkpoint_sha256": "fdaf9214f66c10713ee5dc9b3b61577e133c1b4bd0ab39a10432fd475ac10fac"
+    }
+  ],
+  "gate_state": {
+    "baseline_gate": "NOT_RUN",
+    "state_bank": "PROHIBITED_UNTIL_BASELINE_PASS",
+    "oracle_gate": "PROHIBITED_UNTIL_BASELINE_PASS",
+    "stage3": "NOT_CREATED_OR_IMPLEMENTED"
+  },
+  "conclusion": "The formal training inputs are eligible for the preregistered closed-loop baseline evaluation. This is not evidence that the baseline gate, oracle gate, or Stage-3 hypothesis passes."
+}
