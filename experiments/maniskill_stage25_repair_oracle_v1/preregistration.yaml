@@ -1,0 +1,397 @@
+protocol_id: R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1
+protocol_version: 1
+protocol_frozen_date_utc: "2026-08-14"
+stage: 2.5
+scope: existing_checkpoint_repair_success_semantics_and_privileged_single_task_joint_oracle
+
+current_user_instruction_override:
+  frozen_before_any_stage25_confirmatory_result: true
+  run_all_planned_experiments_even_when_a_gate_fails: true
+  gates_still_control_claim_tier_and_final_status: true
+  downstream_results_cannot_reverse_upstream_gate_failures: true
+  allowed_a800_gpu_count_inclusive: [2, 8]
+  overrides_archived_stop_rules: true
+  overrides_archived_two_gpu_maximum: true
+  scientific_thresholds_changed: false
+
+immutable_predecessor:
+  audited_commit: 76e71f5eae9771b83906478f0c421183e38cdd9c
+  audited_tree: 088b74883a53f9577aacd742f4c9ac560704dad9
+  decision: NO_GO_BASELINE_GATE
+  path: experiments/maniskill_act_boundary_screen_v1
+  mutation_policy: no_bytes_may_change
+  import_or_execute_predecessor_oracle_code: false
+
+repository:
+  required_branch: stage25-baseline-repair-oracle-v1
+  experiment_root: experiments/maniskill_stage25_repair_oracle_v1
+  formal_source_must_be_clean_commit: true
+
+environment:
+  maniskill_tag: v3.0.1
+  maniskill_commit: a4a4f9272ad64b1564035874b605ceb687b63ed8
+  python: "3.11.11"
+  pytorch: 2.5.1+cu124
+  torchvision: 0.20.1+cu124
+  sapien: 3.0.0
+  rgb_resolution: [128, 128]
+  official_act_resize: [224, 224]
+  action_queries: 30
+  temporal_aggregation: true
+  action_prefix_steps: 4
+  model_seeds: [16018, 16019, 16020]
+  tasks:
+    StackCube-v1:
+      control_mode: pd_ee_delta_pos
+      horizon: 200
+    PushCube-v1:
+      control_mode: pd_ee_delta_pos
+      horizon: 100
+  formal_sim_backend: physx_cuda
+  restoration_sim_backend: physx_cpu
+
+seed_banks:
+  algorithm: sha256_low31_disjoint_v1
+  checkpoint_screen_val_per_task: 32
+  checkpoint_final_val_per_task: 100
+  checkpoint_final_val_contains_screen_prefix: true
+  confirmatory_test_per_task: 100
+  oracle_simulator_source_per_task: 512
+  expert_source_episodes:
+    StackCube-v1: 96
+  exclusions:
+    - all_300_predecessor_demo_episode_seeds_per_task
+    - all_100_predecessor_closed_loop_test_seeds_per_task
+    - every_other_new_bank_except_screen_is_prefix_of_final_validation
+  same_order_across_model_seeds: true
+  confirmatory_metrics_may_select_any_parameter: false
+
+checkpoint_repair:
+  tasks: [StackCube-v1, PushCube-v1]
+  candidate_steps: [5000, 10000, 15000, 20000, 25000, 30000]
+  screen_episodes: 32
+  screen_top_k_per_model_seed: 2
+  full_validation_episodes: 100
+  lexicographic_selection:
+    - maximize_success_hold5
+    - maximize_success_at_end
+    - minimize_post_success_loss
+    - minimize_checkpoint_step
+  controls:
+    - predecessor_validation_loss_selected
+    - final_checkpoint
+  report:
+    - spearman_validation_imitation_loss_vs_closed_loop_success_hold5
+    - checkpoint_rank_inversion
+    - predecessor_checkpoint_pareto_dominance
+    - screen_final_selection_consistency
+  select_before_confirmatory_test: true
+
+success_metrics:
+  primary:
+    - success_once
+    - success_hold5
+    - success_at_end
+    - post_success_loss
+    - longest_success_streak
+    - first_success_step
+  success_hold5: any_five_consecutive_success_predicates
+  post_success_loss: success_once_and_not_success_at_end
+  checkpoint_metrics_use_fixed_horizon_only: true
+
+stackcube_baseline_gate:
+  aggregate_success_once_inclusive: [0.25, 0.85]
+  aggregate_success_hold5_gte: 0.30
+  maximum_model_seed_range_percentage_points: 20
+  aggregate_success_at_end_divided_by_success_once_gte: 0.60
+  all_conditions_required: true
+  failure_status: NO_GO_BASELINE_REPAIR
+
+pushcube_health_diagnostic:
+  aggregate_success_once_gte: 0.70
+  healthy_task_level_negative_control_only_if_pass: true
+  does_not_block_stackcube_oracle: true
+
+success_semantics:
+  task: StackCube-v1
+  checkpoint: selected_closed_loop_checkpoint_per_model_seed
+  seeds: confirmatory_test
+  arms:
+    - fixed_horizon
+    - terminate_first_success
+    - terminate_hold5
+    - neutral_after_hold5
+  neutral_action:
+    arm_delta: 0
+    gripper: last_legal_policy_command
+    policy_calls_after_hold5: 0
+  stopping_confound_rule:
+    metric: aggregate_success_at_end
+    minimum_absolute_gain_over_fixed_horizon: 0.10
+    paired_95_ci_lower_bound_gt: 0
+    minimum_model_seeds_directionally_consistent: 2
+    failure_status: REVISE_STOPPING_CONFOUND
+  cannot_reselect_checkpoint: true
+
+contact_metrics:
+  threshold_newtons: 0.0001
+  names:
+    - intended_contact_onsets
+    - unintended_contact_onsets
+    - intended_contact_duration_steps
+    - unintended_contact_duration_steps
+    - max_intended_contact_force
+    - max_unintended_contact_force
+    - post_success_contact_onsets
+  force_is_secondary_and_reported_only_when_finite_reliable: true
+  old_collisions_alias_forbidden: true
+  task_outcome_is_primary: true
+  scripted_positive_and_negative_tests_required: true
+
+state_banks:
+  task: StackCube-v1
+  banks:
+    calibration:
+      states: 32
+      per_phase: 8
+      expert_per_phase: 4
+      on_policy_per_phase: 4
+    confirmatory:
+      states: 64
+      per_phase: 16
+      expert_per_phase: 8
+      on_policy_per_phase: 8
+    post_success_diagnostic:
+      states: 16
+      source: on_policy_after_first_hold5
+  phases:
+    - free_space_approach
+    - pre_grasp_or_pre_contact
+    - object_in_hand_pre_placement
+    - placement_contact_near_completion
+  source_episode_disjoint_across_banks: true
+  source_episode_disjoint_from_all_demo_validation_and_test_banks: true
+  deterministic_selection: source_priority_then_sha256_episode_seed_step
+  stored_fields:
+    - full_simulator_state
+    - source_episode_seed_step
+    - phase
+    - expert_or_on_policy
+    - rgb_sha256
+    - state_sha256
+    - task_predicates
+    - last_legal_gripper_command
+  restoration:
+    repeats: 3
+    short_replay_steps: 4
+    same_action_sequence: true
+    backend: physx_cpu
+    exact_categorical_agreement: true
+    max_absolute_state: 0.0001
+    object_translation_m: 0.0001
+    object_rotation_rad: 0.001
+    normalized_progress: 0.0001
+  gate:
+    restoration_pass_rate: 1.0
+    same_state_same_action_categorical_agreement_gte: 0.95
+    failure_status: NO_GO_STATE_RESTORATION
+
+action_atlas:
+  task: StackCube-v1
+  training_neighbor_chunks: 256
+  action_steps: 4
+  pca_dimensions: 2
+  non_gripper_dimensions: all_arm_dimensions_first_four_steps
+  pca_sign: maximum_absolute_loading_positive
+  radius_candidates: [0.5, 1.0, 1.5]
+  radius_selection_on_calibration:
+    filter: candidate_validity_gte_0.90
+    objective: maximize_state_mean_boundary_density
+    tie_break: smallest_radius
+  grid:
+    coarse_levels: [-1.0, 0.0, 1.0]
+    fine_levels: [-1.0, -0.5, 0.0, 0.5, 1.0]
+    coarse_candidates: 9
+    fine_candidates: 25
+  candidate_bounds:
+    outside_action_space: invalid
+    silent_clip: false
+  rollout:
+    restore_same_state: true
+    execute_candidate_prefix_steps: 4
+    base_policy_steps: 20
+    neutral_hold_steps: 5
+    repeats: 3
+  effect_threshold_candidates: [0.5, 1.0, 1.5]
+  effect_threshold_selection_on_calibration:
+    objective: closest_state_mean_boundary_density_to_0.30
+    tie_break: smaller_threshold
+  normalized_effect_scales:
+    object_translation_m: 0.01
+    object_rotation_rad: 0.17453292519943295
+    normalized_progress: 0.05
+  categorical_outcome_fields:
+    - stable_success
+    - phase_outcome
+    - grasped
+    - supported
+    - dropped_or_slipped
+    - recoverable
+  boundary_edge_if_any:
+    - categorical_outcome_changes
+    - stable_success_changes
+    - normalized_effect_distance_crosses_frozen_threshold
+    - recoverable_changes
+  primary_unit: state
+  gate:
+    candidate_validity_gte: 0.90
+    overall_boundary_density_gte: 0.20
+    placement_contact_density_minus_free_space_density_gte: 0.10
+    failure_status: NO_GO_NO_ACTION_BOUNDARY
+
+visual_resolution:
+  coarse_transform: resize_128_to_64_then_bilinear_128
+  tile_grid: [4, 4]
+  native_tile_pixels: [32, 32]
+  local_fine_background: coarse_transform
+  blend: cosine_feather_2_pixels_inside_tile
+  random_tile: sha256_state_model_seed_mod_16
+  full_native: upper_bound_only
+  official_act_input_after_transform: [224, 224]
+  claim_scope: information_resolution_not_token_or_wall_clock_reduction
+  tile_oracle:
+    screen_calls: policy_only_no_simulator
+    hidden_label: nearest_frozen_native_physical_atlas_candidate_utility
+    selected_tiles: 1
+    deployable: false
+  destructive_old_interventions_primary_evidence: false
+
+joint_factorial:
+  arms:
+    CC: coarse_visual_plus_3x3_action
+    FC: one_local_fine_tile_plus_3x3_action
+    CF: coarse_visual_plus_5x5_action
+    FF: one_local_fine_tile_plus_5x5_action
+  each_arm_uses_privileged_simulator_best_candidate: true
+  local_grid_center: visual_condition_policy_chunk
+  pca_basis_and_radius: frozen_from_action_calibration
+  interactions:
+    I: U_FF_minus_U_FC_minus_U_CF_plus_U_CC
+    J: U_FF_minus_max_U_FC_U_CF
+  j_threshold_candidates: [1.0, 2.0, 5.0]
+  j_threshold_calibration_rule:
+    objective: smallest_candidate_not_below_positive_J_first_quartile
+    empty_positive_J_fallback: 5.0
+  categorical_strict_order:
+    - stable_success
+    - phase_outcome_rank
+    - recoverable
+  coupling_state_requires:
+    - FF_categorical_strictly_better_than_FC_and_CF
+    - J_greater_than_or_equal_frozen_threshold
+    - not_post_success
+    - budget_compliant
+  matched_calls_per_refined_state:
+    coarse_action_candidates: 9
+    fine_action_candidates: 25
+    local_fine_tiles: 1
+    candidate_repeats: 3
+    continuation_policy_calls_per_candidate: 20
+    timeout_steps_per_candidate: 29
+  allocation:
+    confirmatory_refined_states: 32
+    adaptive: top_joint_marginal_utility_then_state_id
+    random: ascending_sha256_protocol_state_model_seed
+    phase_heuristic: placement_then_object_in_hand_then_state_id
+    all_controls_refine_exactly_same_state_count: true
+  controls:
+    - random_state_refinement
+    - random_tile
+    - phase_heuristic
+    - uniform_coarse
+    - uniform_fine
+    - visual_only
+    - action_only
+    - full_native_visual_upper_bound
+    - success_stop
+  utility_primary:
+    stable_success: 100.0
+    clipped_progress_delta: 20.0
+    supported: 5.0
+    intended_contact: 2.0
+    unintended_contact: -5.0
+    dropped_or_slipped: -10.0
+    recoverable: 1.0
+    scaled_action_residual_norm: -0.01
+  utility_sensitivity_frozen:
+    success_dominant:
+      stable_success: 200.0
+      clipped_progress_delta: 10.0
+      supported: 5.0
+      intended_contact: 1.0
+      unintended_contact: -5.0
+      dropped_or_slipped: -10.0
+      recoverable: 1.0
+      scaled_action_residual_norm: -0.01
+    progress_dominant:
+      stable_success: 50.0
+      clipped_progress_delta: 40.0
+      supported: 5.0
+      intended_contact: 2.0
+      unintended_contact: -5.0
+      dropped_or_slipped: -10.0
+      recoverable: 1.0
+      scaled_action_residual_norm: -0.01
+  gate:
+    joint_coupling_density_gte: 0.15
+    best_action_recall_improvement_percentage_points_gte: 10
+    outcome_regret_reduction_fraction_gte: 0.15
+    recall_or_regret_condition: any
+    adaptive_minus_random_and_phase_paired_95_ci_lower_gt: 0
+    minimum_directionally_consistent_model_seeds: 2
+    must_hold_excluding_post_success: true
+
+statistics:
+  primary_unit: frozen_state_identity
+  same_states_across_model_seeds_and_arms: true
+  paired_percentile_bootstrap_replicates: 10000
+  confidence_level: 0.95
+  bootstrap_seed: 16018
+  primary_comparison: joint_adaptive_vs_strongest_matched_budget_single_axis
+  secondary_multiple_testing: holm
+  candidate_cell_pseudoreplication_forbidden: true
+  per_model_seed_and_aggregate: true
+
+final_status:
+  allowed:
+    - NO_GO_BASELINE_REPAIR
+    - REVISE_STOPPING_CONFOUND
+    - NO_GO_STATE_RESTORATION
+    - NO_GO_NO_ACTION_BOUNDARY
+    - REVISE_ACTION_ONLY
+    - REVISE_VISUAL_ONLY
+    - REVISE_NO_JOINT_COUPLING
+    - REVISE_UTILITY_DEPENDENT
+    - GO_SINGLE_TASK_JOINT_ORACLE
+  precedence_when_multiple_findings_apply:
+    - NO_GO_BASELINE_REPAIR
+    - REVISE_STOPPING_CONFOUND
+    - NO_GO_STATE_RESTORATION
+    - NO_GO_NO_ACTION_BOUNDARY
+    - REVISE_UTILITY_DEPENDENT
+    - REVISE_ACTION_ONLY
+    - REVISE_VISUAL_ONLY
+    - REVISE_NO_JOINT_COUPLING
+    - GO_SINGLE_TASK_JOINT_ORACLE
+  all_secondary_gate_failures_must_be_reported: true
+  thresholds_may_change_after_results: false
+
+prohibited_after_oracle:
+  - learned_effect_predictor
+  - boundary_predictor
+  - deployable_budgeted_selector
+  - OOD_experiment
+  - Stage_3_branch
+  - pi0_5
+  - real_robot
+

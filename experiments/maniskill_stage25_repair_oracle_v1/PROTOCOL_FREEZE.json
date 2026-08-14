@@ -1,0 +1,27 @@
+{
+  "checkpoint_payload_count_verified": 156,
+  "confirmatory_results_observed_before_freeze": false,
+  "current_user_override": {
+    "a800_gpu_count_inclusive": [
+      2,
+      8
+    ],
+    "gate_failures_constrain_claims_but_do_not_stop_execution": true,
+    "run_all_planned_experiments": true
+  },
+  "frozen_at_utc": "2026-08-14T05:04:07.338157Z",
+  "predecessor_path_mutation_allowed": false,
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "scientific_file_sha256": {
+    "manifests/checkpoint_candidates.json": "62c283f9fef40927c5e0950661559c1330833f06b2da7c83281c38dce2f43c19",
+    "manifests/checkpoint_final_val_seed_bank.json": "e9c5bdcb11f4d2baed8642d73bd3b01e754073e53de2023b2e10677ffd88e325",
+    "manifests/checkpoint_screen_seed_bank.json": "9dac538ef4a5ec6f7df9f4fd4b9b0c41513fa75337413c52c63548758a380f33",
+    "manifests/confirmatory_test_seed_bank.json": "3fa427268685771983c8211d7616d04f1b42c45d718d081cc67e34d6c92dd722",
+    "manifests/oracle_source_seed_bank.json": "98bc04db07dba0f44e3d61e2098af9ee574540f34725f822f2c212fb482c3e12",
+    "manifests/seed_bank_audit.json": "ed55c9edf0c622d20d51ab930f96b044e06adbd131bbb52604833c3461dbc66c",
+    "manifests/source_bindings.json": "bec0a91fbfcaac6df77860e78145063bd7217ee7eeaebf9852c0fb6fe1694f9e",
+    "preregistration.yaml": "51b954642f7d9661438fbecbdf5f3cd63d5d2f877bf961d058c872c6fce5f699"
+  },
+  "status": "PROTOCOL_FROZEN_BEFORE_CONFIRMATORY_RESULTS",
+  "threshold_mutation_after_freeze_allowed": false
+}

@@ -1,0 +1,1568 @@
+{
+  "candidate_count": 156,
+  "candidates": [
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "42dd3c36b0f29ed55a484c8f66b9362c51f1414edb401021136fe01a1d077667",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.013311244063589512
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "f4549b9b4111876f99f22132aaad4be401b354a0b0ce161968a3a6ea7997a266",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.010902960023269117
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "6654af9d88970860b03324d65e8847e9bb2305729917e343b2a27a25fdfcfdbc",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.009945383868181664
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "4af1185038cd1be8981dd72348f076dadb2cdfd910bb4b473d22ea2b2a342531",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.009405641106832419
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "29dc812a9a3a35d4145eb1a643207b2aa814928b1ffb051bea2fb2a117f8563a",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.00911893450080829
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "e9fb39d30e443b5bfe37086d6b9c5f7da0c69ed70d1ea15c3150e2bb167cc098",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008904036168250206
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000035000/checkpoint.pt",
+      "checkpoint_sha256": "a9740e1b432ec8cc03e4d2451805de4804500ee038a68a8a5a0301d81a40de80",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000035000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 35000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008733670199113103
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000040000/checkpoint.pt",
+      "checkpoint_sha256": "561eabe3c94da32f34e27a696c31e94ccb60bee83930324a638275593c825987",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000040000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 40000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008575483244126955
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000045000/checkpoint.pt",
+      "checkpoint_sha256": "a5f56898b7710b7ed8efcdc32784c162f0580966aa70037a31d6f1b42443c2ac",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000045000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 45000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008449321850836324
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000050000/checkpoint.pt",
+      "checkpoint_sha256": "66a4b78d87a1687d00147add21dd9a70003b27f9454745fc3e35247e9cf3a635",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000050000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 50000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008354121070283292
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000055000/checkpoint.pt",
+      "checkpoint_sha256": "2e6dc8fa80fe07cbe5ed76f7ea20f18b4d5ba4c2a2bd1f52c5aaf14fce92fbb9",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000055000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 55000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008276676362739233
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000060000/checkpoint.pt",
+      "checkpoint_sha256": "122008ade004cc763909c17160241133c8e7af8d0dc74946763edb7367f7d884",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000060000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 60000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008210319612196097
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000065000/checkpoint.pt",
+      "checkpoint_sha256": "5675469cad169fc93cad7514f93cab8deccfb7e61db3f3ef992bcc60d0314af9",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000065000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 65000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008160941690030293
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000070000/checkpoint.pt",
+      "checkpoint_sha256": "16457149a548ed2b32c26e51cdc15b1e832a2a24c67129effdd3ad5674af33e2",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000070000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 70000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008130093424129098
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000075000/checkpoint.pt",
+      "checkpoint_sha256": "5c95eb9798a64dd7b6fdb869b4e3354e991af2acd8db1597d01c7f200a277951",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000075000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 75000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008133197174147537
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000080000/checkpoint.pt",
+      "checkpoint_sha256": "17da5141c36324f23a4964a2d6a7d0d1cd49fd08d9f3dd4f3901898bddc77038",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000080000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 80000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008141527503845971
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000085000/checkpoint.pt",
+      "checkpoint_sha256": "fa508c008f50daa36888b40748faff7d8f1edba26dce40873d53e35e2215fc95",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000085000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 85000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008148968575706076
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000090000/checkpoint.pt",
+      "checkpoint_sha256": "3540824ac5726606ed178fc985fa52a35b61543e33bc94f315f8362c7693fdb5",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000090000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 90000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008158699650934255
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000095000/checkpoint.pt",
+      "checkpoint_sha256": "13014d1e2c72d4e2fd4364c765a1bf9dac8aae1e98cfa078ee2b4a54cc2678ad",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000095000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 95000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008172038029079317
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000100000/checkpoint.pt",
+      "checkpoint_sha256": "80d907111a880f62c990524c2b91c01cdc032d5597b84470cf5f67b17adf6f77",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16018/checkpoints/step_000100000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 100000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.00818233852979947
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "1e8dfdddddd1e4e04fdea039b024819e7125af20fd9da0871dca52cbb29b7e0e",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.012473551569221883
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "ee6a41eacafd29d213e33cac7532d80eae0ef7684df1ca386b0cb305813bb972",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.010217458073924005
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "3e60caf13c8d66b876ffb327414c5dac83a3d7b6783fc966359eded1725dbe1a",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.009365291476430568
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "0329e06472b9ef80895060bfe9c10e597182187af0ead0eb2713c447c72d1ae3",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008975690774940745
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "b00ee8ba6d95fda934552cb28a646f819ffa888b9b0cfd003c7ddc7c99094b39",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008757686794500993
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "70039221658c1572bef02922da2fa769e9e3848071df896c7975fa025a3e4003",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008631768969745325
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000035000/checkpoint.pt",
+      "checkpoint_sha256": "1dd203eb0d400819f0d9d2e6f93f7dd6f5be3e5bc1be254b5290c0b0bda385c9",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000035000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 35000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008523611929105323
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000040000/checkpoint.pt",
+      "checkpoint_sha256": "06510ea64751ecec68d2bd9452e6717f76bab5cd3a72973a5e72682a4db28219",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000040000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 40000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008455529044490392
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000045000/checkpoint.pt",
+      "checkpoint_sha256": "5c71f998368db90cad41386b5fb7d6d1c6d297197251ce6db8bb1c0416cf518a",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000045000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 45000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.00839599969046387
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000050000/checkpoint.pt",
+      "checkpoint_sha256": "0d501ab55d2fe0432cd3ad11e08663fee5eb19758b61f4d537b43e3a9f5f5b41",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000050000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 50000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008343464699699904
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000055000/checkpoint.pt",
+      "checkpoint_sha256": "ec598d3cd2c653bfa68bbdbf6394dd943f254c70494f831745617a783dd5215f",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000055000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 55000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008294980822857428
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000060000/checkpoint.pt",
+      "checkpoint_sha256": "872385e279921cf7535b772070995e2b80f88d0124d3f73842bf946cde2a8dca",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000060000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 60000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008249373198392659
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000065000/checkpoint.pt",
+      "checkpoint_sha256": "d1eef6df0d3478bda3512cc8d7eac4eabf7d91713e814a9ae3637b261e26f0ec",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000065000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 65000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008228611605258706
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000070000/checkpoint.pt",
+      "checkpoint_sha256": "3a82ff343ec08e905a4a26c5152e9ce9ec6f6911e97d116c07a91168f1835fa3",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000070000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 70000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008218768688421401
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000075000/checkpoint.pt",
+      "checkpoint_sha256": "b1a8e5e3dc6bf344c8d4388eb24fa3a15428ac3409752444d211934fa559a646",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000075000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 75000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008228548992294187
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000080000/checkpoint.pt",
+      "checkpoint_sha256": "aeb78fe0eab32e3ab560dc4465d3f78f9b2b6a84b37a845cc54b5f1d00dac129",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000080000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 80000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008239213191001791
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000085000/checkpoint.pt",
+      "checkpoint_sha256": "e9e06dcc3ed7b976b6f1c6949f078337fa4b389d09e03852a7fccfccd419c370",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000085000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 85000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008245120269362053
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000090000/checkpoint.pt",
+      "checkpoint_sha256": "6fb71fc11412c961a696512efe40b90aac0a792722cd51f594836023d0b5fd80",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000090000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 90000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008252031357661515
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000095000/checkpoint.pt",
+      "checkpoint_sha256": "e3a1e82b575bef05a9f8dc2a856e4874c1138bd41b02448c9e84c1a6506389b9",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000095000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 95000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008257484799027768
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000100000/checkpoint.pt",
+      "checkpoint_sha256": "0607eff93794fc8e7ca042ff4f61d5235414f76776b55005401dc2ed236205f6",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16019/checkpoints/step_000100000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 100000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008260886002113997
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "80347aea252a5cdf3e486bda880a6e404d680ad3e1dd36ed39e72e2611acd225",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.012679054837475638
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "d8a4fbd50c92b974aafb3834c1fc83d68abc2e7d0140cce5c49998cdfe5a3aa3",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.010386056046865688
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "6fa95db5ea82c0bac6e8dd1f50d6d8d6941d4861bb6077c269a15a124b519574",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.009572819232566174
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "6df5ff76c50bde4589f845ea53f56c88bf17e91ebaa744502038fd7818e4e4ac",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.009082673711732953
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "e16d26b7d39e0e05bb9dea0cd27c0c25479eea26dd6d8ce344711c70b9026ce3",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008845092743806775
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "c4b0a0db92019e3bb1603cd6f0c2b6adc7d717c9bfc9f4dbac38d3ce31da5288",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008674360979104939
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000035000/checkpoint.pt",
+      "checkpoint_sha256": "eb0b27fdd38818bc7188495eace91d76cbc460bc35235252db150e797d00aa06",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000035000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 35000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008542316723870009
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000040000/checkpoint.pt",
+      "checkpoint_sha256": "e8326f58e71cb3ae2d784e4ca03464d117d864c3223d321189dbd71cf6d8736c",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000040000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 40000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008433631920872254
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000045000/checkpoint.pt",
+      "checkpoint_sha256": "f138b8dc6f05023066e012f0e5dc786f6b1c462244ece8e3d8487c3504aaecac",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000045000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 45000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.00834975810475135
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000050000/checkpoint.pt",
+      "checkpoint_sha256": "4c8b81fa28710563463ba39d8b0968fc16bab14e31a693c4eb75c4dacc6f33dd",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000050000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 50000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008267798291886248
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000055000/checkpoint.pt",
+      "checkpoint_sha256": "958afd9ab0a7a57477ea09c253b86ee426a89d5c459781b5dceeda72e0e2813a",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000055000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 55000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.00820034958359574
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000060000/checkpoint.pt",
+      "checkpoint_sha256": "c33228fb5258775e56acd2bb910fab14f892074cb2872617e4410dc8e961a204",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000060000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 60000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008148464826716837
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000065000/checkpoint.pt",
+      "checkpoint_sha256": "5ba69f85df88688aa369c9c1c85c8fefd3c0dc46ed02ba1ad756ff875650068f",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000065000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 65000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008111440626758858
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000070000/checkpoint.pt",
+      "checkpoint_sha256": "23c8c5c0a67522a60d0ec17964c2dad0399d01b5bf5732f8e94196aedbe81a41",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000070000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 70000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008089245682819365
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000075000/checkpoint.pt",
+      "checkpoint_sha256": "102dc07d6edf9379b850413efd61ece900db5406452e5f3211906a2cc04a4033",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000075000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 75000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.00809901802131887
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000080000/checkpoint.pt",
+      "checkpoint_sha256": "62409f6a657c7f7d6a7c539ea5c291728a8c27232d715e679350ec5c98b419b6",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000080000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 80000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008111276816161639
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000085000/checkpoint.pt",
+      "checkpoint_sha256": "d5a4652f30b53cbabaf03c7761a5064f6aff2871399fff6911594ef8574a2339",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000085000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 85000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008121328514186423
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000090000/checkpoint.pt",
+      "checkpoint_sha256": "6ed3a8a0d971c132b0046512b208dbc932ff58c0b59bd31cac0a3ef9453e37c8",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000090000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 90000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008135378003494922
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000095000/checkpoint.pt",
+      "checkpoint_sha256": "8c007942e73dcf528b26d2ec77922b24644f6439aa5dd05e03be98b4b60f1b05",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000095000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 95000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008142840620559295
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000100000/checkpoint.pt",
+      "checkpoint_sha256": "c8abfcb3a9a6aac459355ed556fb81dec6b5322fb7b07cfcbd6896ee3ec8520f",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PullCubeTool-v1/seed_16020/checkpoints/step_000100000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 100000,
+      "task_id": "PullCubeTool-v1",
+      "validation_loss": 0.008152276509865502
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "fb31b6cbd718bf162c23bdf1ca7fe3ece05ecdd147d7917c182f4b6fb9c544e1",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.015211056392010383
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "3767fde947ed3e8b4b631d2c73f4569c3c5eaf0c0d9777a8eec63f429c77496d",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.012875573953179743
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "9344d6dcae3eb968ca294956c0e367d680a02249dd0ad623c63ff45718b47ee0",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.011355667192612277
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "8d88e1b717e240f429e47e26f1e44487453e6044e644a29343563a32be235661",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.010654288103939487
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "a527af3bb60de1beb8ac9f9482b08b49fcfab7d0cd4340ecda9d5139a419f865",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.010457397036585495
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "c5a987e9ca6fffc35ccbc8f0f3500fa2c0888abfd1f0386369456ae0e1127375",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16018/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.01046671888266711
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "2dc5d76eb5ee46f38371f8cfd6f9fa61734b62ece6ae53843b1a6ecfbef4a16d",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.01339172419137407
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "a81ef722fef605bb325889fc6f9f5e9f7a9aaff63153abd8473bda0eac2c226c",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.011323034682672522
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "573b2305a0929c1f8a5a72d2df1c5b2330690b808a737305cd7899afcc86ef47",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.010434047606985351
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "cd14ac035e0483b04bca9d981f10e07a015086ad79886c6a46e09cd33457c744",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.009898012150484966
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "9a2a8a34a06007e36142689492b80b3c9d764ebc713bd2b28129f67e7cf64e4f",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.009698826568836477
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "7e2032b2b45e7c8805f38032cc0170397d69a4a457820c3fbc586778e591bd51",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16019/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.009703190003050147
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "e46c00837f907c52836a335b4733fce2c13182967f498533aa645bd5174161ec",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.012928590850686844
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "ec3c6d6abd4b2bc990ef3de68ead870c1f019b21bd1da2842b925e59e98ea3da",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.011221369219685019
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "aed3a2a02572da9f0bbf717e1b485181b90c8ac08ee98cff3dc70e812cf5557b",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.01036997614235968
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "82780129c0ae573ebc27b8b7b5993d877c90164bb98989c5065f4f7cb2168c25",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.009995917381838432
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "bcb3968bab197e78182fe598b978c3dfdb4b82b6eec4b93e79c57ad1704d01b6",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.00986323774057582
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "fdaf9214f66c10713ee5dc9b3b61577e133c1b4bd0ab39a10432fd475ac10fac",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushCube-v1/seed_16020/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PushCube-v1",
+      "validation_loss": 0.009861066224522194
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "0b931ac7b010378bcae25d997ea3f576c8947c48e2cfd1bce28f700387cd65e0",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19434212148189545
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "36cdf2a6eebbe808bed047ecfd43c82aa722aed5f07ac0f68761f74db34288fd",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1966317952484698
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "202534d4f0ea4d690f7f9a1dc79a37709a803db2d2c7617481fcd6b444532eaa",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19741524312947248
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "8fbca011709a7a56a74d13ea7b3c67111f30447398d3d89772aabbf100feb8f1",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19703313506938316
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "f8c3a59780f6cc0db2b7b46ac9d067734e6b6ecb886ac6c760d4eb721427c7ec",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19694871918575182
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "65ec33f101fa1fea66b3ba6bcb893eabfa76ca7996171e99a2b414a6ab07bb50",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1966617941050916
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000035000/checkpoint.pt",
+      "checkpoint_sha256": "a9da25dd0c7bcc496b495ab56d74773718666d4a95066e993bb7c6a2dc60f157",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000035000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 35000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19625309069414396
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000040000/checkpoint.pt",
+      "checkpoint_sha256": "4a46e71aa5f19cf5c8685d7ac23beab72c93e9a533377dc95eef66e38f0fa663",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000040000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 40000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19563082585463654
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000045000/checkpoint.pt",
+      "checkpoint_sha256": "49a93df58675ebd4ae5f777650bbe2ab7765e52cd9c59de3d87878c3d843d2ae",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000045000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 45000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19511291747157639
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000050000/checkpoint.pt",
+      "checkpoint_sha256": "29a475c1daaa7d5f47b4c8449f86350ec2a4dc88d47fa322f63732003306bfaf",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000050000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 50000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1947267164249678
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000055000/checkpoint.pt",
+      "checkpoint_sha256": "3541a840293e24396693b1ade74b7a3318aaa8158760f566a0a5be24d35ffded",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000055000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 55000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19436362385749817
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000060000/checkpoint.pt",
+      "checkpoint_sha256": "82f0183dec66bb22f7bce6082c6cd8e219d8df912b3f8ff7f5a85a91064dfb77",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000060000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 60000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19403503754654447
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000065000/checkpoint.pt",
+      "checkpoint_sha256": "1914d15ed89efc844f7d0bffc3415596f1bbcb7de6f58d53478d8963db5f3bbd",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000065000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 65000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1937660015112645
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000070000/checkpoint.pt",
+      "checkpoint_sha256": "095c22ba32f70ed17f1f50c6d7aeca1f3436adbd164487e181836345edd0ade7",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000070000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 70000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1934871218494467
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000075000/checkpoint.pt",
+      "checkpoint_sha256": "700657a57329d806646c54700ef8692047c8b8f41beed1611de5367ed36ce397",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000075000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 75000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19337870100060026
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000080000/checkpoint.pt",
+      "checkpoint_sha256": "5b9ff651d78a155dec8b8d4bda4dba1c1dc7729c6e209673d2e779a099ba5def",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000080000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 80000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1933543939848204
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000085000/checkpoint.pt",
+      "checkpoint_sha256": "c4a6662d83ab0498eee50e7747aca6ba18cc6011069c323065744901e58060f8",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000085000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 85000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1933629843028816
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000090000/checkpoint.pt",
+      "checkpoint_sha256": "65c9ee455c5313e0593913ddaaa5791e981fd9f90f505b74ad34d5100fe0e252",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000090000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 90000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1933941353817244
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000095000/checkpoint.pt",
+      "checkpoint_sha256": "78d9c2ccc75ef0d9133ff4d4b57d40278b3bcc59c5222163215bf5e469f0b44c",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000095000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 95000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19345887528883443
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000100000/checkpoint.pt",
+      "checkpoint_sha256": "dc91f0887fbba1d28e191f698db4e7ec65b939f19ef7bf4931af201113d9b2c9",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16018/checkpoints/step_000100000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 100000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19352954626083374
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "4a0ba48f326c81c92d1c5451ef6ccdc77420ed04d12663e2b0f6c088f6c640cd",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19626053362279325
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "5056a5d32da724db8f9653d36be2e1da63fa226d7e58869820b026ef5e5c7806",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1981444233978117
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "32a5c1fb9c5ea41b2b90e66830c9fc8f88036a9d7ad10792727b1b0435731266",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.198181520845439
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "d1b92cb2659bfbb8b1d8e3086a5c3926376c835afbec96994c222542848d56e1",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19830660401163874
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "da1df9456a6e6e03aa07f31377647393a315ecd9498ad3a5b80f39226f92b537",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19784085734470472
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "a6f7d16a8840af58f34a877ae40a6cbcf6fed3e6930aa77d00fa5bb8c929005a",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19721536378602725
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000035000/checkpoint.pt",
+      "checkpoint_sha256": "ef7d1b6e796f5bab32e3ccc3b896a2e58dfbdc641645ab50e633778dbb16c1c2",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000035000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 35000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1966736763715744
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000040000/checkpoint.pt",
+      "checkpoint_sha256": "cc82f9267b628afe72172533f3e0cddcade3208cbd724c780dff75777b9e76cd",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000040000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 40000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19618622676746264
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000045000/checkpoint.pt",
+      "checkpoint_sha256": "4f2d9ae595154cdf59c9414958563f2ebc840fe012174ac62dd66d48e0bacb90",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000045000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 45000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19577506788679072
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000050000/checkpoint.pt",
+      "checkpoint_sha256": "edf39594486d3e903c592bc78ed773f69c38b9ac9d5d776769ae4d826e08eadd",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000050000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 50000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1954371490188547
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000055000/checkpoint.pt",
+      "checkpoint_sha256": "83b6ea216821ecba3101f6fe1e49c5537eff911678086a1c240347ba4b61d293",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000055000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 55000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1951797701217033
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000060000/checkpoint.pt",
+      "checkpoint_sha256": "e3e5bc55bc124d1df02d9478d2495b4b916f4caf7edb2c3cea5c7490e98272da",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000060000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 60000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1949919768281885
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000065000/checkpoint.pt",
+      "checkpoint_sha256": "5309d0798de275858e33806fd9002684f540e5cdc8b7b7dcf9538ea13e56b3fb",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000065000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 65000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1948137464555534
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000070000/checkpoint.pt",
+      "checkpoint_sha256": "1a8fb9a09a243761039ab317dd8973802108703c5bd10904784af5e770a04e90",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000070000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 70000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19466066360473633
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000075000/checkpoint.pt",
+      "checkpoint_sha256": "3e3568e968285ab9519445d7fcb625e6423fb2cf052194ef04662dfe3382e2bf",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000075000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 75000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19451800874761632
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000080000/checkpoint.pt",
+      "checkpoint_sha256": "44a4435ad9b12501eacafacc67127f9cfab97216a8fa68ab43db623dd0d4a1ce",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000080000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 80000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19446440242432259
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000085000/checkpoint.pt",
+      "checkpoint_sha256": "bdcc4939e56c30252c286faf93e6eb0141b52cd2f1d3ddffee786063f55f348e",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000085000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 85000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19445023464189992
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000090000/checkpoint.pt",
+      "checkpoint_sha256": "09c5225669851eaa9d1b16b52ce8f3e8573efb58fe9aa2a326a8ded6fc6672a9",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000090000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 90000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19446640320726344
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000095000/checkpoint.pt",
+      "checkpoint_sha256": "5ecd373b94107cb00b4b23fd72b4b1fb50d13f105269a353da975d9c3819f7a0",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000095000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 95000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19449390027974103
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000100000/checkpoint.pt",
+      "checkpoint_sha256": "42443d82c73cb6fb3f56aa0979289f9c3ecee126daa16775a601e1b750fd1f9c",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16019/checkpoints/step_000100000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 100000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1945586514634055
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "c21b17f67a4dfe931f365d3d2fbef0fbe49a7f77ba2576718c1efb6f3e88819e",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19542469124536258
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "ec4555c91392f9778d596aa7df7e25df1059a5637300e7ec9a6d8c4cdaeb1851",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.20006776097658518
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "79374301436b4a35c4b90c570ed92808139411407c661785f3ce3c544131f96d",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.20035303243108699
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "fb15008eba045c86dee6229e7dcff3d363b682cab97cdcbdf1b273c1b437779a",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1996183077225814
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "d03d09d2b2cc467589d44cd424a7dc3a0c5139c5cb82ee1e22d7c02a641766d2",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19925426550813624
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "cb538fef025dd608938f1352cb2bea31d24e140a8904062b465a55ba1c6843a2",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1987213013139931
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000035000/checkpoint.pt",
+      "checkpoint_sha256": "833ff64cffeef781859ea7c4efaf258b24084ff45d670451d946f2c43ae20b00",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000035000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 35000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19829968222089717
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000040000/checkpoint.pt",
+      "checkpoint_sha256": "b428aebdee5a0faf3868a8801ec2a4dd2ce240076236cdeb50966cb6c065fdbc",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000040000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 40000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1978762327013789
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000045000/checkpoint.pt",
+      "checkpoint_sha256": "c2ed1ccb5b8041c68a4219a95762b7b7390f4d7489599552f0e65f4095ab5ac5",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000045000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 45000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19739353978956067
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000050000/checkpoint.pt",
+      "checkpoint_sha256": "0912d0bf6215893580b89a473709263cbc3f2122a2275efce4139bfc751b1b79",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000050000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 50000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19696151968595144
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000055000/checkpoint.pt",
+      "checkpoint_sha256": "9cd05c056d0717a26f32a5c4f7ea27aa5abb73e0984d7bfe5acf129c8843563d",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000055000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 55000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1966199951397406
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000060000/checkpoint.pt",
+      "checkpoint_sha256": "7ae7d3677d31ba2fa11078a6048eb57a05d4bfe00f4b4561fe4e2781f203bc59",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000060000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 60000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19633729312870954
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000065000/checkpoint.pt",
+      "checkpoint_sha256": "5e9eb40cd5b45d8706c3f74e30a683c4a66477205c3764d8a787cf5939bf64cd",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000065000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 65000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19605529429139318
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000070000/checkpoint.pt",
+      "checkpoint_sha256": "4555a455c3ba0507d52e94b5c93f6cb869414f6563dc407177050f171f62214f",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000070000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 70000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19584349965727008
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000075000/checkpoint.pt",
+      "checkpoint_sha256": "26507b458c9ebe57248cb0253a9287cbe65dc29b2bbe3e0b0663b638279d7a6c",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000075000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 75000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19572104070637678
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000080000/checkpoint.pt",
+      "checkpoint_sha256": "d757df0a44520f6b0bd189823b4c25b64d63165504ad1245d49206995c4f3d37",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000080000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 80000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19568969067689534
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000085000/checkpoint.pt",
+      "checkpoint_sha256": "db6bd818cf83d66346c1640b5a8f3bad0878b23818801baee37078ec3e1390e1",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000085000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 85000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19570886122213826
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000090000/checkpoint.pt",
+      "checkpoint_sha256": "7827e321eb8922ffec2e2ed4a09b3f7499cc181d1fa2616d9b3074c181f8741c",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000090000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 90000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.1957552755201185
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000095000/checkpoint.pt",
+      "checkpoint_sha256": "fecb67a0f8fe29909455295e89061de5f6d3a2de2c3eb24595a9686059d42bd3",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000095000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 95000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19579454410720515
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000100000/checkpoint.pt",
+      "checkpoint_sha256": "c5c0c8b615bb79fbe783702ff7a82dad71553f2246a95a80a959d89df9387589",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/PushT-v1/seed_16020/checkpoints/step_000100000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 100000,
+      "task_id": "PushT-v1",
+      "validation_loss": 0.19585426755853602
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "6e9b8c562480267a1f66d59f99e9d93058a87f78d176cf2caf23b8707615a23f",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.04112938315987159
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "ac6aa358e0474c9a4a3b91c0b69635082cac29601b0ff438b56095d80f5bdb41",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03638016898625823
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "96d6d93c584f39c3846a1221e367d9d819039a1b36e1a09ca0b2541acb0cf698",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03503704176474225
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "6d9042b608afd9414e3b58d653528fdd2423275644dada74ea65322c96ea70a8",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.0340747363136977
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "fc59779bd0674c1886ade3535e9e5de64d70db80da61c437c8f98fea49ff9371",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03398555132081774
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "5bec162bc2c6f4e7c7f509f72732e0764ed333c828fec1d302b7783df28b0667",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16018/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16018,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03407420272468762
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "c5220ba5bde4d0f0e5ff0661feba8eb744088feb06e39156474a171ef4888a96",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.04709687780619874
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "6f5d076bb36473ae54efebc37db85eda19dad2289600144188103cd64559d47a",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.041013216812322284
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "be5db19fcc6880f36130fea648fb254796f030fd09c743e21cdbb8bdca9b7662",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03860469397096022
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "68d4a1f09e1cd67fb8336f85e8bdde21527821c9dd346afa2c29472886e6bb67",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03697050957400452
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "794529e0fcee17d7517563c3c126b36e934cee255ffadd080965ede542935feb",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.036551899249161246
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "dae5f616833c2d4390d9b78887ea75c192734515e6ff3a41bcf955715f5d0efd",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16019/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16019,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03658411060132345
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000005000/checkpoint.pt",
+      "checkpoint_sha256": "2b7e99bf6442870a3abe219578d15807e0773777c712dbdd10cb5d410bb8b473",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000005000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 5000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.04062448656792954
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000010000/checkpoint.pt",
+      "checkpoint_sha256": "7b8e4b8044df5d0ffa385986df90d5657187f052854fcde56a910b4437fd1743",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000010000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 10000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03736758218862035
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000015000/checkpoint.pt",
+      "checkpoint_sha256": "d45da4af7d4a044c4677c81afae000c2c2c34f17cc27a89c4bbc8948f58d6eba",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000015000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 15000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03575347602715184
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+      "checkpoint_sha256": "fbe1ac632f752a5ba33032b75fbcf0c067bbbf70d83b63ba7de0e654e7aadb7d",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000020000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 20000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03473640548836568
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+      "checkpoint_sha256": "338a86ad8ea3cae4a3fc71a496efaf33dd932268e2dff673eb47b328ed0e46ce",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000025000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 25000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.034599340236705495
+    },
+    {
+      "checkpoint_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+      "checkpoint_sha256": "1cd67ccca93b2b5019d26179b0f1deda548527ce41719951a23f086e13b8c565",
+      "complete_marker_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/StackCube-v1/seed_16020/checkpoints/step_000030000/COMPLETE.json",
+      "model_seed": 16020,
+      "payload_digest_verified_now": true,
+      "step": 30000,
+      "task_id": "StackCube-v1",
+      "validation_loss": 0.03460423248528617
+    }
+  ],
+  "payloads_verified_before_freeze": true,
+  "predecessor_checkpoint_root": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1",
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1"
+}

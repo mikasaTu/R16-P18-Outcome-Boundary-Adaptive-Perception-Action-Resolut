@@ -1,0 +1,12 @@
+{
+  "declared_exception": "checkpoint_screen_is_prefix_of_checkpoint_final_val",
+  "files": {
+    "checkpoint_final_val_seed_bank.json": "e9c5bdcb11f4d2baed8642d73bd3b01e754073e53de2023b2e10677ffd88e325",
+    "checkpoint_screen_seed_bank.json": "9dac538ef4a5ec6f7df9f4fd4b9b0c41513fa75337413c52c63548758a380f33",
+    "confirmatory_test_seed_bank.json": "3fa427268685771983c8211d7616d04f1b42c45d718d081cc67e34d6c92dd722",
+    "oracle_source_seed_bank.json": "98bc04db07dba0f44e3d61e2098af9ee574540f34725f822f2c212fb482c3e12"
+  },
+  "globally_reserved_seed_count": 2234,
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "status": "SEED_BANK_AUDIT_PASS"
+}
