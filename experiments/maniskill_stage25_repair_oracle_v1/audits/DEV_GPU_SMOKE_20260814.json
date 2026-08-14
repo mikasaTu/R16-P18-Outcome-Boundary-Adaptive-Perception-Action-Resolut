@@ -1,0 +1,35 @@
+{
+  "classification": "development smoke only; not baseline reproduction or mechanism evidence",
+  "checkpoint_sha256": "6e9b8c562480267a1f66d59f99e9d93058a87f78d176cf2caf23b8707615a23f",
+  "checkpoint_step": 5000,
+  "device_selection": {
+    "cuda_visible_devices": "1",
+    "observed_host_gpu_count": 4,
+    "observed_model": "NVIDIA A800",
+    "other_processes_killed_or_paused": false
+  },
+  "episode_seed": 1900458115,
+  "evidence_sha256": {
+    "FIRST_REAL_ROLLOUT.json": "59117c48f525093a202e99c767a95f4a7b79ffd0c61db9b1fe7b125da01dca4e",
+    "episodes.jsonl": "dfad55e30a817bac98d0e0a7d750a1b58e39b6aa8b2128dc4eca10ec83012f86",
+    "summary.json": "d746f6c78617d8df52750fd0c72589ed793a225f7701a0edce6ad370c2f1261a"
+  },
+  "first_attempt": {
+    "classification": "infrastructure-only failure",
+    "cause": "Gym task registration side effect was missing",
+    "scientific_result": false
+  },
+  "metrics": {
+    "action_opportunities": 200,
+    "episodes": 1,
+    "policy_calls": 200,
+    "post_success_loss": 0.0,
+    "success_at_end": 0.0,
+    "success_hold5": 0.0,
+    "success_once": 0.0,
+    "wall_seconds": 15.652389764785767
+  },
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "second_attempt_status": "CHECKPOINT_EVALUATION_COMPLETE",
+  "task_id": "StackCube-v1"
+}
