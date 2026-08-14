@@ -25,6 +25,9 @@ never merged into the final namespace.
 | v19 | `dlc11nu9e2z0hrl7` | exp-efficiency, 2 A800 | intentionally stopped after the first CUDA atlas smoke was found to pass vacuously with 0/25 valid candidates | none; smoke rejected and formal screen partials not reused |
 | v20 | `dlc16dq616en4mnc` | exp-efficiency, 2 A800 | failed closed in the tightened pre-formal atlas smoke because the real selected-checkpoint/state candidate validity was below 90% | none; formal orchestrator never started |
 | v21 | `dlca742ruakkxqj7` | exp-efficiency, 2 A800 | failed closed after persisting the atlas diagnostic: 25/25 arm candidates legal, but all inherited the raw ACT gripper overshoot | none; diagnostic-only smoke, formal orchestrator never started |
+| v22 | none | exp-efficiency, 2 A800 | sealed before CreateJob because the resume result root had not been pre-created | none |
+| v23 | none | exp-efficiency, 2 A800 | sealed before CreateJob because the fresh artifact root had been pre-created instead of being registry-owned | none |
+| v24 | `dlcugeneyssp0lsg` | exp-efficiency, 2 A800 | CUDA atlas smoke passed 25/25; intentionally stopped during checkpoint screen after static audit found a guaranteed later batched-action-space scalar conversion error | none; six screen summaries and all partials rejected, smoke retained as non-scientific implementation evidence |
 
 ## v11 preserved partials
 
@@ -82,3 +85,21 @@ evidence isolates the violation to the unperturbed gripper channel; the three
 arm channels have zero bound violations.  The failure is retained as
 implementation-diagnostic evidence only and is not merged into a subsequent
 run namespace.
+
+## v24 successful smoke and proactive stop
+
+The corrected CUDA smoke passed with 25/25 valid candidates, 25/25 non-null
+outcomes, 2,175 scientific simulator steps inside the smoke path, and 1,500
+policy calls.  Its JSON SHA-256 is
+`44dd945ab9bc8027272a5e1987d6da14df10e8e269e4c6b828a4cc719a8ef6ac`.
+The artifact remains explicitly `scientific_evidence=false` and is used only to
+validate the implementation path.
+
+While v24 was still screening checkpoints, static audit of the newly added
+state-bank gripper bookkeeping found that a 16-environment vector action space
+would return a four-element row for `env.action_space.low[-1]`, causing a later
+`float(...)` failure.  The job was stopped at 10:33:11Z rather than consuming
+the remaining evaluation allocation.  It had produced six StackCube seed-16018
+screen summaries only.  Those files are not copied or reused.  The correction
+reads the scalar gripper bounds from `env.single_action_space`; the registry's
+separate fresh artifact/result directory lifecycle is also now respected.

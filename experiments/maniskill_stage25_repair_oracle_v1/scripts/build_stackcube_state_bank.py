@@ -148,8 +148,8 @@ def expert_candidates(
                             if step == 0
                             else effective_gripper_command(
                                 float(actions[min(step, action_count) - 1, -1]),
-                                float(env.action_space.low[-1]),
-                                float(env.action_space.high[-1]),
+                                float(env.single_action_space.low[-1]),
+                                float(env.single_action_space.high[-1]),
                             )
                         ),
                         predicate_source="simulator_geometry",
@@ -210,8 +210,8 @@ def collect_on_policy(
                             predicates=public_predicates(predicates, index),
                             last_gripper=effective_gripper_command(
                                 float(last_action[index, -1].item()),
-                                float(env.action_space.low[-1]),
-                                float(env.action_space.high[-1]),
+                                float(env.single_action_space.low[-1]),
+                                float(env.single_action_space.high[-1]),
                             ),
                             predicate_source="simulator_geometry",
                         )
@@ -232,8 +232,8 @@ def collect_on_policy(
                             predicates=public_predicates(predicates, index),
                             last_gripper=effective_gripper_command(
                                 float(last_action[index, -1].item()),
-                                float(env.action_space.low[-1]),
-                                float(env.action_space.high[-1]),
+                                float(env.single_action_space.low[-1]),
+                                float(env.single_action_space.high[-1]),
                             ),
                             predicate_source="official_success_hold5",
                         )

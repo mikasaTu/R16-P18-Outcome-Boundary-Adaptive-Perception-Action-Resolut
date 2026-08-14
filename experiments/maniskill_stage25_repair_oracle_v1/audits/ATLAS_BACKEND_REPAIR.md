@@ -77,9 +77,17 @@ controller-effective final gripper value.  PCA neighbors, PCA directions,
 candidate arm values, action-space validity checks, radii, thresholds, rollout
 counts, seeds, utilities, and decision rules are unchanged.
 
+The next v24 smoke verified this correction end to end: candidate validity was
+1.0, all 25 outcomes were non-null, and every candidate bound-violation count
+was zero while the separate raw nominal diagnostic still showed the original
+gripper overshoot.  A subsequent static check found that state-bank collection
+must read the scalar bounds from `single_action_space` because its 16-way
+environment exposes a batched `action_space`.  That access-path correction is
+covered by a source contract and changes no bound value.
+
 The repairs change no scientific threshold, candidate arm grid, repeat count,
 state identity/phase selection, seed bank, checkpoint selection rule, utility,
-or statistical decision rule.  Fifteen unit/static tests pass, including
+or statistical decision rule.  Seventeen unit/static tests pass, including
 explicit rejection of an illegal stored gripper and a call-site contract that
 every atlas binds the state-bank command.  All nine frozen scientific hashes
 continue to verify.

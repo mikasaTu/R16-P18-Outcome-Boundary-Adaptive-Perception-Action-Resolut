@@ -72,3 +72,13 @@ def test_every_atlas_call_binds_the_state_bank_legal_gripper() -> None:
             )
             for call in calls
         )
+
+
+def test_parallel_state_bank_reads_unbatched_gripper_bounds() -> None:
+    source = (ROOT / "scripts" / "build_stackcube_state_bank.py").read_text(
+        encoding="utf-8"
+    )
+    assert "env.single_action_space.low[-1]" in source
+    assert "env.single_action_space.high[-1]" in source
+    assert "env.action_space.low[-1]" not in source
+    assert "env.action_space.high[-1]" not in source
