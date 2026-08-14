@@ -44,10 +44,79 @@ def flatten_difference(first: Mapping[str, Any], second: Mapping[str, Any]) -> f
     )
 
 
+def audit_serial_repeats(
+    env: Any,
+    state: Mapping[str, Any],
+    metadata: Mapping[str, Any],
+    *,
+    repeats: int = 3,
+    short_replay_steps: int = 4,
+) -> dict[str, Any]:
+    """Restore and replay one state repeatedly in a single CPU environment.
+
+    ManiSkill's PhysX CPU backend only supports one environment per process.  The
+    protocol calls for serial exact restoration, so every repeat begins with a
+    fresh reset of the same one-environment simulator before the frozen action is
+    replayed.
+    """
+    if repeats < 2:
+        raise ValueError("restoration audit requires at least two repeats")
+
+    restore_errors: list[float] = []
+    finals: list[Mapping[str, Any]] = []
+    categories: list[dict[str, Any]] = []
+    for _repeat_index in range(repeats):
+        reset_to_state(env, state, int(metadata["source_episode_seed"]), 1)
+        restored = state_to_numpy(env.base_env.get_state_dict())
+        restore_errors.append(state_restore_max_abs(state, restored, 0)[0])
+
+        action = torch.zeros(
+            1, env.action_space.shape[-1], device=env.base_env.device
+        )
+        action[:, -1] = float(metadata["last_legal_gripper_command"])
+        success_once = torch.zeros(
+            1, dtype=torch.bool, device=env.base_env.device
+        )
+        for _ in range(short_replay_steps):
+            _, _, _, _, info = env.step(action)
+            success_once |= info["success"].to(torch.bool)
+
+        final_states = state_to_numpy(env.base_env.get_state_dict())
+        finals.append(state_index(final_states, 0))
+        snapshot = task_snapshot(env.base_env, "StackCube-v1")
+        predicates = stack_predicates(env.base_env)
+        categories.append(
+            {
+                "success_once": bool(success_once[0].item()),
+                "success_at_end": bool(snapshot["success"][0]),
+                "grasped": bool(snapshot["grasped"][0]),
+                "supported": bool(snapshot["supported"][0]),
+                "phase": stack_phase(predicates, 0),
+            }
+        )
+
+    final_difference = max(
+        flatten_difference(finals[0], final) for final in finals[1:]
+    )
+    categorical_agreement = all(
+        category == categories[0] for category in categories[1:]
+    )
+    return {
+        "restore_errors": restore_errors,
+        "final_difference": final_difference,
+        "categories": categories,
+        "categorical_agreement": categorical_agreement,
+    }
+
+
 def main() -> None:
     args = parse_args()
     env = make_env(
-        "StackCube-v1", 3, obs_mode="state", sim_backend="physx_cpu", reconfiguration_freq=0
+        "StackCube-v1",
+        1,
+        obs_mode="state",
+        sim_backend="physx_cpu",
+        reconfiguration_freq=0,
     )
     raw_path = args.output.with_name("state_restoration_raw.jsonl")
     if args.output.exists() or raw_path.exists():
@@ -66,37 +135,11 @@ def main() -> None:
             with h5py.File(h5_path, "r") as source:
                 for metadata in state_rows:
                     state = h5_full(source[f"{metadata['bank_id']}/env_state"])
-                    _, _ = reset_to_state(
-                        env, state, int(metadata["source_episode_seed"]), 3
-                    )
-                    restored = state_to_numpy(env.base_env.get_state_dict())
-                    restore_errors = [
-                        state_restore_max_abs(state, restored, index)[0] for index in range(3)
-                    ]
-                    action = torch.zeros(3, env.action_space.shape[-1], device=env.base_env.device)
-                    action[:, -1] = float(metadata["last_legal_gripper_command"])
-                    success_once = torch.zeros(3, dtype=torch.bool, device=env.base_env.device)
-                    for _ in range(4):
-                        _, _, _, _, info = env.step(action)
-                        success_once |= info["success"].to(torch.bool)
-                    final_states = state_to_numpy(env.base_env.get_state_dict())
-                    finals = [state_index(final_states, index) for index in range(3)]
-                    final_difference = max(
-                        flatten_difference(finals[0], finals[index]) for index in (1, 2)
-                    )
-                    snapshot = task_snapshot(env.base_env, "StackCube-v1")
-                    predicates = stack_predicates(env.base_env)
-                    categories = [
-                        {
-                            "success_once": bool(success_once[index].item()),
-                            "success_at_end": bool(snapshot["success"][index]),
-                            "grasped": bool(snapshot["grasped"][index]),
-                            "supported": bool(snapshot["supported"][index]),
-                            "phase": stack_phase(predicates, index),
-                        }
-                        for index in range(3)
-                    ]
-                    categorical_agreement = categories[0] == categories[1] == categories[2]
+                    audit = audit_serial_repeats(env, state, metadata)
+                    restore_errors = audit["restore_errors"]
+                    final_difference = audit["final_difference"]
+                    categories = audit["categories"]
+                    categorical_agreement = audit["categorical_agreement"]
                     row = {
                         "protocol_id": PROTOCOL_ID,
                         "bank": bank,
@@ -133,6 +176,8 @@ def main() -> None:
         "raw_path": str(raw_path),
         "raw_sha256": sha256_file(raw_path),
         "backend": "physx_cpu",
+        "execution": "single_environment_serial",
+        "num_envs": 1,
         "repeats": 3,
         "short_replay_steps": 4,
     }
