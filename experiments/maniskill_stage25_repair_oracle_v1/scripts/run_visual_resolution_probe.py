@@ -123,10 +123,10 @@ def main() -> None:
     h5_path = Path(state_manifest["state_bank_h5"])
     device = torch.device("cuda")
     rollout_env = make_env(
-        "StackCube-v1", PADDED_ENVS, sim_backend="physx_cpu", reconfiguration_freq=0
+        "StackCube-v1", PADDED_ENVS, sim_backend="physx_cuda", reconfiguration_freq=0
     )
     policy_env = make_env(
-        "StackCube-v1", 1, sim_backend="physx_cpu", reconfiguration_freq=0
+        "StackCube-v1", 1, sim_backend="physx_cuda", reconfiguration_freq=0
     )
     selected = selected_row(args.selected_checkpoints, args.model_seed)
     agent, _ = load_policy_from_checkpoint(

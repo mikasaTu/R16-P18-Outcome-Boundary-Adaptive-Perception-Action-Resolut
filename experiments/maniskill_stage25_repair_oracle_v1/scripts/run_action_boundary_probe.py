@@ -74,10 +74,10 @@ def main() -> None:
     training_chunks = load_training_chunks(str(args.training_h5))
     device = torch.device("cuda")
     rollout_env = make_env(
-        "StackCube-v1", PADDED_ENVS, sim_backend="physx_cpu", reconfiguration_freq=0
+        "StackCube-v1", PADDED_ENVS, sim_backend="physx_cuda", reconfiguration_freq=0
     )
     policy_env = make_env(
-        "StackCube-v1", 1, sim_backend="physx_cpu", reconfiguration_freq=0
+        "StackCube-v1", 1, sim_backend="physx_cuda", reconfiguration_freq=0
     )
     selected = selected_row(args.selected_checkpoints, args.model_seed)
     agent, _ = load_policy_from_checkpoint(
