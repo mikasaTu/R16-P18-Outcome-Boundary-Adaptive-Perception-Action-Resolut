@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "status": "BASELINE_FAILURE_MECHANISM_DIAGNOSTIC_COMPLETE",
+  "decision": "NO_GO_BASELINE_GATE",
+  "analysis_method": "code_first_observed_execution_path_plus_episode_stratification",
+  "analysis_scope": "1200_formal_baseline_episodes_only",
+  "claim_taxonomy": {
+    "confirmed_code_semantics": "Directly established by the frozen evaluator implementation.",
+    "observed_association": "Computed from the formal episodes; not a causal estimate.",
+    "bounded_inference": "Consistent with code and observations but not isolated by an ablation.",
+    "not_tested": "No data were generated for the claim."
+  },
+  "source_bindings": {
+    "evaluator_sha256": "743ee3da7f94d41dfe9873b0c73a2df6d12b0ee58d2a71bca99e6b9cc48fc925",
+    "trainer_sha256": "f8b9308c57e6dc298e9672f5f8216b0a2999124fee857f739a2e3c53df2f5311",
+    "summarizer_sha256": "1afd618ef60c4943a95d98f76cc09a748a67c7b0c6cf71976ec64bd2325ac40e",
+    "mechanism_analyzer_sha256": "0e137f89c625ea82ec40bbbbb15f4a9879eb008b3efc2d3c2a5f962c7e2ce4cf"
+  },
+  "confirmed_code_semantics": [
+    {
+      "mechanism": "fixed_horizon_execution_after_success",
+      "symbols": [
+        "make_env",
+        "evaluate_batch"
+      ],
+      "evidence": "ManiSkillVectorEnv uses ignore_terminations=true. evaluate_batch executes all frozen-horizon timesteps, ORs the success signal into success_once, and reads success_at_end only after the loop.",
+      "metric_effect": "A rollout can count as success_once and later lose the terminal success predicate because actions continue after first success."
+    },
+    {
+      "mechanism": "per_step_temporal_action_aggregation",
+      "symbols": [
+        "temporal_action",
+        "make_official_args"
+      ],
+      "evidence": "Official ACT emits 30-query chunks. The evaluator blends predictions for the current timestep with exp(-0.01*k) weights and calls the policy at every action opportunity.",
+      "metric_effect": "This behavior is shared by every baseline run and is not an adaptive-resolution intervention."
+    },
+    {
+      "mechanism": "validation_only_checkpoint_selection",
+      "evidence": "Each checkpoint is the minimum deterministic validation imitation loss with earliest-step tie break; test outcomes are not inputs.",
+      "metric_effect": "The formal test result cannot be repaired by post-hoc checkpoint selection."
+    }
+  ],
+  "observed_and_bounded_findings": [
+    {
+      "finding": "floor_failure_is_not_single_seed_instability",
+      "level": "observed_association",
+      "evidence": "PullCubeTool scores 1%, 1%, 1%; PushT scores 2%, 7%, 2%. Seed ranges are 0pp and 5pp, both below 25pp.",
+      "interpretation": "The two positive-task floor failures replicate across seeds rather than coming from one divergent seed."
+    },
+    {
+      "finding": "continued_actions_realize_post_success_loss",
+      "level": "bounded_inference",
+      "evidence": "StackCube has 164 success_once episodes, 108 successes at horizon, and 56 transient successes (65.85% retention). PushT has 11 success_once, 1 at horizon, and 10 transient (9.09% retention).",
+      "interpretation": "The fixed-horizon code path permits this drop and the drop is observed. The physical motion responsible for each post-success loss was not isolated."
+    },
+    {
+      "finding": "collision_burden_separates_pushcube_failures",
+      "level": "observed_association",
+      "evidence": "PushCube never-success episodes average 7.398 collisions; success_once episodes average 0.535. Aggregate success is 57.33%, below the frozen 70% floor.",
+      "interpretation": "Unintended robot-table contact is a strong diagnostic marker, but this split does not establish that it is the sole cause."
+    },
+    {
+      "finding": "stackcube_success_is_contact_cleaner",
+      "level": "observed_association",
+      "evidence": "StackCube success_once episodes average 0.250 collisions; never-success episodes average 1.566. StackCube is the only passing positive task.",
+      "interpretation": "The passing task is associated with cleaner contact execution, not evidence for an adaptive selector."
+    },
+    {
+      "finding": "pusht_intended_contact_counter_is_noninformative",
+      "level": "observed_association",
+      "evidence": "The frozen pair-contact predicate records zero intended-contact events in all 300 PushT episodes, including all 11 success_once episodes.",
+      "interpretation": "This channel cannot explain PushT success or failure here; predicate, actor representation, and threshold causes were not isolated."
+    },
+    {
+      "finding": "early_pusht_checkpoint_is_not_sufficient_explanation",
+      "level": "observed_association",
+      "evidence": "Seed 16020 selects 5k and scores 2%; seed 16018 selects 80k and also scores 2%; seed 16019 selects 85k and scores 7%.",
+      "interpretation": "The early 5k selection is insufficient to explain the task-level floor."
+    }
+  ],
+  "task_diagnostics": {
+    "PullCubeTool-v1": {
+      "episode_count": 300,
+      "success_once_count": 3,
+      "success_at_end_count": 3,
+      "transient_success_count": 0,
+      "post_success_retention": 1,
+      "first_success_step_mean": 233.66666666666666,
+      "first_success_step_range": [
+        225,
+        250
+      ]
+    },
+    "PushT-v1": {
+      "episode_count": 300,
+      "success_once_count": 11,
+      "success_at_end_count": 1,
+      "transient_success_count": 10,
+      "post_success_retention": 0.09090909090909091,
+      "first_success_step_mean": 72,
+      "first_success_step_range": [
+        16,
+        124
+      ]
+    },
+    "StackCube-v1": {
+      "episode_count": 300,
+      "success_once_count": 164,
+      "success_at_end_count": 108,
+      "transient_success_count": 56,
+      "post_success_retention": 0.6585365853658537,
+      "first_success_step_mean": 105.03658536585365,
+      "first_success_step_range": [
+        79,
+        190
+      ]
+    },
+    "PushCube-v1": {
+      "episode_count": 300,
+      "success_once_count": 172,
+      "success_at_end_count": 172,
+      "transient_success_count": 0,
+      "post_success_retention": 1,
+      "first_success_step_mean": 61.18023255813954,
+      "first_success_step_range": [
+        51,
+        100
+      ]
+    }
+  },
+  "not_tested": [
+    "action_boundary_density",
+    "visual_boundary_density",
+    "joint_coupling_density",
+    "best_action_recall",
+    "outcome_regret",
+    "learned_effect_predictor",
+    "boundary_predictor",
+    "budgeted_joint_selector",
+    "outcome_flip_margin",
+    "boundary_normal_anisotropic_refinement",
+    "marginal_value_of_compute_router",
+    "contact_phase_hysteresis",
+    "action_commutator_proxy"
+  ],
+  "scope_conclusion": "These diagnostics explain observed baseline behavior without generating a new idea. Because the baseline failed before the oracle, they neither validate nor reject the R16-P18 adaptive mechanism."
+}

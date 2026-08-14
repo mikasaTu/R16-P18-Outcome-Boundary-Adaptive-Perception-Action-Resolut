@@ -1,0 +1,223 @@
+{
+  "bootstrap": {
+    "confidence_level": 0.95,
+    "method": "paired_percentile_resample_fixed_episode_identity",
+    "replicates": 10000,
+    "seed": 16018
+  },
+  "continue_to_oracle_probe": false,
+  "minimum_passing_positive_tasks": 2,
+  "negative_control_pass": false,
+  "passing_positive_task_count": 1,
+  "passing_positive_tasks": [
+    "StackCube-v1"
+  ],
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "status": "NO_GO_BASELINE_GATE",
+  "tasks": {
+    "PullCubeTool-v1": {
+      "aggregate_success_at_end": 0.01,
+      "aggregate_success_once": 0.01,
+      "baseline_gate": {
+        "aggregate_success_inclusive": [
+          0.25,
+          0.85
+        ],
+        "maximum_seed_range_percentage_points": 25.0
+      },
+      "baseline_gate_pass": false,
+      "episodes_per_model_seed": 100,
+      "mean_collisions": 0.10333333333333333,
+      "mean_episode_length": 300.0,
+      "mean_intended_contact_events": 1.2333333333333334,
+      "mean_unintended_contact_events": 0.10333333333333333,
+      "model_seeds": [
+        16018,
+        16019,
+        16020
+      ],
+      "paired_episode_bootstrap_95_ci": [
+        0.0,
+        0.02666666666666667
+      ],
+      "per_seed": [
+        {
+          "model_seed": 16018,
+          "selected_checkpoint_step": 70000,
+          "success_at_end": 0.01,
+          "success_once": 0.01
+        },
+        {
+          "model_seed": 16019,
+          "selected_checkpoint_step": 70000,
+          "success_at_end": 0.01,
+          "success_once": 0.01
+        },
+        {
+          "model_seed": 16020,
+          "selected_checkpoint_step": 70000,
+          "success_at_end": 0.01,
+          "success_once": 0.01
+        }
+      ],
+      "seed_success_range_percentage_points": 0.0,
+      "task_id": "PullCubeTool-v1",
+      "total_action_opportunities": 90000,
+      "total_policy_calls": 90000,
+      "total_policy_latency_seconds": 36.76333570799973
+    },
+    "PushCube-v1": {
+      "aggregate_success_at_end": 0.5733333333333334,
+      "aggregate_success_once": 0.5733333333333334,
+      "baseline_gate": {
+        "aggregate_success_inclusive": [
+          0.7,
+          0.98
+        ]
+      },
+      "baseline_gate_pass": false,
+      "episodes_per_model_seed": 100,
+      "mean_collisions": 3.4633333333333334,
+      "mean_episode_length": 100.0,
+      "mean_intended_contact_events": 1.6766666666666667,
+      "mean_unintended_contact_events": 3.4633333333333334,
+      "model_seeds": [
+        16018,
+        16019,
+        16020
+      ],
+      "paired_episode_bootstrap_95_ci": [
+        0.4866666666666667,
+        0.66
+      ],
+      "per_seed": [
+        {
+          "model_seed": 16018,
+          "selected_checkpoint_step": 25000,
+          "success_at_end": 0.59,
+          "success_once": 0.59
+        },
+        {
+          "model_seed": 16019,
+          "selected_checkpoint_step": 25000,
+          "success_at_end": 0.6,
+          "success_once": 0.6
+        },
+        {
+          "model_seed": 16020,
+          "selected_checkpoint_step": 30000,
+          "success_at_end": 0.53,
+          "success_once": 0.53
+        }
+      ],
+      "seed_success_range_percentage_points": 6.999999999999995,
+      "task_id": "PushCube-v1",
+      "total_action_opportunities": 30000,
+      "total_policy_calls": 30000,
+      "total_policy_latency_seconds": 12.657698023997867
+    },
+    "PushT-v1": {
+      "aggregate_success_at_end": 0.0033333333333333335,
+      "aggregate_success_once": 0.03666666666666667,
+      "baseline_gate": {
+        "aggregate_success_inclusive": [
+          0.25,
+          0.85
+        ],
+        "maximum_seed_range_percentage_points": 25.0
+      },
+      "baseline_gate_pass": false,
+      "episodes_per_model_seed": 100,
+      "mean_collisions": 2.6266666666666665,
+      "mean_episode_length": 150.0,
+      "mean_intended_contact_events": 0.0,
+      "mean_unintended_contact_events": 2.6266666666666665,
+      "model_seeds": [
+        16018,
+        16019,
+        16020
+      ],
+      "paired_episode_bootstrap_95_ci": [
+        0.013333333333333334,
+        0.06333333333333334
+      ],
+      "per_seed": [
+        {
+          "model_seed": 16018,
+          "selected_checkpoint_step": 80000,
+          "success_at_end": 0.0,
+          "success_once": 0.02
+        },
+        {
+          "model_seed": 16019,
+          "selected_checkpoint_step": 85000,
+          "success_at_end": 0.0,
+          "success_once": 0.07
+        },
+        {
+          "model_seed": 16020,
+          "selected_checkpoint_step": 5000,
+          "success_at_end": 0.01,
+          "success_once": 0.02
+        }
+      ],
+      "seed_success_range_percentage_points": 5.0,
+      "task_id": "PushT-v1",
+      "total_action_opportunities": 45000,
+      "total_policy_calls": 45000,
+      "total_policy_latency_seconds": 18.280976427000688
+    },
+    "StackCube-v1": {
+      "aggregate_success_at_end": 0.36,
+      "aggregate_success_once": 0.5466666666666666,
+      "baseline_gate": {
+        "aggregate_success_inclusive": [
+          0.25,
+          0.85
+        ],
+        "maximum_seed_range_percentage_points": 25.0
+      },
+      "baseline_gate_pass": true,
+      "episodes_per_model_seed": 100,
+      "mean_collisions": 0.8466666666666667,
+      "mean_episode_length": 200.0,
+      "mean_intended_contact_events": 1.9633333333333334,
+      "mean_unintended_contact_events": 0.8466666666666667,
+      "model_seeds": [
+        16018,
+        16019,
+        16020
+      ],
+      "paired_episode_bootstrap_95_ci": [
+        0.47333333333333333,
+        0.62
+      ],
+      "per_seed": [
+        {
+          "model_seed": 16018,
+          "selected_checkpoint_step": 25000,
+          "success_at_end": 0.28,
+          "success_once": 0.5
+        },
+        {
+          "model_seed": 16019,
+          "selected_checkpoint_step": 25000,
+          "success_at_end": 0.47,
+          "success_once": 0.63
+        },
+        {
+          "model_seed": 16020,
+          "selected_checkpoint_step": 25000,
+          "success_at_end": 0.33,
+          "success_once": 0.51
+        }
+      ],
+      "seed_success_range_percentage_points": 13.0,
+      "task_id": "StackCube-v1",
+      "total_action_opportunities": 60000,
+      "total_policy_calls": 60000,
+      "total_policy_latency_seconds": 35.13125428400081
+    }
+  },
+  "thresholds_changed_after_results": false
+}

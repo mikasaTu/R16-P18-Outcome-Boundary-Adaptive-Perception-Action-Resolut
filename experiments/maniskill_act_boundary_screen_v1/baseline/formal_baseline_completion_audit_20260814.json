@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "protocol_id": "R16-P18-MS3-ACT-BOUNDARY-SCREEN-V1",
+  "evidence_role": "formal_closed_loop_baseline_completion_and_payload_audit",
+  "status": "FORMAL_BASELINE_AUDIT_PASS",
+  "scientific_decision": "NO_GO_BASELINE_GATE",
+  "formal_evaluation": {
+    "run_id": "r16p18-msact-baseline-v1-20260814d",
+    "source_commit": "4c0a1d382c68af6cf68f467a9da5fd6b8bfc51f4",
+    "source_tree": "ae5e1398eaffc621f8b3f09f797e8cf7f41ef487",
+    "tasks": [
+      "PullCubeTool-v1",
+      "PushT-v1",
+      "StackCube-v1",
+      "PushCube-v1"
+    ],
+    "model_seeds": [
+      16018,
+      16019,
+      16020
+    ],
+    "episodes_per_task_model_seed": 100,
+    "run_count": 12,
+    "episode_count": 1200,
+    "total_policy_calls": 225000,
+    "total_action_opportunities": 225000,
+    "all_policy_calls_equal_action_opportunities": true,
+    "all_episode_identities_match_frozen_manifest": true,
+    "all_selected_checkpoints_validation_only": true,
+    "test_metrics_used_for_selection": false,
+    "paired_bootstrap": {
+      "method": "paired_percentile_resample_fixed_episode_identity",
+      "replicates": 10000,
+      "seed": 16018,
+      "confidence_level": 0.95
+    }
+  },
+  "pai_terminal_readback": {
+    "job_id": "dlc141oirugeildi",
+    "pod_uid": "de4b26e7-2ad9-42f2-9c1e-f198226c9953",
+    "status": "Succeeded",
+    "reason_code": "JobSucceeded",
+    "created_at_utc": "2026-08-14T02:36:02Z",
+    "running_at_utc": "2026-08-14T02:36:53Z",
+    "finished_at_utc": "2026-08-14T02:46:11Z",
+    "duration_seconds": 609,
+    "resource_id": "quotakzri8a5wqcp",
+    "pod_count": 1,
+    "cpu": 12,
+    "gpu": 2,
+    "gpu_model": "NVIDIA A800",
+    "memory": "200Gi",
+    "shared_memory": "200Gi",
+    "runtime_uid": 2254,
+    "runtime_gid": 2254,
+    "enable_ai_master": false,
+    "enable_elastic_training": false,
+    "oversold_type": "ForbiddenQuotaOverSold",
+    "observed_pod_restarts": 0
+  },
+  "submission_contract": {
+    "launcher_sha256": "633695ed89425c7b0275c0733576a1ac4697791a57cba88cb62ac64984681c0c",
+    "submission_state_sha256": "62a9a4a2a81b069cff7dd8ab509798b08fe3e53e397fb16cc06a1c56a33263ec",
+    "submission_state": "submitted_verified",
+    "preflight_attempts": [
+      {
+        "run_id": "r16p18-msact-baseline-v1-20260814a",
+        "state": "preflight_failed_sealed",
+        "failure_scope": "infrastructure_pre_submit_no_job_id_no_gpu",
+        "reason": "missing_precreated_baseline_evaluation_directory",
+        "submission_state_sha256": "570bb98684c8650a9b28e69339b2aa2bd6498fa790f3116c2bdc80d70a0d58b9"
+      },
+      {
+        "run_id": "r16p18-msact-baseline-v1-20260814b",
+        "state": "preflight_failed_sealed",
+        "failure_scope": "infrastructure_pre_submit_no_job_id_no_gpu",
+        "reason": "missing_run_scoped_cache_directory",
+        "submission_state_sha256": "66316f6f000b126ffa6bf66a58697962948ac2d39a5bb3418bb6df6a110b39da"
+      },
+      {
+        "run_id": "r16p18-msact-baseline-v1-20260814c",
+        "state": "preflight_failed_sealed",
+        "failure_scope": "infrastructure_pre_submit_no_job_id_no_gpu",
+        "reason": "missing_pai_eval_parent_directory",
+        "submission_state_sha256": "f190b1c3b6ee25d3e682cca7cd103badebf124388ccd530bd78c2472d4b70c94"
+      }
+    ]
+  },
+  "artifact_audit": {
+    "audit_completed_at_utc": "2026-08-14",
+    "auditor_sha256": "1c29fc5ea12dd97f8466e5381044ff5e4cb325b94c8c29e9752020957b9c664f",
+    "evaluator_sha256": "743ee3da7f94d41dfe9873b0c73a2df6d12b0ee58d2a71bca99e6b9cc48fc925",
+    "seed_manifest_sha256": "e724c267fefd61d3517c4c0299a1c405b5e01fd825bf1da8b5eb267cc3c02084",
+    "baseline_gate": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-act-boundary-screen-v1/baseline_evaluation/baseline_gate.json",
+      "bytes": 6343,
+      "sha256": "ad873bfcc980ab383b31d03b34545f2e07c4110aa2fb72e130c12cdaec79bc6a",
+      "uid": 2254,
+      "gid": 2254
+    },
+    "evaluation_matrix_complete": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-act-boundary-screen-v1/pai-eval/r16p18-msact-baseline-v1-20260814d/EVALUATION_MATRIX_COMPLETE.json",
+      "bytes": 4831,
+      "sha256": "a6e523377bee47f70b022a42eef917108771fc135678bdbb19fea1a05e0ad75f",
+      "uid": 2254,
+      "gid": 2254
+    },
+    "first_real_work": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-act-boundary-screen-v1/pai-eval/r16p18-msact-baseline-v1-20260814d/FIRST_REAL_WORK.json",
+      "bytes": 890,
+      "sha256": "3f7afe27e3fe2b1d349c66b7929bc8cc859fbf5493fdeadaf46d4e3d7b34adc7",
+      "uid": 2254,
+      "gid": 2254
+    },
+    "first_rollout_batch_marker_sha256": "39b5ac8e8273cd15dd88dc684aa759597b665e2213d1206c25931647f11ffb8b",
+    "selected_checkpoint_payload_verification_scope": "all_12_selected_payloads",
+    "all_selected_checkpoint_payload_hashes_verified": true,
+    "all_12_run_summaries_recomputed_from_raw_episode_jsonl": true,
+    "all_4_paired_bootstrap_intervals_recomputed": true
+  },
+  "runs": [
+    {
+      "task_id": "PullCubeTool-v1",
+      "model_seed": 16018,
+      "checkpoint_step": 70000,
+      "checkpoint_sha256": "16457149a548ed2b32c26e51cdc15b1e832a2a24c67129effdd3ad5674af33e2",
+      "success_once": 0.01,
+      "success_at_end": 0.01,
+      "episodes_sha256": "a65f906854c3b0bbeb7a21fe5df0df371cc401604cd07e5a9a41dd92b6e42447",
+      "summary_sha256": "e9d664eb2a18499ba79d785eb6608a940caf3d660af631a6aa532b52a57dbdc6"
+    },
+    {
+      "task_id": "PullCubeTool-v1",
+      "model_seed": 16019,
+      "checkpoint_step": 70000,
+      "checkpoint_sha256": "3a82ff343ec08e905a4a26c5152e9ce9ec6f6911e97d116c07a91168f1835fa3",
+      "success_once": 0.01,
+      "success_at_end": 0.01,
+      "episodes_sha256": "4d2992bc5d50c74ed39399e04a8a8837218aea8b8c817dcf531a696a35ed2337",
+      "summary_sha256": "bdae9eb83865dda540dc850bf352b5f3a50987378ce6d2565e8d4dc4819e279f"
+    },
+    {
+      "task_id": "PullCubeTool-v1",
+      "model_seed": 16020,
+      "checkpoint_step": 70000,
+      "checkpoint_sha256": "23c8c5c0a67522a60d0ec17964c2dad0399d01b5bf5732f8e94196aedbe81a41",
+      "success_once": 0.01,
+      "success_at_end": 0.01,
+      "episodes_sha256": "79127899bf3978162b1517446c562838f5c73c827d8ecacd1b938019c298b66a",
+      "summary_sha256": "fe3c44deda7034622e288122f7e78774b7e125848eb2b0662db2f683fd22c80b"
+    },
+    {
+      "task_id": "PushT-v1",
+      "model_seed": 16018,
+      "checkpoint_step": 80000,
+      "checkpoint_sha256": "5b9ff651d78a155dec8b8d4bda4dba1c1dc7729c6e209673d2e779a099ba5def",
+      "success_once": 0.02,
+      "success_at_end": 0,
+      "episodes_sha256": "93bfa2ee62ba1830318ea4e886f35a28d87a762dedb80bc1f333be2c872a3b7f",
+      "summary_sha256": "d5f4a0c8b6bbd3d09968fdef2cb6029b14576c38601cb9a4c4803d143430578b"
+    },
+    {
+      "task_id": "PushT-v1",
+      "model_seed": 16019,
+      "checkpoint_step": 85000,
+      "checkpoint_sha256": "bdcc4939e56c30252c286faf93e6eb0141b52cd2f1d3ddffee786063f55f348e",
+      "success_once": 0.07,
+      "success_at_end": 0,
+      "episodes_sha256": "56479f860d4a86d69e9b41bbd98d49f51bae08a122759e3f9811baa660d7c135",
+      "summary_sha256": "b7f6aaad6132a49b64a67eab1445a0a8581b8b3ce15108b56a8ef69be73f3871"
+    },
+    {
+      "task_id": "PushT-v1",
+      "model_seed": 16020,
+      "checkpoint_step": 5000,
+      "checkpoint_sha256": "c21b17f67a4dfe931f365d3d2fbef0fbe49a7f77ba2576718c1efb6f3e88819e",
+      "success_once": 0.02,
+      "success_at_end": 0.01,
+      "episodes_sha256": "f12c46c4dc12fa149765a817a3173e894e21b3f59ae4145eec75463d31bae5bc",
+      "summary_sha256": "1dc88a13937dc8f4f483035d8da9df602bb9cfdef0ff3e85ffc167a215b1bcdc"
+    },
+    {
+      "task_id": "StackCube-v1",
+      "model_seed": 16018,
+      "checkpoint_step": 25000,
+      "checkpoint_sha256": "fc59779bd0674c1886ade3535e9e5de64d70db80da61c437c8f98fea49ff9371",
+      "success_once": 0.5,
+      "success_at_end": 0.28,
+      "episodes_sha256": "ee44b338368944d7c9f7a112e41214f273abfed524ee27e217f79ea90b4c1e13",
+      "summary_sha256": "a2b698bcf81df097235366fc69032f78f1dc6a8f5f606ba7a8bc535018166cdc"
+    },
+    {
+      "task_id": "StackCube-v1",
+      "model_seed": 16019,
+      "checkpoint_step": 25000,
+      "checkpoint_sha256": "794529e0fcee17d7517563c3c126b36e934cee255ffadd080965ede542935feb",
+      "success_once": 0.63,
+      "success_at_end": 0.47,
+      "episodes_sha256": "bd2aaee6b48e72061ec88ccdea0803ab54764810e0bd0a9f0e1543db78901a6c",
+      "summary_sha256": "7e655bfbefafdf3d429b7e022b1ddf4a8df646d32b53dbe64cac687ac5633768"
+    },
+    {
+      "task_id": "StackCube-v1",
+      "model_seed": 16020,
+      "checkpoint_step": 25000,
+      "checkpoint_sha256": "338a86ad8ea3cae4a3fc71a496efaf33dd932268e2dff673eb47b328ed0e46ce",
+      "success_once": 0.51,
+      "success_at_end": 0.33,
+      "episodes_sha256": "95f7422347d39151ad36d7804396515005e866b077b8e8123ab8e7843fe5af9c",
+      "summary_sha256": "94779adb669b48ef9715f02a76fb3fcffd9339de8eb595fb72c0a3d30451eead"
+    },
+    {
+      "task_id": "PushCube-v1",
+      "model_seed": 16018,
+      "checkpoint_step": 25000,
+      "checkpoint_sha256": "a527af3bb60de1beb8ac9f9482b08b49fcfab7d0cd4340ecda9d5139a419f865",
+      "success_once": 0.59,
+      "success_at_end": 0.59,
+      "episodes_sha256": "025ffd61e9986f07d8dcbcbd253d0373516563ac0e964dbd49b75db6de504fdc",
+      "summary_sha256": "970247613432b30896e62d43caf3f5634f69b8cfbe373871fb9511241ccf61f6"
+    },
+    {
+      "task_id": "PushCube-v1",
+      "model_seed": 16019,
+      "checkpoint_step": 25000,
+      "checkpoint_sha256": "9a2a8a34a06007e36142689492b80b3c9d764ebc713bd2b28129f67e7cf64e4f",
+      "success_once": 0.6,
+      "success_at_end": 0.6,
+      "episodes_sha256": "3bf2a1d53d5dcf952e7999917091b08c37525114f8409f8d386ac68fa31641dc",
+      "summary_sha256": "1d66ef33c17b9c49421b334b5a47d2c5d8d96fc222df3968a9801778c511e997"
+    },
+    {
+      "task_id": "PushCube-v1",
+      "model_seed": 16020,
+      "checkpoint_step": 30000,
+      "checkpoint_sha256": "fdaf9214f66c10713ee5dc9b3b61577e133c1b4bd0ab39a10432fd475ac10fac",
+      "success_once": 0.53,
+      "success_at_end": 0.53,
+      "episodes_sha256": "44b9902b71d5698ffcc480a80c2f427eb1b7338c906060682c6bb2267052377d",
+      "summary_sha256": "8ff96adcb973d72b7fad0b46ab3c76c903cc00b953cb9ebfdd00f8e69be4f254"
+    }
+  ],
+  "gate": {
+    "passing_positive_tasks": [
+      "StackCube-v1"
+    ],
+    "passing_positive_task_count": 1,
+    "minimum_passing_positive_tasks": 2,
+    "negative_control_pass": false,
+    "continue_to_oracle_probe": false,
+    "thresholds_changed_after_results": false
+  },
+  "stop_scope": {
+    "state_bank_created": false,
+    "oracle_atlas_created": false,
+    "oracle_job_submitted": false,
+    "stage3_branch_created": false,
+    "stage3_directory_created": false,
+    "learned_selector_implemented": false,
+    "reason": "preregistered_baseline_gate_failed"
+  },
+  "conclusion": "The formal baseline evidence is complete and internally consistent, but the baseline health gate failed. The oracle probe and Stage-3 are therefore prohibited. This result neither validates nor refutes the R16-P18 adaptive mechanism."
+}

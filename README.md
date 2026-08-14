@@ -1,5 +1,13 @@
 # R16-P18 Outcome-Boundary Adaptive Perception–Action Resolution
 
+> **ManiSkill RGB-ACT Stage-2 final (2026-08-14): `NO_GO_BASELINE_GATE`.**
+> The audited 1,200-episode baseline passed only `StackCube-v1`; both
+> `PullCubeTool-v1` and `PushT-v1` were below the positive-task floor, and the
+> `PushCube-v1` negative control was below its 70% floor. The preregistered stop
+> rule therefore prohibited the state-bank/oracle probe and Stage-3. See
+> [`docs/MANISKILL_STAGE2_FINAL_REPORT.md`](docs/MANISKILL_STAGE2_FINAL_REPORT.md).
+> This is not a validation or refutation of the adaptive mechanism.
+
 This repository is the complete archived implementation and evidence package for the
 **LIBERO Stage-1 Small-BC baseline gate** run on 2026-08-12. It contains the frozen
 BoundaryBC-S source, PAI launch contracts and audit trail, all 36 checkpoints, raw

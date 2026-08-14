@@ -1,5 +1,12 @@
 # ManiSkill3 RGB-ACT task screen and oracle boundary probe
 
+> **Final status (2026-08-14): `NO_GO_BASELINE_GATE`.** Formal training and
+> 1,200 fixed-seed closed-loop episodes completed and passed the independent
+> artifact audit. Only one positive task passed and `PushCube-v1` failed the
+> negative-control floor, so `continue_to_oracle_probe=false`. No state bank,
+> oracle atlas, oracle job, or Stage-3 implementation was created. The full
+> report is [`../../docs/MANISKILL_STAGE2_FINAL_REPORT.md`](../../docs/MANISKILL_STAGE2_FINAL_REPORT.md).
+
 This directory is the only mutable scope for the second R16-P18 validation
 stage. The archived LIBERO baseline-gate tree and artifacts outside this
 directory remain unchanged.
@@ -22,7 +29,7 @@ replayed RGB trajectories, checkpoints, and simulator state banks live under
 the pinned CPFS paths recorded in `environment_lock.json`; Git contains their
 manifests, SHA256 digests, summaries, and the code needed to reproduce them.
 
-Implemented protocol components currently include deterministic 300-trajectory
+Implemented protocol components include deterministic 300-trajectory
 selection and integrity verification, official trajectory-to-RGB replay,
 official ACT architecture/data imports with split-aware validation-only
 checkpoint selection, complete-state checkpoint/resume, fixed-seed closed-loop
@@ -30,9 +37,9 @@ evaluation with contact accounting, and a two-GPU PAI matrix launcher. The
 state-bank/oracle code now also includes frozen held-out phase selection,
 three-repeat exact restoration, 5x5 local PCA action surfaces, 48 visual
 interventions, a 4x5 joint probe, paired state bootstrap, exact call/restore
-accounting, and restart-safe two-GPU PAI orchestration. Execution remains gated
-on the ACT baseline result; these components do not authorize Stage-3 by
-themselves.
+accounting, and restart-safe two-GPU PAI orchestration. The frozen ACT baseline
+gate failed, so the existing oracle code remained unexecuted and did not
+authorize Stage-3.
 
 The formal short-horizon counterfactual backend is pinned to PhysX CPU. A
 pre-formal-result development smoke showed that PhysX CUDA preserved task
