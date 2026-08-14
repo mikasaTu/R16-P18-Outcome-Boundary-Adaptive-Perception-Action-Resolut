@@ -1,0 +1,45 @@
+{
+  "gpu_count": 2,
+  "inputs": {
+    "candidate_manifest": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage25-formal-source/experiments/maniskill_stage25_repair_oracle_v1/manifests/checkpoint_candidates.json",
+      "sha256": "62c283f9fef40927c5e0950661559c1330833f06b2da7c83281c38dce2f43c19"
+    },
+    "confirmatory_seed_bank": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage25-formal-source/experiments/maniskill_stage25_repair_oracle_v1/manifests/confirmatory_test_seed_bank.json",
+      "sha256": "3fa427268685771983c8211d7616d04f1b42c45d718d081cc67e34d6c92dd722"
+    },
+    "final_val_seed_bank": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage25-formal-source/experiments/maniskill_stage25_repair_oracle_v1/manifests/checkpoint_final_val_seed_bank.json",
+      "sha256": "e9c5bdcb11f4d2baed8642d73bd3b01e754073e53de2023b2e10677ffd88e325"
+    },
+    "official_stack_h5": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/official_demos/StackCube-v1/motionplanning/trajectory.h5",
+      "sha256": "61d07df7b52f303d2088e977df5f863be7d2274348ff05791f3a815359815523"
+    },
+    "oracle_seed_bank": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage25-formal-source/experiments/maniskill_stage25_repair_oracle_v1/manifests/oracle_source_seed_bank.json",
+      "sha256": "98bc04db07dba0f44e3d61e2098af9ee574540f34725f822f2c212fb482c3e12"
+    },
+    "protocol_freeze": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage25-formal-source/experiments/maniskill_stage25_repair_oracle_v1/PROTOCOL_FREEZE.json",
+      "sha256": "9fd66b86e3d8176baa65da783ee5e3f41df5b1d86a841fa4535e52cd9991c7ca"
+    },
+    "screen_seed_bank": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage25-formal-source/experiments/maniskill_stage25_repair_oracle_v1/manifests/checkpoint_screen_seed_bank.json",
+      "sha256": "9dac538ef4a5ec6f7df9f4fd4b9b0c41513fa75337413c52c63548758a380f33"
+    },
+    "training_stack_h5": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/selected_raw/StackCube-v1/train/trajectory.rgb.pd_ee_delta_pos.physx_cpu.h5",
+      "sha256": "b89801ea53cc429e074aa1aa4773ef9efc1b42bfb898aba0eab211b3d847ce20"
+    }
+  },
+  "orchestrator_sha256": "c6ceb80ca401d0e9afc45da3882cac891de5d3de3c28fe22fe2ec6054a3eabdb",
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "run_id": "r16p18-stage25-oracle-20260814-v26",
+  "runtime_gid": 2254,
+  "runtime_python": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python",
+  "runtime_uid": 2254,
+  "started_at_unix": 1786705617.6956284,
+  "status": "FORMAL_RUN_INPUTS_FROZEN"
+}

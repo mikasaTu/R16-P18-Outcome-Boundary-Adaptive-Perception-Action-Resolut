@@ -11,6 +11,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from smoke_action_atlas_cuda import validate_smoke_atlas
+from audit_success_trace_terminal import terminal_from_trace
+from audit_mechanisms import comparison_summary, physical_signature
 
 
 def padded_rollout_backends(script_name: str) -> list[str]:
@@ -96,3 +98,72 @@ def test_success_semantics_trace_keeps_policy_neutral_contact_and_drift_fields()
         '"neutral_action"',
     ):
         assert field in source
+
+
+def test_terminal_trace_audit_uses_episode_terminal_not_vector_final_snapshot() -> None:
+    row = {
+        "episode_length": 3,
+        "first_success_step": 2,
+        "success_once": True,
+        "trace": [
+            {
+                "step": 1,
+                "success_predicate": False,
+                "object_position": [0.0, 0.0, 0.0],
+                "object_quaternion": [1.0, 0.0, 0.0, 0.0],
+                "post_success_object_drift": None,
+            },
+            {
+                "step": 2,
+                "success_predicate": True,
+                "object_position": [0.0, 0.0, 0.0],
+                "object_quaternion": [1.0, 0.0, 0.0, 0.0],
+                "post_success_object_drift": {
+                    "translation_m": 0.0,
+                    "rotation_rad": 0.0,
+                },
+            },
+            {
+                "step": 3,
+                "success_predicate": True,
+                "object_position": [0.003, 0.004, 0.0],
+                "object_quaternion": [1.0, 0.0, 0.0, 0.0],
+                "post_success_object_drift": {
+                    "translation_m": 0.005,
+                    "rotation_rad": 0.0,
+                },
+            },
+        ],
+    }
+    result = terminal_from_trace(row)
+    assert result["terminal_step"] == 3
+    assert result["final_object_position"] == [0.003, 0.004, 0.0]
+    assert result["drift"]["translation_m"] == pytest.approx(0.005)
+    assert result["drift"]["to_step"] == 3
+
+
+def test_mechanism_audit_counts_executed_physical_outcome_changes() -> None:
+    base = {
+        "stable_success": False,
+        "phase_outcome": "regressed",
+        "grasped": False,
+        "supported": False,
+        "dropped_or_slipped": False,
+        "recoverable": True,
+        "intended_contact": False,
+        "unintended_contact": False,
+    }
+    refined = {**base, "phase_outcome": "progressed", "grasped": True}
+    rows = [
+        {
+            "arms": {
+                "CC": {"best_index": 12, "utility": 1.0, "outcome": base},
+                "FC": {"best_index": 13, "utility": 2.5, "outcome": refined},
+            }
+        }
+    ]
+    result = comparison_summary(rows, "FC", "CC")
+    assert physical_signature(base) != physical_signature(refined)
+    assert result["physical_signature_change_count"] == 1
+    assert result["phase_outcome_change_count"] == 1
+    assert result["mean_utility_delta"] == pytest.approx(1.5)

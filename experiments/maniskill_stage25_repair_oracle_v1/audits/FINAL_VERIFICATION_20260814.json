@@ -1,0 +1,72 @@
+{
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "verified_at_utc": "2026-08-14T13:17:37Z",
+  "status": "FINAL_VERIFICATION_PASS",
+  "scientific_decision": "REVISE_STOPPING_CONFOUND",
+  "evidence_scope": "SINGLE_TASK_PRIVILEGED_ORACLE_ONLY",
+  "formal_source": {
+    "commit": "7be99cd867d27372cfc75095d459b782c0f75a66",
+    "tree": "31df45e1f28bbba57aebcd804e13c88fe14a0784",
+    "scientific_checksum_sha256": "8a606d77d2e70ca6147943c01ba1dc7a8f713852f486698b7998c50c364b5e4f",
+    "protocol_freeze_sha256": "9fd66b86e3d8176baa65da783ee5e3f41df5b1d86a841fa4535e52cd9991c7ca",
+    "predecessor_immutable": true
+  },
+  "pai": {
+    "run_id": "r16p18-stage25-oracle-20260814-v26",
+    "job_id": "dlc1ptg07eqpdaxy",
+    "status": "Succeeded",
+    "reason_code": "JobSucceeded",
+    "worker_count": 1,
+    "gpu_type": "A800",
+    "gpu_count": 2,
+    "uid_gid": "2254:2254",
+    "getjob_latest_sha256": "e2fb6ce7f5f47c9d57901dbbf52785fda73ce4c889b5620f03a263d44e2a46b5",
+    "monitor_result_sha256": "0122338de7ced2015e3f8981b0c347fed8193dca5d7945df89ae4579f01b875b"
+  },
+  "scientific_evidence": {
+    "formal_complete_sha256": "09e6dedaf0da6970764d99b7342b9e2bdb351fd171b9cc68063446947109f323",
+    "formal_summary_sha256": "ab1976e633fbcc7ca2108224c6131922f6c15d0ca7d5a892f27b779e450ebbd5",
+    "trace_corrected_summary_sha256": "94b7b795b9c1fe2f6ed84affd771a6f1b2ea29f6a627c38edacf7828c988c3ba",
+    "independent_audit_sha256": "35f0ab027c7faca13d6779a87ab78b2679acc1db1e9ef9adfbf45e20d6b9adec",
+    "trace_terminal_audit_sha256": "e0d1af1fa0a11b79d5ee2a72574eda265e49d22d5a577d4c878cad1d9d116e40",
+    "mechanism_audit_sha256": "b1d522ee2b2455274333bfaddc49d9d63e3c8978f2fe4e0a76c0dd59344e25ee",
+    "report_sha256": "21afb3edf61556f2f57fd9f7d9e3838203fe55249656b99ea0677f938e0f4bff",
+    "decision_consistent_across_formal_corrected_and_independent": true,
+    "post_oracle_prohibited_work_executed": false
+  },
+  "repository_bundle": {
+    "formal_results_archive_sha256": "d568b7e51fb55f7057840a4a838a6819f596a6675b00b2c53f0c7f514f91f79e",
+    "pai_logs_archive_sha256": "8203d68e3684f51882e48831d98bea15c8b3a9d603af3eb2db6fda902fe42f47",
+    "pai_registry_archive_sha256": "7ffe6defa066575e95bbb6148226ac1399d599843f18ef0f32907313f761d54a",
+    "raw_file_inventory_sha256": "11bb023cc2303e1992127aeb7b4ab52bf02d43a196bcbc03a84e5e701b151a9a",
+    "bundle_sha256s_sha256": "acb374a948e14a5cd3c2195db3be1a37677bc3db29d1ccf27e0487d0e8d90c37",
+    "raw_file_count": 384,
+    "archive_extract_and_raw_hash_check": "PASS",
+    "credential_scan": "PASS_EMPTY_IMAGECONFIG_PASSWORD_ONLY"
+  },
+  "tests": {
+    "python": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python",
+    "pytest": "26 passed in 6.81s",
+    "compileall": "PASS"
+  },
+  "feishu": {
+    "step4_node_token": "Vg0WwZcAfiqhbQkNooKcllXcnkd",
+    "step4_parent_node_token": "ACvKwniphi2saqkm6EicOsVDnFc",
+    "step4_plan_revision_id": 5,
+    "step4_plan_protocol_present": true,
+    "report_node_token": "GnYKwQ63EiWZUjkyeOwcJXvYnRj",
+    "report_document_id": "KVUedo75RoAh7cxgAudcNWPynMb",
+    "report_parent_node_token": "Vg0WwZcAfiqhbQkNooKcllXcnkd",
+    "report_title": "实验报告",
+    "report_revision_id": 10,
+    "report_content_length": 20591,
+    "required_content_checks": {
+      "final_decision": true,
+      "ten_required_questions": true,
+      "joint_gate_metrics": true,
+      "mechanism_reverse_explanation": true,
+      "tests": true,
+      "not_validated_scope": true
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "calibration": {
+    "0.5": {
+      "boundary_density_by_effect_threshold": {
+        "0.5": 0.13541666666666666,
+        "1.0": 0.12734374999999998,
+        "1.5": 0.12578124999999998
+      },
+      "candidate_validity": 1.0,
+      "state_model_rows": 96
+    },
+    "1.0": {
+      "boundary_density_by_effect_threshold": {
+        "0.5": 0.16171875,
+        "1.0": 0.14765625000000002,
+        "1.5": 0.14479166666666668
+      },
+      "candidate_validity": 1.0,
+      "state_model_rows": 96
+    },
+    "1.5": {
+      "boundary_density_by_effect_threshold": {
+        "0.5": 0.1942708333333333,
+        "1.0": 0.17734375,
+        "1.5": 0.17578125
+      },
+      "candidate_validity": 1.0,
+      "state_model_rows": 96
+    }
+  },
+  "confirmatory_results_observed_before_freeze": false,
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "radius_validity_gate_pass": true,
+  "selected_effect_threshold": 0.5,
+  "selected_radius": 1.5,
+  "selection_rules": {
+    "effect_threshold": "closest_boundary_density_to_0.30_then_smallest",
+    "radius": "validity>=0.90_then_max_boundary_density_at_threshold_1.0_then_smallest"
+  },
+  "source_sha256": {
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/action_boundary/calibration/seed_16018/states.jsonl": "380e24924d21b2aa71f803d181b58c412bfc505d80b55b6db12495d44bf08725",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/action_boundary/calibration/seed_16019/states.jsonl": "a6bb0b42d59aec05cca4d17be6c451f4042a1b0d8e3aa2f3825f10995f672e71",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/action_boundary/calibration/seed_16020/states.jsonl": "ba5f67c149ac8d834424e32f3b63c98bac42103f67821725edc562d0cfab7a32"
+  },
+  "status": "ACTION_CALIBRATION_FROZEN"
+}

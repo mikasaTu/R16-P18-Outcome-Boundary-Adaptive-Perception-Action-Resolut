@@ -1,5 +1,18 @@
 # R16-P18 Outcome-Boundary Adaptive Perception–Action Resolution
 
+> **ManiSkill Step4 / Stage-2.5 final (2026-08-14): `REVISE_STOPPING_CONFOUND`.**
+> The complete privileged-oracle protocol was executed despite downstream gate
+> failures, as explicitly requested. StackCube passed its repaired baseline gate,
+> but privileged first-success termination improved terminal success by 16.33pp
+> (paired-bootstrap 95% CI [12.00pp, 21.00pp], 3/3 seeds), so the preregistered
+> stopping-confound status takes precedence. The action gate and joint gate also
+> failed: cross-seed joint coupling was 0/64, recall improvement was 0pp, and
+> outcome-regret reduction was 3.12%. See
+> [`STAGE25_FINAL_REPORT.md`](experiments/maniskill_stage25_repair_oracle_v1/docs/STAGE25_FINAL_REPORT.md)
+> and the [sealed v26 artifacts](experiments/maniskill_stage25_repair_oracle_v1/artifacts/formal-run/r16p18-stage25-oracle-20260814-v26/README.md).
+> This is neither validation nor refutation of the R16-P18 idea, and no learned
+> predictor, OOD, Stage-3, Diffusion Policy, DINO-WM, or pi0.5 work was started.
+
 > **ManiSkill RGB-ACT Stage-2 final (2026-08-14): `NO_GO_BASELINE_GATE`.**
 > The audited 1,200-episode baseline passed only `StackCube-v1`; both
 > `PullCubeTool-v1` and `PushT-v1` were below the positive-task floor, and the

@@ -1,0 +1,1622 @@
+{
+  "confirmatory_state_count": 64,
+  "deployable": false,
+  "directionally_positive_model_seeds": {
+    "adaptive_minus_phase": 3,
+    "adaptive_minus_random": 3
+  },
+  "j_threshold": 1.0,
+  "joint_calibration_freeze_sha256": "12783b7a4f4f592398ccce01774c7aa447b9132029a05fb2c98cbe596a86bfea",
+  "joint_oracle_gate_pass": false,
+  "learned_selector": false,
+  "matched_abstract_budget": {
+    "coarse_action_candidates": 9,
+    "fine_action_candidates": 25,
+    "local_fine_tiles": 1
+  },
+  "matched_refined_states": 32,
+  "model_seeds": [
+    16018,
+    16019,
+    16020
+  ],
+  "offline_allocation_and_statistics_latency_seconds": 6.286617550999836,
+  "post_success_states_in_primary": 0,
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "raw_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/joint_oracle/allocation_states.jsonl",
+  "raw_sha256": "2822f3266868226c7ad2746a8c432d213281a97f5a7debbf2410b5d8a09af9c2",
+  "source_compute_accounting": {
+    "allocation_and_statistics_effect_model_calls": 0,
+    "allocation_and_statistics_simulator_calls": 0,
+    "condition_atlas": {
+      "coarse": {
+        "atlas_calls": 192,
+        "latency_seconds_total": {
+          "candidate_rollout": 576.5342197600085,
+          "pca_grid_construction": 1.3339718029956202,
+          "state_restore_transform_and_nominal_policy": 4.485973290007678,
+          "total": 582.3543470160021
+        },
+        "totals": {
+          "actual_rollout_policy_forward_calls": 3840,
+          "actual_rollout_policy_forward_rows": 288000,
+          "actual_rollout_simulator_step_calls": 5568,
+          "actual_rollout_simulator_step_rows": 417600,
+          "candidate_opportunities": 4800,
+          "candidate_repeats": 576,
+          "effect_model_calls": 0,
+          "nominal_policy_forward_calls": 192,
+          "nominal_policy_forward_rows": 192,
+          "padded_invalid_policy_forward_rows": 0,
+          "padded_invalid_simulator_steps": 0,
+          "scientific_policy_calls": 288000,
+          "scientific_simulator_steps": 417600,
+          "valid_candidates": 4800
+        }
+      },
+      "oracle_tile": {
+        "atlas_calls": 192,
+        "latency_seconds_total": {
+          "candidate_rollout": 578.0388584830071,
+          "pca_grid_construction": 1.3363544520016148,
+          "state_restore_transform_and_nominal_policy": 4.587537076000444,
+          "total": 583.9629200739982
+        },
+        "totals": {
+          "actual_rollout_policy_forward_calls": 3840,
+          "actual_rollout_policy_forward_rows": 288000,
+          "actual_rollout_simulator_step_calls": 5568,
+          "actual_rollout_simulator_step_rows": 417600,
+          "candidate_opportunities": 4800,
+          "candidate_repeats": 576,
+          "effect_model_calls": 0,
+          "nominal_policy_forward_calls": 192,
+          "nominal_policy_forward_rows": 192,
+          "padded_invalid_policy_forward_rows": 0,
+          "padded_invalid_simulator_steps": 0,
+          "scientific_policy_calls": 288000,
+          "scientific_simulator_steps": 417600,
+          "valid_candidates": 4800
+        }
+      },
+      "phase_tile": {
+        "atlas_calls": 192,
+        "latency_seconds_total": {
+          "candidate_rollout": 577.791913015999,
+          "pca_grid_construction": 1.3107162429878372,
+          "state_restore_transform_and_nominal_policy": 4.593420860009246,
+          "total": 583.696235313997
+        },
+        "totals": {
+          "actual_rollout_policy_forward_calls": 3840,
+          "actual_rollout_policy_forward_rows": 288000,
+          "actual_rollout_simulator_step_calls": 5568,
+          "actual_rollout_simulator_step_rows": 417600,
+          "candidate_opportunities": 4800,
+          "candidate_repeats": 576,
+          "effect_model_calls": 0,
+          "nominal_policy_forward_calls": 192,
+          "nominal_policy_forward_rows": 192,
+          "padded_invalid_policy_forward_rows": 0,
+          "padded_invalid_simulator_steps": 0,
+          "scientific_policy_calls": 288000,
+          "scientific_simulator_steps": 417600,
+          "valid_candidates": 4800
+        }
+      },
+      "random_tile": {
+        "atlas_calls": 192,
+        "latency_seconds_total": {
+          "candidate_rollout": 577.5772434649953,
+          "pca_grid_construction": 1.3155498969963446,
+          "state_restore_transform_and_nominal_policy": 4.55989989200134,
+          "total": 583.4528597069966
+        },
+        "totals": {
+          "actual_rollout_policy_forward_calls": 3840,
+          "actual_rollout_policy_forward_rows": 288000,
+          "actual_rollout_simulator_step_calls": 5568,
+          "actual_rollout_simulator_step_rows": 417600,
+          "candidate_opportunities": 4800,
+          "candidate_repeats": 576,
+          "effect_model_calls": 0,
+          "nominal_policy_forward_calls": 192,
+          "nominal_policy_forward_rows": 192,
+          "padded_invalid_policy_forward_rows": 0,
+          "padded_invalid_simulator_steps": 0,
+          "scientific_policy_calls": 288000,
+          "scientific_simulator_steps": 417600,
+          "valid_candidates": 4800
+        }
+      }
+    },
+    "native_action_atlas_is_referenced_not_recomputed": true,
+    "source_state_model_seed_rows": 192,
+    "tile_screen": {
+      "actual_policy_forward_calls": 192,
+      "latency_seconds_total": 3.76629714700357,
+      "policy_forward_rows": 3072,
+      "simulator_calls": 0
+    }
+  },
+  "status": "JOINT_FACTORIAL_ORACLE_COMPLETE",
+  "summaries": {
+    "primary": {
+      "aggregate_by_state": {
+        "best_action_recall_improvement_pp": 0.0,
+        "best_action_recall_joint": 0.02702702702702703,
+        "best_action_recall_strongest_single": 0.02702702702702703,
+        "best_fixed_single_axis_for_reporting": "visual_only",
+        "comparisons": {
+          "phase_heuristic": {
+            "holm_adjusted_p": 0.00039996000399960006,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": true,
+            "mean_gain": 0.08419035674379342,
+            "paired_bootstrap_95_ci": [
+              0.03434181483279932,
+              0.14720446093025297
+            ],
+            "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+            "positive_fraction": 0.34375,
+            "testing_role": "secondary"
+          },
+          "phase_tile": {
+            "holm_adjusted_p": 0.543045695430457,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": false,
+            "mean_gain": -0.3078430231909899,
+            "paired_bootstrap_95_ci": [
+              -2.6238752276177113,
+              2.0039721988473405
+            ],
+            "paired_sign_flip_one_sided_p": 0.543045695430457,
+            "positive_fraction": 0.375,
+            "testing_role": "secondary"
+          },
+          "random_state": {
+            "holm_adjusted_p": 0.00039996000399960006,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": true,
+            "mean_gain": 3.7882714238598103,
+            "paired_bootstrap_95_ci": [
+              1.2169714914222045,
+              7.000688794969016
+            ],
+            "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+            "positive_fraction": 0.765625,
+            "testing_role": "secondary"
+          },
+          "random_tile": {
+            "holm_adjusted_p": 0.21897810218978103,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": false,
+            "mean_gain": 1.3631136252977083,
+            "paired_bootstrap_95_ci": [
+              -1.1130892423806087,
+              3.9546283209034256
+            ],
+            "paired_sign_flip_one_sided_p": 0.10948905109489052,
+            "positive_fraction": 0.515625,
+            "testing_role": "secondary"
+          },
+          "strongest_single_axis": {
+            "mean_gain": 0.573447518135529,
+            "paired_bootstrap_95_ci": [
+              0.014058433942612475,
+              1.649435188801646
+            ],
+            "paired_sign_flip_one_sided_p": 0.0005999400059994001,
+            "positive_fraction": 0.453125,
+            "testing_role": "primary"
+          }
+        },
+        "coupled_states": 0,
+        "joint_coupling_density": 0.0,
+        "mean_outcome_regret_joint": 2.6264942708658774,
+        "mean_outcome_regret_strongest_single": 2.711199842131964,
+        "mean_utility": {
+          "action_only": 18.831603912502054,
+          "full_native_upper": 23.760683810748418,
+          "joint_adaptive": 22.320656772389064,
+          "phase_heuristic": 22.236466415645275,
+          "phase_tile": 22.628499795580055,
+          "random_state": 18.532385348529257,
+          "random_tile": 20.957543147091357,
+          "strongest_single_axis": 21.74720925425354,
+          "uniform_coarse": 17.796006506684495,
+          "uniform_fine": 22.286640777489865,
+          "visual_only": 21.291107181133462
+        },
+        "multiple_testing": {
+          "alpha": 0.05,
+          "replicates": 10000,
+          "secondary_family": [
+            "random_state",
+            "phase_heuristic",
+            "random_tile",
+            "phase_tile"
+          ],
+          "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+        },
+        "outcome_regret_reduction_fraction": 0.031242835717885654,
+        "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+        "states": 64,
+        "strongest_single_axis": "per_state_privileged_max_FC_CF"
+      },
+      "per_model_seed": {
+        "16018": {
+          "best_action_recall_improvement_pp": 0.0,
+          "best_action_recall_joint": 0.09375,
+          "best_action_recall_strongest_single": 0.09375,
+          "best_fixed_single_axis_for_reporting": "action_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0023997600239976003,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.1013059389473215,
+              "paired_bootstrap_95_ci": [
+                0.029386820324052577,
+                0.19961805631105578
+              ],
+              "paired_sign_flip_one_sided_p": 0.0007999200079992001,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.49875012498750126,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 0.43596152441088953,
+              "paired_bootstrap_95_ci": [
+                -4.279393225044799,
+                5.0244227761761255
+              ],
+              "paired_sign_flip_one_sided_p": 0.25437456254374563,
+              "positive_fraction": 0.34375,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 1.7935261731171395,
+              "paired_bootstrap_95_ci": [
+                0.08852572696233921,
+                5.146897839654151
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.484375,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.49875012498750126,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 0.8050230617372606,
+              "paired_bootstrap_95_ci": [
+                -3.3783251232336076,
+                5.406232869760456
+              ],
+              "paired_sign_flip_one_sided_p": 0.24937506249375063,
+              "positive_fraction": 0.40625,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 0.2592721875731986,
+              "paired_bootstrap_95_ci": [
+                -3.906171944397781,
+                4.6769454181441015
+              ],
+              "paired_sign_flip_one_sided_p": 0.2592740725927407,
+              "positive_fraction": 0.21875,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 5.47489419599432,
+          "mean_outcome_regret_strongest_single": 4.175980801490125,
+          "mean_utility": {
+            "action_only": 21.10682099962908,
+            "full_native_upper": 25.11784289614566,
+            "joint_adaptive": 21.633111830760747,
+            "phase_heuristic": 21.531805891813427,
+            "phase_tile": 21.197150306349855,
+            "random_state": 19.839585657643603,
+            "random_tile": 20.828088769023484,
+            "strongest_single_axis": 21.373839643187544,
+            "uniform_coarse": 18.097928768365843,
+            "uniform_fine": 21.581013165751955,
+            "visual_only": 20.038025955687758
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": -0.3110439095028169,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        },
+        "16019": {
+          "best_action_recall_improvement_pp": -3.125,
+          "best_action_recall_joint": 0.03125,
+          "best_action_recall_strongest_single": 0.0625,
+          "best_fixed_single_axis_for_reporting": "visual_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0005999400059994001,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.06281117983611431,
+              "paired_bootstrap_95_ci": [
+                0.014531748127603184,
+                0.13469330457581682
+              ],
+              "paired_sign_flip_one_sided_p": 0.00019998000199980003,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.7881211878812119,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": -3.0065318252803666,
+              "paired_bootstrap_95_ci": [
+                -9.205654020839473,
+                3.129937649867339
+              ],
+              "paired_sign_flip_one_sided_p": 0.7881211878812119,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 4.747372302342367,
+              "paired_bootstrap_95_ci": [
+                0.21093846755019294,
+                10.72567244596794
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.5,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.23977602239776022,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 3.111462281854065,
+              "paired_bootstrap_95_ci": [
+                -2.8829859421879815,
+                9.335235928267558
+              ],
+              "paired_sign_flip_one_sided_p": 0.11988801119888011,
+              "positive_fraction": 0.390625,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 0.030341138766859788,
+              "paired_bootstrap_95_ci": [
+                0.0051696916832088685,
+                0.07171835905374911
+              ],
+              "paired_sign_flip_one_sided_p": 0.004399560043995601,
+              "positive_fraction": 0.21875,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 3.2076587616419214,
+          "mean_outcome_regret_strongest_single": 3.2391089644065465,
+          "mean_utility": {
+            "action_only": 14.11272537723326,
+            "full_native_upper": 22.17119597532347,
+            "joint_adaptive": 19.044358042383458,
+            "phase_heuristic": 18.981546862547344,
+            "phase_tile": 22.050889867663823,
+            "random_state": 14.29698574004109,
+            "random_tile": 15.93289576052939,
+            "strongest_single_axis": 19.014016903616596,
+            "uniform_coarse": 14.059210502931926,
+            "uniform_fine": 19.008381078552638,
+            "visual_only": 19.00639048636992
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": 0.009709522930602373,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        },
+        "16020": {
+          "best_action_recall_improvement_pp": -6.25,
+          "best_action_recall_joint": 0.0625,
+          "best_action_recall_strongest_single": 0.125,
+          "best_fixed_single_axis_for_reporting": "visual_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0014998500149985001,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.08845395144794449,
+              "paired_bootstrap_95_ci": [
+                0.027351405638097133,
+                0.1741523517082852
+              ],
+              "paired_sign_flip_one_sided_p": 0.0004999500049995,
+              "positive_fraction": 0.21875,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.05779422057794221,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 1.647041231296505,
+              "paired_bootstrap_95_ci": [
+                -0.010062253281691438,
+                4.862354044170784
+              ],
+              "paired_sign_flip_one_sided_p": 0.05779422057794221,
+              "positive_fraction": 0.296875,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 4.823915796119923,
+              "paired_bootstrap_95_ci": [
+                0.2828549152474407,
+                10.767609136875997
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.40625,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.017998200179982,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.1728555323018002,
+              "paired_bootstrap_95_ci": [
+                0.03284627636099759,
+                0.37447037770864267
+              ],
+              "paired_sign_flip_one_sided_p": 0.008999100089991,
+              "positive_fraction": 0.328125,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 1.4307292280665282,
+              "paired_bootstrap_95_ci": [
+                0.0044229218654731825,
+                4.263117915757382
+              ],
+              "paired_sign_flip_one_sided_p": 0.021597840215978402,
+              "positive_fraction": 0.25,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 0.6679145671080878,
+          "mean_outcome_regret_strongest_single": 0.7791106354137949,
+          "mean_utility": {
+            "action_only": 21.27526536064383,
+            "full_native_upper": 23.993012560776116,
+            "joint_adaptive": 26.284500444023,
+            "phase_heuristic": 26.196046492575057,
+            "phase_tile": 24.63745921272649,
+            "random_state": 21.460584647903076,
+            "random_tile": 26.111644911721196,
+            "strongest_single_axis": 24.85377121595647,
+            "uniform_coarse": 21.230880248755714,
+            "uniform_fine": 26.270528088164998,
+            "visual_only": 24.828905101342713
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": 0.14272179489200465,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        }
+      }
+    },
+    "progress_dominant": {
+      "aggregate_by_state": {
+        "best_action_recall_improvement_pp": 0.0,
+        "best_action_recall_joint": 0.02702702702702703,
+        "best_action_recall_strongest_single": 0.02702702702702703,
+        "best_fixed_single_axis_for_reporting": "visual_only",
+        "comparisons": {
+          "phase_heuristic": {
+            "holm_adjusted_p": 0.00039996000399960006,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": true,
+            "mean_gain": 0.12694062095131556,
+            "paired_bootstrap_95_ci": [
+              0.06126163576587752,
+              0.20443154045536766
+            ],
+            "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+            "positive_fraction": 0.34375,
+            "testing_role": "secondary"
+          },
+          "phase_tile": {
+            "holm_adjusted_p": 0.45755424457554245,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": false,
+            "mean_gain": 0.07536328944895782,
+            "paired_bootstrap_95_ci": [
+              -1.1864371385108323,
+              1.4072599793913532
+            ],
+            "paired_sign_flip_one_sided_p": 0.45755424457554245,
+            "positive_fraction": 0.40625,
+            "testing_role": "secondary"
+          },
+          "random_state": {
+            "holm_adjusted_p": 0.00039996000399960006,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": true,
+            "mean_gain": 2.1026999911476003,
+            "paired_bootstrap_95_ci": [
+              0.8257797303043343,
+              3.753353069568634
+            ],
+            "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+            "positive_fraction": 0.765625,
+            "testing_role": "secondary"
+          },
+          "random_tile": {
+            "holm_adjusted_p": 0.15658434156584342,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": false,
+            "mean_gain": 0.9662384308195467,
+            "paired_bootstrap_95_ci": [
+              -0.23823877340872068,
+              2.27690599609492
+            ],
+            "paired_sign_flip_one_sided_p": 0.07829217078292171,
+            "positive_fraction": 0.515625,
+            "testing_role": "secondary"
+          },
+          "strongest_single_axis": {
+            "mean_gain": 0.3342797517519809,
+            "paired_bootstrap_95_ci": [
+              0.02554834172951489,
+              0.8969567669187192
+            ],
+            "paired_sign_flip_one_sided_p": 0.0004999500049995,
+            "positive_fraction": 0.4375,
+            "testing_role": "primary"
+          }
+        },
+        "coupled_states": 0,
+        "joint_coupling_density": 0.0,
+        "mean_outcome_regret_joint": 2.6434336677365273,
+        "mean_outcome_regret_strongest_single": 2.7554874991424443,
+        "mean_utility": {
+          "action_only": 11.997694115048382,
+          "full_native_upper": 16.043138222903927,
+          "joint_adaptive": 14.100986151120598,
+          "phase_heuristic": 13.974045530169283,
+          "phase_tile": 14.02562286167164,
+          "random_state": 11.998286159972999,
+          "random_tile": 13.134747720301052,
+          "strongest_single_axis": 13.766706399368616,
+          "uniform_coarse": 11.45283832316099,
+          "uniform_fine": 14.053460561071596,
+          "visual_only": 13.55777890010381
+        },
+        "multiple_testing": {
+          "alpha": 0.05,
+          "replicates": 10000,
+          "secondary_family": [
+            "random_state",
+            "phase_heuristic",
+            "random_tile",
+            "phase_tile"
+          ],
+          "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+        },
+        "outcome_regret_reduction_fraction": 0.04066570123827093,
+        "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+        "states": 64,
+        "strongest_single_axis": "per_state_privileged_max_FC_CF"
+      },
+      "per_model_seed": {
+        "16018": {
+          "best_action_recall_improvement_pp": 0.0,
+          "best_action_recall_joint": 0.09375,
+          "best_action_recall_strongest_single": 0.09375,
+          "best_fixed_single_axis_for_reporting": "action_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0023997600239976003,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.14033064587724353,
+              "paired_bootstrap_95_ci": [
+                0.056661450159757064,
+                0.2463781250781198
+              ],
+              "paired_sign_flip_one_sided_p": 0.0007999200079992001,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.46715328467153283,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 0.6067812651533347,
+              "paired_bootstrap_95_ci": [
+                -1.7828244740283739,
+                2.895469203741422
+              ],
+              "paired_sign_flip_one_sided_p": 0.252974702529747,
+              "positive_fraction": 0.34375,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 1.14970025851168,
+              "paired_bootstrap_95_ci": [
+                0.17230144546661133,
+                3.0002073909521614
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.484375,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.46715328467153283,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 0.939199676464149,
+              "paired_bootstrap_95_ci": [
+                -0.8788154426201881,
+                3.2531282238372428
+              ],
+              "paired_sign_flip_one_sided_p": 0.23357664233576642,
+              "positive_fraction": 0.40625,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 0.2841308510526862,
+              "paired_bootstrap_95_ci": [
+                -1.4840721698467942,
+                2.322607906699569
+              ],
+              "paired_sign_flip_one_sided_p": 0.25907409259074093,
+              "positive_fraction": 0.21875,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 3.8246476253895008,
+          "mean_outcome_regret_strongest_single": 3.336183490861851,
+          "mean_utility": {
+            "action_only": 13.40741782799639,
+            "full_native_upper": 16.64825024665602,
+            "joint_adaptive": 14.085357565498061,
+            "phase_heuristic": 13.945026919620819,
+            "phase_tile": 13.478576300344727,
+            "random_state": 12.935657306986382,
+            "random_tile": 13.146157889033912,
+            "strongest_single_axis": 13.801226714445374,
+            "uniform_coarse": 11.936618258382147,
+            "uniform_fine": 14.012125258982048,
+            "visual_only": 13.239312681492958
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": -0.14641404942671868,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        },
+        "16019": {
+          "best_action_recall_improvement_pp": -3.125,
+          "best_action_recall_joint": 0.03125,
+          "best_action_recall_strongest_single": 0.0625,
+          "best_fixed_single_axis_for_reporting": "visual_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0005999400059994001,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.09446773442578327,
+              "paired_bootstrap_95_ci": [
+                0.02894738490315435,
+                0.17893907790228875
+              ],
+              "paired_sign_flip_one_sided_p": 0.00019998000199980003,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.76992300769923,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": -1.3312693269214806,
+              "paired_bootstrap_95_ci": [
+                -4.520207962539222,
+                1.8522082175894072
+              ],
+              "paired_sign_flip_one_sided_p": 0.76992300769923,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 2.5576759456882,
+              "paired_bootstrap_95_ci": [
+                0.348337793502779,
+                5.437284411047174
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.5,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.23577642235776422,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 1.6919048681468891,
+              "paired_bootstrap_95_ci": [
+                -1.15923185880125,
+                4.777477411052205
+              ],
+              "paired_sign_flip_one_sided_p": 0.11788821117888211,
+              "positive_fraction": 0.390625,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 0.04477601239340243,
+              "paired_bootstrap_95_ci": [
+                0.010241200351543299,
+                0.09476364828351957
+              ],
+              "paired_sign_flip_one_sided_p": 0.0046995300469953,
+              "positive_fraction": 0.21875,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 3.5397893581423325,
+          "mean_outcome_regret_strongest_single": 3.5868190113512513,
+          "mean_utility": {
+            "action_only": 8.997624731387845,
+            "full_native_upper": 15.191664091546766,
+            "joint_adaptive": 11.782735259128104,
+            "phase_heuristic": 11.688267524702322,
+            "phase_tile": 13.114004586049585,
+            "random_state": 9.225059313439905,
+            "random_tile": 10.090830390981214,
+            "strongest_single_axis": 11.737959246734702,
+            "uniform_coarse": 8.922306625413574,
+            "uniform_fine": 11.74118623501205,
+            "visual_only": 11.72288157213003
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": 0.013111799915212724,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        },
+        "16020": {
+          "best_action_recall_improvement_pp": -6.25,
+          "best_action_recall_joint": 0.0625,
+          "best_action_recall_strongest_single": 0.125,
+          "best_fixed_single_axis_for_reporting": "visual_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0014998500149985001,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.14602348255091968,
+              "paired_bootstrap_95_ci": [
+                0.05449468396595486,
+                0.2589084514166191
+              ],
+              "paired_sign_flip_one_sided_p": 0.0004999500049995,
+              "positive_fraction": 0.21875,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.0428957104289571,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.9505779301150178,
+              "paired_bootstrap_95_ci": [
+                0.004063310875282529,
+                2.677539971576866
+              ],
+              "paired_sign_flip_one_sided_p": 0.0428957104289571,
+              "positive_fraction": 0.296875,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 2.6007237692429195,
+              "paired_bootstrap_95_ci": [
+                0.3938518606897986,
+                5.443995491611618
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.40625,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.018198180181981802,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.2676107478476016,
+              "paired_bootstrap_95_ci": [
+                0.06315496411584222,
+                0.5165384502785547
+              ],
+              "paired_sign_flip_one_sided_p": 0.009099090090990901,
+              "positive_fraction": 0.328125,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 0.673932391809853,
+              "paired_bootstrap_95_ci": [
+                0.008595916083908717,
+                1.9641061102660684
+              ],
+              "paired_sign_flip_one_sided_p": 0.021897810218978103,
+              "positive_fraction": 0.234375,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 1.3207083266127368,
+          "mean_outcome_regret_strongest_single": 1.4649570932925438,
+          "mean_utility": {
+            "action_only": 13.588039785760918,
+            "full_native_upper": 16.289500330508993,
+            "joint_adaptive": 16.43486562873563,
+            "phase_heuristic": 16.288842146184706,
+            "phase_tile": 15.48428769862061,
+            "random_state": 13.834141859492709,
+            "random_tile": 16.167254880888024,
+            "strongest_single_axis": 15.760933236925775,
+            "uniform_coarse": 13.499590085687252,
+            "uniform_fine": 16.40707018922069,
+            "visual_only": 15.711142446688442
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": 0.09846620582968926,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        }
+      }
+    },
+    "success_dominant": {
+      "aggregate_by_state": {
+        "best_action_recall_improvement_pp": 0.0,
+        "best_action_recall_joint": 0.02702702702702703,
+        "best_action_recall_strongest_single": 0.02702702702702703,
+        "best_fixed_single_axis_for_reporting": "visual_only",
+        "comparisons": {
+          "phase_heuristic": {
+            "holm_adjusted_p": 0.00039996000399960006,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": true,
+            "mean_gain": 0.04196057886313647,
+            "paired_bootstrap_95_ci": [
+              0.017074693270912128,
+              0.07334956698960429
+            ],
+            "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+            "positive_fraction": 0.34375,
+            "testing_role": "secondary"
+          },
+          "phase_tile": {
+            "holm_adjusted_p": 0.5514448555144486,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": false,
+            "mean_gain": -0.8962461428961519,
+            "paired_bootstrap_95_ci": [
+              -5.27587140208681,
+              3.4684204737472304
+            ],
+            "paired_sign_flip_one_sided_p": 0.5514448555144486,
+            "positive_fraction": 0.359375,
+            "testing_role": "secondary"
+          },
+          "random_state": {
+            "holm_adjusted_p": 0.00039996000399960006,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": true,
+            "mean_gain": 7.3602245282473735,
+            "paired_bootstrap_95_ci": [
+              2.189937747871214,
+              13.685379159168784
+            ],
+            "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+            "positive_fraction": 0.765625,
+            "testing_role": "secondary"
+          },
+          "random_tile": {
+            "holm_adjusted_p": 0.21897810218978103,
+            "holm_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "holm_reject_alpha_0_05": false,
+            "mean_gain": 2.3375667011924235,
+            "paired_bootstrap_95_ci": [
+              -2.751740371992679,
+              7.52484472937125
+            ],
+            "paired_sign_flip_one_sided_p": 0.10948905109489052,
+            "positive_fraction": 0.515625,
+            "testing_role": "secondary"
+          },
+          "strongest_single_axis": {
+            "mean_gain": 1.0836568386622136,
+            "paired_bootstrap_95_ci": [
+              0.007673332004538378,
+              3.1987377884431107
+            ],
+            "paired_sign_flip_one_sided_p": 0.0005999400059994001,
+            "positive_fraction": 0.453125,
+            "testing_role": "primary"
+          }
+        },
+        "coupled_states": 0,
+        "joint_coupling_density": 0.0,
+        "mean_outcome_regret_joint": 3.7898475418801683,
+        "mean_outcome_regret_strongest_single": 3.8608718766747434,
+        "mean_utility": {
+          "action_only": 32.84239565826708,
+          "full_native_upper": 40.94243746122791,
+          "joint_adaptive": 39.352460469482786,
+          "phase_heuristic": 39.31049989061965,
+          "phase_tile": 40.24870661237894,
+          "random_state": 31.992235941235418,
+          "random_tile": 37.014893768290364,
+          "strongest_single_axis": 38.26880363082057,
+          "uniform_coarse": 30.785396837759052,
+          "uniform_fine": 39.33558223232416,
+          "visual_only": 37.29848927077286
+        },
+        "multiple_testing": {
+          "alpha": 0.05,
+          "replicates": 10000,
+          "secondary_family": [
+            "random_state",
+            "phase_heuristic",
+            "random_tile",
+            "phase_tile"
+          ],
+          "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+        },
+        "outcome_regret_reduction_fraction": 0.0183959315572384,
+        "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+        "states": 64,
+        "strongest_single_axis": "per_state_privileged_max_FC_CF"
+      },
+      "per_model_seed": {
+        "16018": {
+          "best_action_recall_improvement_pp": 0.0,
+          "best_action_recall_joint": 0.09375,
+          "best_action_recall_strongest_single": 0.09375,
+          "best_fixed_single_axis_for_reporting": "action_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0023997600239976003,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.05049235257899126,
+              "paired_bootstrap_95_ci": [
+                0.01461967686234566,
+                0.0995532387818683
+              ],
+              "paired_sign_flip_one_sided_p": 0.0007999200079992001,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.49895010498950104,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 0.3349185075788145,
+              "paired_bootstrap_95_ci": [
+                -9.048341859009543,
+                9.631051661933263
+              ],
+              "paired_sign_flip_one_sided_p": 0.2598740125987401,
+              "positive_fraction": 0.34375,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 3.287358145924049,
+              "paired_bootstrap_95_ci": [
+                0.045223104242593085,
+                9.737223686288166
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.484375,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.49895010498950104,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 0.7222210044772008,
+              "paired_bootstrap_95_ci": [
+                -8.16924645870183,
+                10.014798600716793
+              ],
+              "paired_sign_flip_one_sided_p": 0.24947505249475052,
+              "positive_fraction": 0.40625,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 0.24685266053360047,
+              "paired_bootstrap_95_ci": [
+                -8.632686135972124,
+                9.369818334858026
+              ],
+              "paired_sign_flip_one_sided_p": 0.2595740425957404,
+              "positive_fraction": 0.234375,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 9.81567867930955,
+          "mean_outcome_regret_strongest_single": 6.939652828307707,
+          "mean_utility": {
+            "action_only": 37.128566187460024,
+            "full_native_upper": 43.85269983260961,
+            "joint_adaptive": 37.54778071909081,
+            "phase_heuristic": 37.49728836651182,
+            "phase_tile": 37.212862211512004,
+            "random_state": 34.260422573166764,
+            "random_tile": 36.82555971461361,
+            "strongest_single_axis": 37.30092805855722,
+            "uniform_coarse": 31.006902491816,
+            "uniform_fine": 37.5217977418916,
+            "visual_only": 34.406289543783735
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": -0.41443367876706677,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        },
+        "16019": {
+          "best_action_recall_improvement_pp": -3.125,
+          "best_action_recall_joint": 0.03125,
+          "best_action_recall_strongest_single": 0.0625,
+          "best_fixed_single_axis_for_reporting": "visual_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0005999400059994001,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.0313579025412799,
+              "paired_bootstrap_95_ci": [
+                0.007281752473786357,
+                0.06713818820384745
+              ],
+              "paired_sign_flip_one_sided_p": 0.00019998000199980003,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.7897210278972103,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": -6.1908154653323715,
+              "paired_bootstrap_95_ci": [
+                -18.571593821898333,
+                6.142830092359791
+              ],
+              "paired_sign_flip_one_sided_p": 0.7897210278972103,
+              "positive_fraction": 0.203125,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 9.34222271998539,
+              "paired_bootstrap_95_ci": [
+                0.1215721099607188,
+                21.55538888339298
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.5,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.23977602239776022,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 6.165005627498902,
+              "paired_bootstrap_95_ci": [
+                -6.09021170522412,
+                18.614513966185488
+              ],
+              "paired_sign_flip_one_sided_p": 0.11988801119888011,
+              "positive_fraction": 0.390625,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 0.023104562080325464,
+              "paired_bootstrap_95_ci": [
+                0.0026732901909104338,
+                0.05953230302636103
+              ],
+              "paired_sign_flip_one_sided_p": 0.004199580041995801,
+              "positive_fraction": 0.21875,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 4.213440854832349,
+          "mean_outcome_regret_strongest_single": 4.237082192501565,
+          "mean_utility": {
+            "action_only": 24.123457872510205,
+            "full_native_upper": 37.81727349535995,
+            "joint_adaptive": 33.64398919232969,
+            "phase_heuristic": 33.61263128978841,
+            "phase_tile": 39.83480465766206,
+            "random_state": 24.301766472344305,
+            "random_tile": 27.47898356483079,
+            "strongest_single_axis": 33.62088463024937,
+            "uniform_coarse": 24.09647534896979,
+            "uniform_fine": 33.626391523558226,
+            "visual_only": 33.61698384168169
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": 0.005579626874138574,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        },
+        "16020": {
+          "best_action_recall_improvement_pp": -6.25,
+          "best_action_recall_joint": 0.0625,
+          "best_action_recall_strongest_single": 0.125,
+          "best_fixed_single_axis_for_reporting": "visual_only",
+          "comparisons": {
+            "phase_heuristic": {
+              "holm_adjusted_p": 0.0014998500149985001,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.04403148146913456,
+              "paired_bootstrap_95_ci": [
+                0.013526284198116634,
+                0.08684259575582208
+              ],
+              "paired_sign_flip_one_sided_p": 0.0004999500049995,
+              "positive_fraction": 0.21875,
+              "testing_role": "secondary"
+            },
+            "phase_tile": {
+              "holm_adjusted_p": 0.0928907109289071,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": false,
+              "mean_gain": 3.1671585290650985,
+              "paired_bootstrap_95_ci": [
+                -0.018598921442278503,
+                9.471808330840409
+              ],
+              "paired_sign_flip_one_sided_p": 0.0928907109289071,
+              "positive_fraction": 0.296875,
+              "testing_role": "secondary"
+            },
+            "random_state": {
+              "holm_adjusted_p": 0.00039996000399960006,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 9.451092718832683,
+              "paired_bootstrap_95_ci": [
+                0.22749976686228668,
+                21.639149936925207
+              ],
+              "paired_sign_flip_one_sided_p": 9.999000099990002e-05,
+              "positive_fraction": 0.40625,
+              "testing_role": "secondary"
+            },
+            "random_tile": {
+              "holm_adjusted_p": 0.017598240175982403,
+              "holm_family": [
+                "random_state",
+                "phase_heuristic",
+                "random_tile",
+                "phase_tile"
+              ],
+              "holm_reject_alpha_0_05": true,
+              "mean_gain": 0.12547347160116945,
+              "paired_bootstrap_95_ci": [
+                0.016559176646693725,
+                0.3076586867352139
+              ],
+              "paired_sign_flip_one_sided_p": 0.008799120087991202,
+              "positive_fraction": 0.328125,
+              "testing_role": "secondary"
+            },
+            "strongest_single_axis": {
+              "mean_gain": 2.981013293372716,
+              "paired_bootstrap_95_ci": [
+                0.002272308037349407,
+                8.9282991687967
+              ],
+              "paired_sign_flip_one_sided_p": 0.021097890210978902,
+              "positive_fraction": 0.25,
+              "testing_role": "primary"
+            }
+          },
+          "coupled_states": 1,
+          "joint_coupling_density": 0.015625,
+          "mean_outcome_regret_joint": 0.34150982356292225,
+          "mean_outcome_regret_strongest_single": 0.43619018985942903,
+          "mean_utility": {
+            "action_only": 37.27516291483101,
+            "full_native_upper": 41.157339055714175,
+            "joint_adaptive": 46.86561149702786,
+            "phase_heuristic": 46.82158001555873,
+            "phase_tile": 43.698452967962766,
+            "random_state": 37.41451877819517,
+            "random_tile": 46.74013802542669,
+            "strongest_single_axis": 43.884598203655145,
+            "uniform_coarse": 37.25281267249137,
+            "uniform_fine": 46.85855743152264,
+            "visual_only": 43.87219442685318
+          },
+          "multiple_testing": {
+            "alpha": 0.05,
+            "replicates": 10000,
+            "secondary_family": [
+              "random_state",
+              "phase_heuristic",
+              "random_tile",
+              "phase_tile"
+            ],
+            "secondary_method": "Holm step-down over one-sided paired sign-flip p-values"
+          },
+          "outcome_regret_reduction_fraction": 0.21706211762125924,
+          "recall_definition": "best arm action mapped to nearest valid native physical-atlas action in frozen standardized coordinates",
+          "states": 64,
+          "strongest_single_axis": "per_state_privileged_max_FC_CF"
+        }
+      }
+    }
+  },
+  "wall_clock_compute_claimed_matched": false
+}

@@ -1,0 +1,211 @@
+{
+  "decision_metrics_affected_by_redundant_field_defect": false,
+  "max_abs_trace_vs_pose_recompute_error": {
+    "rotation_rad": 0.0,
+    "translation_m": 0.0
+  },
+  "modes": {
+    "fixed_horizon": {
+      "aggregate": {
+        "hold5_episode_count": 92,
+        "hold5_terminal_drift_rotation_rad": 0.14074084427372827,
+        "hold5_terminal_drift_translation_m": 0.005107064082284507,
+        "post_success_loss": 0.17666666666666667,
+        "success_at_end": 0.28,
+        "success_at_end_given_hold5": 0.8152173913043478,
+        "success_hold5": 0.30666666666666664,
+        "success_once": 0.45666666666666667,
+        "terminal_drift_rotation_rad": 0.21629275948659712,
+        "terminal_drift_translation_m": 0.008267355683694522
+      },
+      "per_model_seed": {
+        "16018": {
+          "post_success_loss": 0.15,
+          "success_at_end": 0.28,
+          "success_hold5": 0.31,
+          "success_once": 0.43,
+          "terminal_drift_rotation_rad": 0.21025153469181415,
+          "terminal_drift_translation_m": 0.0073866396191350015
+        },
+        "16019": {
+          "post_success_loss": 0.21,
+          "success_at_end": 0.31,
+          "success_hold5": 0.34,
+          "success_once": 0.52,
+          "terminal_drift_rotation_rad": 0.20234107678907642,
+          "terminal_drift_translation_m": 0.008133107566387245
+        },
+        "16020": {
+          "post_success_loss": 0.17,
+          "success_at_end": 0.25,
+          "success_hold5": 0.27,
+          "success_once": 0.42,
+          "terminal_drift_rotation_rad": 0.23975133487818626,
+          "terminal_drift_translation_m": 0.009335253133123991
+        }
+      },
+      "redundant_top_level_drift_mismatch_rows": 0,
+      "redundant_top_level_final_position_mismatch_rows": 0
+    },
+    "neutral_after_hold5": {
+      "aggregate": {
+        "hold5_episode_count": 93,
+        "hold5_terminal_drift_rotation_rad": 0.021078183457148483,
+        "hold5_terminal_drift_translation_m": 0.0010130582096892565,
+        "paired_bootstrap_95_ci": [
+          0.03,
+          0.10333333333333333
+        ],
+        "post_success_loss": 0.12666666666666668,
+        "success_at_end": 0.3466666666666667,
+        "success_at_end_gain_vs_fixed": 0.06666666666666667,
+        "success_at_end_given_hold5": 0.956989247311828,
+        "success_hold5": 0.31,
+        "success_once": 0.47333333333333333,
+        "terminal_drift_rotation_rad": 0.10382734801173121,
+        "terminal_drift_translation_m": 0.004641143413435212
+      },
+      "per_model_seed": {
+        "16018": {
+          "post_success_loss": 0.07,
+          "success_at_end": 0.37,
+          "success_hold5": 0.31,
+          "success_once": 0.44,
+          "terminal_drift_rotation_rad": 0.03372492038847398,
+          "terminal_drift_translation_m": 0.0016635298619107183
+        },
+        "16019": {
+          "post_success_loss": 0.16,
+          "success_at_end": 0.36,
+          "success_hold5": 0.36,
+          "success_once": 0.52,
+          "terminal_drift_rotation_rad": 0.12844310777590254,
+          "terminal_drift_translation_m": 0.005569205250032719
+        },
+        "16020": {
+          "post_success_loss": 0.15,
+          "success_at_end": 0.31,
+          "success_hold5": 0.26,
+          "success_once": 0.46,
+          "terminal_drift_rotation_rad": 0.14305533296143583,
+          "terminal_drift_translation_m": 0.006440182125696242
+        }
+      },
+      "redundant_top_level_drift_mismatch_rows": 0,
+      "redundant_top_level_final_position_mismatch_rows": 0
+    },
+    "terminate_first_success": {
+      "aggregate": {
+        "hold5_episode_count": 0,
+        "hold5_terminal_drift_rotation_rad": null,
+        "hold5_terminal_drift_translation_m": null,
+        "paired_bootstrap_95_ci": [
+          0.12,
+          0.21
+        ],
+        "post_success_loss": 0.0,
+        "success_at_end": 0.44333333333333336,
+        "success_at_end_gain_vs_fixed": 0.16333333333333333,
+        "success_at_end_given_hold5": null,
+        "success_hold5": 0.0,
+        "success_once": 0.44333333333333336,
+        "terminal_drift_rotation_rad": 1.1131571883262142e-08,
+        "terminal_drift_translation_m": 0.0
+      },
+      "per_model_seed": {
+        "16018": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.4,
+          "success_hold5": 0.0,
+          "success_once": 0.4,
+          "terminal_drift_rotation_rad": 9.158647611650784e-09,
+          "terminal_drift_translation_m": 0.0
+        },
+        "16019": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.53,
+          "success_hold5": 0.0,
+          "success_once": 0.53,
+          "terminal_drift_rotation_rad": 1.1751952563035973e-08,
+          "terminal_drift_translation_m": 0.0
+        },
+        "16020": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.4,
+          "success_hold5": 0.0,
+          "success_once": 0.4,
+          "terminal_drift_rotation_rad": 1.2282491754173165e-08,
+          "terminal_drift_translation_m": 0.0
+        }
+      },
+      "redundant_top_level_drift_mismatch_rows": 133,
+      "redundant_top_level_final_position_mismatch_rows": 133
+    },
+    "terminate_hold5": {
+      "aggregate": {
+        "hold5_episode_count": 93,
+        "hold5_terminal_drift_rotation_rad": 0.019334516582258727,
+        "hold5_terminal_drift_translation_m": 0.000974909106187692,
+        "paired_bootstrap_95_ci": [
+          0.043333333333333335,
+          0.11666666666666667
+        ],
+        "post_success_loss": 0.11333333333333333,
+        "success_at_end": 0.36,
+        "success_at_end_gain_vs_fixed": 0.08,
+        "success_at_end_given_hold5": 1.0,
+        "success_hold5": 0.31,
+        "success_once": 0.47333333333333333,
+        "terminal_drift_rotation_rad": 0.10268536900212034,
+        "terminal_drift_translation_m": 0.004616158437198272
+      },
+      "per_model_seed": {
+        "16018": {
+          "post_success_loss": 0.06,
+          "success_at_end": 0.38,
+          "success_hold5": 0.31,
+          "success_once": 0.44,
+          "terminal_drift_rotation_rad": 0.031469738602293046,
+          "terminal_drift_translation_m": 0.001612234460334463
+        },
+        "16019": {
+          "post_success_loss": 0.13,
+          "success_at_end": 0.39,
+          "success_hold5": 0.36,
+          "success_once": 0.52,
+          "terminal_drift_rotation_rad": 0.12795889830070847,
+          "terminal_drift_translation_m": 0.005574208725914361
+        },
+        "16020": {
+          "post_success_loss": 0.15,
+          "success_at_end": 0.31,
+          "success_hold5": 0.26,
+          "success_once": 0.46,
+          "terminal_drift_rotation_rad": 0.1422345910470294,
+          "terminal_drift_translation_m": 0.006406463653910684
+        }
+      },
+      "redundant_top_level_drift_mismatch_rows": 93,
+      "redundant_top_level_final_position_mismatch_rows": 93
+    }
+  },
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "raw_episode_rows": 1200,
+  "raw_sha256": {
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/fixed_horizon/seed_16018/episodes.jsonl": "72e5c076668edf794f9d30c7204897b4667c32042095967e184e4979dbc36fdc",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/fixed_horizon/seed_16019/episodes.jsonl": "52d61f94af052b4e76cbaa03f0e8ec56f49a999a1db1a4c418461cb7056dc293",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/fixed_horizon/seed_16020/episodes.jsonl": "df4a415a979cea145e6c2586a0401c6f6153e538ef43e2bd4df4fa1604d1b6d8",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/neutral_after_hold5/seed_16018/episodes.jsonl": "29aa70e79b9ea044c10f5c038e2739ebc880c5b46c63a1fe9424113953438ced",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/neutral_after_hold5/seed_16019/episodes.jsonl": "2a7bdc9df15ed20e62c7ce9feb3a78c17c8ffaa211894927c762901f55063cbf",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/neutral_after_hold5/seed_16020/episodes.jsonl": "206383fb95f9ce68fd595bcde6e865aa10fc1475e2689775f6a2698ec8e52648",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/terminate_first_success/seed_16018/episodes.jsonl": "a13cc9e2a886c82eca2e5b789ad18e2ad4105426ec0ab0d6bcce416eae79106e",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/terminate_first_success/seed_16019/episodes.jsonl": "fd282951dbd499757ef1d9fa5673503eb00458723ad71c0bde33cd16b2ba509a",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/terminate_first_success/seed_16020/episodes.jsonl": "2f529dedf88aa709170feb225315066911f051d66665405a22b85fba03af7543",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/terminate_hold5/seed_16018/episodes.jsonl": "76957640fdde1a4f0e6ad1844498be748c27c0db8eefe54b982ae9f8a61c765f",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/terminate_hold5/seed_16019/episodes.jsonl": "0e25d9f4cd9b72b96e3e5b7b58962ef4713274ea5a2dd0632e5cd079ededbaea",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/success_semantics/terminate_hold5/seed_16020/episodes.jsonl": "78ea10f88fa43e9e57212656f3d0d88e2b3ae2765a5cba3db9f59c8aeace6d0a"
+  },
+  "raw_trace_rows": 219679,
+  "scientific_raw_files_modified": false,
+  "status": "SUCCESS_TRACE_TERMINAL_AUDIT_PASS"
+}

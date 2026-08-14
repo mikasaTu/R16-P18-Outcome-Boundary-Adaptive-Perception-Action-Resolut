@@ -144,3 +144,60 @@ action/visual atlas 同时增加真实 simulator/policy call 与分阶段 latenc
 由于 visual tensor 尺寸始终相同，报告仍明确拒绝 wall-clock matched claim。
 24 个 CPU/static tests 含专门反例，确认上述语义；正式 CUDA smoke 仍需在
 新的、哈希绑定的 PAI namespace 中再次通过。
+
+## 10. v26 formal observation 后的反解结果
+
+本节在 `FORMAL_COMPLETE.json` 已落盘后才生成，不参与 checkpoint、radius、
+threshold、tile rule、utility 或 gate 选择。机器可读结果是
+`audits/mechanism_reverse_engineering.json`，status 为
+`MECHANISM_REVERSE_ENGINEERING_AUDIT_PASS`，scope 明确为
+`reverse_explanation_only_no_new_idea`。
+
+### 10.1 Checkpoint 与 stopping
+
+**observed association**：StackCube 三个 seed 的 closed-loop checkpoint
+selection 在 validation 上分别把 `success_hold5` 提高 5/7/5pp；六组 task/seed
+中 5 组出现 imitation-loss/stable-success rank inversion。但 PushCube
+confirmatory `success_once` 仍为 53.67%，所以 selection 只解释 baseline repair
+的一部分。
+
+**privileged oracle evidence**：fixed-horizon StackCube 的 end success 为
+28.00%；首次 success 立即终止提高到 44.33%，增益 16.33pp，paired 95% CI
+`[12.00,21.00]pp`。hold5 后 neutral 的 conditional terminal drift 为
+1.013mm/0.0211rad，fixed 是 5.107mm/0.1407rad。源码与配对观测共同支持“后续
+policy actions 是主要失稳来源，physical hold drift 是较小次因”。
+
+### 10.2 Action 与 visual
+
+**observed association**：action boundary density 在 free/pre-contact/in-hand/
+near-completion 分别为 2.34%/27.60%/7.55%/42.14%。near-completion 的 repeat
+agreement 只有 76.83%，把总体 agreement 拉到 93.35%；overall density
+19.91%。这同时解释了 outcome surface 的 phase-localized 增长与 gate 的下降。
+
+visual-only FC 相对 CC 在 35/192 个 state×seed rows 改变执行后的 physical
+signature，action-only CF 只有 10/192。FC 的改变在 pre-contact 与 near-completion
+分别为 27.08% 和 29.17%。所有视觉 condition 都经过真实 simulator atlas，
+所以这是物理 outcome 信号；但 tile 是 hidden-utility oracle，不可部署。
+
+### 10.3 Joint 的小增益为何不是 coupling
+
+primary 下 adaptive 相对逐 state strongest single axis 的 mean utility 增益为
+0.573，95% CI `[0.014,1.649]`；但 best-action recall 增益为 0pp、regret 只降
+3.12%、跨 seed joint coupling 为 0/64。三个 seed 各自唯一的 coupled row 是
+三个不同 state。adaptive-selected 的 96 个 state×seed rows 中 strongest axis
+为 FC 74 次、CF 22 次。
+
+**bounded inference**：视觉与动作 refinement 大多是替代关系。小幅 adaptive
+utility 来自按已知 `FF-CC` 排序选择 state，以及在局部拾取已有单轴增益；它
+没有形成冻结定义下可复现的视觉×动作非加性交互。三组 utility weights 的
+coupling 都是 0、recall 都是 0pp、regret reduction 都低于 4.1%，该否定不由
+某一组 weights 驱动。
+
+### 10.4 Trace 冗余字段缺陷
+
+formal v26 的 terminate arms 在共享 vector simulator 中留下已终止 slot，旧
+顶层 final snapshot 因而不是每个 episode 的 terminal state。逐步 trace 与
+全部 decision metrics 正确。独立脚本从 1,200 episodes / 219,679 trace rows 的
+pose/quaternion 重算 drift，最大误差为 0；terminate-first 与 terminate-hold5
+分别定位 133/93 个冗余顶层 mismatch。修复只改变未来的描述性终态字段和
+post-hoc summary，不修改 v26 raw 或正式状态。

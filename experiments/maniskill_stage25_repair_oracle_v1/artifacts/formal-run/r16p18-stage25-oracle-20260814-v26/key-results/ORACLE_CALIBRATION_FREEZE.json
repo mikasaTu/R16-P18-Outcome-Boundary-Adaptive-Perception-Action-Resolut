@@ -1,0 +1,17 @@
+{
+  "J_threshold_rule": "smallest_candidate_not_below_positive_J_first_quartile_else_5.0",
+  "action_calibration_freeze_sha256": "e127abd62b66fe51ae1606dd545b77007e46d2daccf80829ea740b41418c5156",
+  "confirmatory_results_observed_before_freeze": false,
+  "positive_J_first_quartile": 0.021295090395300614,
+  "positive_J_rows": 24,
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "selected_J_threshold": 1.0,
+  "selected_effect_threshold": 0.5,
+  "selected_radius": 1.5,
+  "status": "ORACLE_CALIBRATION_FROZEN",
+  "visual_calibration_source_sha256": {
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/visual_resolution/calibration/seed_16018/states.jsonl": "934fc03e76fec7cd221edbc726b73b6e93e68dd5984bd91b65d8bd152f7e7b0a",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/visual_resolution/calibration/seed_16019/states.jsonl": "d858731087ac628349a166f5aff6a388f839afdef5a7d2100a74228039d27148",
+    "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage25-repair-oracle-v1/r16p18-stage25-oracle-20260814-v26/visual_resolution/calibration/seed_16020/states.jsonl": "456083115407b03fcc2778f4e4ddd9febb3614101c1608dba009e3e44c455def"
+  }
+}

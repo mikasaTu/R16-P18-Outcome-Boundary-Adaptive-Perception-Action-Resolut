@@ -122,3 +122,38 @@ corrections are covered by 24 local unit/static tests, including adversarial
 alternating-axis and multi-radius fixtures. A subsequent formal attempt must
 use a new run ID, fresh result namespace, new source commit/tree binding, and a
 fresh CUDA smoke before any result is scientifically eligible.
+
+## v26 successful formal run and monitor termination
+
+v26 is the sole scientific source for the final Step-4 result.
+
+- Run ID: `r16p18-stage25-oracle-20260814-v26`
+- JobId: `dlc1ptg07eqpdaxy`
+- exact source commit: `7be99cd867d27372cfc75095d459b782c0f75a66`
+- exact source tree: `31df45e1f28bbba57aebcd804e13c88fe14a0784`
+- resource: dedicated `exp-efficiency`, one worker, 2 A800, 12 CPU,
+  200Gi memory and 200Gi shared memory
+- runtime identity: `2254:2254`
+- AIMaster / automatic fault tolerance: disabled
+- PAI running interval: 2026-08-14 11:05:53Z to 12:49:58Z
+- PAI duration: 6,294 seconds
+- terminal status: `Succeeded / JobSucceeded`
+- final exact-job readback SHA-256:
+  `e2fb6ce7f5f47c9d57901dbbf52785fda73ce4c889b5620f03a263d44e2a46b5`
+
+The fresh v26 CUDA smoke passed 25/25 valid candidates and remained
+`scientific_evidence=false`. The formal orchestrator then completed every
+planned checkpoint, baseline, semantics, contact, restoration, action,
+visual, post-success diagnostic and joint experiment. `FORMAL_COMPLETE.json`
+reports `ALL_PREREGISTERED_STAGE25_EXPERIMENTS_COMPLETE`, user-mandated
+downstream execution despite gates, no early stopping, and no prohibited
+post-oracle work. Its SHA-256 is
+`09e6dedaf0da6970764d99b7342b9e2bdb351fd171b9cc68063446947109f323`.
+
+The independent raw-data audit passed and agreed on final status
+`REVISE_STOPPING_CONFOUND`. After terminal GetJob, the registry sealed
+`monitor-result.json` with `ROUTINE_MONITORING_DONE`. v26's requested and
+resolved contracts contain no sealed superseded predecessor target set, so
+cleanup is explicitly `EXPLICIT_ZERO_TARGET`; no historical service record
+was inferred post hoc or deleted by wildcard. Exact-job CLI readback remained
+available, so no browser lease or FIFO was used.

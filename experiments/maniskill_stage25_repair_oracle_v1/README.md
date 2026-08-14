@@ -25,3 +25,16 @@ The run stops after the privileged joint oracle.  Learned predictors,
 deployable routers, OOD evaluation, pi0.5, and real-robot experiments are out
 of scope.
 
+## Final result
+
+The complete PAI run `r16p18-stage25-oracle-20260814-v26` succeeded. The
+preregistered final state is **`REVISE_STOPPING_CONFOUND`**: privileged
+first-success termination improved StackCube terminal success by 16.33pp
+(paired-bootstrap 95% CI [12.00pp, 21.00pp], 3/3 model seeds). The action and
+joint necessary-condition gates also failed (joint coupling 0/64, recall
+improvement 0pp, regret reduction 3.12%).
+
+Read the full Chinese report in [`docs/STAGE25_FINAL_REPORT.md`](docs/STAGE25_FINAL_REPORT.md).
+The full raw results, PAI logs, registry records, key JSON files, and checksums
+are sealed under
+[`artifacts/formal-run/r16p18-stage25-oracle-20260814-v26/`](artifacts/formal-run/r16p18-stage25-oracle-20260814-v26/).

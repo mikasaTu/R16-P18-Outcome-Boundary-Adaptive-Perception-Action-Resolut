@@ -1,0 +1,102 @@
+{
+  "audit_pass": true,
+  "decision_logic_source_independent_from_summarizer": true,
+  "frozen_manifest_failures": [],
+  "frozen_scientific_manifest_pass": true,
+  "independently_recomputed": {
+    "action_axis_mean_gain_over_CC": 1.0355974058175617,
+    "action_gate": false,
+    "action_states": 64,
+    "baseline": {
+      "PushCube-v1": {
+        "end": 0.5233333333333333,
+        "hold5": 0.5233333333333333,
+        "once": 0.5366666666666666,
+        "range_pp": 7.000000000000006,
+        "retention": 0.9751552795031057
+      },
+      "StackCube-v1": {
+        "end": 0.28,
+        "hold5": 0.30666666666666664,
+        "once": 0.45666666666666667,
+        "range_pp": 7.000000000000001,
+        "retention": 0.6131386861313869
+      }
+    },
+    "baseline_gate": true,
+    "best_action_recall_improvement_pp": 0.0,
+    "final_status": "REVISE_STOPPING_CONFOUND",
+    "holm_secondary_checks": {
+      "primary": {
+        "phase_heuristic": true,
+        "phase_tile": true,
+        "random_state": true,
+        "random_tile": true
+      },
+      "progress_dominant": {
+        "phase_heuristic": true,
+        "phase_tile": true,
+        "random_state": true,
+        "random_tile": true
+      },
+      "success_dominant": {
+        "phase_heuristic": true,
+        "phase_tile": true,
+        "random_state": true,
+        "random_tile": true
+      }
+    },
+    "joint_coupling_density": 0.0,
+    "joint_gate": false,
+    "joint_minus_per_state_strongest_single_axis": 0.573447518135529,
+    "joint_states": 64,
+    "outcome_regret_reduction_fraction": 0.031242835717885654,
+    "restoration_gate": true,
+    "restoration_rows": 112,
+    "stopping": {
+      "neutral_after_hold5": {
+        "ci": [
+          0.03,
+          0.10333333333333333
+        ],
+        "finding": false,
+        "gain": 0.06666666666666667
+      },
+      "terminate_first_success": {
+        "ci": [
+          0.12,
+          0.21
+        ],
+        "finding": true,
+        "gain": 0.16333333333333333
+      },
+      "terminate_hold5": {
+        "ci": [
+          0.043333333333333335,
+          0.12
+        ],
+        "finding": false,
+        "gain": 0.08
+      }
+    },
+    "stopping_confound": true,
+    "utility_sensitivity_direction_robust": true,
+    "visual_axis_mean_gain_over_CC": 3.495100674448968
+  },
+  "predecessor_directory_unchanged_vs_audited_commit": true,
+  "problems": [],
+  "protocol_id": "R16-P18-MS4-STAGE25-REPAIR-ORACLE-V1",
+  "status": "INDEPENDENT_STAGE25_AUDIT_PASS",
+  "summary_agreement": {
+    "action_axis_gain": true,
+    "action_gate": true,
+    "baseline_gate": true,
+    "final_status": true,
+    "joint_gate": true,
+    "restoration_gate": true,
+    "stopping_confound": true,
+    "utility_sensitivity": true,
+    "visual_axis_gain": true
+  },
+  "summary_sha256": "ab1976e633fbcc7ca2108224c6131922f6c15d0ca7d5a892f27b779e450ebbd5"
+}

@@ -34,6 +34,32 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
 
 
+def terminal_trace_drift(row: dict[str, Any]) -> dict[str, float] | None:
+    """Read drift at the episode's own terminal trace row.
+
+    Formal v26 preserves the correct stepwise trace, but its redundant
+    top-level field can refer to the vector-wide final snapshot after an
+    individual slot has terminated.  Always derive descriptive drift from the
+    immutable per-episode trace so old raw evidence remains recomputable.
+    """
+
+    if int(row.get("first_success_step", -1)) < 0:
+        return None
+    trace = row.get("trace")
+    if not isinstance(trace, list) or not trace:
+        raise RuntimeError("successful semantics row has no terminal trace")
+    terminal = trace[-1]
+    if int(terminal["step"]) != int(row["episode_length"]):
+        raise RuntimeError("terminal trace step does not match episode length")
+    drift = terminal.get("post_success_object_drift")
+    if drift is None:
+        raise RuntimeError("successful terminal trace has no drift")
+    return {
+        "translation_m": float(drift["translation_m"]),
+        "rotation_rad": float(drift["rotation_rad"]),
+    }
+
+
 def baseline(root: Path) -> dict[str, Any]:
     tasks = {}
     for task in ("StackCube-v1", "PushCube-v1"):
@@ -106,11 +132,7 @@ def stopping(root: Path) -> dict[str, Any]:
             rows = read_jsonl(path)
             if len(rows) != 100:
                 raise RuntimeError(f"incomplete stopping arm: {path}")
-            drifts = [
-                row["post_success_object_drift"]
-                for row in rows
-                if row.get("post_success_object_drift") is not None
-            ]
+            drifts = [drift for row in rows if (drift := terminal_trace_drift(row)) is not None]
             by_mode_seed[mode][str(seed)] = {
                 key: float(np.mean([row[key] for row in rows]))
                 for key in ("success_once", "success_hold5", "success_at_end", "post_success_loss")

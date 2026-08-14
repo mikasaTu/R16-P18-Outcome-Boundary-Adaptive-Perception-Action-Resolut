@@ -473,6 +473,14 @@ def evaluate_policy_batch(
         if record_trace:
             record["trace"] = traces[index]
             first_pose = first_success_poses[index]
+            terminal_trace = traces[index][-1]
+            # A terminated vector slot remains in the shared simulator while
+            # other slots continue.  The vector-wide final snapshot therefore
+            # is not this episode's terminal state.  Bind descriptive terminal
+            # fields to the last persisted per-episode trace row instead.
+            record["final_object_position"] = terminal_trace[
+                "object_position"
+            ]
             record["post_success_object_drift"] = (
                 None
                 if first_pose is None
@@ -480,11 +488,11 @@ def evaluate_policy_batch(
                     **object_pose_drift(
                         first_pose[0],
                         first_pose[1],
-                        final_snapshot["object_position"][index],
-                        final_snapshot["object_quaternion"][index],
+                        np.asarray(terminal_trace["object_position"]),
+                        np.asarray(terminal_trace["object_quaternion"]),
                     ),
                     "from_step": int(first_success[index].item()),
-                    "to_step": int(episode_length[index].item()),
+                    "to_step": int(terminal_trace["step"]),
                 }
             )
         records.append(record)
