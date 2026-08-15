@@ -69,3 +69,8 @@ def test_public_snapshot_uses_frozen_stage25_interfaces()->None:
     assert 'task_snapshot(base, "StackCube-v1")' in function
     assert 'ContactTracker("StackCube-v1", base).forces()' in function
     assert 'predicates["cube_a_on_cube_b"]' not in function
+
+def test_predictor_freeze_uses_python_boolean_literal()->None:
+    text=(ROOT/"scripts/train_completion_predictors.py").read_text()
+    assert '"confirmatory_data_used": False' in text
+    assert '"confirmatory_data_used": false' not in text

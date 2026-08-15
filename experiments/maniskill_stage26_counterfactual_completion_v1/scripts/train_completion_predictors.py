@@ -114,7 +114,7 @@ def main() -> None:
         with torch.no_grad(): held_logits = loso_model(torch.from_numpy(test_x).to(device)).cpu().numpy()
         leave_one_seed_out[str(held_out)] = calibrate(held_logits, test_y)
     learnability_passes = [m["stop_beneficial_auprc"] >= .60 and m["ece"] <= .05 and m["not_done_false_stop"] <= .05 and m["done_fragile_recall"] >= .60 for m in (selected_checkpoints[str(seed)]["calibration"] for seed in MODEL_SEEDS)]
-    write_json_new(marker, {"protocol_id": PROTOCOL_ID, "status": "PREDICTOR_CALIBRATION_FROZEN", "selected_architecture": selected, "architecture_selection": architecture_rows, "candidate_metrics": all_metrics, "selected_checkpoints": selected_checkpoints, "leave_one_model_seed_out": leave_one_seed_out, "offline_learnability_pass_per_seed": learnability_passes, "offline_learnability_gate_pass": sum(learnability_passes) >= 2 and all(selected_checkpoints[str(seed)]["calibration"]["not_done_false_stop"] <= .20 for seed in MODEL_SEEDS), "confirmatory_data_used": false, "epochs": args.epochs})
+    write_json_new(marker, {"protocol_id": PROTOCOL_ID, "status": "PREDICTOR_CALIBRATION_FROZEN", "selected_architecture": selected, "architecture_selection": architecture_rows, "candidate_metrics": all_metrics, "selected_checkpoints": selected_checkpoints, "leave_one_model_seed_out": leave_one_seed_out, "offline_learnability_pass_per_seed": learnability_passes, "offline_learnability_gate_pass": sum(learnability_passes) >= 2 and all(selected_checkpoints[str(seed)]["calibration"]["not_done_false_stop"] <= .20 for seed in MODEL_SEEDS), "confirmatory_data_used": False, "epochs": args.epochs})
 
 
 if __name__ == "__main__": main()
