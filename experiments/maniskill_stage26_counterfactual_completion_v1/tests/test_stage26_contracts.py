@@ -10,7 +10,7 @@ import torch
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"scripts"))
 from common import write_json_new
 from predictor import CompletionModel,FeatureShape
-from stage26_runtime import Capsule,capsule_bytes,capture_rng,load_capsule,restore_rng,save_capsule_new
+from stage26_runtime import Capsule,capsule_bytes,capture_rng,frozen_observation,load_capsule,observation_hash,restore_rng,save_capsule_new,tree_max_abs
 
 def capsule()->Capsule:
     return Capsule("id","first_success","StackCube-v1",16018,7,"/x","0"*64,12,"placement_contact_near_completion",{"a":np.array([1.])},12,{"state":np.zeros(2)},"a"*64,[[0.,1.]],[[2.,3.]],[[0.,0.,0.,1.]],[[0.,0.,0.,1.]]*5,np.zeros((2,3,4),np.float32),[0.,0.,0.,1.],1.,True,1,2,capture_rng(),"b"*64,[])
@@ -23,6 +23,16 @@ def test_capsule_serialization_and_act_prefix(tmp_path:Path)->None:
 
 def test_rng_roundtrip()->None:
     random.seed(3);np.random.seed(3);torch.manual_seed(3);state=capture_rng();expected=(random.random(),np.random.rand(),torch.rand(1).item());restore_rng(state);actual=(random.random(),np.random.rand(),torch.rand(1).item());assert np.allclose(expected,actual)
+
+def test_frozen_observation_roundtrip()->None:
+    value=capsule();obs=frozen_observation(value,torch.device("cpu"))
+    value.observation_sha256=observation_hash(obs,0)
+    assert observation_hash(frozen_observation(value,torch.device("cpu")),0)==value.observation_sha256
+
+def test_tree_max_abs_handles_live_batch_dimension()->None:
+    captured={"actor":{"pose":np.array([1.,2.],dtype=np.float32)}}
+    live={"actor":{"pose":torch.tensor([[1.,2.0000002]])}}
+    assert 0 < tree_max_abs(captured,live) < 1e-6
 
 def test_predictor_shapes()->None:
     shape=FeatureShape(8,3,4,20,4);x=torch.randn(5,shape.flat)

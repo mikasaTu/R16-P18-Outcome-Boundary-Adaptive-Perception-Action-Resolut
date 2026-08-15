@@ -27,6 +27,7 @@ from stage25_runtime import (  # type: ignore
     neutral_from_last,
     object_pose_drift,
     policy_chunk,
+    quaternion_distance_rad,
     task_snapshot,
     temporal_action_for_indices,
 )
@@ -89,6 +90,29 @@ def repeat_tree(value: Any, count: int) -> Any:
     return np.repeat(np.asarray(value)[None], count, axis=0)
 
 
+def tree_max_abs(left: Any, right: Any) -> float:
+    """Return the largest numeric difference between matching state trees."""
+    if isinstance(left, Mapping):
+        if not isinstance(right, Mapping) or set(left) != set(right):
+            raise RuntimeError("restored simulator-state tree keys do not match capsule")
+        return max((tree_max_abs(left[key], right[key]) for key in left), default=0.0)
+    lhs = np.asarray(left.detach().cpu() if isinstance(left, torch.Tensor) else left)
+    rhs = np.asarray(right.detach().cpu() if isinstance(right, torch.Tensor) else right)
+    # The capsule is unbatched while ManiSkill's live state remains batched.
+    if rhs.ndim == lhs.ndim + 1 and rhs.shape[0] == 1:
+        rhs = rhs[0]
+    if lhs.shape != rhs.shape:
+        raise RuntimeError(f"restored simulator-state shape mismatch: {lhs.shape} != {rhs.shape}")
+    if lhs.size == 0:
+        return 0.0
+    return float(np.max(np.abs(lhs.astype(np.float64) - rhs.astype(np.float64))))
+
+
+def frozen_observation(capsule: "Capsule", device: torch.device) -> dict[str, torch.Tensor]:
+    """Materialize the exact captured observation used at the branch point."""
+    return {key: torch.as_tensor(value, device=device)[None] for key, value in capsule.observation.items()}
+
+
 def visual_latent(agent: torch.nn.Module, obs: Mapping[str, torch.Tensor], indices: torch.Tensor) -> torch.Tensor:
     rgb = obs["rgb"][indices].to(next(agent.parameters()).device, non_blocking=True).float() / 255.0
     rgb = agent.normalize(rgb)
@@ -137,6 +161,7 @@ class Capsule:
     rng_states: dict[str, Any]
     trace_prefix_sha256: str
     reference_future: list[dict[str, Any]] = field(default_factory=list)
+    pending_policy_chunk: list[list[float]] = field(default_factory=list)
 
     def feature_dict(self) -> dict[str, np.ndarray]:
         latent = pad_history(self.recent_visual_latents, 4)
@@ -216,15 +241,38 @@ def make_capsule(
         last_executed_action=last_action[index].detach().cpu().float().tolist(), last_legal_gripper_command=float(gripper),
         success_once=bool(success_once), success_streak=int(streak), longest_success_streak=int(longest),
         rng_states=capture_rng(), trace_prefix_sha256=sha256_bytes(canonical_json(list(trace_prefix)).encode()),
+        pending_policy_chunk=chunk[index].detach().cpu().float().tolist(),
     )
 
 
-def restore_capsule(env: Any, capsule: Capsule, device: torch.device) -> Mapping[str, torch.Tensor]:
-    restore_rng(capsule.rng_states)
-    obs, _ = env.reset(seed=[capsule.episode_seed], options={"reset_to_env_states": {"env_states": repeat_tree(capsule.full_simulator_state, 1)}})
+def restore_capsule(
+    env: Any, capsule: Capsule, device: torch.device, diagnostics: dict[str, Any] | None = None,
+) -> Mapping[str, torch.Tensor]:
+    # Reset first: reset itself may consume process RNG.  The captured RNG state
+    # belongs exactly at the branch point and therefore must be restored after it.
+    restored_state = repeat_tree(capsule.full_simulator_state, 1)
+    rerendered, _ = env.reset(seed=[capsule.episode_seed], options={"reset_to_env_states": {"env_states": restored_state}})
+    # ManiSkill resets controllers *after* applying reset_to_env_states.  Since
+    # get_state_dict includes controller state, apply the complete state once
+    # more after reset so the ACT continuation sees the captured controller
+    # target instead of a newly initialized target.
+    env.base_env.set_state_dict(restored_state)
     env.base_env._elapsed_steps[:] = int(capsule.elapsed_step)
+    state_error = tree_max_abs(capsule.full_simulator_state, env.base_env.get_state_dict())
+    if state_error > 1e-6:
+        raise RuntimeError(f"restored simulator-state mismatch for {capsule.capsule_id}: {state_error}")
+    obs = frozen_observation(capsule, device)
     if observation_hash(obs, 0) != capsule.observation_sha256:
-        raise RuntimeError(f"restored observation hash mismatch for {capsule.capsule_id}")
+        raise RuntimeError(f"serialized capsule observation hash mismatch for {capsule.capsule_id}")
+    restore_rng(capsule.rng_states)
+    if diagnostics is not None:
+        diagnostics.update({
+            "simulator_state_max_abs": state_error,
+            "captured_observation_sha256": capsule.observation_sha256,
+            "policy_input_observation_sha256": observation_hash(obs, 0),
+            "rerendered_observation_sha256": observation_hash(rerendered, 0),
+            "rerendered_observation_exact": observation_hash(rerendered, 0) == capsule.observation_sha256,
+        })
     return obs
 
 
@@ -234,7 +282,8 @@ def branch_rollout(
 ) -> dict[str, Any]:
     if branch not in {"continue_policy", "neutral_hold", "hold_then_reobserve", "terminate_oracle"}:
         raise ValueError(branch)
-    obs = restore_capsule(env, capsule, device)
+    restore_diagnostics: dict[str, Any] = {}
+    obs = restore_capsule(env, capsule, device, restore_diagnostics)
     action_dim = int(env.action_space.shape[-1])
     remaining = 200 - capsule.source_step if original_horizon else horizon
     table = torch.zeros(1, 230, 260, action_dim, device=device)
@@ -257,7 +306,14 @@ def branch_rollout(
         if branch == "hold_then_reobserve" and offset == 2:
             table.zero_()
         absolute_for_table = offset - 2 if branch == "hold_then_reobserve" and offset >= 2 else absolute
-        if use_policy:
+        if use_policy and branch == "continue_policy" and offset == 0:
+            if not capsule.pending_policy_chunk:
+                raise RuntimeError(f"capsule {capsule.capsule_id} lacks the pending ACT policy chunk")
+            chunk = torch.as_tensor(capsule.pending_policy_chunk, device=device)[None]
+            chosen = temporal_action_for_indices(table, chunk, absolute_for_table, torch.tensor([0], device=device))
+            action = chosen
+            last_action = chosen
+        elif use_policy:
             started = time.perf_counter()
             chunk = policy_chunk(agent, obs, device)
             if device.type == "cuda": torch.cuda.synchronize(device)
@@ -294,5 +350,5 @@ def branch_rollout(
         "phase": capsule.phase, "branch": branch, "horizon": remaining, "success_once": success_once,
         "success_hold5": hold5, "success_at_horizon": terminal_success,
         "first_success_step": first_success_step, "policy_calls": policy_calls,
-        "policy_latency_seconds": policy_latency, "trace": traces,
+        "policy_latency_seconds": policy_latency, "restore_diagnostics": restore_diagnostics, "trace": traces,
     }
