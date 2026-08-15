@@ -1,0 +1,10 @@
+{
+  "all_planned_experiments_executed": true,
+  "completed_at_unix": 1786822562.1293063,
+  "final_status": "NO_GO_SHARED_PREFIX_FIDELITY",
+  "independent_audit_sha256": "b3aa40398393db28bf8c50a1235d325f0df7722eae0ff4e8ec82e393e8916ba0",
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "run_id": "r16p18-stage26-counterfactual-20260816-v13",
+  "status": "ALL_PREREGISTERED_STAGE26_EXPERIMENTS_COMPLETE",
+  "summary_sha256": "9617b8e812e3e1b7e46d6eee50a7a9b68bc9e535cd36fb91215ec18d97755a44"
+}

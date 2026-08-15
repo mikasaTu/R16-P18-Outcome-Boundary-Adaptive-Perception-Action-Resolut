@@ -1,0 +1,379 @@
+{
+  "analysis_only_no_new_idea": true,
+  "closed_loop_decomposition": {
+    "16018": {
+      "fixed_horizon": {
+        "harmed_episodes": 0,
+        "mean_stop_step": null,
+        "net_end_success_gain": 0.0,
+        "post_success_loss": 0.13,
+        "rescued_episodes": 0,
+        "stop_rate": 0.0,
+        "success_once": 0.375
+      },
+      "fixed_time_matched_stop": {
+        "harmed_episodes": 6,
+        "mean_stop_step": 113.0,
+        "net_end_success_gain": -0.02,
+        "post_success_loss": 0.13,
+        "rescued_episodes": 2,
+        "stop_rate": 0.445,
+        "success_once": 0.355
+      },
+      "gate_overlap": {
+        "intersection": 86,
+        "jaccard": 0.671875,
+        "union": 128
+      },
+      "learned_counterfactual_completion_gate": {
+        "harmed_episodes": 7,
+        "mean_stop_step": 113.28089887640449,
+        "net_end_success_gain": 0.04,
+        "post_success_loss": 0.075,
+        "rescued_episodes": 15,
+        "stop_rate": 0.445,
+        "success_once": 0.36
+      },
+      "learned_success_only_classifier": {
+        "harmed_episodes": 16,
+        "mean_stop_step": 97.2,
+        "net_end_success_gain": -0.01,
+        "post_success_loss": 0.09,
+        "rescued_episodes": 14,
+        "stop_rate": 0.625,
+        "success_once": 0.325
+      },
+      "privileged_neutral_after_hold5": {
+        "harmed_episodes": 1,
+        "mean_stop_step": 110.36734693877551,
+        "net_end_success_gain": 0.02,
+        "post_success_loss": 0.125,
+        "rescued_episodes": 5,
+        "stop_rate": 0.245,
+        "success_once": 0.39
+      },
+      "privileged_terminate_first_success": {
+        "harmed_episodes": 0,
+        "mean_stop_step": 104.13157894736842,
+        "net_end_success_gain": 0.135,
+        "post_success_loss": 0.0,
+        "rescued_episodes": 27,
+        "stop_rate": 0.38,
+        "success_once": 0.38
+      },
+      "random_matched_stop": {
+        "harmed_episodes": 16,
+        "mean_stop_step": 113.28089887640449,
+        "net_end_success_gain": -0.065,
+        "post_success_loss": 0.145,
+        "rescued_episodes": 3,
+        "stop_rate": 0.445,
+        "success_once": 0.325
+      }
+    },
+    "16019": {
+      "fixed_horizon": {
+        "harmed_episodes": 0,
+        "mean_stop_step": null,
+        "net_end_success_gain": 0.0,
+        "post_success_loss": 0.17,
+        "rescued_episodes": 0,
+        "stop_rate": 0.0,
+        "success_once": 0.575
+      },
+      "fixed_time_matched_stop": {
+        "harmed_episodes": 14,
+        "mean_stop_step": 93.0,
+        "net_end_success_gain": -0.03,
+        "post_success_loss": 0.12,
+        "rescued_episodes": 8,
+        "stop_rate": 0.3,
+        "success_once": 0.495
+      },
+      "gate_overlap": {
+        "intersection": 45,
+        "jaccard": 0.30612244897959184,
+        "union": 147
+      },
+      "learned_counterfactual_completion_gate": {
+        "harmed_episodes": 19,
+        "mean_stop_step": 92.6,
+        "net_end_success_gain": -0.06,
+        "post_success_loss": 0.135,
+        "rescued_episodes": 7,
+        "stop_rate": 0.3,
+        "success_once": 0.48
+      },
+      "learned_success_only_classifier": {
+        "harmed_episodes": 19,
+        "mean_stop_step": 96.33333333333333,
+        "net_end_success_gain": -0.045,
+        "post_success_loss": 0.125,
+        "rescued_episodes": 10,
+        "stop_rate": 0.66,
+        "success_once": 0.485
+      },
+      "privileged_neutral_after_hold5": {
+        "harmed_episodes": 6,
+        "mean_stop_step": 111.72941176470589,
+        "net_end_success_gain": 0.035,
+        "post_success_loss": 0.145,
+        "rescued_episodes": 13,
+        "stop_rate": 0.425,
+        "success_once": 0.585
+      },
+      "privileged_terminate_first_success": {
+        "harmed_episodes": 2,
+        "mean_stop_step": 102.89380530973452,
+        "net_end_success_gain": 0.16,
+        "post_success_loss": 0.0,
+        "rescued_episodes": 34,
+        "stop_rate": 0.565,
+        "success_once": 0.565
+      },
+      "random_matched_stop": {
+        "harmed_episodes": 23,
+        "mean_stop_step": 92.6,
+        "net_end_success_gain": -0.08,
+        "post_success_loss": 0.145,
+        "rescued_episodes": 7,
+        "stop_rate": 0.3,
+        "success_once": 0.47
+      }
+    },
+    "16020": {
+      "fixed_horizon": {
+        "harmed_episodes": 0,
+        "mean_stop_step": null,
+        "net_end_success_gain": 0.0,
+        "post_success_loss": 0.12,
+        "rescued_episodes": 0,
+        "stop_rate": 0.0,
+        "success_once": 0.485
+      },
+      "fixed_time_matched_stop": {
+        "harmed_episodes": 45,
+        "mean_stop_step": 85.0,
+        "net_end_success_gain": -0.215,
+        "post_success_loss": 0.045,
+        "rescued_episodes": 2,
+        "stop_rate": 0.74,
+        "success_once": 0.195
+      },
+      "gate_overlap": {
+        "intersection": 142,
+        "jaccard": 0.8304093567251462,
+        "union": 171
+      },
+      "learned_counterfactual_completion_gate": {
+        "harmed_episodes": 33,
+        "mean_stop_step": 84.94594594594595,
+        "net_end_success_gain": -0.13,
+        "post_success_loss": 0.11,
+        "rescued_episodes": 7,
+        "stop_rate": 0.74,
+        "success_once": 0.345
+      },
+      "learned_success_only_classifier": {
+        "harmed_episodes": 32,
+        "mean_stop_step": 91.42424242424242,
+        "net_end_success_gain": -0.11,
+        "post_success_loss": 0.12,
+        "rescued_episodes": 10,
+        "stop_rate": 0.825,
+        "success_once": 0.375
+      },
+      "privileged_neutral_after_hold5": {
+        "harmed_episodes": 6,
+        "mean_stop_step": 107.16923076923077,
+        "net_end_success_gain": -0.005,
+        "post_success_loss": 0.115,
+        "rescued_episodes": 5,
+        "stop_rate": 0.325,
+        "success_once": 0.475
+      },
+      "privileged_terminate_first_success": {
+        "harmed_episodes": 2,
+        "mean_stop_step": 102.14893617021276,
+        "net_end_success_gain": 0.105,
+        "post_success_loss": 0.0,
+        "rescued_episodes": 23,
+        "stop_rate": 0.47,
+        "success_once": 0.47
+      },
+      "random_matched_stop": {
+        "harmed_episodes": 45,
+        "mean_stop_step": 84.94594594594595,
+        "net_end_success_gain": -0.185,
+        "post_success_loss": 0.09,
+        "rescued_episodes": 8,
+        "stop_rate": 0.74,
+        "success_once": 0.27
+      }
+    }
+  },
+  "counterfactual_label_strata": {
+    "calibration/first_hold5/placement_contact_near_completion": {
+      "continue_beneficial": 4,
+      "continue_success": 114,
+      "hold_beneficial": 21,
+      "hold_success": 131,
+      "n": 140
+    },
+    "calibration/first_near_completion/placement_contact_near_completion": {
+      "continue_beneficial": 128,
+      "continue_success": 128,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 319
+    },
+    "calibration/first_near_completion_false_positive/placement_contact_near_completion": {
+      "continue_beneficial": 9,
+      "continue_success": 9,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 135
+    },
+    "calibration/first_success/placement_contact_near_completion": {
+      "continue_beneficial": 2,
+      "continue_success": 123,
+      "hold_beneficial": 40,
+      "hold_success": 161,
+      "n": 184
+    },
+    "calibration/first_success_minus_3/placement_contact_near_completion": {
+      "continue_beneficial": 126,
+      "continue_success": 134,
+      "hold_beneficial": 8,
+      "hold_success": 16,
+      "n": 184
+    },
+    "calibration/first_success_minus_6/placement_contact_near_completion": {
+      "continue_beneficial": 139,
+      "continue_success": 140,
+      "hold_beneficial": 3,
+      "hold_success": 4,
+      "n": 184
+    },
+    "calibration/first_success_plus_3/placement_contact_near_completion": {
+      "continue_beneficial": 15,
+      "continue_success": 127,
+      "hold_beneficial": 32,
+      "hold_success": 144,
+      "n": 184
+    },
+    "calibration/maximum_progress/free_space_approach": {
+      "continue_beneficial": 0,
+      "continue_success": 0,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 12
+    },
+    "calibration/maximum_progress/object_in_hand_pre_placement": {
+      "continue_beneficial": 0,
+      "continue_success": 0,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 10
+    },
+    "calibration/maximum_progress/placement_contact_near_completion": {
+      "continue_beneficial": 3,
+      "continue_success": 5,
+      "hold_beneficial": 5,
+      "hold_success": 7,
+      "n": 135
+    },
+    "calibration/maximum_progress/pre_grasp_or_pre_contact": {
+      "continue_beneficial": 0,
+      "continue_success": 0,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 43
+    },
+    "train_source/first_hold5/placement_contact_near_completion": {
+      "continue_beneficial": 15,
+      "continue_success": 440,
+      "hold_beneficial": 79,
+      "hold_success": 504,
+      "n": 536
+    },
+    "train_source/first_near_completion/placement_contact_near_completion": {
+      "continue_beneficial": 505,
+      "continue_success": 505,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 1236
+    },
+    "train_source/first_near_completion_false_positive/placement_contact_near_completion": {
+      "continue_beneficial": 51,
+      "continue_success": 51,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 490
+    },
+    "train_source/first_success/placement_contact_near_completion": {
+      "continue_beneficial": 35,
+      "continue_success": 495,
+      "hold_beneficial": 129,
+      "hold_success": 589,
+      "n": 746
+    },
+    "train_source/first_success_minus_3/placement_contact_near_completion": {
+      "continue_beneficial": 459,
+      "continue_success": 489,
+      "hold_beneficial": 44,
+      "hold_success": 74,
+      "n": 746
+    },
+    "train_source/first_success_minus_6/placement_contact_near_completion": {
+      "continue_beneficial": 477,
+      "continue_success": 482,
+      "hold_beneficial": 12,
+      "hold_success": 17,
+      "n": 746
+    },
+    "train_source/first_success_plus_3/placement_contact_near_completion": {
+      "continue_beneficial": 49,
+      "continue_success": 501,
+      "hold_beneficial": 110,
+      "hold_success": 562,
+      "n": 745
+    },
+    "train_source/maximum_progress/free_space_approach": {
+      "continue_beneficial": 0,
+      "continue_success": 0,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 53
+    },
+    "train_source/maximum_progress/object_in_hand_pre_placement": {
+      "continue_beneficial": 1,
+      "continue_success": 1,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 39
+    },
+    "train_source/maximum_progress/placement_contact_near_completion": {
+      "continue_beneficial": 27,
+      "continue_success": 31,
+      "hold_beneficial": 20,
+      "hold_success": 24,
+      "n": 480
+    },
+    "train_source/maximum_progress/pre_grasp_or_pre_contact": {
+      "continue_beneficial": 0,
+      "continue_success": 0,
+      "hold_beneficial": 0,
+      "hold_success": 0,
+      "n": 218
+    }
+  },
+  "interpretation_contract": [
+    "compare counterfactual gate against success-only classifier",
+    "compare against fixed-time and random matched stop controls",
+    "attribute net gain as rescued minus harmed paired episodes",
+    "do not interpret invalid restored branches as causal if shared-prefix gate fails"
+  ],
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "status": "MECHANISM_ANALYSIS_COMPLETE"
+}

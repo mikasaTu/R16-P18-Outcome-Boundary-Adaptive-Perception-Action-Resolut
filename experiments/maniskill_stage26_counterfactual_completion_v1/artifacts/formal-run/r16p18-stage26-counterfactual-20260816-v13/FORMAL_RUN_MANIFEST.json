@@ -1,0 +1,14 @@
+{
+  "checkpoint_bindings_sha256": "0c75db1963a02840e367c761d5ec319f585a252b0103a012894406e7dad326ad",
+  "gid": 2254,
+  "gpu_count": 8,
+  "protocol_freeze_sha256": "acab0372362d441a5b5b3a432cb4858289ea8a527cf1f1affc1f4586e0a8a220",
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "run_id": "r16p18-stage26-counterfactual-20260816-v13",
+  "seed_bank_sha256": "25a9408684cc3f6b4754b554b7e74db6457157e73132993bc8094db07ec239b8",
+  "source_commit": "06e729a0fe8e532ac0aa57cd5c242244f8ea2b7e",
+  "source_tree": "188596525b6e5f157fa2126947f30a9f686469f8",
+  "started_at_unix": 1786822541.5033312,
+  "status": "FORMAL_INPUTS_FROZEN",
+  "uid": 2254
+}

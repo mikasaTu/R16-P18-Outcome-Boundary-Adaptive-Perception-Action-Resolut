@@ -1,0 +1,18 @@
+{
+  "categorical_agreement": 0.8609375,
+  "max_executed_action_abs": 0.3911120295524597,
+  "max_object_rotation_rad": 0.380347482405016,
+  "max_object_translation_m": 0.015209174192178933,
+  "observation_hash_agreement": 0.0,
+  "pass": false,
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "states": 64,
+  "status": "NO_GO_SHARED_PREFIX_FIDELITY",
+  "steps_per_state": 10,
+  "thresholds": {
+    "action": 1e-06,
+    "categorical": 1.0,
+    "rotation": 0.0001,
+    "translation": 1e-05
+  }
+}

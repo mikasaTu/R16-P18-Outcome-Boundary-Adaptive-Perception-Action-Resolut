@@ -1,0 +1,53 @@
+{
+  "audit_pass": true,
+  "branch_label_rows_recomputed": 7565,
+  "checks": {
+    "causal_gain": true,
+    "fidelity": true,
+    "final": true,
+    "learned_gain": true,
+    "offline": true
+  },
+  "decision_logic_independent_from_summarizer": true,
+  "independent": {
+    "causal": {
+      "ci": [
+        0.10333333333333332,
+        0.165
+      ],
+      "gain": 0.13333333333333333,
+      "seed_gain": {
+        "16018": 0.135,
+        "16019": 0.16,
+        "16020": 0.105
+      }
+    },
+    "fidelity": {
+      "16018": false,
+      "16019": false,
+      "16020": false
+    },
+    "final_status": "NO_GO_SHARED_PREFIX_FIDELITY",
+    "latency_overhead": 0.01843816037389745,
+    "learned": {
+      "ci": [
+        -0.07833333333333332,
+        -0.02166666666666667
+      ],
+      "gain": -0.04999999999999999,
+      "seed_gain": {
+        "16018": 0.04,
+        "16019": -0.06,
+        "16020": -0.13
+      }
+    },
+    "loss_reduction": 0.2380952380952381,
+    "offline": false,
+    "once_loss": 0.08333333333333331,
+    "recovery_fraction": -0.37499999999999994
+  },
+  "problems": [],
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "status": "INDEPENDENT_STAGE26_AUDIT_PASS",
+  "summary_sha256": "9617b8e812e3e1b7e46d6eee50a7a9b68bc9e535cd36fb91215ec18d97755a44"
+}
