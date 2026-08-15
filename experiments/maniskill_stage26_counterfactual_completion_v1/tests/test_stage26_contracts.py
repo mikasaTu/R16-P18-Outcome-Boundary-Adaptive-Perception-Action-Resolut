@@ -52,3 +52,10 @@ def test_partial_shard_recovery_preserves_evidence()->None:
     text=(ROOT/"scripts/collect_counterfactual_data.py").read_text()
     assert ".partial-preserved-" in text
     assert "shard.rename(preserved)" in text
+
+def test_public_snapshot_uses_frozen_stage25_interfaces()->None:
+    text=(ROOT/"scripts/stage26_runtime.py").read_text()
+    function=text[text.index("def public_snapshot"):text.index("@dataclass",text.index("def public_snapshot"))]
+    assert 'task_snapshot(base, "StackCube-v1")' in function
+    assert 'ContactTracker("StackCube-v1", base).forces()' in function
+    assert 'predicates["cube_a_on_cube_b"]' not in function

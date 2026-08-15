@@ -102,12 +102,10 @@ def visual_latent(agent: torch.nn.Module, obs: Mapping[str, torch.Tensor], indic
 
 def public_snapshot(base: Any) -> dict[str, np.ndarray]:
     raw = task_snapshot(base, "StackCube-v1")
-    predicates = stack_predicates(base)
+    intended_force, _ = ContactTracker("StackCube-v1", base).forces()
     return {
         **raw,
-        "contact": (predicates["cube_a_on_cube_b"] | predicates["grasped"]).detach().cpu().numpy(),
-        "grasped": predicates["grasped"].detach().cpu().numpy(),
-        "supported": predicates["cube_a_on_cube_b"].detach().cpu().numpy(),
+        "contact": (intended_force > 1e-4).detach().cpu().numpy(),
     }
 
 
