@@ -59,7 +59,7 @@ def main()->None:
     elif learned["gain"]>0 and false_high: final="REVISE_EARLY_STOP_FALSE_POSITIVE"
     elif learned_gate: final="GO_STOP_NORMALIZED_BASELINE"
     else: final="NO_GO_COMPLETION_NOT_LEARNABLE"
-    reported=json.loads(a.summary.read_text()); checks={"final":final==reported["final_status"],"causal_gain":np.isclose(causal["gain"],reported["comparisons"]["privileged_terminate_vs_fixed"]["gain"]),"learned_gain":np.isclose(learned["gain"],reported["comparisons"]["learned_counterfactual_vs_fixed"]["gain"]),"fidelity":all(fidelity.values())==reported["gates"]["shared_prefix"],"offline":offline==reported["gates"]["offline_learnability"]}
+    reported=json.loads(a.summary.read_text()); checks={"final":final==reported["final_status"],"causal_gain":bool(np.isclose(causal["gain"],reported["comparisons"]["privileged_terminate_vs_fixed"]["gain"])),"learned_gain":bool(np.isclose(learned["gain"],reported["comparisons"]["learned_counterfactual_vs_fixed"]["gain"])),"fidelity":all(fidelity.values())==reported["gates"]["shared_prefix"],"offline":offline==reported["gates"]["offline_learnability"]}
     passed=all(checks.values()) and not problems
     write_json_new(a.output,{"protocol_id":PROTOCOL_ID,"status":"INDEPENDENT_STAGE26_AUDIT_PASS" if passed else "INDEPENDENT_STAGE26_AUDIT_FAIL","audit_pass":passed,"decision_logic_independent_from_summarizer":True,"branch_label_rows_recomputed":label_rows,"problems":problems,"checks":checks,"independent":{"fidelity":fidelity,"causal":causal,"offline":offline,"learned":learned,"recovery_fraction":recovery,"once_loss":once_loss,"loss_reduction":loss_reduction,"latency_overhead":latency,"final_status":final},"summary_sha256":sha256_file(a.summary)})
 

@@ -74,3 +74,8 @@ def test_predictor_freeze_uses_python_boolean_literal()->None:
     text=(ROOT/"scripts/train_completion_predictors.py").read_text()
     assert '"confirmatory_data_used": False' in text
     assert '"confirmatory_data_used": false' not in text
+
+def test_independent_audit_uses_json_native_booleans()->None:
+    text=(ROOT/"scripts/audit_stage26.py").read_text()
+    assert '"causal_gain":bool(np.isclose(' in text
+    assert '"learned_gain":bool(np.isclose(' in text
