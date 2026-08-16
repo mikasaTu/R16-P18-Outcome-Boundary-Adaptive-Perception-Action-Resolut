@@ -161,3 +161,12 @@ preregistration draft, so no draft or Stage-2.7 experiment was produced.
 Independent audit status: `INDEPENDENT_STAGE26_AUDIT_PASS`, with 7,565 branch
 label rows recomputed and no problems. This means the negative decision was
 reproduced from raw rows; it does not make the failed fidelity gate pass.
+
+## Operational closeout
+
+Formal run `r16p18-stage26-counterfactual-20260816-v13`, PAI Job
+`dlc1exqlfu0iiwaa`, completed with status `Succeeded` under UID/GID
+`2254:2254`. After that completion was proven, the nine exact superseded
+Failed/Stopped PAI service records from this workflow were deleted and their
+absence verified; CPFS evidence was not deleted. Submission and monitoring
+used the pinned CLI/OpenAPI path only (`browser_not_used=fifo_not_applicable`).

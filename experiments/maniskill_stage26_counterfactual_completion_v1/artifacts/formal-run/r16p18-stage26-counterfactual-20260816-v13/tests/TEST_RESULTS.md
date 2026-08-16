@@ -6,5 +6,6 @@
   **13 passed in 6.89s**.
 - `sha256sum -c manifests/SCIENTIFIC_SHA256SUMS`: every frozen scientific
   source passed.
+- `python -m compileall -q` over Stage-2.6 scripts and tests: passed.
 - Independent raw audit: `INDEPENDENT_STAGE26_AUDIT_PASS`.
 - PAI formal completion: `ALL_PREREGISTERED_STAGE26_EXPERIMENTS_COMPLETE`.

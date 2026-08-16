@@ -1,0 +1,258 @@
+{
+  "architecture_selection": [
+    [
+      false,
+      -0.48307854617117507,
+      0.044056426141583206,
+      3495,
+      "linear_probe"
+    ],
+    [
+      false,
+      -0.46645637340502527,
+      0.06802179575933598,
+      331523,
+      "two_layer_mlp"
+    ],
+    [
+      false,
+      -0.47351247122077994,
+      0.09065138296412578,
+      179331,
+      "one_layer_small_gru"
+    ]
+  ],
+  "candidate_metrics": {
+    "16018/linear_probe": {
+      "calibration_rows": 489,
+      "done_fragile_recall": 0.2857142857142857,
+      "ece": 0.05507230677628597,
+      "not_done_false_stop": 0.027888446215139442,
+      "parameters": 3495,
+      "stop_beneficial_auprc": 0.39178551471511286,
+      "success_only_false_stop": 0.036211699164345405,
+      "success_only_recall": 0.7076923076923077,
+      "success_only_threshold": 0.5,
+      "tau_advantage": 0.1,
+      "tau_hold": 0.5,
+      "temperature": 0.75
+    },
+    "16018/one_layer_small_gru": {
+      "calibration_rows": 489,
+      "done_fragile_recall": 0.5142857142857142,
+      "ece": 0.0811698460048693,
+      "not_done_false_stop": 0.0398406374501992,
+      "parameters": 179331,
+      "stop_beneficial_auprc": 0.4378210789352497,
+      "success_only_false_stop": 0.036211699164345405,
+      "success_only_recall": 0.5384615384615384,
+      "success_only_threshold": 0.8,
+      "tau_advantage": 0.1,
+      "tau_hold": 0.6,
+      "temperature": 2.0
+    },
+    "16018/two_layer_mlp": {
+      "calibration_rows": 489,
+      "done_fragile_recall": 0.45714285714285713,
+      "ece": 0.059382476358472575,
+      "not_done_false_stop": 0.043824701195219126,
+      "parameters": 331523,
+      "stop_beneficial_auprc": 0.35499733959229957,
+      "success_only_false_stop": 0.03899721448467967,
+      "success_only_recall": 0.6692307692307692,
+      "success_only_threshold": 0.7,
+      "tau_advantage": 0.1,
+      "tau_hold": 0.6,
+      "temperature": 2.0
+    },
+    "16019/linear_probe": {
+      "calibration_rows": 536,
+      "done_fragile_recall": 0.34782608695652173,
+      "ece": 0.03693911376402283,
+      "not_done_false_stop": 0.041025641025641026,
+      "parameters": 3495,
+      "stop_beneficial_auprc": 0.44873723839150026,
+      "success_only_false_stop": 0.046703296703296704,
+      "success_only_recall": 0.8255813953488372,
+      "success_only_threshold": 0.7,
+      "tau_advantage": 0.3,
+      "tau_hold": 0.5,
+      "temperature": 1.0
+    },
+    "16019/one_layer_small_gru": {
+      "calibration_rows": 536,
+      "done_fragile_recall": 0.43478260869565216,
+      "ece": 0.08866221760052131,
+      "not_done_false_stop": 0.03076923076923077,
+      "parameters": 179331,
+      "stop_beneficial_auprc": 0.45192108812343706,
+      "success_only_false_stop": 0.04395604395604396,
+      "success_only_recall": 0.7267441860465116,
+      "success_only_threshold": 0.6,
+      "tau_advantage": 0.0,
+      "tau_hold": 0.5,
+      "temperature": 2.0
+    },
+    "16019/two_layer_mlp": {
+      "calibration_rows": 536,
+      "done_fragile_recall": 0.5,
+      "ece": 0.08154368377898806,
+      "not_done_false_stop": 0.046153846153846156,
+      "parameters": 331523,
+      "stop_beneficial_auprc": 0.5104417998341451,
+      "success_only_false_stop": 0.046703296703296704,
+      "success_only_recall": 0.8372093023255814,
+      "success_only_threshold": 0.5,
+      "tau_advantage": 0.2,
+      "tau_hold": 0.5,
+      "temperature": 2.0
+    },
+    "16020/linear_probe": {
+      "calibration_rows": 505,
+      "done_fragile_recall": 0.7142857142857143,
+      "ece": 0.04015785788444083,
+      "not_done_false_stop": 0.041025641025641026,
+      "parameters": 3495,
+      "stop_beneficial_auprc": 0.6087128854069122,
+      "success_only_false_stop": 0.04297994269340974,
+      "success_only_recall": 0.8846153846153846,
+      "success_only_threshold": 0.7,
+      "tau_advantage": 0.0,
+      "tau_hold": 0.5,
+      "temperature": 0.75
+    },
+    "16020/one_layer_small_gru": {
+      "calibration_rows": 505,
+      "done_fragile_recall": 0.6428571428571429,
+      "ece": 0.10212208528698671,
+      "not_done_false_stop": 0.041025641025641026,
+      "parameters": 179331,
+      "stop_beneficial_auprc": 0.5307952466036532,
+      "success_only_false_stop": 0.04871060171919771,
+      "success_only_recall": 0.7435897435897436,
+      "success_only_threshold": 0.5,
+      "tau_advantage": 0.0,
+      "tau_hold": 0.5,
+      "temperature": 2.0
+    },
+    "16020/two_layer_mlp": {
+      "calibration_rows": 505,
+      "done_fragile_recall": 0.6785714285714286,
+      "ece": 0.06313922714054732,
+      "not_done_false_stop": 0.03076923076923077,
+      "parameters": 331523,
+      "stop_beneficial_auprc": 0.533929980788631,
+      "success_only_false_stop": 0.045845272206303724,
+      "success_only_recall": 0.8974358974358975,
+      "success_only_threshold": 0.7,
+      "tau_advantage": 0.2,
+      "tau_hold": 0.5,
+      "temperature": 2.0
+    }
+  },
+  "confirmatory_data_used": false,
+  "epochs": 50,
+  "leave_one_model_seed_out": {
+    "16018": {
+      "done_fragile_recall": 0.0,
+      "ece": 0.20737149753438305,
+      "not_done_false_stop": 0.0,
+      "stop_beneficial_auprc": 0.28261355953394307,
+      "success_only_false_stop": 0.0,
+      "success_only_recall": 0.0,
+      "success_only_threshold": 0.5,
+      "tau_advantage": 0.0,
+      "tau_hold": 0.5,
+      "temperature": 2.0
+    },
+    "16019": {
+      "done_fragile_recall": 0.13043478260869565,
+      "ece": 0.28256191659385144,
+      "not_done_false_stop": 0.020512820512820513,
+      "stop_beneficial_auprc": 0.13286608752483067,
+      "success_only_false_stop": 0.04945054945054945,
+      "success_only_recall": 0.5872093023255814,
+      "success_only_threshold": 0.6,
+      "tau_advantage": 0.0,
+      "tau_hold": 0.8,
+      "temperature": 2.0
+    },
+    "16020": {
+      "done_fragile_recall": 0.07142857142857142,
+      "ece": 0.15656064135750922,
+      "not_done_false_stop": 0.015384615384615385,
+      "stop_beneficial_auprc": 0.10142839487195073,
+      "success_only_false_stop": 0.03151862464183381,
+      "success_only_recall": 0.3076923076923077,
+      "success_only_threshold": 0.7,
+      "tau_advantage": 0.0,
+      "tau_hold": 0.8,
+      "temperature": 2.0
+    }
+  },
+  "offline_learnability_gate_pass": false,
+  "offline_learnability_pass_per_seed": [
+    false,
+    false,
+    true
+  ],
+  "protocol_id": "R16-P18-MS5-STAGE26-COUNTERFACTUAL-COMPLETION-V1",
+  "selected_architecture": "linear_probe",
+  "selected_checkpoints": {
+    "16018": {
+      "calibration": {
+        "calibration_rows": 489,
+        "done_fragile_recall": 0.2857142857142857,
+        "ece": 0.05507230677628597,
+        "not_done_false_stop": 0.027888446215139442,
+        "parameters": 3495,
+        "stop_beneficial_auprc": 0.39178551471511286,
+        "success_only_false_stop": 0.036211699164345405,
+        "success_only_recall": 0.7076923076923077,
+        "success_only_threshold": 0.5,
+        "tau_advantage": 0.1,
+        "tau_hold": 0.5,
+        "temperature": 0.75
+      },
+      "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage26-counterfactual-completion-v1/r16p18-stage26-counterfactual-20260816-v12/predictors/seed_16018/predictor.pt",
+      "sha256": "8e4db7686e1da7d14edff7408acb0d18ef2f745a6e2c598e4392ee1fc0474e02"
+    },
+    "16019": {
+      "calibration": {
+        "calibration_rows": 536,
+        "done_fragile_recall": 0.34782608695652173,
+        "ece": 0.03693911376402283,
+        "not_done_false_stop": 0.041025641025641026,
+        "parameters": 3495,
+        "stop_beneficial_auprc": 0.44873723839150026,
+        "success_only_false_stop": 0.046703296703296704,
+        "success_only_recall": 0.8255813953488372,
+        "success_only_threshold": 0.7,
+        "tau_advantage": 0.3,
+        "tau_hold": 0.5,
+        "temperature": 1.0
+      },
+      "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage26-counterfactual-completion-v1/r16p18-stage26-counterfactual-20260816-v12/predictors/seed_16019/predictor.pt",
+      "sha256": "396227782f610314dd3b6a454a825ea395cd49c1cbe817251fd1d046b271d2a1"
+    },
+    "16020": {
+      "calibration": {
+        "calibration_rows": 505,
+        "done_fragile_recall": 0.7142857142857143,
+        "ece": 0.04015785788444083,
+        "not_done_false_stop": 0.041025641025641026,
+        "parameters": 3495,
+        "stop_beneficial_auprc": 0.6087128854069122,
+        "success_only_false_stop": 0.04297994269340974,
+        "success_only_recall": 0.8846153846153846,
+        "success_only_threshold": 0.7,
+        "tau_advantage": 0.0,
+        "tau_hold": 0.5,
+        "temperature": 0.75
+      },
+      "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage26-counterfactual-completion-v1/r16p18-stage26-counterfactual-20260816-v12/predictors/seed_16020/predictor.pt",
+      "sha256": "fd226c3c681973432ac0555bad5fc275c747ae4e08b4a1b2758720402b6d6403"
+    }
+  },
+  "status": "PREDICTOR_CALIBRATION_FROZEN"
+}

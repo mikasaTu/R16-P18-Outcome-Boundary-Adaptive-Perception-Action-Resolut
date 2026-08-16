@@ -38,3 +38,13 @@ diagnosis is omitted PhysX contact-solver warm-start/cache state. The formal
 - Protocol freeze SHA256: `acab0372362d441a5b5b3a432cb4858289ea8a527cf1f1affc1f4586e0a8a220`
 - Scientific sums-file SHA256: `8622ec2f8b42a28a1e17cdf1dfd6dd34c27719a3142f8db85e310387666c8a86`
 - v13 operational payload SHA256: `35533a6742bd500727361063d12cfd8dd8eb8fc284613b985ada7ed6d0fe10be`
+
+## Superseded PAI service-record cleanup
+
+After v13 reached `Succeeded` with persisted `FORMAL_COMPLETE.json`, the nine
+exact Failed/Stopped service records for v3, v4, v5, v6, v7, v8, v9, v10 and
+v12 were deleted through the pinned two-phase OpenAPI helper. Each deletion
+returned `deleted: true` and a fresh exact-job absence check returned
+`verified_absent: true`. The successful v13 service record and every CPFS
+artifact, registry record, log and manifest were retained. Browser automation
+was not used.
