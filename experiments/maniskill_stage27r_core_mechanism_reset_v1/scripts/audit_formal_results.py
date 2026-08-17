@@ -53,16 +53,38 @@ def main():
     pass_rates = [json.loads(path.read_text())["fidelity_pass_rate"] for path in bank_files]
     checks["fresh_reset_prefix_fidelity"] = {"pass": bool(pass_rates) and min(pass_rates) >= .95, "pass_rates": pass_rates}
     raw_files = sorted((args.formal_root / "oracle").glob("*.json"))
-    row_count = utility_mismatch = accounting_missing = 0
+    row_count = utility_mismatch = accounting_missing = accounting_mismatch = 0
     for path in raw_files:
         for row in json.loads(path.read_text()).get("rows", []):
             row_count += 1
             accounting_missing += not ACCOUNTING.issubset(row["accounting"])
+            accounting = row["accounting"]
+            expected_flops = accounting["global_encoder_calls"] * 1.8e9 + accounting["fine_encoder_calls"] * 1.8e9 + accounting["policy_forward_calls"] * 0.7e9
+            expected_latency = accounting["gpu_latency_ms"] + accounting["simulator_latency_ms"] + accounting["selector_latency_ms"]
+            accounting_mismatch += abs(accounting["estimated_flops"] - expected_flops) > 1e-6
+            accounting_mismatch += abs(accounting["episode_total_compute"] - expected_latency) > 1e-6
             for name, weights in WEIGHTS.items():
                 expected = weights[0] * row["success_hold5"] + weights[1] * row["normalized_progress"] + weights[2] * row["recoverable"] + weights[3] * row["dropped_or_slipped"] + weights[4] * row["collision"]
                 utility_mismatch += abs(expected - row["utilities"][name]) > 1e-9
     checks["raw_outcome_recompute"] = {"pass": row_count > 0 and utility_mismatch == 0, "rows": row_count, "utility_mismatches": utility_mismatch}
-    checks["compute_accounting_recompute"] = {"pass": row_count > 0 and accounting_missing == 0, "missing_rows": accounting_missing}
+    statistics = json.loads((args.formal_root / "statistics.json").read_text())
+    budget_mismatches = []
+    for family in ("budgets", "negative_control_budgets"):
+        for weight, fractions in statistics[family].items():
+            for fraction, arms in fractions.items():
+                expected_budget = float(fraction) * arms["all_fine"]["cost"]
+                for arm, values in arms.items():
+                    if not isinstance(values, dict) or "cost" not in values:
+                        continue
+                    observed = bool(values["cost"] <= expected_budget + 1e-6)
+                    if abs(values["budget"] - expected_budget) > 1e-6 or values["budget_compliant"] != observed:
+                        budget_mismatches.append(f"{family}/{weight}/{fraction}/{arm}")
+    checks["compute_accounting_recompute"] = {
+        "pass": row_count > 0 and accounting_missing == 0 and accounting_mismatch == 0 and not budget_mismatches,
+        "missing_rows": accounting_missing,
+        "formula_mismatches": accounting_mismatch,
+        "budget_mismatches": budget_mismatches,
+    }
 
     with tempfile.TemporaryDirectory(prefix="stage27r-audit-") as directory:
         recomputed = Path(directory) / "statistics.json"

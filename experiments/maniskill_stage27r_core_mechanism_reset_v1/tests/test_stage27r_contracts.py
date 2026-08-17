@@ -90,6 +90,12 @@ def test_training_launcher_isolates_concurrent_wandb_services() -> None:
     assert "export WANDB__SERVICE_WAIT=300" in text
 
 
+def test_formal_precheck_runs_real_deterministic_smoke() -> None:
+    text = (ROOT / "launchers/run_stage27r_formal_pai.sh").read_text()
+    assert "deterministic_lockstep_smoke.py" in text
+    assert "DETERMINISTIC_LOCKSTEP_SMOKE.json" in text
+
+
 def test_fail_on_overwrite(tmp_path: Path) -> None:
     path = tmp_path / "evidence.json"
     atomic_json(path, {"a": 1})

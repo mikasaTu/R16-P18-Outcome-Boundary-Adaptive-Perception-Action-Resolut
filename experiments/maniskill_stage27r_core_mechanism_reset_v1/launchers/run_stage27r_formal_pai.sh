@@ -28,7 +28,8 @@ export PYTHONDONTWRITEBYTECODE=1
 if [[ ! -f "${result}/PRECHECKS.json" ]]; then
   "${py}" -m compileall -q "${exp}/scripts"
   "${py}" -m pytest -q "${exp}/tests" | tee "${artifact}/preflight-pytest.log"
-  "${py}" -c 'import json,sys; json.dump({"compileall":True,"unit_tests":True,"deterministic_smoke":True,"fail_on_overwrite":True,"all_pass":True},open(sys.argv[1],"x"),indent=2)' "${result}/PRECHECKS.json"
+  "${py}" "${exp}/scripts/deterministic_lockstep_smoke.py" --output "${result}/DETERMINISTIC_LOCKSTEP_SMOKE.json"
+  "${py}" -c 'import json,sys; smoke=json.load(open(sys.argv[1])); json.dump({"compileall":True,"unit_tests":True,"deterministic_smoke":bool(smoke["pass"]),"deterministic_smoke_evidence":sys.argv[1],"fail_on_overwrite":True,"all_pass":bool(smoke["pass"])},open(sys.argv[2],"x"),indent=2)' "${result}/DETERMINISTIC_LOCKSTEP_SMOKE.json" "${result}/PRECHECKS.json"
 fi
 test -f "${result}/EXACT_DATASET_AUDIT.json" || "${py}" "${exp}/scripts/audit_exact_dataset.py" --dataset-root "${data_root}" --output "${result}/EXACT_DATASET_AUDIT.json"
 
