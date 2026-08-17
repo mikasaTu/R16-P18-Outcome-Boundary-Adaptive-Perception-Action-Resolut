@@ -52,7 +52,7 @@ def split_replay(source_h5: Path, output_root: Path) -> list[dict]:
             chosen = episodes[cursor : cursor + count]
             with h5py.File(target, "x") as sink:
                 for new_id, row in enumerate(chosen):
-                    source.copy(source[f"traj_{row['episode_id']}"]], sink, name=f"traj_{new_id}")
+                    source.copy(source[f"traj_{row['episode_id']}"], sink, name=f"traj_{new_id}")
             split_rows = []
             for new_id, row in enumerate(chosen):
                 row = dict(row); row["episode_id"] = new_id; row["split"] = split
