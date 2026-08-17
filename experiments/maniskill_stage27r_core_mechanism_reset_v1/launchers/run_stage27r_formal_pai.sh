@@ -13,7 +13,7 @@ readonly old_data="/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-bou
 readonly expert_root="/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-stage27r-expert-pool-v1"
 readonly run_id="${PAI_CANARY_RUN_ID:?}"
 readonly gpu_count="${PAI_CANARY_EXPECTED_GPUS:?}"
-readonly result="/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/${run_id}"
+readonly result="${R16P18_FORMAL_RESULT_ROOT:-/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/${run_id}}"
 readonly artifact="${PAI_CANARY_RUN_DIR:?}"
 test -f "${training}/DATA_AND_TRAINING_COMPLETE.json"
 test "$(git -C "${source_root}" rev-parse HEAD)" = "${R16P18_EXPECTED_PROJECT_COMMIT:?}"
