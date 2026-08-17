@@ -26,6 +26,11 @@ CONFIG = {
 SPLITS = (("train", 200), ("validation", 50), ("test", 50))
 
 
+def replay_state_flags(task_id: str) -> list[str]:
+    """Bind GPU-sensitive PushT rendering to the recorded successful states."""
+    return ["--use-env-states"] if task_id == "PushT-v1" else ["--use-first-env-state"]
+
+
 def write_subset(source_h5: Path, target_h5: Path, count: int) -> None:
     if target_h5.exists() or target_h5.with_suffix(".json").exists():
         raise FileExistsError(f"fail-on-overwrite: {target_h5}")
@@ -85,7 +90,7 @@ def main() -> None:
         print(complete.read_text()); return
     raw = task_root / "oversized_source" / "trajectory.h5"
     write_subset(args.official_h5, raw, pool_count)
-    command = [str(args.python), "-m", "mani_skill.trajectory.replay_trajectory", "--traj-path", str(raw), "--sim-backend", replay_backend, "--obs-mode", "rgb", "--reward-mode", "none", "--target-control-mode", control, "--save-traj", "--use-first-env-state", "--max-retry", "9", "--num-envs", "8"]
+    command = [str(args.python), "-m", "mani_skill.trajectory.replay_trajectory", "--traj-path", str(raw), "--sim-backend", replay_backend, "--obs-mode", "rgb", "--reward-mode", "none", "--target-control-mode", control, "--save-traj", *replay_state_flags(args.task_id), "--max-retry", "9", "--num-envs", "8"]
     log = task_root / "replay.log"
     with log.open("x") as handle:
         result = subprocess.run(command, stdout=handle, stderr=subprocess.STDOUT)

@@ -13,6 +13,7 @@ from common import atomic_json  # noqa: E402
 from analyze_stage27r import holm, paired_summary  # noqa: E402
 import multires_policy  # noqa: E402
 from multires_policy import MultiResolutionAgent, Native128Dataset, crop_tile  # noqa: E402
+from prepare_exact_replay_data import replay_state_flags  # noqa: E402
 
 
 def test_crop_tiles_partition_exactly() -> None:
@@ -75,6 +76,11 @@ def test_consistency_uses_same_posterior_sample_and_free_space_mask(monkeypatch)
     assert len(agent.model.noises) == 2
     assert torch.equal(agent.model.noises[0], agent.model.noises[1])
     assert result["consistency"].item() == pytest.approx(0.5)
+
+
+def test_pusht_rgb_conversion_uses_recorded_successful_env_states() -> None:
+    assert replay_state_flags("PushT-v1") == ["--use-env-states"]
+    assert replay_state_flags("StackCube-v1") == ["--use-first-env-state"]
 
 
 def test_fail_on_overwrite(tmp_path: Path) -> None:
