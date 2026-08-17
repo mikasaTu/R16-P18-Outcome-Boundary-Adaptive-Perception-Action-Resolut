@@ -1,0 +1,9 @@
+{
+  "head": "d1d479f86b4d696b3d1c5ba0cedc9222d1b1bc1d",
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "trees": {
+    "experiments/maniskill_act_boundary_screen_v1": "7fd28ddb55dc40813c014b37be82389da345e029",
+    "experiments/maniskill_stage25_repair_oracle_v1": "f05c4f074deb178580b0bf090b3785d8b788d914",
+    "experiments/maniskill_stage26_counterfactual_completion_v1": "9350ed1f8a25b6ad55ee17bdf078294c054e40ae"
+  }
+}
