@@ -64,11 +64,16 @@ control_for() {
 mapfile -t jobs < <(for task in "${tasks[@]}"; do for seed in 16018 16019 16020; do echo "${task} ${seed}"; done; done)
 worker() {
   local gpu="$1" index task seed control output worker_tmp wandb_dir
+  # Python multiprocessing creates AF_UNIX resource-sharer sockets below
+  # TMPDIR.  CPFS artifact paths exceed Linux's sockaddr_un limit once the
+  # random socket suffix is appended, so keep one short, job-lifetime temp
+  # directory per GPU.  W&B artifacts remain persisted separately on CPFS.
+  worker_tmp="/tmp/r27r-gpu-${gpu}"
+  mkdir -p "${worker_tmp}"
   for ((index=gpu; index<${#jobs[@]}; index+=gpu_count)); do
     read -r task seed <<<"${jobs[$index]}"
     control="$(control_for "${task}")"
     output="${result_root}/training/${task}/seed_${seed}"
-    worker_tmp="${artifact_dir}/tmp/gpu_${gpu}/${task}/seed_${seed}"
     wandb_dir="${output}/wandb"
     mkdir -p "${worker_tmp}" "${wandb_dir}"
     # W&B starts a child service after Python's tempfile context is created.
