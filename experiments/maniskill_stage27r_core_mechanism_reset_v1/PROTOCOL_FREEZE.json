@@ -1,0 +1,13 @@
+{
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "frozen_at_utc": "2026-08-18T00:00:00Z",
+  "frozen_before_confirmatory_results": true,
+  "preregistration_path": "experiments/maniskill_stage27r_core_mechanism_reset_v1/preregistration.yaml",
+  "candidate_order_frozen": true,
+  "seeds_frozen": true,
+  "treatments_frozen": true,
+  "statistics_frozen": true,
+  "thresholds_and_precedence_frozen": true,
+  "run_all_oracle_arms_if_gate_fails": true,
+  "downstream_results_cannot_reverse_upstream_failure": true
+}

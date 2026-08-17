@@ -1,0 +1,228 @@
+protocol_id: R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1
+protocol_version: 1
+frozen_date_utc: "2026-08-18"
+stage: 2.7R
+scope: outcome_marginal_value_oracle_with_symmetric_visual_action_treatments
+
+execution_contract:
+  run_all_oracle_arms_after_any_gate_failure: true
+  upstream_failure_limits_claim_tier: true
+  confirmatory_tuning_forbidden: true
+  learned_router_ood_pi05_real_robot_forbidden: true
+  formal_source_must_be_clean_commit: true
+  raw_evidence_fail_on_overwrite: true
+  allowed_a800_gpu_count_inclusive: [2, 8]
+
+repository:
+  branch: stage27r-core-mechanism-reset-v1
+  experiment_root: experiments/maniskill_stage27r_core_mechanism_reset_v1
+  immutable_predecessor_paths:
+    - experiments/maniskill_act_boundary_screen_v1
+    - experiments/maniskill_stage25_repair_oracle_v1
+    - experiments/maniskill_stage26_counterfactual_completion_v1
+
+scientific_questions:
+  - Does fine visual resolution have stable marginal outcome value over CC?
+  - Does per-step action replanning have stable marginal outcome value over CC?
+  - Does FF add value beyond the better single-axis treatment?
+  - Does state-and-axis allocation beat the strongest equal-cost fixed-axis control?
+  - Can the oracle approach all-fine outcome quality at materially lower measured compute?
+  - Does the negative control receive spurious refinement?
+
+environment:
+  maniskill_tag: v3.0.1
+  maniskill_commit: a4a4f9272ad64b1564035874b605ceb687b63ed8
+  python: "3.11.11"
+  pytorch: 2.5.1+cu124
+  torchvision: 0.20.1+cu124
+  sapien: 3.0.0
+  formal_sim_backend: physx_cpu
+  observation_mode: rgb
+  render_resolution: [128, 128]
+  control_modes:
+    StackCube-v1: pd_ee_delta_pos
+    PegInsertionSide-v1: pd_ee_delta_pose
+    PlugCharger-v1: pd_ee_delta_pose
+    PullCubeTool-v1: pd_ee_delta_pose
+    PushT-v1: pd_ee_delta_pose
+    PushCube-v1: pd_ee_delta_pos
+
+data:
+  required_independent_successful_episodes_per_formal_task: 300
+  split_counts: {train: 200, validation: 50, test: 50}
+  split_unit: source_trajectory
+  required_uniqueness: [source_trajectory_id, episode_seed, initial_state_sha256]
+  augmentation_counts_as_episode: false
+  source: pinned_official_motion_planning_or_rl_demo_replayed_to_rgb
+  dataset_root: /mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1
+
+task_selection:
+  anchor_positive: StackCube-v1
+  second_positive_candidate_order:
+    - PegInsertionSide-v1
+    - PlugCharger-v1
+    - PullCubeTool-v1
+    - PushT-v1
+    - StackCubeHard-v1
+  negative_primary_candidate: PushCube-v1
+  negative_fallback_order: [PickCube-v1, LiftPegUpright-v1]
+  negative_definition: healthy_smooth_low_contact
+  model_seeds: [16018, 16019, 16020]
+  screen_episodes_per_seed: 40
+  validation_episodes_per_seed: 100
+  checkpoint_candidates: top_2_by_validation_loss_plus_final
+  checkpoint_lexicographic_selection:
+    - maximize_success_hold5
+    - maximize_success_at_end
+    - minimize_post_success_loss
+    - minimize_checkpoint_step
+  positive_gate:
+    aggregate_success_hold5_inclusive: [0.30, 0.80]
+    model_seed_range_pp_lte: 20
+    minimum_two_of_three_seed_success_hold5_gte: 0.25
+    all_fine_success_lte: 0.90
+    coarse_success_fraction_of_all_fine_gte: 0.50
+    fresh_reset_replay_categorical_agreement: 1.0
+  negative_gate:
+    PushCube-v1_repaired_success_hold5_gte: 0.70
+
+seed_banks:
+  algorithm: sha256_low31_disjoint_v1
+  namespace: R16-P18-MS6-STAGE27R
+  model: [16018, 16019, 16020]
+  screen_base: 2701000
+  validation_base: 2702000
+  calibration_base: 2703000
+  confirmatory_base: 2704000
+  repeat: [0, 1, 2, 3, 4]
+  same_episode_order_across_model_seeds: true
+  all_banks_pairwise_disjoint: true
+
+policy:
+  one_model_and_shared_primary_weights_for_all_modes: true
+  action_horizon: 8
+  training_resolution_mode_dropout: {CC: 0.25, FC: 0.25, CF: 0.25, FF: 0.25}
+  free_space_consistency_regularization_weight: 0.1
+  visual:
+    native_input: [128, 128]
+    coarse_global_input: [112, 112]
+    coarse_encoder_only: true
+    fine_keeps_global_branch: true
+    fine_crop_grid_candidates: [[2, 2], [4, 4]]
+    confirmatory_grid_rule: use_2x2_only_if_gain_ratio_vs_4x4_gte_0.90_else_use_4x4
+    crop_encoder: shared_weight_resnet18
+    fusion: token_attention
+    blur_probe_primary_forbidden: true
+  action:
+    coarse: {query_every_steps: 4, execute_chunk_steps: 4}
+    fine: {query_every_steps: 1, execute_chunk_steps: 1}
+    old_pca_atlas_deployable_forbidden: true
+
+lockstep_replay:
+  mid_state_restore_forbidden: true
+  canonical_driver_only_before_branch: true
+  broadcast_exact_prefix_action: true
+  thresholds:
+    broadcast_action_max_abs: 0.0
+    object_translation_m_lte: 1.0e-5
+    object_rotation_rad_lte: 1.0e-4
+    categorical_agreement: 1.0
+    rgb_max_lsb_lte: 1
+    selected_state_pass_rate_gte: 0.95
+  failure_status: NO_GO_CAUSAL_BACKEND
+
+state_banks:
+  positive_calibration_per_task: {states: 48, phases: 4, per_phase: 12, expert_per_phase: 6, on_policy_per_phase: 6}
+  positive_confirmatory_per_task: {states: 96, phases: 4, per_phase: 24, expert_per_phase: 12, on_policy_per_phase: 12}
+  negative_confirmatory_states: 48
+  phases: [free_space_approach, pre_contact_or_pre_grasp, object_in_hand_pre_placement, contact_placement_near_completion]
+  maximum_primary_states_per_source_episode: 1
+  post_success_primary_forbidden: true
+  privileged_phase_deployable_input_forbidden: true
+  deterministic_selection: phase_then_source_type_then_sha256_source_episode_seed_step
+  disjoint_from: [train, validation, screen, test, calibration]
+
+treatments:
+  names: [CC, CF, FC_tile0, FC_tile1, FC_tile2, FC_tile3, FF_tile0, FF_tile1, FF_tile2, FF_tile3]
+  treatment_window_steps: 8
+  common_native_full_continuation_steps: 20
+  stop_after_success_hold5: true
+  calibration_repeats: 3
+  confirmatory_repeats: 5
+  physical_oracle:
+    FC: best_mean_utility_physical_FC_tile
+    FF: best_mean_utility_physical_FF_tile
+  tile_is_statistical_unit: false
+  matched_fields: [source_episode, branch_step, model_seed, prefix, treatment_duration, continuation_duration, success_semantics, controller_semantics, gripper_semantics]
+
+success_semantics:
+  primary: success_hold5
+  success_hold5: any_five_consecutive_true_success_predicates
+  uniformly_privileged_termination_after_hold5: true
+  stopping_predictor_treatment_forbidden: true
+  record: [success_once, success_hold5, success_at_end, first_success_step, longest_success_streak, post_success_loss, normalized_progress, intended_contact, unintended_contact, collision, dropped_or_slipped, recoverable, object_translation_drift, object_rotation_drift]
+
+repeat_aggregation:
+  repeat_disagreement_as_new_categorical_boundary_forbidden: true
+  fields: [success_probability, mean_progress, progress_variance, drop_probability, collision_probability, recoverability_probability, utility_mean, standard_error]
+
+utility_weight_sets:
+  balanced: {success_hold5: 100, normalized_progress: 20, recoverable: 5, dropped_or_slipped: -10, collision: -5}
+  success_dominant: {success_hold5: 120, normalized_progress: 10, recoverable: 3, dropped_or_slipped: -12, collision: -6}
+  progress_dominant: {success_hold5: 80, normalized_progress: 35, recoverable: 5, dropped_or_slipped: -10, collision: -5}
+  directional_consistency_required_sets: 2
+
+effects:
+  visual: U_FC_minus_U_CC
+  action: U_CF_minus_U_CC
+  joint: U_FF_minus_max_U_FC_U_CF
+
+compute_accounting:
+  raw_fields: [global_encoder_calls, fine_encoder_calls, policy_forward_calls, policy_forward_rows, visual_tokens, action_opportunities, executed_steps, gpu_latency_ms, simulator_latency_ms, estimated_flops, peak_memory_bytes, selector_latency_ms, episode_total_compute]
+  budgets_fraction_all_fine: [0.25, 0.50, 0.75]
+  deployment_arms: [all_coarse, all_fine, random_state, phase_heuristic, visual_only_oracle, action_only_oracle, strongest_equal_cost_fixed_axis, state_axis_oracle, joint_oracle]
+  equal_cost_FC_may_refine_more_states_than_FF: true
+  physical_oracle_sim_calls_reported_as_offline_labeling_cost: true
+  hardcoded_budget_compliant_forbidden: true
+
+statistics:
+  primary_unit: source_episode
+  repeats_aggregated_within_state_treatment: true
+  tiles_are_not_independent: true
+  per_model_seed_and_aggregate: true
+  paired_bootstrap_replicates: 10000
+  paired_sign_flip_test: true
+  confidence_level: 0.95
+  secondary_holm_correction: true
+
+final_status:
+  precedence: [NO_GO_CAUSAL_BACKEND, NO_GO_CORE_MECHANISM, REVISE_VISUAL_ONLY, REVISE_SHARED_AXIS_ROUTER, GO_FULL_JOINT]
+  GO_FULL_JOINT:
+    visual_effect_positive_both_tasks: true
+    action_effect_one_positive_other_nonnegative: true
+    joint_task_level_ci_lower_gt: 0
+    positive_joint_state_fraction_gte: 0.10
+    positive_joint_state_required_model_seeds: 2
+    budget_50_joint_vs_strongest_equal_cost:
+      either_success_hold5_gain_gte: 0.05
+      and_ci_lower_gt: 0
+      or_success_difference_abs_lte: 0.02
+      and_compute_reduction_gte: 0.25
+  REVISE_SHARED_AXIS_ROUTER:
+    stable_visual_and_action_marginal_value: true
+    joint_synergy_fails: true
+    state_axis_beats_best_equal_cost_fixed_axis: true
+  REVISE_VISUAL_ONLY:
+    visual_effect_positive_both_tasks: true
+    action_and_joint_fail: true
+    visual_allocation_near_all_fine_or_beats_random_equal_cost_coarse_at_50pct: true
+  NO_GO_CORE_MECHANISM:
+    no_stable_visual_action_or_allocation_gain_or_single_seed_task_weight_only: true
+
+audit:
+  required: [unit_tests, compileall, deterministic_smoke, fresh_reset_prefix_fidelity_smoke, fail_on_overwrite, shard_autoresume, split_leakage, no_privileged_input_static, raw_outcome_recomputation, compute_accounting_recomputation, paired_statistics_recomputation, scientific_sha256_manifest, clean_source_commit, predecessor_immutability]
+  independent_decision_implementation: true
+
+stage28:
+  draft_only_for_status: [GO_FULL_JOINT, REVISE_SHARED_AXIS_ROUTER, REVISE_VISUAL_ONLY]
+  execute: false

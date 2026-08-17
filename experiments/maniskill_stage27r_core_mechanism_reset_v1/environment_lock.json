@@ -1,0 +1,12 @@
+{
+  "maniskill_tag": "v3.0.1",
+  "maniskill_commit": "a4a4f9272ad64b1564035874b605ceb687b63ed8",
+  "python": "3.11.11",
+  "torch": "2.5.1+cu124",
+  "torchvision": "0.20.1+cu124",
+  "sapien": "3.0.0",
+  "formal_backend": "physx_cpu",
+  "observation_mode": "rgb",
+  "render_size": [128, 128],
+  "formal_runtime_root": "/mnt/cpfs/zbl-cpfs-new"
+}

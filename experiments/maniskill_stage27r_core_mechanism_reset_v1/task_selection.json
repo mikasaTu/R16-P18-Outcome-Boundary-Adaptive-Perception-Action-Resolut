@@ -1,0 +1,13 @@
+{
+  "anchor_positive": "StackCube-v1",
+  "second_positive_candidate_order": ["PegInsertionSide-v1", "PlugCharger-v1", "PullCubeTool-v1", "PushT-v1", "StackCubeHard-v1"],
+  "negative_primary": "PushCube-v1",
+  "negative_fallback_order": ["PickCube-v1", "LiftPegUpright-v1"],
+  "selection": "first candidate in frozen order passing every positive gate",
+  "screen_model_seeds": [16018, 16019, 16020],
+  "screen_episodes_per_seed": 40,
+  "validation_episodes_per_seed": 100,
+  "selected_positive": null,
+  "selected_negative": null,
+  "selection_not_yet_observed_at_freeze": true
+}
