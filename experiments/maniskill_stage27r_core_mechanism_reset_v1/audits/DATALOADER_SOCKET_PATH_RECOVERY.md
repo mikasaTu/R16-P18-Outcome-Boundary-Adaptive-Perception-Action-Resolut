@@ -27,3 +27,17 @@ outputs continue to use their existing per-run CPFS directories.
 The replacement run must show all eight initial tracked losses matching the
 accepted single-worker run, no resource-sharer errors, and materially lower
 time to optimizer step 200 before the full training run is accepted.
+
+## Accepted replacement
+
+PAI run `stage27r-data-train-v19` / `dlc12njk0ax98xec` passed the early
+acceptance checks. All eight first-step losses exactly matched v17:
+
+- StackCube seeds 16018/16019/16020: 80.3175049, 101.5326462, 65.9923096
+- PegInsertionSide seeds 16018/16019/16020: 59.2976074, 78.5486679, 88.0450439
+- PlugCharger seeds 16018/16019: 61.3166542, 79.2542191
+
+The first observed StackCube step-200 wall time fell from 4444.99 seconds in
+v17 to 42.57 seconds in v19 (104.4x faster), with eight separate W&B run files
+and no resource-sharer, traceback, or W&B error at acceptance time. The full
+30,000-step schedule remains unchanged and continues under the same JobId.
