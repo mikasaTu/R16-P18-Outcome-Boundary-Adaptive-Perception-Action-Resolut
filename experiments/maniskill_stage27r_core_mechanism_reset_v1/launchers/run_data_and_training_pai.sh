@@ -80,7 +80,7 @@ worker() {
       --train-h5 "${data_root}/${task}/splits/train/trajectory.h5" \
       --validation-h5 "${data_root}/${task}/splits/validation/trajectory.h5" \
       --output-dir "${output}" --total-iterations 30000 --checkpoint-interval 5000 \
-      --batch-size 256 --validation-batch-size 256 --device cuda --track \
+      --batch-size 256 --validation-batch-size 256 --num-workers 8 --device cuda --track \
       --wandb-project "${WANDB_PROJECT}" --run-name "stage27r-${task}-seed${seed}"
   done
 }

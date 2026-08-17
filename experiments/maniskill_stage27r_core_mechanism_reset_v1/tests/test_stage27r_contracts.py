@@ -88,6 +88,7 @@ def test_training_launcher_isolates_concurrent_wandb_services() -> None:
     assert 'TMPDIR="${worker_tmp}"' in text
     assert 'WANDB_DIR="${wandb_dir}"' in text
     assert "export WANDB__SERVICE_WAIT=300" in text
+    assert "--num-workers 8" in text
 
 
 def test_formal_precheck_runs_real_deterministic_smoke() -> None:
