@@ -13,12 +13,15 @@ import h5py
 from common import PROTOCOL_ID, atomic_json, sha256_file
 
 CONFIG = {
-    "StackCube-v1": ("pd_ee_delta_pos", 340),
-    "PegInsertionSide-v1": ("pd_ee_delta_pose", 400),
-    "PlugCharger-v1": ("pd_ee_delta_pose", 450),
-    "PullCubeTool-v1": ("pd_ee_delta_pose", 330),
-    "PushT-v1": ("pd_ee_delta_pose", 400),
-    "PushCube-v1": ("pd_ee_delta_pos", 340),
+    "StackCube-v1": ("pd_ee_delta_pos", 340, "physx_cpu"),
+    "PegInsertionSide-v1": ("pd_ee_delta_pose", 400, "physx_cpu"),
+    "PlugCharger-v1": ("pd_ee_delta_pose", 450, "physx_cpu"),
+    "PullCubeTool-v1": ("pd_ee_delta_pose", 330, "physx_cpu"),
+    # The official PushT policy/data are GPU-physics artifacts. Exact action
+    # replay on CPU is empirically 0/400 successful, so data conversion stays
+    # on the pinned source backend; formal evaluation remains PhysX CPU.
+    "PushT-v1": ("pd_ee_delta_pose", 400, "physx_cuda"),
+    "PushCube-v1": ("pd_ee_delta_pos", 340, "physx_cpu"),
 }
 SPLITS = (("train", 200), ("validation", 50), ("test", 50))
 
@@ -75,22 +78,22 @@ def main() -> None:
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--python", type=Path, required=True)
     args = parser.parse_args()
-    control, pool_count = CONFIG[args.task_id]
+    control, pool_count, replay_backend = CONFIG[args.task_id]
     task_root = args.output_root / args.task_id
     complete = task_root / "DATA_COMPLETE.json"
     if complete.exists():
         print(complete.read_text()); return
     raw = task_root / "oversized_source" / "trajectory.h5"
     write_subset(args.official_h5, raw, pool_count)
-    command = [str(args.python), "-m", "mani_skill.trajectory.replay_trajectory", "--traj-path", str(raw), "--sim-backend", "physx_cpu", "--obs-mode", "rgb", "--reward-mode", "none", "--target-control-mode", control, "--save-traj", "--use-first-env-state", "--max-retry", "9", "--num-envs", "8"]
+    command = [str(args.python), "-m", "mani_skill.trajectory.replay_trajectory", "--traj-path", str(raw), "--sim-backend", replay_backend, "--obs-mode", "rgb", "--reward-mode", "none", "--target-control-mode", control, "--save-traj", "--use-first-env-state", "--max-retry", "9", "--num-envs", "8"]
     log = task_root / "replay.log"
     with log.open("x") as handle:
         result = subprocess.run(command, stdout=handle, stderr=subprocess.STDOUT)
     if result.returncode:
         raise RuntimeError(f"replay failed {result.returncode}: {log}")
-    replayed = raw.with_name(f"trajectory.rgb.{control}.physx_cpu.h5")
+    replayed = raw.with_name(f"trajectory.rgb.{control}.{replay_backend}.h5")
     records = split_replay(replayed, task_root / "splits")
-    atomic_json(complete, {"protocol_id": PROTOCOL_ID, "status": "PASS", "task": args.task_id, "source_pool": pool_count, "control_mode": control, "splits": records})
+    atomic_json(complete, {"protocol_id": PROTOCOL_ID, "status": "PASS", "task": args.task_id, "source_pool": pool_count, "control_mode": control, "replay_backend": replay_backend, "formal_backend": "physx_cpu", "splits": records})
     print(complete.read_text())
 
 
