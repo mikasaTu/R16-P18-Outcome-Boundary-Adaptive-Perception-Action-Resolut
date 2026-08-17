@@ -3,7 +3,7 @@ set -euo pipefail
 umask 077
 
 [[ "$(id -u):$(id -g)" == "2254:2254" ]] || { echo "expected runtime 2254:2254" >&2; exit 73; }
-readonly source_root="/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage26-formal-source-v4"
+readonly source_root="${R16P18_SOURCE_ROOT:-/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage26-formal-source-v4}"
 readonly exp_root="${source_root}/experiments/maniskill_stage27r_core_mechanism_reset_v1"
 readonly runtime_python="/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python"
 readonly overlay="/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/r16p18-maniskill-act-v301-overlay/site-packages"
