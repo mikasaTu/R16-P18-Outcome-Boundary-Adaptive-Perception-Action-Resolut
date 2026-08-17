@@ -83,6 +83,13 @@ def test_pusht_rgb_conversion_uses_recorded_successful_env_states() -> None:
     assert replay_state_flags("StackCube-v1") == ["--use-first-env-state"]
 
 
+def test_training_launcher_isolates_concurrent_wandb_services() -> None:
+    text = (ROOT / "launchers/run_data_and_training_pai.sh").read_text()
+    assert 'TMPDIR="${worker_tmp}"' in text
+    assert 'WANDB_DIR="${wandb_dir}"' in text
+    assert "export WANDB__SERVICE_WAIT=300" in text
+
+
 def test_fail_on_overwrite(tmp_path: Path) -> None:
     path = tmp_path / "evidence.json"
     atomic_json(path, {"a": 1})

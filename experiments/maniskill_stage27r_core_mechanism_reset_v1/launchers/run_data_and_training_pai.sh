@@ -33,6 +33,7 @@ export PYTHONPATH="${exp_root}/scripts:${maniskill_root}/examples/baselines/act:
 export PYTHONUNBUFFERED=1
 export WANDB_ENTITY="chen_jian-cj-workspace"
 export WANDB_PROJECT="R16-P18-ManiSkill-Stage27R"
+export WANDB__SERVICE_WAIT=300
 child_pids=()
 handle_signal() {
   printf '{"protocol_id":"R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1","status":"PREEMPTION_SIGNAL_RECEIVED"}\n' >"${result_root}/PREEMPTION_SIGNAL.json"
@@ -62,12 +63,19 @@ control_for() {
 
 mapfile -t jobs < <(for task in "${tasks[@]}"; do for seed in 16018 16019 16020; do echo "${task} ${seed}"; done; done)
 worker() {
-  local gpu="$1" index task seed control output
+  local gpu="$1" index task seed control output worker_tmp wandb_dir
   for ((index=gpu; index<${#jobs[@]}; index+=gpu_count)); do
     read -r task seed <<<"${jobs[$index]}"
     control="$(control_for "${task}")"
     output="${result_root}/training/${task}/seed_${seed}"
-    CUDA_VISIBLE_DEVICES="${gpu}" "${runtime_python}" "${exp_root}/scripts/train_multires_act.py" \
+    worker_tmp="${artifact_dir}/tmp/gpu_${gpu}/${task}/seed_${seed}"
+    wandb_dir="${output}/wandb"
+    mkdir -p "${worker_tmp}" "${wandb_dir}"
+    # W&B starts a child service after Python's tempfile context is created.
+    # Give every concurrent run a persistent, non-shared directory so one
+    # process cannot invalidate another process's service port file.
+    CUDA_VISIBLE_DEVICES="${gpu}" TMPDIR="${worker_tmp}" WANDB_DIR="${wandb_dir}" \
+      "${runtime_python}" "${exp_root}/scripts/train_multires_act.py" \
       --task-id "${task}" --seed "${seed}" --control-mode "${control}" \
       --train-h5 "${data_root}/${task}/splits/train/trajectory.h5" \
       --validation-h5 "${data_root}/${task}/splits/validation/trajectory.h5" \
