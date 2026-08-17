@@ -18,9 +18,9 @@ def utility(row,w): return w[0]*row["success_hold5"]+w[1]*row["normalized_progre
 
 
 def main():
- p=argparse.ArgumentParser(); p.add_argument("--state-bank",type=Path,required=True); p.add_argument("--checkpoint",type=Path,required=True); p.add_argument("--output",type=Path,required=True); p.add_argument("--device",default="cuda"); p.add_argument("--tile-grid",type=int,choices=[2,4],default=2); p.add_argument("--state-start",type=int,default=0); p.add_argument("--state-stop",type=int); a=p.parse_args()
+ p=argparse.ArgumentParser(); p.add_argument("--state-bank",type=Path,required=True); p.add_argument("--checkpoint",type=Path,required=True); p.add_argument("--model-seed",type=int,required=True); p.add_argument("--output",type=Path,required=True); p.add_argument("--device",default="cuda"); p.add_argument("--tile-grid",type=int,choices=[2,4],default=2); p.add_argument("--state-start",type=int,default=0); p.add_argument("--state-stop",type=int); a=p.parse_args()
  if a.output.exists(): raise FileExistsError(a.output)
- bank=json.loads(a.state_bank.read_text()); states=bank["states"][a.state_start:a.state_stop]; task=bank["task"]; seed=int(bank["model_seed"]); repeats=3 if bank["bank"]=="calibration" else 5; device=torch.device(a.device); env=make_env(task); agent,_=load_agent(env,task,seed,a.checkpoint,device); rows=[]; tiles=a.tile_grid*a.tile_grid; conditions=[("CC","coarse","coarse",None),("CF","coarse","fine",None),*[(f"FC_tile{i}","fine","coarse",i) for i in range(tiles)],*[(f"FF_tile{i}","fine","fine",i) for i in range(tiles)]]
+ bank=json.loads(a.state_bank.read_text()); states=bank["states"][a.state_start:a.state_stop]; task=bank["task"]; seed=a.model_seed; repeats=3 if bank["bank"]=="calibration" else 5; device=torch.device(a.device); env=make_env(task); agent,_=load_agent(env,task,seed,a.checkpoint,device); rows=[]; tiles=a.tile_grid*a.tile_grid; conditions=[("CC","coarse","coarse",None),("CF","coarse","fine",None),*[(f"FC_tile{i}","fine","coarse",i) for i in range(tiles)],*[(f"FF_tile{i}","fine","fine",i) for i in range(tiles)]]
  try:
   for state in states:
    for name,visual,action,tile in conditions:

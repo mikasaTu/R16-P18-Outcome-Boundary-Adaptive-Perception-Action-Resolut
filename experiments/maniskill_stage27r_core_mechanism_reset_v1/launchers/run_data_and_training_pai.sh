@@ -26,6 +26,8 @@ test "$(nvidia-smi --query-gpu=name --format=csv,noheader | grep -c '^NVIDIA A80
 mkdir -p "${result_root}" "${data_root}" "${artifact_dir}"
 test "$(stat -c '%u:%g' "${result_root}")" = "2254:2254"
 exec > >(tee -a "${artifact_dir}/runtime.log") 2>&1
+cd "${artifact_dir}"
+test "$(pwd -P)" = "${artifact_dir}"
 
 export PYTHONPATH="${exp_root}/scripts:${maniskill_root}/examples/baselines/act:${maniskill_root}:${overlay}"
 export PYTHONUNBUFFERED=1

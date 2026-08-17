@@ -40,9 +40,10 @@ def state_table(rows,weight):
     for r in rows: grouped[(r["task"],r["model_seed"],r["bank_id"],r["source_episode"],r["phase"])][r["condition"]]=r
     out=[]
     for key,c in grouped.items():
-      if len(c)!=10: raise RuntimeError(f"incomplete factorial {key}: {len(c)}")
-      fc=max((c[f"FC_tile{i}"] for i in range(4)),key=lambda r:(r["utility"][weight],-int(r["condition"][-1])))
-      ff=max((c[f"FF_tile{i}"] for i in range(4)),key=lambda r:(r["utility"][weight],-int(r["condition"][-1])))
+      fc_rows=[value for name,value in c.items() if name.startswith("FC_tile")]; ff_rows=[value for name,value in c.items() if name.startswith("FF_tile")]
+      if not fc_rows or len(fc_rows)!=len(ff_rows) or "CC" not in c or "CF" not in c: raise RuntimeError(f"incomplete factorial {key}: {len(c)}")
+      fc=max(fc_rows,key=lambda r:(r["utility"][weight],-int(r["condition"].split("tile")[-1])))
+      ff=max(ff_rows,key=lambda r:(r["utility"][weight],-int(r["condition"].split("tile")[-1])))
       cc,cf=c["CC"],c["CF"]
       out.append({"key":key,"task":key[0],"seed":key[1],"source_episode":key[3],"phase":key[4],"CC":cc,"CF":cf,"FC":fc,"FF":ff,"dv":fc["utility"][weight]-cc["utility"][weight],"da":cf["utility"][weight]-cc["utility"][weight],"dj":ff["utility"][weight]-max(fc["utility"][weight],cf["utility"][weight])})
     return out
