@@ -1,38 +1,83 @@
 #!/usr/bin/env python3
+"""Independent recomputation and provenance audit for the formal Stage-2.7R run."""
 from __future__ import annotations
 
 import argparse
 import ast
-import hashlib
 import json
 import subprocess
+import tempfile
 from pathlib import Path
 
 from common import PROTOCOL_ID, atomic_json, sha256_file
 
-PREDECESSORS=["experiments/maniskill_act_boundary_screen_v1","experiments/maniskill_stage25_repair_oracle_v1","experiments/maniskill_stage26_counterfactual_completion_v1"]
+PREDECESSORS = ("experiments/maniskill_act_boundary_screen_v1", "experiments/maniskill_stage25_repair_oracle_v1", "experiments/maniskill_stage26_counterfactual_completion_v1")
+WEIGHTS = {"balanced": (100, 20, 5, -10, -5), "success_dominant": (120, 10, 3, -12, -6), "progress_dominant": (80, 35, 5, -10, -5)}
+ACCOUNTING = {"global_encoder_calls", "fine_encoder_calls", "policy_forward_calls", "policy_forward_rows", "visual_tokens", "action_opportunities", "executed_steps", "gpu_latency_ms", "simulator_latency_ms", "estimated_flops", "peak_memory_bytes", "selector_latency_ms", "episode_total_compute"}
 
 
 def main():
- p=argparse.ArgumentParser(); p.add_argument("--repo",type=Path,required=True); p.add_argument("--formal-root",type=Path,required=True); p.add_argument("--output",type=Path,required=True); a=p.parse_args(); checks={}
- freeze=json.loads((a.repo/"experiments/maniskill_stage27r_core_mechanism_reset_v1/manifests/predecessor_tree_freeze.json").read_text())["trees"]
- current={path:subprocess.check_output(["git","rev-parse",f"HEAD:{path}"],cwd=a.repo,text=True).strip() for path in PREDECESSORS}; checks["predecessor_immutability"]={"pass":current==freeze,"frozen":freeze,"current":current}
- model=(a.repo/"experiments/maniskill_stage27r_core_mechanism_reset_v1/scripts/multires_policy.py").read_text(); tree=ast.parse(model); obs_keys=set()
- for node in ast.walk(tree):
-  if isinstance(node,ast.Subscript) and isinstance(node.value,ast.Name) and node.value.id in {"obs","data"} and isinstance(node.slice,ast.Constant) and isinstance(node.slice.value,str): obs_keys.add(node.slice.value)
- checks["no_privileged_model_input"]={"pass":not bool(obs_keys-{"state","rgb","_visual_mode","_tile_id","_tile_grid"}),"observed_keys":sorted(obs_keys)}
- raw_files=sorted(a.formal_root.glob("oracle/**/*.json")); row_count=0; utility_mismatch=0; accounting_missing=0
- weights={"balanced":(100,20,5,-10,-5),"success_dominant":(120,10,3,-12,-6),"progress_dominant":(80,35,5,-10,-5)}
- for path in raw_files:
-  value=json.loads(path.read_text())
-  for row in value.get("rows",[]):
-   row_count+=1; required={"global_encoder_calls","fine_encoder_calls","policy_forward_calls","policy_forward_rows","visual_tokens","action_opportunities","executed_steps","gpu_latency_ms","simulator_latency_ms","estimated_flops","peak_memory_bytes"}; accounting_missing+=not required.issubset(row["accounting"])
-   for name,w in weights.items():
-    expected=w[0]*row["success_hold5"]+w[1]*row["normalized_progress"]+w[2]*row["recoverable"]+w[3]*row["dropped_or_slipped"]+w[4]*row["collision"]
-    utility_mismatch+=abs(expected-row["utilities"][name])>1e-9
- checks["raw_outcome_recompute"]={"pass":row_count>0 and utility_mismatch==0,"rows":row_count,"utility_mismatches":utility_mismatch}; checks["compute_accounting_recompute"]={"pass":row_count>0 and accounting_missing==0,"missing_rows":accounting_missing}
- files=sorted(path for path in a.formal_root.rglob("*") if path.is_file() and path!=a.output); manifest=[{"path":str(path.relative_to(a.formal_root)),"sha256":sha256_file(path),"bytes":path.stat().st_size} for path in files]
- checks["scientific_sha256_manifest"]={"pass":len(manifest)>0,"files":len(manifest)}; checks["all_pass"]=all(value["pass"] for value in checks.values() if isinstance(value,dict) and "pass" in value)
- atomic_json(a.output,{"protocol_id":PROTOCOL_ID,"checks":checks,"manifest":manifest}); print(json.dumps(checks,indent=2))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo", type=Path, required=True)
+    parser.add_argument("--formal-root", type=Path, required=True)
+    parser.add_argument("--training-root", type=Path, required=True)
+    parser.add_argument("--dataset-root", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    checks = {}
+    experiment = args.repo / "experiments/maniskill_stage27r_core_mechanism_reset_v1"
+    freeze = json.loads((experiment / "manifests/predecessor_tree_freeze.json").read_text())["trees"]
+    current = {path: subprocess.check_output(["git", "rev-parse", f"HEAD:{path}"], cwd=args.repo, text=True).strip() for path in PREDECESSORS}
+    checks["predecessor_immutability"] = {"pass": current == freeze, "frozen": freeze, "current": current}
+    checks["clean_source_commit"] = {"pass": not subprocess.check_output(["git", "status", "--porcelain"], cwd=args.repo, text=True).strip(), "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=args.repo, text=True).strip()}
+    protocol = json.loads((experiment / "PROTOCOL_FREEZE.json").read_text())
+    checks["protocol_freeze"] = {"pass": protocol["preregistration_sha256"] == sha256_file(experiment / "preregistration.yaml"), "expected": protocol["preregistration_sha256"], "observed": sha256_file(experiment / "preregistration.yaml")}
 
-if __name__=="__main__": main()
+    model_text = (experiment / "scripts/multires_policy.py").read_text()
+    tree, obs_keys = ast.parse(model_text), set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id in {"obs", "data"} and isinstance(node.slice, ast.Constant) and isinstance(node.slice.value, str):
+            obs_keys.add(node.slice.value)
+    allowed = {"state", "rgb", "_visual_mode", "_tile_id", "_tile_grid"}
+    checks["no_privileged_model_input"] = {"pass": not bool(obs_keys - allowed), "observed_keys": sorted(obs_keys)}
+
+    exact = json.loads((args.formal_root / "EXACT_DATASET_AUDIT.json").read_text())
+    checks["split_leakage"] = {"pass": exact["status"] == "PASS" and all(not row["split_leakage"] for row in exact["task_checks"].values()), "task_checks": exact["task_checks"]}
+    preflight = json.loads((args.formal_root / "PRECHECKS.json").read_text())
+    checks["unit_compile_smoke_overwrite"] = {"pass": bool(preflight.get("all_pass")), "evidence": preflight}
+    training_complete = (args.training_root / "DATA_AND_TRAINING_COMPLETE.json").is_file()
+    checkpoints = list(args.training_root.glob("training/*/seed_*/checkpoints/step_*/COMPLETE.json"))
+    checks["shard_autoresume"] = {"pass": training_complete and len(checkpoints) >= 18 * 6, "training_complete": training_complete, "complete_checkpoint_markers": len(checkpoints)}
+
+    bank_files = sorted((args.formal_root / "state_banks").glob("*.json"))
+    pass_rates = [json.loads(path.read_text())["fidelity_pass_rate"] for path in bank_files]
+    checks["fresh_reset_prefix_fidelity"] = {"pass": bool(pass_rates) and min(pass_rates) >= .95, "pass_rates": pass_rates}
+    raw_files = sorted((args.formal_root / "oracle").glob("*.json"))
+    row_count = utility_mismatch = accounting_missing = 0
+    for path in raw_files:
+        for row in json.loads(path.read_text()).get("rows", []):
+            row_count += 1
+            accounting_missing += not ACCOUNTING.issubset(row["accounting"])
+            for name, weights in WEIGHTS.items():
+                expected = weights[0] * row["success_hold5"] + weights[1] * row["normalized_progress"] + weights[2] * row["recoverable"] + weights[3] * row["dropped_or_slipped"] + weights[4] * row["collision"]
+                utility_mismatch += abs(expected - row["utilities"][name]) > 1e-9
+    checks["raw_outcome_recompute"] = {"pass": row_count > 0 and utility_mismatch == 0, "rows": row_count, "utility_mismatches": utility_mismatch}
+    checks["compute_accounting_recompute"] = {"pass": row_count > 0 and accounting_missing == 0, "missing_rows": accounting_missing}
+
+    with tempfile.TemporaryDirectory(prefix="stage27r-audit-") as directory:
+        recomputed = Path(directory) / "statistics.json"
+        command = [str(Path(__import__("sys").executable)), str(experiment / "scripts/analyze_stage27r.py"), "--inputs", *map(str, raw_files), "--output", str(recomputed)]
+        subprocess.run(command, check=True, cwd=experiment / "scripts")
+        expected_stats = args.formal_root / "statistics.json"
+        checks["paired_statistics_recompute"] = {"pass": sha256_file(recomputed) == sha256_file(expected_stats), "recomputed_sha256": sha256_file(recomputed), "reported_sha256": sha256_file(expected_stats)}
+
+    files = sorted(path for path in args.formal_root.rglob("*") if path.is_file() and path != args.output)
+    manifest = [{"path": str(path.relative_to(args.formal_root)), "sha256": sha256_file(path), "bytes": path.stat().st_size} for path in files]
+    checks["scientific_sha256_manifest"] = {"pass": bool(manifest), "files": len(manifest)}
+    checks["all_pass"] = all(value["pass"] for value in checks.values() if isinstance(value, dict) and "pass" in value)
+    atomic_json(args.output, {"protocol_id": PROTOCOL_ID, "checks": checks, "manifest": manifest})
+    print(json.dumps(checks, indent=2))
+
+
+if __name__ == "__main__":
+    main()

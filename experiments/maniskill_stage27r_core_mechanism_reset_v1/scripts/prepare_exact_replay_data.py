@@ -27,6 +27,10 @@ def write_subset(source_h5: Path, target_h5: Path, count: int) -> None:
     if target_h5.exists() or target_h5.with_suffix(".json").exists():
         raise FileExistsError(f"fail-on-overwrite: {target_h5}")
     metadata = json.loads(source_h5.with_suffix(".json").read_text())
+    # Some v1 official metadata (notably PlugCharger) names the retired
+    # ``dense`` mode. Replay does not record reward, so bind both original and
+    # target environments to the universally supported ``none`` mode.
+    metadata["env_info"]["env_kwargs"]["reward_mode"] = "none"
     episodes = sorted(metadata["episodes"], key=lambda row: int(row["episode_id"]))[:count]
     target_h5.parent.mkdir(parents=True, exist_ok=True)
     with h5py.File(source_h5, "r") as source, h5py.File(target_h5, "x") as target:
@@ -78,7 +82,7 @@ def main() -> None:
         print(complete.read_text()); return
     raw = task_root / "oversized_source" / "trajectory.h5"
     write_subset(args.official_h5, raw, pool_count)
-    command = [str(args.python), "-m", "mani_skill.trajectory.replay_trajectory", "--traj-path", str(raw), "--sim-backend", "physx_cpu", "--obs-mode", "rgb", "--target-control-mode", control, "--save-traj", "--use-first-env-state", "--max-retry", "9", "--num-envs", "8"]
+    command = [str(args.python), "-m", "mani_skill.trajectory.replay_trajectory", "--traj-path", str(raw), "--sim-backend", "physx_cpu", "--obs-mode", "rgb", "--reward-mode", "none", "--target-control-mode", control, "--save-traj", "--use-first-env-state", "--max-retry", "9", "--num-envs", "8"]
     log = task_root / "replay.log"
     with log.open("x") as handle:
         result = subprocess.run(command, stdout=handle, stderr=subprocess.STDOUT)

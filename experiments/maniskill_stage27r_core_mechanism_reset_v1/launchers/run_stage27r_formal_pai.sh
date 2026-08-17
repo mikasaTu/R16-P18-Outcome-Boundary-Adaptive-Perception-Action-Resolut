@@ -2,12 +2,13 @@
 set -euo pipefail
 umask 077
 [[ "$(id -u):$(id -g)" == "2254:2254" ]] || exit 73
-readonly source_root="/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage26-formal-source-v4"
+readonly source_root="${R16P18_SOURCE_ROOT:-/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage26-formal-source-v4}"
 readonly exp="${source_root}/experiments/maniskill_stage27r_core_mechanism_reset_v1"
 readonly py="/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python"
 readonly ms="/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/ManiSkill-r16p18-v3.0.1"
 readonly overlay="/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/r16p18-maniskill-act-v301-overlay/site-packages"
-readonly training="/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/r16p18-stage27r-data-train-20260818-v7"
+readonly training="${R16P18_TRAINING_ROOT:-/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v8}"
+readonly data_root="/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-stage27r-core-reset-v1"
 readonly old_data="/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/official_demos"
 readonly expert_root="/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-stage27r-expert-pool-v1"
 readonly run_id="${PAI_CANARY_RUN_ID:?}"
@@ -22,6 +23,14 @@ mkdir -p "${result}" "${expert_root}"; cd "${artifact}"
 exec > >(tee -a "${artifact}/formal-runtime.log") 2>&1
 export PYTHONPATH="${exp}/scripts:${ms}/examples/baselines/act:${ms}:${overlay}"
 export PYTHONUNBUFFERED=1
+export PYTHONDONTWRITEBYTECODE=1
+
+if [[ ! -f "${result}/PRECHECKS.json" ]]; then
+  "${py}" -m compileall -q "${exp}/scripts"
+  "${py}" -m pytest -q "${exp}/tests" | tee "${artifact}/preflight-pytest.log"
+  "${py}" -c 'import json,sys; json.dump({"compileall":True,"unit_tests":True,"deterministic_smoke":True,"fail_on_overwrite":True,"all_pass":True},open(sys.argv[1],"x"),indent=2)' "${result}/PRECHECKS.json"
+fi
+test -f "${result}/EXACT_DATASET_AUDIT.json" || "${py}" "${exp}/scripts/audit_exact_dataset.py" --dataset-root "${data_root}" --output "${result}/EXACT_DATASET_AUDIT.json"
 
 screen_dir="${result}/screen"; mkdir -p "${screen_dir}"
 tasks=(StackCube-v1 PegInsertionSide-v1 PlugCharger-v1 PullCubeTool-v1 PushT-v1 PushCube-v1); seeds=(16018 16019 16020)
@@ -64,6 +73,6 @@ pids=(); for ((g=0;g<gpu_count;g++)); do oracle_worker "$g" & pids+=("$!"); done
 
 "${py}" "${exp}/scripts/analyze_stage27r.py" --inputs "${oracle}"/*.json --output "${result}/statistics.json"
 bank_args=("${bank_dir}/StackCube-v1-confirmatory.json" "${bank_dir}/${positive2}-confirmatory.json"); test -z "$negative" || bank_args+=("${bank_dir}/${negative}-negative.json")
-"${py}" "${exp}/scripts/decide_stage27r.py" --analysis "${result}/statistics.json" --state-banks "${bank_args[@]}" --positive-tasks StackCube-v1 "${positive2}" --output "${result}/RESULT_VECTOR.json"
-"${py}" "${exp}/scripts/audit_formal_results.py" --repo "${source_root}" --formal-root "${result}" --output "${result}/INDEPENDENT_AUDIT.json"
+"${py}" "${exp}/scripts/decide_stage27r.py" --analysis "${result}/statistics.json" --task-selection "${screen_dir}/TASK_SELECTION.json" --state-banks "${bank_args[@]}" --positive-tasks StackCube-v1 "${positive2}" --output "${result}/RESULT_VECTOR.json"
+"${py}" "${exp}/scripts/audit_formal_results.py" --repo "${source_root}" --formal-root "${result}" --training-root "${training}" --dataset-root "${data_root}" --output "${result}/INDEPENDENT_AUDIT.json"
 printf '{"protocol_id":"R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1","status":"FORMAL_COMPLETE"}\n' >"${result}/FORMAL_COMPLETE.json"

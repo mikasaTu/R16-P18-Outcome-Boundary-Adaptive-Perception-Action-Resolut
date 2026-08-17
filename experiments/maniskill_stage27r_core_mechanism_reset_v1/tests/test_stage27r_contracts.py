@@ -10,6 +10,7 @@ import torch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from common import atomic_json  # noqa: E402
+from analyze_stage27r import holm, paired_summary  # noqa: E402
 from multires_policy import crop_tile  # noqa: E402
 
 
@@ -43,3 +44,14 @@ def test_protocol_freeze_has_required_status_order() -> None:
         "REVISE_SHARED_AXIS_ROUTER", "GO_FULL_JOINT",
     ]
     assert value["execution_contract"]["run_all_oracle_arms_after_any_gate_failure"] is True
+
+
+def test_paired_summary_clusters_model_seeds_by_source_episode() -> None:
+    result = paired_summary([1.0, 3.0, -1.0, 1.0], [("task", "ep0"), ("task", "ep0"), ("task", "ep1"), ("task", "ep1")], n=1000)
+    assert result["cluster_count"] == 2
+    assert result["mean"] == pytest.approx(1.0)
+
+
+def test_holm_is_monotone_in_sorted_pvalues() -> None:
+    result = holm({"a": .01, "b": .03, "c": .2})
+    assert result["a"] <= result["b"] <= result["c"]
