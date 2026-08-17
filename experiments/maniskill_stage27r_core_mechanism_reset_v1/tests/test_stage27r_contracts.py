@@ -11,7 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from common import atomic_json  # noqa: E402
 from analyze_stage27r import holm, paired_summary  # noqa: E402
-from multires_policy import crop_tile  # noqa: E402
+import multires_policy  # noqa: E402
+from multires_policy import MultiResolutionAgent, Native128Dataset, crop_tile  # noqa: E402
 
 
 def test_crop_tiles_partition_exactly() -> None:
@@ -26,6 +27,54 @@ def test_crop_validation() -> None:
         crop_tile(torch.zeros(1, 1, 128, 128), 4, 2)
     with pytest.raises(ValueError):
         crop_tile(torch.zeros(1, 1, 128, 128), 0, 3)
+
+
+def test_dataset_marks_only_first_temporal_quintile_as_free_space(monkeypatch) -> None:
+    monkeypatch.setattr(
+        multires_policy.official_act.SmallDemoDataset_ACTPolicy,
+        "__getitem__",
+        lambda self, index: {"observations": {"state": torch.zeros(1)}, "actions": torch.zeros(1)},
+    )
+    dataset = Native128Dataset.__new__(Native128Dataset)
+    dataset.slices = [(0, 1), (0, 2)]
+    dataset.trajectories = {"actions": [torch.zeros(10, 7)]}
+    assert bool(dataset[0]["observations"]["_free_space_mask"])
+    assert not bool(dataset[1]["observations"]["_free_space_mask"])
+
+
+def test_consistency_uses_same_posterior_sample_and_free_space_mask(monkeypatch) -> None:
+    class FakeModel(torch.nn.Module):
+        latent_dim = 2
+
+        def __init__(self):
+            super().__init__()
+            self.noises = []
+
+        def forward(self, obs, actions=None):
+            self.noises.append(obs["_latent_noise"].detach().clone())
+            batch, horizon, action_dim = actions.shape
+            base = obs["_latent_noise"][:, :1, None].expand(batch, horizon, action_dim)
+            if obs["_visual_mode"] == "fine":
+                base = base + torch.tensor([1.0, 50.0, 50.0])[:, None, None]
+            zeros = torch.zeros(batch, self.latent_dim)
+            return base, [zeros, zeros]
+
+    agent = MultiResolutionAgent.__new__(MultiResolutionAgent)
+    torch.nn.Module.__init__(agent)
+    agent.model = FakeModel()
+    agent.normalize = torch.nn.Identity()
+    agent.kl_weight = 0.0
+    agent.consistency_weight = 0.1
+    monkeypatch.setattr(torch, "randint", lambda *args, **kwargs: torch.tensor(1))
+    observations = {
+        "state": torch.zeros(3, 2),
+        "rgb": torch.zeros(3, 1, 3, 8, 8, dtype=torch.uint8),
+        "_free_space_mask": torch.tensor([True, False, False]),
+    }
+    result = agent.compute_loss(observations, torch.zeros(3, 2, 1))
+    assert len(agent.model.noises) == 2
+    assert torch.equal(agent.model.noises[0], agent.model.noises[1])
+    assert result["consistency"].item() == pytest.approx(0.5)
 
 
 def test_fail_on_overwrite(tmp_path: Path) -> None:

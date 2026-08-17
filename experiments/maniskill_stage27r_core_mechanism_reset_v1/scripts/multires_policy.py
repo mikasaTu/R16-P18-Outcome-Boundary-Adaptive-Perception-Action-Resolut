@@ -42,6 +42,19 @@ def crop_tile(images: torch.Tensor, tile_id: int, grid: int) -> torch.Tensor:
 class Native128Dataset(official_act.SmallDemoDataset_ACTPolicy):
     """Official loader with original 128px RGB retained instead of 224px."""
 
+    def __getitem__(self, index):
+        item = super().__getitem__(index)
+        trajectory_index, timestep = self.slices[index]
+        episode_length = int(self.trajectories["actions"][trajectory_index].shape[0])
+        # The demonstration files do not expose a task-independent contact label.
+        # Freeze the first temporal quintile as the cross-task free-space stratum.
+        # This is sample metadata only and is never provided to the policy forward.
+        free_space_end = max(1, round(0.2 * episode_length))
+        item["observations"]["_free_space_mask"] = torch.tensor(
+            timestep < free_space_end, dtype=torch.bool
+        )
+        return item
+
     def process_obs(self, obs_dict):
         from mani_skill.utils import common
 
@@ -78,7 +91,12 @@ class MultiResolutionDETRVAE(DETRVAE):
             latent_info = self.latent_proj(encoded)
             mu, logvar = latent_info[:, : self.latent_dim], latent_info[:, self.latent_dim :]
             std = (logvar / 2).exp()
-            latent = mu + torch.randn_like(std) * std
+            latent_noise = obs.get("_latent_noise")
+            if latent_noise is None:
+                latent_noise = torch.randn_like(std)
+            elif latent_noise.shape != std.shape:
+                raise ValueError("fixed latent noise shape does not match posterior")
+            latent = mu + latent_noise * std
             latent_input = self.latent_out_proj(latent)
         else:
             mu = logvar = None
@@ -130,21 +148,24 @@ class MultiResolutionAgent(nn.Module):
 
     def compute_loss(self, obs, action_seq):
         data = self._normalized(obs)
+        free_space_mask = data.pop("_free_space_mask", None)
         mode_index = int(torch.randint(0, 4, (), device=action_seq.device).item())
         data["_visual_mode"] = "fine" if mode_index in (1, 3) else "coarse"
         data["_tile_id"] = int(torch.randint(0, 4, ()).item())
         data["_tile_grid"] = 2
+        # Reuse one posterior sample in both resolution branches. Otherwise the
+        # consistency term measures ACT latent noise in addition to resolution.
+        data["_latent_noise"] = torch.randn(
+            action_seq.shape[0], self.model.latent_dim, device=action_seq.device
+        )
         predicted, (mu, logvar) = self.model(data, action_seq)
         l1 = F.l1_loss(predicted, action_seq)
         kl = self._kl(mu, logvar)
         consistency = torch.zeros((), device=action_seq.device)
-        # Free-space is not privileged in the model. A deterministic 1/4 batch
-        # surrogate prevents unconditional coarse collapse without phase input.
-        if mode_index in (1, 3) and action_seq.shape[0] >= 4:
+        if mode_index in (1, 3) and free_space_mask is not None and bool(free_space_mask.any()):
             coarse = dict(data, _visual_mode="coarse")
-            with torch.no_grad():
-                coarse_pred, _ = self.model(coarse, None)
-            consistency = F.smooth_l1_loss(predicted[: action_seq.shape[0] // 4], coarse_pred[: action_seq.shape[0] // 4])
+            coarse_pred, _ = self.model(coarse, action_seq)
+            consistency = F.smooth_l1_loss(predicted[free_space_mask], coarse_pred[free_space_mask])
         loss = l1 + self.kl_weight * kl + self.consistency_weight * consistency
         return {"loss": loss, "l1": l1, "kl": kl, "consistency": consistency}
 
