@@ -1,0 +1,15 @@
+# Feishu experiment-document snapshots
+
+This directory contains Markdown snapshots of the R16-P18 Feishu experiment-planning documents and their reports.
+
+| Step | Plan | Experiment report |
+|---|---|---|
+| 1 | [step1/step.md](step1/step.md) | [step1/experiment-report.md](step1/experiment-report.md) |
+| 2 | [step2/step.md](step2/step.md) | [step2/experiment-report.md](step2/experiment-report.md) |
+| 3 | [step3/step.md](step3/step.md) | [step3/experiment-report.md](step3/experiment-report.md) |
+| 4 | [step4/step.md](step4/step.md) | [step4/experiment-report.md](step4/experiment-report.md) |
+| 5 | [step5/step.md](step5/step.md) | [step5/experiment-report.md](step5/experiment-report.md) |
+
+Each generated file records its Feishu source URL, wiki token, object token, and revision in YAML front matter. Run `scripts/export_feishu_steps.sh` from an authenticated environment to refresh all snapshots.
+
+The Feishu documents remain the mutable collaboration copies. These files are immutable Git snapshots for review, provenance, and reproducibility.
