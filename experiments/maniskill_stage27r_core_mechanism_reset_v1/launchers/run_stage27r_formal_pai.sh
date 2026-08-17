@@ -7,7 +7,7 @@ readonly exp="${source_root}/experiments/maniskill_stage27r_core_mechanism_reset
 readonly py="/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/libero_sft/bin/python"
 readonly ms="/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/ManiSkill-r16p18-v3.0.1"
 readonly overlay="/mnt/cpfs/zbl-cpfs-new/USERS/leon/envs/r16p18-maniskill-act-v301-overlay/site-packages"
-readonly training="${R16P18_TRAINING_ROOT:-/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v8}"
+readonly training="${R16P18_TRAINING_ROOT:-/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v12}"
 readonly data_root="/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-stage27r-core-reset-v1"
 readonly old_data="/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-act-boundary-screen-v1/official_demos"
 readonly expert_root="/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-stage27r-expert-pool-v1"
@@ -72,6 +72,7 @@ oracle_worker(){ local gpu=$1 i task seed grid bank out; for ((i=gpu;i<${#jobs[@
 pids=(); for ((g=0;g<gpu_count;g++)); do oracle_worker "$g" & pids+=("$!"); done; for p in "${pids[@]}"; do wait "$p"; done
 
 "${py}" "${exp}/scripts/analyze_stage27r.py" --inputs "${oracle}"/*.json --output "${result}/statistics.json"
+"${py}" "${exp}/scripts/mechanism_audit.py" --inputs "${oracle}"/*.json --output "${result}/MECHANISM_AUDIT.json"
 bank_args=("${bank_dir}/StackCube-v1-confirmatory.json" "${bank_dir}/${positive2}-confirmatory.json"); test -z "$negative" || bank_args+=("${bank_dir}/${negative}-negative.json")
 "${py}" "${exp}/scripts/decide_stage27r.py" --analysis "${result}/statistics.json" --task-selection "${screen_dir}/TASK_SELECTION.json" --state-banks "${bank_args[@]}" --positive-tasks StackCube-v1 "${positive2}" --output "${result}/RESULT_VECTOR.json"
 "${py}" "${exp}/scripts/audit_formal_results.py" --repo "${source_root}" --formal-root "${result}" --training-root "${training}" --dataset-root "${data_root}" --output "${result}/INDEPENDENT_AUDIT.json"

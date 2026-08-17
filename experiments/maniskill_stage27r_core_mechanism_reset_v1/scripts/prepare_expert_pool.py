@@ -20,8 +20,8 @@ def main():
  if raw.exists(): raise FileExistsError(raw)
  with h5py.File(a.official_h5,"r") as src,h5py.File(raw,"x") as dst:
   for i,row in enumerate(episodes): src.copy(src[f"traj_{row['episode_id']}"],dst,name=f"traj_{i}"); row["episode_id"]=i
- meta["episodes"]=episodes; raw.with_suffix(".json").write_text(json.dumps(meta,indent=2)+"\n")
- command=[str(a.python),"-m","mani_skill.trajectory.replay_trajectory","--traj-path",str(raw),"--sim-backend","physx_cpu","--obs-mode","rgb","--target-control-mode",CONTROL[a.task],"--save-traj","--use-first-env-state","--max-retry","9","--num-envs","8"]
+ meta["episodes"]=episodes; meta["env_info"]["env_kwargs"]["reward_mode"]="none"; raw.with_suffix(".json").write_text(json.dumps(meta,indent=2)+"\n")
+ command=[str(a.python),"-m","mani_skill.trajectory.replay_trajectory","--traj-path",str(raw),"--sim-backend","physx_cpu","--obs-mode","rgb","--reward-mode","none","--target-control-mode",CONTROL[a.task],"--save-traj","--use-first-env-state","--max-retry","9","--num-envs","8"]
  with (root/"replay.log").open("x") as log: rc=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT).returncode
  if rc: raise RuntimeError(f"expert replay failed {rc}")
  output=raw.with_name(f"trajectory.rgb.{CONTROL[a.task]}.physx_cpu.h5"); count=len(json.loads(output.with_suffix('.json').read_text())["episodes"])

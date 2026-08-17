@@ -21,8 +21,10 @@ def main():
     args = parser.parse_args()
     analysis = json.loads(args.analysis.read_text())
     task_selection = json.loads(args.task_selection.read_text())
-    task_gate = bool(task_selection["task_gates"]["StackCube-v1"]["pass"] and task_selection.get("selected_positive"))
-    fidelity = [json.loads(path.read_text())["fidelity_pass_rate"] for path in args.state_banks]
+    bank_payloads = [json.loads(path.read_text()) for path in args.state_banks]
+    categorical_agreement = all(state["fidelity"]["categorical_agreement"] for bank in bank_payloads for state in bank["states"])
+    task_gate = bool(task_selection["task_gates"]["StackCube-v1"]["pass"] and task_selection.get("selected_positive") and categorical_agreement)
+    fidelity = [bank["fidelity_pass_rate"] for bank in bank_payloads]
     causal = min(fidelity) >= .95
 
     weight_gates = {}
@@ -68,6 +70,7 @@ def main():
         "protocol_id": PROTOCOL_ID, "final_status": status, "precedence_applied": True,
         "causal_backend_pass": causal, "fidelity_pass_rates": fidelity,
         "positive_task_screen_gate_pass": task_gate,
+        "fresh_reset_categorical_agreement_100pct": categorical_agreement,
         "two_of_three_weight_set_gates": stable, "per_weight_gates": weight_gates,
         "downstream_cannot_reverse_upstream_failure": True,
     }
