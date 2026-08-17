@@ -31,7 +31,7 @@ def write_subset(source_h5: Path, target_h5: Path, count: int) -> None:
     target_h5.parent.mkdir(parents=True, exist_ok=True)
     with h5py.File(source_h5, "r") as source, h5py.File(target_h5, "x") as target:
         for output_id, episode in enumerate(episodes):
-            source.copy(source[f"traj_{episode['episode_id']}"]], target, name=f"traj_{output_id}")
+            source.copy(source[f"traj_{episode['episode_id']}"], target, name=f"traj_{output_id}")
             episode["episode_id"] = output_id
     metadata["episodes"] = episodes
     target_h5.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n")
