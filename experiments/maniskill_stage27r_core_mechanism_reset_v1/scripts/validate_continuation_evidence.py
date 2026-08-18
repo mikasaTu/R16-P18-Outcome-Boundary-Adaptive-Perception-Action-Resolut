@@ -48,6 +48,17 @@ NON_TERMINAL_STATUSES = {
     "",
 }
 HEX64 = re.compile(r"^[0-9a-fA-F]{64}$")
+EXPECTED_RESOURCE_ID = "quotaewyznuc7b9l"
+EXPECTED_OVERSOLD_TYPE = "AcceptQuotaOverSold"
+EXPECTED_WORKER_COUNT = 1
+EXPECTED_GPU_COUNT = 8
+EXPECTED_CPU_COUNT = 92
+EXPECTED_MEMORY_GI = "1600Gi"
+EXPECTED_UID_GID = "2254:2254"
+EXPECTED_TEMPLATE_SCHEMA_VERSION = 2
+EXPECTED_TEMPLATE_KIND = "pytorchjob"
+EXPECTED_WORKSPACE_ID = 179169
+EXPECTED_RESOURCE_ALIAS = "idle-a800-stablevla-native5-8gpu"
 
 
 def sha256_file(path: Path) -> str:
@@ -122,43 +133,159 @@ def _bool_true(value: Any, label: str) -> None:
         raise RuntimeError(f"{label} must be the JSON boolean true")
 
 
+def _top_or_recursive_values(payload: dict[str, Any], keys: set[str]) -> list[Any]:
+    """Prefer manifest top-level fields, then accept a nested contract field."""
+    direct = [payload[key] for key in keys if key in payload]
+    return direct or _values_for_keys(payload, keys)
+
+
+def _required_consistent(
+    payloads: Iterable[dict[str, Any]],
+    keys: set[str],
+    label: str,
+    normalizer=None,
+) -> Any:
+    values: list[Any] = []
+    for payload in payloads:
+        found = _values_for_keys(payload, keys)
+        if not found:
+            raise RuntimeError(f"{label} is missing from one placement evidence record")
+        values.extend(found)
+    if not values:
+        raise RuntimeError(f"{label} is missing")
+    converted = [normalizer(value) if normalizer is not None else value for value in values]
+    if len(set(converted)) != 1:
+        raise RuntimeError(f"{label} is inconsistent: {converted}")
+    return converted[0]
+
+
+def _strict_int(value: Any, label: str) -> int:
+    if isinstance(value, bool):
+        raise RuntimeError(f"{label} must be an integer")
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str) and value.strip().isdigit():
+        return int(value.strip())
+    raise RuntimeError(f"{label} must be an integer: {value!r}")
+
+
+def _memory_gi(value: Any, label: str) -> str:
+    if isinstance(value, bool):
+        raise RuntimeError(f"{label} must be a GiB quantity")
+    text = str(value).strip().replace(" ", "")
+    lower = text.lower()
+    if lower.endswith("gi"):
+        number = lower[:-2]
+    else:
+        number = lower
+    try:
+        amount = float(number)
+    except ValueError as exc:
+        raise RuntimeError(f"{label} must be a GiB quantity: {value!r}") from exc
+    if not amount.is_integer() or amount < 0:
+        raise RuntimeError(f"{label} must be a non-negative integer GiB quantity: {value!r}")
+    return f"{int(amount)}Gi"
+
+
+def _bound_json_file(
+    metadata: Any,
+    label: str,
+    *,
+    expected_path: Path | None = None,
+) -> tuple[Path, dict[str, Any], dict[str, Any]]:
+    if not isinstance(metadata, dict):
+        raise RuntimeError(f"{label} path/hash/bytes binding is missing")
+    raw_path = metadata.get("path")
+    raw_hash = metadata.get("sha256")
+    raw_bytes = metadata.get("bytes")
+    if not isinstance(raw_path, str) or not raw_path.strip():
+        raise RuntimeError(f"{label} path is required")
+    if not isinstance(raw_hash, str) or not HEX64.fullmatch(raw_hash.strip()):
+        raise RuntimeError(f"{label} sha256 is required and must be valid")
+    if isinstance(raw_bytes, bool) or not isinstance(raw_bytes, int) or raw_bytes < 0:
+        raise RuntimeError(f"{label} bytes is required and must be a non-negative integer")
+    path = Path(raw_path)
+    if expected_path is not None and path != Path(expected_path):
+        raise RuntimeError(f"{label} path mismatch: {path} != {expected_path}")
+    if not path.is_file() or path.is_symlink():
+        raise RuntimeError(f"{label} must be a regular immutable JSON file: {path}")
+    observed_hash = sha256_file(path)
+    observed_bytes = path.stat().st_size
+    if observed_hash.lower() != raw_hash.lower() or observed_bytes != raw_bytes:
+        raise RuntimeError(f"{label} hash/bytes mismatch: {path}")
+    payload = _read_json(path, label)
+    return path, payload, {"path": str(path), "sha256": observed_hash, "bytes": observed_bytes}
+
+
+def _metadata_object(payload: dict[str, Any], names: set[str], label: str) -> dict[str, Any]:
+    values = _values_for_keys(payload, names)
+    objects = [value for value in values if isinstance(value, dict)]
+    if len(objects) != 1:
+        raise RuntimeError(f"{label} must contain exactly one object binding")
+    return objects[0]
+
+
+def _status_value(payload: dict[str, Any], label: str) -> tuple[str, str]:
+    values = _nonempty_strings(
+        _top_or_recursive_values(
+            payload,
+            {"status", "Status", "state", "State", "terminal_status", "job_status", "JobStatus"},
+        ),
+        label,
+    )
+    if len(set(values)) != 1:
+        raise RuntimeError(f"{label} is inconsistent: {values}")
+    status = values[0]
+    normalized = status.upper().replace(" ", "_")
+    if normalized in NON_TERMINAL_STATUSES or normalized not in TERMINAL_STATUSES:
+        raise RuntimeError(f"{label} is not terminal: {status}")
+    return status, normalized
+
+
+def _registry_record_fields(payload: dict[str, Any], label: str, expected_run_id: str, expected_job_id: str) -> None:
+    run_id = _one_consistent(_values_for_keys(payload, {"run_id"}), f"{label} run_id")
+    job_id = _one_consistent(
+        _values_for_keys(payload, {"job_id", "JobId", "pai_job_id", "continuation_job_id"}),
+        f"{label} JobId",
+    )
+    if run_id != expected_run_id or job_id != expected_job_id:
+        raise RuntimeError(
+            f"{label} run/job mismatch: {run_id}/{job_id} != {expected_run_id}/{expected_job_id}"
+        )
+
+
 def validate_old_producer_terminal(
     path: Path,
     *,
     expected_job_id: str,
     expected_run_id: str | None = None,
+    producer_registry_run: Path | None = None,
+    producer_registry_evidence: Path | None = None,
 ) -> dict[str, Any]:
     """Validate an externally-created no-overlap predecessor attestation."""
     payload = _read_json(path, "OLD_PRODUCER_TERMINAL")
     if not expected_job_id or expected_job_id in {"unknown", "UNKNOWN"}:
         raise RuntimeError("exact old producer JobId is required")
+    if producer_registry_run is None or producer_registry_evidence is None:
+        raise RuntimeError("OLD_PRODUCER_TERMINAL must bind the old producer registry")
 
-    job_values = _values_for_keys(payload, {"job_id", "JobId", "old_job_id", "producer_job_id"})
+    job_values = _top_or_recursive_values(payload, {"job_id", "JobId", "old_job_id", "producer_job_id"})
     job_id = _one_consistent(job_values, "OLD_PRODUCER_TERMINAL JobId")
     if job_id != expected_job_id:
         raise RuntimeError(f"old producer JobId mismatch: {job_id} != {expected_job_id}")
 
     if expected_run_id:
-        run_values = _values_for_keys(payload, {"run_id", "old_run_id", "producer_run_id"})
+        run_values = _top_or_recursive_values(payload, {"run_id", "old_run_id", "producer_run_id"})
         run_id = _one_consistent(run_values, "OLD_PRODUCER_TERMINAL run_id")
         if run_id != expected_run_id:
             raise RuntimeError(f"old producer run_id mismatch: {run_id} != {expected_run_id}")
     else:
         run_id = _one_consistent(
-            _values_for_keys(payload, {"run_id", "old_run_id", "producer_run_id"}),
+            _top_or_recursive_values(payload, {"run_id", "old_run_id", "producer_run_id"}),
             "OLD_PRODUCER_TERMINAL run_id",
         )
 
-    status_values = _nonempty_strings(
-        _values_for_keys(payload, {"status", "state", "terminal_status", "job_status"}),
-        "OLD_PRODUCER_TERMINAL status",
-    )
-    if len(set(status_values)) != 1:
-        raise RuntimeError(f"old producer status is inconsistent: {status_values}")
-    status = status_values[0]
-    normalized_status = status.upper().replace(" ", "_")
-    if normalized_status in NON_TERMINAL_STATUSES or normalized_status not in TERMINAL_STATUSES:
-        raise RuntimeError(f"old producer is not terminal: {status}")
+    status, normalized_status = _status_value(payload, "OLD_PRODUCER_TERMINAL status")
 
     terminal_values = _values_for_keys(payload, {"terminal", "is_terminal", "terminal_confirmed"})
     if not terminal_values or any(value is not True for value in terminal_values):
@@ -171,11 +298,62 @@ def validate_old_producer_terminal(
     if not no_overlap_values or any(value is not True for value in no_overlap_values):
         raise RuntimeError("OLD_PRODUCER_TERMINAL lacks no_overlap=true attestation")
 
-    observed_values = _values_for_keys(payload, {"observed_at", "observed_at_utc", "terminal_observed_at"})
+    observed_values = _top_or_recursive_values(payload, {"observed_at", "observed_at_utc", "terminal_observed_at"})
     observed_at = _timestamp(
         _one_consistent(observed_values, "OLD_PRODUCER_TERMINAL observed_at"),
         "OLD_PRODUCER_TERMINAL observed_at",
     )
+    getjob_binding = _metadata_object(
+        payload,
+        {"getjob", "raw_getjob", "raw_get_job", "get_job"},
+        "OLD_PRODUCER_TERMINAL raw GetJob",
+    )
+    getjob_path, getjob_payload, getjob_file = _bound_json_file(getjob_binding, "raw GetJob")
+    raw_job_id = _one_consistent(
+        _values_for_keys(getjob_payload, {"job_id", "JobId", "pai_job_id"}),
+        "raw GetJob JobId",
+    )
+    if raw_job_id != expected_job_id:
+        raise RuntimeError(f"raw GetJob JobId mismatch: {raw_job_id} != {expected_job_id}")
+    raw_status, raw_normalized_status = _status_value(getjob_payload, "raw GetJob status")
+    if raw_normalized_status != normalized_status:
+        raise RuntimeError(f"OLD_PRODUCER_TERMINAL summary/raw status mismatch: {status} != {raw_status}")
+
+    registry_binding = _metadata_object(
+        payload,
+        {"producer_registry", "old_producer_registry", "registry"},
+        "OLD_PRODUCER_TERMINAL producer registry",
+    )
+    registry_run_values = _values_for_keys(registry_binding, {"run_id"})
+    registry_run_id = _one_consistent(registry_run_values, "OLD_PRODUCER_TERMINAL producer registry run_id")
+    if registry_run_id != run_id:
+        raise RuntimeError(f"OLD_PRODUCER_TERMINAL producer registry run_id mismatch: {registry_run_id} != {run_id}")
+    registry_job_id = _one_consistent(
+        _values_for_keys(registry_binding, {"job_id", "JobId", "producer_job_id"}),
+        "OLD_PRODUCER_TERMINAL producer registry JobId",
+    )
+    if registry_job_id != expected_job_id:
+        raise RuntimeError(f"OLD_PRODUCER_TERMINAL producer registry JobId mismatch: {registry_job_id} != {expected_job_id}")
+
+    expected_registry_run = Path(producer_registry_run)
+    expected_resolved = Path(producer_registry_evidence)
+    if expected_resolved != expected_registry_run / "resolved.json":
+        raise RuntimeError("old producer registry evidence must be the exact run resolved.json")
+    expected_placement = expected_registry_run / "placement-evidence.external.json"
+    resolved_binding = registry_binding.get("resolved")
+    placement_binding = registry_binding.get("placement")
+    resolved_path, resolved_payload, resolved_file = _bound_json_file(
+        resolved_binding,
+        "old producer resolved registry",
+        expected_path=expected_resolved,
+    )
+    placement_path, placement_payload, placement_file = _bound_json_file(
+        placement_binding,
+        "old producer placement registry",
+        expected_path=expected_placement,
+    )
+    _registry_record_fields(resolved_payload, "old producer resolved registry", run_id, expected_job_id)
+    _registry_record_fields(placement_payload, "old producer placement registry", run_id, expected_job_id)
     return {
         "status": "PASS",
         "job_id": job_id,
@@ -187,6 +365,13 @@ def validate_old_producer_terminal(
             "path": str(Path(path)),
             "sha256": sha256_file(Path(path)),
             "bytes": Path(path).stat().st_size,
+        },
+        "raw_getjob": {"path": str(getjob_path), **getjob_file},
+        "producer_registry": {
+            "run_id": run_id,
+            "job_id": expected_job_id,
+            "resolved": {"path": str(resolved_path), **resolved_file},
+            "placement": {"path": str(placement_path), **placement_file},
         },
     }
 
@@ -228,6 +413,28 @@ def _uid_gid(payloads: Iterable[dict[str, Any]]) -> str:
     return "2254:2254"
 
 
+def _uid_gid_each(payloads: Iterable[dict[str, Any]], label: str) -> str:
+    """Require every sealed placement/template record to state UID:GID."""
+    observed: list[str] = []
+    for index, payload in enumerate(payloads):
+        pairs: set[str] = set()
+        for value in _values_for_keys(payload, {"uid_gid", "UID:GID", "runtime_uid_gid"}):
+            if isinstance(value, str) and value.strip():
+                pairs.add(value.strip())
+        uids = _values_for_keys(payload, {"uid", "UID", "recorded_by_uid", "runtime_uid", "expected_first_work_uid"})
+        gids = _values_for_keys(payload, {"gid", "GID", "recorded_by_gid", "runtime_gid", "expected_first_work_gid"})
+        for uid in uids:
+            for gid in gids:
+                if isinstance(uid, (int, str)) and isinstance(gid, (int, str)):
+                    pairs.add(f"{uid}:{gid}")
+        if pairs != {EXPECTED_UID_GID}:
+            raise RuntimeError(f"{label} record {index} UID:GID is missing/inconsistent: {sorted(pairs)}")
+        observed.extend(pairs)
+    if not observed:
+        raise RuntimeError(f"{label} UID:GID evidence is missing")
+    return EXPECTED_UID_GID
+
+
 def _hash_value(payloads: Iterable[dict[str, Any]], keys: set[str], label: str) -> str:
     values = _nonempty_strings(
         [item for payload in payloads for item in _values_for_keys(payload, keys)],
@@ -254,21 +461,20 @@ def _required_hash(payload: dict[str, Any], key: str, label: str) -> str:
 
 def _source_template_binding(
     root: Path,
+    template: Path,
     resolved: dict[str, Any],
     source_manifest_payload: dict[str, Any],
-) -> dict[str, Any] | None:
-    """Validate an optional source-template path and its independent hash.
+) -> dict[str, Any]:
+    """Validate source-template bytes and their immutable copied counterpart.
 
-    A registry may point at a template copied into the run, or at a template
-    outside the registry directory.  For the latter, the source path and its
-    hash must be repeated in both the resolved/request evidence and the source
-    manifest.  If the path is locally readable, its bytes are checked too;
-    an unreadable external path is rejected because a path-only assertion is
-    not provenance.
+    The source path and hash are required even when the source is registry
+    relative.  A path-only assertion is not provenance: the source bytes and
+    copied template bytes must hash identically, and both hashes are repeated
+    in the resolved/request evidence and source manifest.
     """
     values = _values_for_keys(resolved, {"source_template"})
     if not values:
-        return None
+        raise RuntimeError("resolved/request source_template path is required")
     source_template = _one_consistent(values, "resolved source_template")
     manifest_paths = _values_for_keys(source_manifest_payload, {"source_template"})
     if not manifest_paths:
@@ -282,14 +488,6 @@ def _source_template_binding(
     candidate = Path(source_template)
     if not candidate.is_absolute():
         candidate = root / candidate
-    root_resolved = root.resolve()
-    candidate_resolved = candidate.resolve(strict=False)
-    is_external = candidate_resolved != root_resolved and root_resolved not in candidate_resolved.parents
-    if not is_external:
-        # A registry-relative source_template is the copied template itself;
-        # template_sha256 below already binds it to the immutable copy.
-        return {"path": source_template, "external": False}
-
     source_hash = _required_hash(
         resolved,
         "source_template_sha256",
@@ -314,12 +512,194 @@ def _source_template_binding(
         raise RuntimeError(
             f"external source_template SHA-256 mismatch: {source_hash} != {observed}"
         )
+    copied_hash = sha256_file(template)
+    if copied_hash != source_hash:
+        raise RuntimeError(
+            f"copied/source template SHA-256 mismatch: {copied_hash} != {source_hash}"
+        )
+    root_resolved = root.resolve()
+    candidate_resolved = candidate.resolve(strict=False)
+    is_external = candidate_resolved != root_resolved and root_resolved not in candidate_resolved.parents
     return {
         "path": source_template,
-        "external": True,
+        "external": is_external,
         "sha256": source_hash,
         "bytes": candidate.stat().st_size,
+        "copied_sha256": copied_hash,
     }
+
+
+def _placement_contract(
+    root: Path,
+    resolved: dict[str, Any],
+    placement: dict[str, Any],
+    *,
+    expected_run_id: str,
+    expected_job_id: str,
+    expected_resource_id: str,
+    expected_oversold_type: str,
+    expected_worker_count: int,
+    expected_gpu_count: int,
+    expected_cpu_count: int,
+    expected_memory_gi: str,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    if placement.get("complete") is not True:
+        raise RuntimeError("placement evidence complete must be true")
+    raw_binding = _metadata_object(
+        placement,
+        {"raw_placement_readback", "placement_readback", "original_placement_readback"},
+        "raw placement readback",
+    )
+    if raw_binding.get("sealed") is not True:
+        raise RuntimeError("raw placement readback must be explicitly sealed")
+    raw_path, raw_payload, raw_file = _bound_json_file(raw_binding, "raw placement readback")
+    _registry_record_fields(raw_payload, "raw placement readback", expected_run_id, expected_job_id)
+    records = (resolved, placement, raw_payload)
+    resource_id = _required_consistent(
+        records,
+        {"resource_id", "resourceId"},
+        "placement resource_id",
+        lambda value: str(value).strip(),
+    )
+    oversold_type = _required_consistent(
+        records,
+        {"oversold_type", "oversoldType"},
+        "placement oversold_type",
+        lambda value: str(value).strip(),
+    )
+    use_oversold = _required_consistent(
+        records,
+        {"use_oversold_resource"},
+        "placement use_oversold_resource",
+    )
+    worker_count = _required_consistent(
+        records,
+        {"worker_count", "worker_num", "num_workers", "replica_count"},
+        "placement worker_count",
+        lambda value: _strict_int(value, "placement worker_count"),
+    )
+    gpu_count = _required_consistent(
+        records,
+        {"gpu_count", "gpus", "gpu_num", "num_gpus", "gpu"},
+        "placement gpu_count",
+        lambda value: _strict_int(value, "placement gpu_count"),
+    )
+    cpu_count = _required_consistent(
+        records,
+        {"cpu_count", "cpus", "cpu_num", "num_cpus", "cpu"},
+        "placement cpu_count",
+        lambda value: _strict_int(value, "placement cpu_count"),
+    )
+    memory_gi = _required_consistent(
+        records,
+        {"memory", "memory_gi", "memoryGi", "memory_size"},
+        "placement memory",
+        lambda value: _memory_gi(value, "placement memory"),
+    )
+    uid_gid = _uid_gid_each(records, "placement")
+    if resource_id != expected_resource_id:
+        raise RuntimeError(f"placement resource_id mismatch: {resource_id} != {expected_resource_id}")
+    if oversold_type != expected_oversold_type:
+        raise RuntimeError(f"placement oversold_type mismatch: {oversold_type} != {expected_oversold_type}")
+    if use_oversold is not True:
+        raise RuntimeError("placement use_oversold_resource must be true")
+    expected = {
+        "worker_count": expected_worker_count,
+        "gpu_count": expected_gpu_count,
+        "cpu_count": expected_cpu_count,
+        "memory": expected_memory_gi,
+    }
+    observed = {
+        "worker_count": worker_count,
+        "gpu_count": gpu_count,
+        "cpu_count": cpu_count,
+        "memory": memory_gi,
+    }
+    if observed != expected:
+        raise RuntimeError(f"placement worker resource mismatch: {observed} != {expected}")
+    return (
+        {
+            "resource_id": resource_id,
+            "oversold_type": oversold_type,
+            "use_oversold_resource": True,
+            "worker_count": worker_count,
+            "gpu_count": gpu_count,
+            "cpu_count": cpu_count,
+            "memory": memory_gi,
+            "uid_gid": uid_gid,
+        },
+        {"path": str(raw_path), **raw_file},
+    )
+
+
+def _template_contract(template: dict[str, Any]) -> dict[str, Any]:
+    schema_version = _required_consistent(
+        (template,), {"schema_version"}, "template schema_version", lambda value: _strict_int(value, "template schema_version")
+    )
+    kind = _required_consistent((template,), {"kind"}, "template kind", lambda value: str(value).strip())
+    workspace_id = _required_consistent(
+        (template,), {"workspace_id", "workspaceId"}, "template workspace_id", lambda value: _strict_int(value, "template workspace_id")
+    )
+    resource_alias = _required_consistent(
+        (template,), {"resource_alias", "resourceAlias"}, "template resource_alias", lambda value: str(value).strip()
+    )
+    worker_count = _required_consistent(
+        (template,), {"worker_count", "worker_num", "num_workers", "replica_count"}, "template worker_count", lambda value: _strict_int(value, "template worker_count")
+    )
+    gpu_count = _required_consistent(
+        (template,), {"gpu_count", "gpus", "gpu_num", "num_gpus", "gpu"}, "template gpu_count", lambda value: _strict_int(value, "template gpu_count")
+    )
+    cpu_count = _required_consistent(
+        (template,), {"cpu_count", "cpus", "cpu_num", "num_cpus", "cpu"}, "template cpu_count", lambda value: _strict_int(value, "template cpu_count")
+    )
+    memory_gi = _required_consistent(
+        (template,), {"memory", "memory_gi", "memoryGi", "memory_size"}, "template memory", lambda value: _memory_gi(value, "template memory")
+    )
+    uid_gid = _uid_gid_each((template,), "template runtime")
+    output_mode = _required_consistent((template,), {"output_mode"}, "template output_mode", lambda value: str(value).strip())
+    autoresume = _required_consistent((template,), {"autoresume", "auto_resume", "fault_autoresume"}, "template fault autoresume")
+    require_idle = _required_consistent((template,), {"require_actual_idle"}, "template evidence require_actual_idle")
+    priority = _required_consistent(
+        (template,), {"priority", "submission_priority"}, "template submission priority", lambda value: _strict_int(value, "template priority")
+    )
+    disable_stock_check = _required_consistent(
+        (template,), {"disable_ecs_stock_check"}, "template disable_ecs_stock_check"
+    )
+    observed = {
+        "schema_version": schema_version,
+        "kind": kind,
+        "workspace_id": workspace_id,
+        "resource_alias": resource_alias,
+        "worker_count": worker_count,
+        "gpu_count": gpu_count,
+        "cpu_count": cpu_count,
+        "memory": memory_gi,
+        "uid_gid": uid_gid,
+        "output_mode": output_mode,
+        "autoresume": autoresume,
+        "require_actual_idle": require_idle,
+        "priority": priority,
+        "disable_ecs_stock_check": disable_stock_check,
+    }
+    expected = {
+        "schema_version": EXPECTED_TEMPLATE_SCHEMA_VERSION,
+        "kind": EXPECTED_TEMPLATE_KIND,
+        "workspace_id": EXPECTED_WORKSPACE_ID,
+        "resource_alias": EXPECTED_RESOURCE_ALIAS,
+        "worker_count": EXPECTED_WORKER_COUNT,
+        "gpu_count": EXPECTED_GPU_COUNT,
+        "cpu_count": EXPECTED_CPU_COUNT,
+        "memory": EXPECTED_MEMORY_GI,
+        "uid_gid": EXPECTED_UID_GID,
+        "output_mode": "resume",
+        "autoresume": True,
+        "require_actual_idle": True,
+        "priority": 9,
+        "disable_ecs_stock_check": True,
+    }
+    if observed != expected:
+        raise RuntimeError(f"template schema/contract mismatch: {observed} != {expected}")
+    return observed
 
 
 def validate_continuation_registry(
@@ -332,6 +712,12 @@ def validate_continuation_registry(
     expected_launcher: Path,
     expected_job_id: str | None = None,
     expected_source_manifest: Path | None = None,
+    expected_resource_id: str = EXPECTED_RESOURCE_ID,
+    expected_oversold_type: str = EXPECTED_OVERSOLD_TYPE,
+    expected_worker_count: int = EXPECTED_WORKER_COUNT,
+    expected_gpu_count: int = EXPECTED_GPU_COUNT,
+    expected_cpu_count: int = EXPECTED_CPU_COUNT,
+    expected_memory_gi: str = EXPECTED_MEMORY_GI,
 ) -> dict[str, Any]:
     """Validate external readback for the newly-created continuation job."""
     if not expected_run_id or expected_run_id in {"unknown", "UNKNOWN"}:
@@ -364,16 +750,6 @@ def validate_continuation_registry(
         raise RuntimeError("continuation registry JobId cannot be unknown")
     if expected_job_id not in (None, "") and job_id != expected_job_id:
         raise RuntimeError(f"continuation JobId mismatch: {job_id} != {expected_job_id}")
-
-    _bool_true(placement.get("complete"), "placement evidence complete")
-    _bool_true(placement.get("use_oversold_resource"), "placement evidence use_oversold_resource")
-    # A string "true" is intentionally not accepted: this is an attestation,
-    # not a best-effort parse of an untrusted shell environment.
-    if "use_oversold_resource" in resolved:
-        _bool_true(resolved["use_oversold_resource"], "resolved use_oversold_resource")
-    elif isinstance(resolved.get("evidence"), dict) and "use_oversold_resource" in resolved["evidence"]:
-        _bool_true(resolved["evidence"]["use_oversold_resource"], "resolved evidence use_oversold_resource")
-    uid_gid = _uid_gid((resolved, placement))
 
     payload = _unique_named_file(root, "payload", ("payload", "payload/*", "payload/**/*", "payload.*"))
     template = _unique_named_file(
@@ -408,6 +784,21 @@ def validate_continuation_registry(
         )
 
     source_manifest_payload = _read_json(source_manifest, "continuation source manifest")
+    placement_contract, raw_placement_file = _placement_contract(
+        root,
+        resolved,
+        placement,
+        expected_run_id=run_id,
+        expected_job_id=job_id,
+        expected_resource_id=expected_resource_id,
+        expected_oversold_type=expected_oversold_type,
+        expected_worker_count=expected_worker_count,
+        expected_gpu_count=expected_gpu_count,
+        expected_cpu_count=expected_cpu_count,
+        expected_memory_gi=expected_memory_gi,
+    )
+    template_payload = _read_json(template, "continuation template")
+    template_contract = _template_contract(template_payload)
     # A template placeholder is not provenance.  The source manifest and the
     # external resolved/request evidence must each carry the exact hash of the
     # immutable template copy, and that hash must match the bytes on disk.
@@ -433,6 +824,7 @@ def validate_continuation_registry(
         )
     source_template_binding = _source_template_binding(
         root,
+        template,
         resolved,
         source_manifest_payload,
     )
@@ -465,7 +857,9 @@ def validate_continuation_registry(
         "run_id": run_id,
         "job_id": job_id,
         "use_oversold_resource": True,
-        "uid_gid": uid_gid,
+        "uid_gid": placement_contract["uid_gid"],
+        "placement": placement_contract,
+        "template_contract": template_contract,
         "source_commit": source_commit,
         "source_tree": source_tree,
         "template_sha256": template_sha,
@@ -473,6 +867,7 @@ def validate_continuation_registry(
         "files": {
             "resolved": {"path": str(resolved_path), "sha256": sha256_file(resolved_path), "bytes": resolved_path.stat().st_size},
             "placement": {"path": str(placement_path), "sha256": sha256_file(placement_path), "bytes": placement_path.stat().st_size},
+            "placement_readback": raw_placement_file,
             "payload": {"path": str(payload), "sha256": payload_sha, "bytes": payload.stat().st_size},
             "template": {"path": str(template), "sha256": sha256_file(template), "bytes": template.stat().st_size},
             "source_manifest": {"path": str(source_manifest), "sha256": sha256_file(source_manifest), "bytes": source_manifest.stat().st_size},
@@ -499,6 +894,8 @@ def validate_all(
     old_terminal: Path,
     old_job_id: str,
     old_run_id: str,
+    old_registry_run: Path,
+    old_registry_evidence: Path,
     registry_run: Path,
     registry_evidence: Path,
     expected_run_id: str,
@@ -507,9 +904,19 @@ def validate_all(
     expected_launcher: Path,
     expected_job_id: str | None = None,
     expected_source_manifest: Path | None = None,
+    expected_resource_id: str = EXPECTED_RESOURCE_ID,
+    expected_oversold_type: str = EXPECTED_OVERSOLD_TYPE,
+    expected_worker_count: int = EXPECTED_WORKER_COUNT,
+    expected_gpu_count: int = EXPECTED_GPU_COUNT,
+    expected_cpu_count: int = EXPECTED_CPU_COUNT,
+    expected_memory_gi: str = EXPECTED_MEMORY_GI,
 ) -> dict[str, Any]:
     terminal = validate_old_producer_terminal(
-        old_terminal, expected_job_id=old_job_id, expected_run_id=old_run_id
+        old_terminal,
+        expected_job_id=old_job_id,
+        expected_run_id=old_run_id,
+        producer_registry_run=old_registry_run,
+        producer_registry_evidence=old_registry_evidence,
     )
     registry = validate_continuation_registry(
         registry_run,
@@ -520,6 +927,12 @@ def validate_all(
         expected_launcher=expected_launcher,
         expected_job_id=expected_job_id,
         expected_source_manifest=expected_source_manifest,
+        expected_resource_id=expected_resource_id,
+        expected_oversold_type=expected_oversold_type,
+        expected_worker_count=expected_worker_count,
+        expected_gpu_count=expected_gpu_count,
+        expected_cpu_count=expected_cpu_count,
+        expected_memory_gi=expected_memory_gi,
     )
     return {"status": "PASS", "old_producer_terminal": terminal, "continuation_registry": registry}
 
@@ -529,6 +942,8 @@ def main() -> int:
     parser.add_argument("--old-terminal", type=Path, required=True)
     parser.add_argument("--old-job-id", required=True)
     parser.add_argument("--old-run-id", required=True)
+    parser.add_argument("--old-registry-run", type=Path, required=True)
+    parser.add_argument("--old-registry-evidence", type=Path, required=True)
     parser.add_argument("--registry-run", type=Path, required=True)
     parser.add_argument("--registry-evidence", type=Path, required=True)
     parser.add_argument("--expected-run-id", required=True)
@@ -537,12 +952,20 @@ def main() -> int:
     parser.add_argument("--expected-launcher", type=Path, required=True)
     parser.add_argument("--expected-job-id", default=None)
     parser.add_argument("--expected-source-manifest", type=Path, default=None)
+    parser.add_argument("--expected-resource-id", default=EXPECTED_RESOURCE_ID)
+    parser.add_argument("--expected-oversold-type", default=EXPECTED_OVERSOLD_TYPE)
+    parser.add_argument("--expected-worker-count", type=int, default=EXPECTED_WORKER_COUNT)
+    parser.add_argument("--expected-gpu-count", type=int, default=EXPECTED_GPU_COUNT)
+    parser.add_argument("--expected-cpu-count", type=int, default=EXPECTED_CPU_COUNT)
+    parser.add_argument("--expected-memory-gi", default=EXPECTED_MEMORY_GI)
     parser.add_argument("--print-job-id", action="store_true")
     args = parser.parse_args()
     result = validate_all(
         old_terminal=args.old_terminal,
         old_job_id=args.old_job_id,
         old_run_id=args.old_run_id,
+        old_registry_run=args.old_registry_run,
+        old_registry_evidence=args.old_registry_evidence,
         registry_run=args.registry_run,
         registry_evidence=args.registry_evidence,
         expected_run_id=args.expected_run_id,
@@ -551,6 +974,12 @@ def main() -> int:
         expected_launcher=args.expected_launcher,
         expected_job_id=args.expected_job_id,
         expected_source_manifest=args.expected_source_manifest,
+        expected_resource_id=args.expected_resource_id,
+        expected_oversold_type=args.expected_oversold_type,
+        expected_worker_count=args.expected_worker_count,
+        expected_gpu_count=args.expected_gpu_count,
+        expected_cpu_count=args.expected_cpu_count,
+        expected_memory_gi=args.expected_memory_gi,
     )
     if args.print_job_id:
         print(result["continuation_registry"]["job_id"])

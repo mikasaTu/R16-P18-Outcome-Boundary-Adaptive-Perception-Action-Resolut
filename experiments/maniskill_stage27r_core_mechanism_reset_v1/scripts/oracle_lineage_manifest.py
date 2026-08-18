@@ -218,7 +218,11 @@ def build_manifest(
         (str(row["task"]), int(row["model_seed"])): row for row in continuation_record_rows
     }
     old_terminal = validate_old_producer_terminal(
-        Path(old_producer_terminal), expected_job_id=producer_job_id, expected_run_id=PRODUCER_RUN_ID
+        Path(old_producer_terminal),
+        expected_job_id=producer_job_id,
+        expected_run_id=PRODUCER_RUN_ID,
+        producer_registry_run=Path(producer_registry_run),
+        producer_registry_evidence=Path(producer_registry_evidence),
     )
     expected_commit = git_value(repo, "rev-parse", "HEAD")
     expected_tree = git_value(repo, "rev-parse", "HEAD^{tree}")

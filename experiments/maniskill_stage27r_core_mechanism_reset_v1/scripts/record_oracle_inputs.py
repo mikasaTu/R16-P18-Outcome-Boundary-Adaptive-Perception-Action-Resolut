@@ -12,6 +12,7 @@ hard failure.
 from __future__ import annotations
 
 import argparse
+import datetime as _datetime
 import json
 import os
 from pathlib import Path
@@ -23,6 +24,72 @@ from validate_continuation_evidence import validate_continuation_registry, valid
 
 SNAPSHOT_SCOPE = "pre_oracle_continuation_input_snapshot"
 RECORD_DIR_NAME = "ORACLE_INPUT_RECORDS"
+
+
+def _utc_now() -> str:
+    return _datetime.datetime.now(_datetime.timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _utc_timestamp(value: Any, label: str) -> _datetime.datetime:
+    if not isinstance(value, str) or not value.strip():
+        raise RuntimeError(f"{label} must be a timezone-aware UTC timestamp")
+    text = value.strip()
+    try:
+        parsed = _datetime.datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise RuntimeError(f"{label} is not ISO-8601: {text}") from exc
+    if parsed.tzinfo is None or parsed.utcoffset() != _datetime.timedelta(0):
+        raise RuntimeError(f"{label} must be UTC: {text}")
+    return parsed.astimezone(_datetime.timezone.utc)
+
+
+def _aware_timestamp(value: Any, label: str) -> _datetime.datetime:
+    if not isinstance(value, str) or not value.strip():
+        raise RuntimeError(f"{label} must be a timezone-aware ISO-8601 timestamp")
+    text = value.strip()
+    try:
+        parsed = _datetime.datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise RuntimeError(f"{label} is not ISO-8601: {text}") from exc
+    if parsed.tzinfo is None:
+        raise RuntimeError(f"{label} must include a timezone: {text}")
+    return parsed.astimezone(_datetime.timezone.utc)
+
+
+def _snapshot_terminal_binding(old_terminal: dict[str, Any] | None) -> dict[str, Any] | None:
+    if old_terminal is None:
+        return None
+    evidence = old_terminal.get("evidence", {})
+    evidence_hash = evidence.get("sha256")
+    if not isinstance(evidence_hash, str) or not evidence_hash:
+        raise RuntimeError("validated old producer terminal lacks evidence hash")
+    return {
+        "job_id": old_terminal.get("job_id"),
+        "run_id": old_terminal.get("run_id"),
+        "observed_at": old_terminal.get("observed_at"),
+        "evidence_sha256": evidence_hash,
+    }
+
+
+def _validate_snapshot_terminal(value: dict[str, Any], old_terminal: dict[str, Any] | None) -> None:
+    created_at = _utc_timestamp(value.get("created_at"), "oracle snapshot created_at")
+    binding = value.get("old_producer_terminal")
+    if binding is None:
+        if old_terminal is not None:
+            raise RuntimeError("oracle snapshot is missing old producer terminal binding")
+        return
+    if not isinstance(binding, dict):
+        raise RuntimeError("oracle snapshot old producer terminal binding is invalid")
+    observed_at = _aware_timestamp(binding.get("observed_at"), "oracle snapshot terminal observed_at")
+    if observed_at > created_at:
+        raise RuntimeError("old producer terminal observed_at is after oracle snapshot created_at")
+    if old_terminal is not None:
+        expected = _snapshot_terminal_binding(old_terminal)
+        if binding != expected:
+            raise RuntimeError("oracle snapshot old producer terminal binding/hash mismatch")
+
+
+validate_snapshot_metadata = _validate_snapshot_terminal
 
 
 def exclusive_json(path: Path, value: dict[str, Any]) -> str:
@@ -59,7 +126,13 @@ def _record_path(formal_root: Path, task: str, seed: int) -> Path:
     return Path(formal_root) / RECORD_DIR_NAME / f"{task}-seed{int(seed)}-confirmatory.json"
 
 
-def snapshot(formal_root: Path, tasks: list[str], seeds: list[int]) -> dict[str, Any]:
+def snapshot(
+    formal_root: Path,
+    tasks: list[str],
+    seeds: list[int],
+    *,
+    old_terminal: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     if not tasks or not seeds or len(set(tasks)) != len(tasks) or len(set(seeds)) != len(seeds):
         raise RuntimeError("oracle input snapshot task/seed arguments must be unique and non-empty")
     entries = []
@@ -95,6 +168,8 @@ def snapshot(formal_root: Path, tasks: list[str], seeds: list[int]) -> dict[str,
         "status": "PASS",
         "schema_version": 2,
         "scope": SNAPSHOT_SCOPE,
+        "created_at": _utc_now(),
+        "old_producer_terminal": _snapshot_terminal_binding(old_terminal),
         "oracle_files": entries,
         "continuation_record_dir": str(Path(formal_root) / RECORD_DIR_NAME),
         "legacy_rows_have_no_intrinsic_checkpoint_hash": True,
@@ -102,7 +177,14 @@ def snapshot(formal_root: Path, tasks: list[str], seeds: list[int]) -> dict[str,
     }
 
 
-def _load_snapshot(path: Path, formal_root: Path, tasks: list[str], seeds: list[int]) -> dict[str, Any]:
+def _load_snapshot(
+    path: Path,
+    formal_root: Path,
+    tasks: list[str],
+    seeds: list[int],
+    *,
+    old_terminal: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     try:
         value = json.loads(Path(path).read_text(encoding="utf-8"))
     except Exception as exc:
@@ -115,6 +197,7 @@ def _load_snapshot(path: Path, formal_root: Path, tasks: list[str], seeds: list[
         or value.get("continuation_rows_require_immutable_semantic_record") is not True
     ):
         raise RuntimeError(f"invalid oracle input snapshot: {path}")
+    _validate_snapshot_terminal(value, old_terminal)
     expected = {(str(task), int(seed)) for task in tasks for seed in seeds}
     rows = value.get("oracle_files")
     if not isinstance(rows, list) or len(rows) != len(expected):
@@ -292,8 +375,9 @@ def validate_existing(
     state_bank_dir: Path | None = None,
     create_continuation_records: bool = True,
     continuation_provenance: dict[str, Any] | None = None,
+    old_terminal: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    value = _load_snapshot(path, formal_root, tasks, seeds)
+    value = _load_snapshot(path, formal_root, tasks, seeds, old_terminal=old_terminal)
     records = continuation_records(
         formal_root,
         path,
@@ -326,6 +410,8 @@ def main() -> int:
     parser.add_argument("--old-producer-terminal", type=Path, default=None)
     parser.add_argument("--old-producer-job-id", default=None)
     parser.add_argument("--old-producer-run-id", default=None)
+    parser.add_argument("--old-producer-registry-run", type=Path, default=None)
+    parser.add_argument("--old-producer-registry-evidence", type=Path, default=None)
     args = parser.parse_args()
     provenance = None
     registry_args = (
@@ -340,6 +426,8 @@ def main() -> int:
         args.old_producer_terminal,
         args.old_producer_job_id,
         args.old_producer_run_id,
+        args.old_producer_registry_run,
+        args.old_producer_registry_evidence,
     )
     if any(value is not None for value in registry_args):
         if any(value is None for value in registry_args):
@@ -360,6 +448,8 @@ def main() -> int:
             args.old_producer_terminal,
             expected_job_id=args.old_producer_job_id,
             expected_run_id=args.old_producer_run_id,
+            producer_registry_run=args.old_producer_registry_run,
+            producer_registry_evidence=args.old_producer_registry_evidence,
         )
         provenance = {
             "run_id": registry["run_id"],
@@ -381,12 +471,24 @@ def main() -> int:
             state_bank_dir=args.state_bank_dir,
             create_continuation_records=True,
             continuation_provenance=provenance,
+            old_terminal=old_terminal if provenance is not None else None,
         )
         status = "validated_existing"
     else:
-        value = snapshot(args.formal_root, args.expected_task, args.model_seed)
+        value = snapshot(
+            args.formal_root,
+            args.expected_task,
+            args.model_seed,
+            old_terminal=old_terminal if provenance is not None else None,
+        )
         status = exclusive_json(args.output, value)
-        value = _load_snapshot(args.output, args.formal_root, args.expected_task, args.model_seed)
+        value = _load_snapshot(
+            args.output,
+            args.formal_root,
+            args.expected_task,
+            args.model_seed,
+            old_terminal=old_terminal if provenance is not None else None,
+        )
         value["continuation_records"] = continuation_records(
             args.formal_root,
             args.output,

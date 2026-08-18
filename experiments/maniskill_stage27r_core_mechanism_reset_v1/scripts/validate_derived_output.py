@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from common import PROTOCOL_ID
+from common import PROTOCOL_ID, sha256_file
 
 FINAL_STATUSES = {
     "GO_FULL_JOINT",
@@ -15,9 +15,55 @@ FINAL_STATUSES = {
     "NO_GO_CORE_MECHANISM",
     "NO_GO_CAUSAL_BACKEND",
 }
+OFFICIAL_REQUIRED_MANIFEST = (
+    "statistics.json",
+    "MECHANISM_AUDIT.json",
+    "RESULT_VECTOR.json",
+    "ORACLE_VALIDATION.json",
+    "ORACLE_LINEAGE_MANIFEST.json",
+)
 
 
-def validate_payload(path: Path, kind: str) -> dict:
+def _validate_official_manifest(payload: dict, formal_root: Path, path: Path) -> None:
+    manifest = payload.get("manifest")
+    if not isinstance(manifest, list) or not manifest:
+        raise RuntimeError(f"official audit manifest missing: {path}")
+    root = Path(formal_root).resolve()
+    seen: set[str] = set()
+    observed: dict[str, dict] = {}
+    for entry in manifest:
+        if not isinstance(entry, dict):
+            raise RuntimeError(f"official audit manifest entry is not an object: {path}")
+        relative = entry.get("path")
+        recorded_hash = entry.get("sha256")
+        recorded_bytes = entry.get("bytes")
+        if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+            raise RuntimeError(f"official audit manifest path is not relative: {path}")
+        candidate = (root / relative).resolve()
+        try:
+            candidate.relative_to(root)
+        except ValueError as exc:
+            raise RuntimeError(f"official audit manifest path escapes formal root: {relative}") from exc
+        if relative in seen:
+            raise RuntimeError(f"official audit manifest path is duplicated: {relative}")
+        seen.add(relative)
+        if not isinstance(recorded_hash, str) or len(recorded_hash) != 64:
+            raise RuntimeError(f"official audit manifest hash is invalid: {relative}")
+        if isinstance(recorded_bytes, bool) or not isinstance(recorded_bytes, int):
+            raise RuntimeError(f"official audit manifest byte count is invalid: {relative}")
+        if not candidate.is_file() or candidate.is_symlink():
+            raise RuntimeError(f"official audit manifest file is missing/not regular: {relative}")
+        actual_hash = sha256_file(candidate)
+        actual_bytes = candidate.stat().st_size
+        if actual_hash.lower() != recorded_hash.lower() or actual_bytes != recorded_bytes:
+            raise RuntimeError(f"official audit manifest hash/bytes mismatch: {relative}")
+        observed[relative] = entry
+    missing = [name for name in OFFICIAL_REQUIRED_MANIFEST if name not in observed]
+    if missing:
+        raise RuntimeError(f"official audit manifest missing required files: {missing}")
+
+
+def validate_payload(path: Path, kind: str, formal_root: Path | None = None) -> dict:
     if not Path(path).is_file():
         raise RuntimeError(f"missing derived output: {path}")
     try:
@@ -46,8 +92,7 @@ def validate_payload(path: Path, kind: str) -> dict:
         checks = payload.get("checks")
         if not isinstance(checks, dict) or payload.get("checks", {}).get("all_pass") is not True:
             raise RuntimeError(f"official audit is not all_pass: {path}")
-        if not isinstance(payload.get("manifest"), list) or not payload["manifest"]:
-            raise RuntimeError(f"official audit manifest missing: {path}")
+        _validate_official_manifest(payload, Path(formal_root) if formal_root is not None else Path(path).parent, Path(path))
     elif kind == "posthoc_audit":
         if payload.get("status") != "PASS":
             raise RuntimeError(f"posthoc audit status is not PASS: {path}")
@@ -131,13 +176,14 @@ def validate_payload(path: Path, kind: str) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--path", type=Path, required=True)
+    parser.add_argument("--formal-root", type=Path, default=None)
     parser.add_argument(
         "--kind",
         choices=("statistics", "mechanism", "result", "official_audit", "posthoc_audit", "marker", "lineage", "oracle_validation"),
         required=True,
     )
     args = parser.parse_args()
-    print(json.dumps(validate_payload(args.path, args.kind), sort_keys=True))
+    print(json.dumps(validate_payload(args.path, args.kind, args.formal_root), sort_keys=True))
     return 0
 
 

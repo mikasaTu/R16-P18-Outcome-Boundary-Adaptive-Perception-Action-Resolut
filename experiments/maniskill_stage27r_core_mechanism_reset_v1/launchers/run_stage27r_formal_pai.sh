@@ -19,6 +19,12 @@ readonly producer_job_id="dlc9nkd8q7u4szm3"
 test "${R16P18_PRODUCER_JOB_ID:-${producer_job_id}}" = "${producer_job_id}"
 readonly producer_run_id="stage27r-formal-idle-v9"
 test "${R16P18_PRODUCER_RUN_ID:-${producer_run_id}}" = "${producer_run_id}"
+readonly expected_resource_id="quotaewyznuc7b9l"
+readonly expected_oversold_type="AcceptQuotaOverSold"
+readonly expected_worker_count=1
+readonly expected_gpu_count=8
+readonly expected_cpu_count=92
+readonly expected_memory_gi="1600Gi"
 readonly old_producer_terminal="${OLD_PRODUCER_TERMINAL:-${R16P18_OLD_PRODUCER_TERMINAL:?external OLD_PRODUCER_TERMINAL/no-overlap JSON is required}}"
 readonly continuation_registry_run="${R16P18_CONTINUATION_REGISTRY_RUN:?external continuation registry run directory is required}"
 readonly continuation_registry_evidence="${R16P18_CONTINUATION_REGISTRY_EVIDENCE:-${continuation_registry_run}/resolved.json}"
@@ -26,6 +32,7 @@ readonly pai_source_manifest="${R16P18_PAI_SOURCE_MANIFEST:?external source mani
 readonly run_id="${PAI_CANARY_RUN_ID:?}"
 readonly pai_job_hint="${PAI_CANARY_JOB_ID:-}"
 readonly gpu_count="${PAI_CANARY_EXPECTED_GPUS:?}"
+test "${gpu_count}" = "${expected_gpu_count}"
 readonly result="${R16P18_FORMAL_RESULT_ROOT:-/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/${run_id}}"
 readonly artifact="${PAI_CANARY_RUN_DIR:?}"
 readonly expected_project_commit="${R16P18_EXPECTED_PROJECT_COMMIT:?}"
@@ -42,11 +49,16 @@ continuation_job_args=()
 if [[ -n "${pai_job_hint}" ]]; then continuation_job_args=(--expected-job-id "${pai_job_hint}"); fi
 readonly pai_job_id="$("${py}" "${exp}/scripts/validate_continuation_evidence.py" \
   --old-terminal "${old_producer_terminal}" --old-job-id "${producer_job_id}" --old-run-id "${producer_run_id}" \
+  --old-registry-run "${producer_registry_run}" --old-registry-evidence "${producer_registry_evidence}" \
   --registry-run "${continuation_registry_run}" --registry-evidence "${continuation_registry_evidence}" \
   --expected-run-id "${run_id}" --expected-source-commit "${expected_project_commit}" \
   --expected-source-tree "${expected_project_tree}" \
   --expected-launcher "${exp}/launchers/run_stage27r_formal_pai.sh" \
-  --expected-source-manifest "${pai_source_manifest}" "${continuation_job_args[@]}" --print-job-id)"
+  --expected-source-manifest "${pai_source_manifest}" \
+  --expected-resource-id "${expected_resource_id}" --expected-oversold-type "${expected_oversold_type}" \
+  --expected-worker-count "${expected_worker_count}" --expected-gpu-count "${expected_gpu_count}" \
+  --expected-cpu-count "${expected_cpu_count}" --expected-memory-gi "${expected_memory_gi}" \
+  "${continuation_job_args[@]}" --print-job-id)"
 test -f "${training}/DATA_AND_TRAINING_COMPLETE.json"
 test "$(git -C "${source_root}" rev-parse HEAD)" = "${expected_project_commit}"
 test "$(git -C "${source_root}" rev-parse 'HEAD^{tree}')" = "${expected_project_tree}"
@@ -190,7 +202,7 @@ PY
 done
 
 oracle="${result}/oracle"; mkdir -p "${oracle}"
-"${py}" "${exp}/scripts/record_oracle_inputs.py" --formal-root "${result}" --output "${result}/ORACLE_INPUT_SNAPSHOT.json" --state-bank-dir "${bank_dir}" --continuation-registry-run "${continuation_registry_run}" --continuation-registry-evidence "${continuation_registry_evidence}" --continuation-run-id "${run_id}" --continuation-job-id "${pai_job_id}" --continuation-source-commit "${expected_project_commit}" --continuation-source-tree "${expected_project_tree}" --continuation-launcher "${exp}/launchers/run_stage27r_formal_pai.sh" --continuation-source-manifest "${pai_source_manifest}" --old-producer-terminal "${old_producer_terminal}" --old-producer-job-id "${producer_job_id}" --old-producer-run-id "${producer_run_id}" --expected-task StackCube-v1 --expected-task "${positive2}" --model-seed 16018 --model-seed 16019 --model-seed 16020
+"${py}" "${exp}/scripts/record_oracle_inputs.py" --formal-root "${result}" --output "${result}/ORACLE_INPUT_SNAPSHOT.json" --state-bank-dir "${bank_dir}" --continuation-registry-run "${continuation_registry_run}" --continuation-registry-evidence "${continuation_registry_evidence}" --continuation-run-id "${run_id}" --continuation-job-id "${pai_job_id}" --continuation-source-commit "${expected_project_commit}" --continuation-source-tree "${expected_project_tree}" --continuation-launcher "${exp}/launchers/run_stage27r_formal_pai.sh" --continuation-source-manifest "${pai_source_manifest}" --old-producer-terminal "${old_producer_terminal}" --old-producer-job-id "${producer_job_id}" --old-producer-run-id "${producer_run_id}" --old-producer-registry-run "${producer_registry_run}" --old-producer-registry-evidence "${producer_registry_evidence}" --expected-task StackCube-v1 --expected-task "${positive2}" --model-seed 16018 --model-seed 16019 --model-seed 16020
 jobs=()
 for task in "${formal_tasks[@]:0:2}"; do grid=$("${py}" -c 'import json,sys;print(json.load(open(sys.argv[1]))["selected_grid"])' "${cal}/${task}-CROP_GRID_FREEZE.json"); for seed in "${seeds[@]}"; do jobs+=("${task} ${seed} ${grid} confirmatory"); done; done
 if [[ -n "$negative" ]]; then for seed in "${seeds[@]}"; do jobs+=("${negative} ${seed} 2 negative"); done; fi
@@ -199,7 +211,7 @@ pids=(); for ((g=0;g<gpu_count;g++)); do oracle_worker "$g" & pids+=("$!"); done
 # The first snapshot above is immutable.  This second invocation records each
 # shard that was absent at that instant only after its state-bank semantic
 # validation has completed; a restart revalidates the same per-shard hashes.
-"${py}" "${exp}/scripts/record_oracle_inputs.py" --formal-root "${result}" --output "${result}/ORACLE_INPUT_SNAPSHOT.json" --state-bank-dir "${bank_dir}" --continuation-registry-run "${continuation_registry_run}" --continuation-registry-evidence "${continuation_registry_evidence}" --continuation-run-id "${run_id}" --continuation-job-id "${pai_job_id}" --continuation-source-commit "${expected_project_commit}" --continuation-source-tree "${expected_project_tree}" --continuation-launcher "${exp}/launchers/run_stage27r_formal_pai.sh" --continuation-source-manifest "${pai_source_manifest}" --old-producer-terminal "${old_producer_terminal}" --old-producer-job-id "${producer_job_id}" --old-producer-run-id "${producer_run_id}" --expected-task StackCube-v1 --expected-task "${positive2}" --model-seed 16018 --model-seed 16019 --model-seed 16020
+"${py}" "${exp}/scripts/record_oracle_inputs.py" --formal-root "${result}" --output "${result}/ORACLE_INPUT_SNAPSHOT.json" --state-bank-dir "${bank_dir}" --continuation-registry-run "${continuation_registry_run}" --continuation-registry-evidence "${continuation_registry_evidence}" --continuation-run-id "${run_id}" --continuation-job-id "${pai_job_id}" --continuation-source-commit "${expected_project_commit}" --continuation-source-tree "${expected_project_tree}" --continuation-launcher "${exp}/launchers/run_stage27r_formal_pai.sh" --continuation-source-manifest "${pai_source_manifest}" --old-producer-terminal "${old_producer_terminal}" --old-producer-job-id "${producer_job_id}" --old-producer-run-id "${producer_run_id}" --old-producer-registry-run "${producer_registry_run}" --old-producer-registry-evidence "${producer_registry_evidence}" --expected-task StackCube-v1 --expected-task "${positive2}" --model-seed 16018 --model-seed 16019 --model-seed 16020
 
 derived_output(){
   local kind="$1" target="$2"; shift 2
