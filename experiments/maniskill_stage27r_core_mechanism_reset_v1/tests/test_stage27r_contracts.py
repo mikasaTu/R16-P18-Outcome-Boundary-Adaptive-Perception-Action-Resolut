@@ -18,6 +18,8 @@ from posthoc_independent_audit import expected_schedule, recompute_outcome  # no
 from posthoc_independent_audit import lower_tile_tiebreak  # noqa: E402
 from audit_formal_results import frozen_preregistration_digest  # noqa: E402
 from resume_derived_output import run_or_validate  # noqa: E402
+from validate_oracle_shard import expected_conditions  # noqa: E402
+from install_formal_complete import MARKER, install_or_validate, validate_prerequisites  # noqa: E402
 
 
 def test_crop_tiles_partition_exactly() -> None:
@@ -99,6 +101,22 @@ def test_formal_precheck_runs_real_deterministic_smoke() -> None:
     text = (ROOT / "launchers/run_stage27r_formal_pai.sh").read_text()
     assert "deterministic_lockstep_smoke.py" in text
     assert "DETERMINISTIC_LOCKSTEP_SMOKE.json" in text
+    assert "--dataset-root \"${data_root}\"" in text
+    assert "--maniskill-root \"${ms}\"" in text
+    assert "install_formal_complete.py" in text
+    assert text.index("ORACLE_VALIDATION.json") < text.index('derived_output statistics')
+    assert "producer_registry_evidence" in text
+    assert "ORACLE_INPUT_SNAPSHOT.json" in text
+
+
+def test_official_manifest_excludes_resume_candidates_and_derived_metadata() -> None:
+    text = (ROOT / "scripts/audit_formal_results.py").read_text()
+    for name in ("INDEPENDENT_AUDIT.json", "POSTHOC_INDEPENDENT_AUDIT.json", "FORMAL_COMPLETE.json"):
+        assert f'"{name}"' in text
+    for name in ("statistics.json", "MECHANISM_AUDIT.json", "RESULT_VECTOR.json"):
+        assert f'"{name}"' not in text.split("derived_names =", 1)[1].split("}", 1)[0]
+    assert '".resume-"' in text
+    assert '".tmp-"' in text
 
 
 def test_state_bank_fidelity_uses_independent_cpu_environments() -> None:
@@ -180,11 +198,107 @@ def test_resume_derived_output_preserves_existing_target_and_validates_equivalen
     target = tmp_path / "statistics.json"
     assert run_or_validate(target, _producer("same")) == "installed_missing"
     assert target.read_text() == "same"
+    before = target.stat()
     assert run_or_validate(target, _producer("same")) == "validated_existing"
     assert target.read_text() == "same"
+    after = target.stat()
+    assert after.st_size == before.st_size
+    assert after.st_mtime_ns == before.st_mtime_ns
     with pytest.raises(RuntimeError, match="refusing overwrite"):
         run_or_validate(target, _producer("different"))
     assert target.read_text() == "same"
+    assert target.stat().st_mtime_ns == before.st_mtime_ns
+
+
+def test_resume_rejects_stale_existing_target_before_producer(tmp_path: Path) -> None:
+    target = tmp_path / "marker.json"
+    target.write_text('{"stale":true}\n', encoding="utf-8")
+    before = target.read_bytes(), target.stat().st_mtime_ns
+    validator = [
+        sys.executable,
+        str(ROOT / "scripts/validate_derived_output.py"),
+        "--path",
+        "__TARGET__",
+        "--kind",
+        "marker",
+    ]
+    with pytest.raises(Exception):
+        run_or_validate(target, _producer(json.dumps(MARKER, sort_keys=True)), validator)
+    assert (target.read_bytes(), target.stat().st_mtime_ns) == before
+    assert not list(tmp_path.glob(".marker.json.resume-*"))
+
+
+def test_resume_interrupted_candidate_keeps_target_untouched(tmp_path: Path) -> None:
+    target = tmp_path / "statistics.json"
+    interrupted = [
+        sys.executable,
+        "-c",
+        "from pathlib import Path; Path('__OUTPUT__').write_text('candidate'); raise SystemExit(17)",
+        "--output",
+        "__OUTPUT__",
+    ]
+    with pytest.raises(Exception):
+        run_or_validate(target, interrupted)
+    assert not target.exists()
+    candidates = list(tmp_path.glob(".statistics.json.resume-*"))
+    assert len(candidates) == 1
+    assert candidates[0].read_text() == "candidate"
+    assert run_or_validate(target, _producer("statistics")) == "installed_missing"
+
+
+def test_resume_exclusive_install_handles_concurrent_equal_and_conflicting_target(tmp_path: Path) -> None:
+    target = tmp_path / "statistics.json"
+    equal_race = [
+        sys.executable,
+        "-c",
+        "from pathlib import Path; Path(r'__TARGET_PATH__').write_text('same'); Path('__OUTPUT__').write_text('same')",
+        "--output",
+        "__OUTPUT__",
+    ]
+    equal_race[2] = equal_race[2].replace("__TARGET_PATH__", str(target))
+    assert run_or_validate(target, equal_race) == "validated_existing"
+    target.unlink()
+    conflict_race = [
+        sys.executable,
+        "-c",
+        "from pathlib import Path; Path(r'__TARGET_PATH__').write_text('winner'); Path('__OUTPUT__').write_text('loser')",
+        "--output",
+        "__OUTPUT__",
+    ]
+    conflict_race[2] = conflict_race[2].replace("__TARGET_PATH__", str(target))
+    with pytest.raises(RuntimeError, match="refusing overwrite"):
+        run_or_validate(target, conflict_race)
+    assert target.read_text() == "winner"
+
+
+def test_formal_complete_marker_is_exclusive_and_stable(tmp_path: Path) -> None:
+    marker = tmp_path / "FORMAL_COMPLETE.json"
+    assert install_or_validate(marker, {}) == "installed_missing"
+    before = marker.read_bytes(), marker.stat().st_mtime_ns
+    assert install_or_validate(marker, {}) == "validated_existing"
+    assert (marker.read_bytes(), marker.stat().st_mtime_ns) == before
+    marker.write_text('{"protocol_id":"wrong","status":"FORMAL_COMPLETE"}\n', encoding="utf-8")
+    with pytest.raises(RuntimeError, match="marker mismatch"):
+        install_or_validate(marker, {})
+
+
+def test_completion_gate_rejects_missing_or_invalid_prerequisites(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError):
+        validate_prerequisites(
+            official_audit=tmp_path / "missing-official.json",
+            posthoc_audit=tmp_path / "missing-posthoc.json",
+            result_vector=tmp_path / "missing-result.json",
+            oracle_validation=tmp_path / "missing-oracle.json",
+        )
+    marker = tmp_path / "FORMAL_COMPLETE.json"
+    assert not marker.exists()
+
+
+def test_confirmatory_oracle_contract_has_exact_34_conditions() -> None:
+    conditions = expected_conditions(4)
+    assert len(conditions) == 34
+    assert conditions[:2] == ("CC", "CF")
+    assert conditions[-1] == "FF_tile15"
 
 
 def test_resume_interruption_boundaries_are_all_idempotent(tmp_path: Path) -> None:

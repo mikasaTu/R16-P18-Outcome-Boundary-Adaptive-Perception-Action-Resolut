@@ -135,12 +135,24 @@ def main():
     # sibling temporary path after the canonical audit file already exists.
     # The canonical audit outputs are metadata about the root, not scientific
     # inputs, and the original run excluded its own output before writing it.
-    audit_outputs = {
-        args.formal_root / "INDEPENDENT_AUDIT.json",
-        args.formal_root / "POSTHOC_INDEPENDENT_AUDIT.json",
-        args.output,
+    # The two audits and terminal marker are metadata about the audit process;
+    # statistics, mechanism and result vectors are scientific derived evidence
+    # and must remain covered by the official manifest.  Exclude interrupted
+    # resume candidates so a recomputation after eviction remains stable.
+    derived_names = {
+        "INDEPENDENT_AUDIT.json",
+        "POSTHOC_INDEPENDENT_AUDIT.json",
+        "FORMAL_COMPLETE.json",
     }
-    files = sorted(path for path in args.formal_root.rglob("*") if path.is_file() and path not in audit_outputs)
+    files = sorted(
+        path
+        for path in args.formal_root.rglob("*")
+        if path.is_file()
+        and path != args.output
+        and path.name not in derived_names
+        and ".resume-" not in path.name
+        and ".tmp-" not in path.name
+    )
     manifest = [{"path": str(path.relative_to(args.formal_root)), "sha256": sha256_file(path), "bytes": path.stat().st_size} for path in files]
     checks["scientific_sha256_manifest"] = {"pass": bool(manifest), "files": len(manifest)}
     checks["all_pass"] = all(value["pass"] for value in checks.values() if isinstance(value, dict) and "pass" in value)
