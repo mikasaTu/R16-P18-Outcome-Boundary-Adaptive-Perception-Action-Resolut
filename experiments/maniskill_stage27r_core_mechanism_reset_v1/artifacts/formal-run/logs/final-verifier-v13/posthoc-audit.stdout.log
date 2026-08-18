@@ -1,0 +1,27 @@
+{
+  "raw_row_count": 97920,
+  "outcome_recompute": {
+    "pass": true,
+    "mismatches": [],
+    "mismatch_count": 0
+  },
+  "schedule_recompute": {
+    "pass": true,
+    "mismatches": [],
+    "mismatch_count": 0,
+    "schedule_definition": "trace length, treatment 8-step query cadence, common fine continuation"
+  },
+  "accounting_recompute": {
+    "pass": true,
+    "mismatches": [],
+    "mismatch_count": 0,
+    "flop_formula": "global*1.8e9 + fine*1.8e9 + policy*0.7e9"
+  },
+  "prefix_latency_disclosure": {
+    "prefix_replay_simulator_latency_ms_sum": 72773426.8613704,
+    "episode_total_compute_ms_sum": 64312262.48481536,
+    "prefix_included_in_episode_total": false,
+    "interpretation": "prefix replay cost is persisted separately and omitted from episode_total_compute; all arms share the prefix, but reported total compute is deployment-only treatment/continuation cost"
+  },
+  "status": "PASS"
+}

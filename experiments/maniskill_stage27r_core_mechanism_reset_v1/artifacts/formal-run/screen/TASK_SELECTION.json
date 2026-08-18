@@ -1,0 +1,2162 @@
+{
+  "fresh_reset_replay_agreement_pending_lockstep_bank": true,
+  "groups": {
+    "PegInsertionSide-v1/seed_16018": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "64be25cdecb22e35d6bcc6926e6d0c2a5458f8b30f4317ad1d9eabe89a4c07b5",
+          "step": 25000,
+          "validation_loss": 0.02061201532777672
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "f52554eb43f060b348b4c6981faaa418b74362ba00b5956bd2ba7a81748f6fde",
+          "step": 20000,
+          "validation_loss": 0.020620386831778817
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "27ad7bb1c2ad22fa0a2d2612c57ec87540b005f50b6d820a299bbd1b5e111ad5",
+          "step": 30000,
+          "validation_loss": 0.020717739102405472
+        }
+      ],
+      "seed": 16018,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.025,
+          "success_hold5": 0.025,
+          "success_once": 0.025
+        },
+        "sha256": "64be25cdecb22e35d6bcc6926e6d0c2a5458f8b30f4317ad1d9eabe89a4c07b5",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          }
+        },
+        "validation_loss": 0.02061201532777672
+      },
+      "task": "PegInsertionSide-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "64be25cdecb22e35d6bcc6926e6d0c2a5458f8b30f4317ad1d9eabe89a4c07b5",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.02061201532777672
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "f52554eb43f060b348b4c6981faaa418b74362ba00b5956bd2ba7a81748f6fde",
+          "step": 20000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.01,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.01
+            }
+          },
+          "validation_loss": 0.020620386831778817
+        }
+      ]
+    },
+    "PegInsertionSide-v1/seed_16019": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "ea41e2f6a562bec78db9813d7f67d7663aa32fb5b881d567dbcf9c5695858eaf",
+          "step": 25000,
+          "validation_loss": 0.02124209000106944
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "f66bcab073c38616e5ba011fb7fff65b8de060ae222d6912c4c3bed91c34bfef",
+          "step": 20000,
+          "validation_loss": 0.021296651329140406
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "a692b09ba632d4e182a95911bc05b7b4a953cd3471b0c3034081151701b086fe",
+          "step": 30000,
+          "validation_loss": 0.02134620865023044
+        }
+      ],
+      "seed": 16019,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "f66bcab073c38616e5ba011fb7fff65b8de060ae222d6912c4c3bed91c34bfef",
+        "step": 20000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          }
+        },
+        "validation_loss": 0.021296651329140406
+      },
+      "task": "PegInsertionSide-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "f66bcab073c38616e5ba011fb7fff65b8de060ae222d6912c4c3bed91c34bfef",
+          "step": 20000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.021296651329140406
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "ea41e2f6a562bec78db9813d7f67d7663aa32fb5b881d567dbcf9c5695858eaf",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.02124209000106944
+        }
+      ]
+    },
+    "PegInsertionSide-v1/seed_16020": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "33f0d0ea31fbe7c99c9a5fdd95043edf1bb644fe0ff133f18b2632bbf23de9fd",
+          "step": 25000,
+          "validation_loss": 0.02323369838613801
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "9cfadf411752490e5d56da2df627809490813c2962981715f6444ce7a8d0f252",
+          "step": 20000,
+          "validation_loss": 0.023248450061069032
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "15dd2c6af03220de3dbf4bb5d84de8a9d78da8a4d28e302794e2d32d5bbb83ac",
+          "step": 30000,
+          "validation_loss": 0.023411913282277503
+        }
+      ],
+      "seed": 16020,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "9cfadf411752490e5d56da2df627809490813c2962981715f6444ce7a8d0f252",
+        "step": 20000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.01,
+            "success_hold5": 0.01,
+            "success_once": 0.01
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          }
+        },
+        "validation_loss": 0.023248450061069032
+      },
+      "task": "PegInsertionSide-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "9cfadf411752490e5d56da2df627809490813c2962981715f6444ce7a8d0f252",
+          "step": 20000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.01
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.023248450061069032
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PegInsertionSide-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "33f0d0ea31fbe7c99c9a5fdd95043edf1bb644fe0ff133f18b2632bbf23de9fd",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.02323369838613801
+        }
+      ]
+    },
+    "PlugCharger-v1/seed_16018": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "78aa1808c48c22d740699df848bd23d2aecae925c4daa64634a40051fb97bfc0",
+          "step": 30000,
+          "validation_loss": 0.010941459183174043
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "4ca215ce984c7c20fb08ba226c7ad487e3c049be1a7925b2c43a820574905c29",
+          "step": 25000,
+          "validation_loss": 0.011004754322878191
+        }
+      ],
+      "seed": 16018,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "4ca215ce984c7c20fb08ba226c7ad487e3c049be1a7925b2c43a820574905c29",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          }
+        },
+        "validation_loss": 0.011004754322878191
+      },
+      "task": "PlugCharger-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "4ca215ce984c7c20fb08ba226c7ad487e3c049be1a7925b2c43a820574905c29",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.011004754322878191
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "78aa1808c48c22d740699df848bd23d2aecae925c4daa64634a40051fb97bfc0",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.010941459183174043
+        }
+      ]
+    },
+    "PlugCharger-v1/seed_16019": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "64a55f4191a4f232d0af6b198607f67f6ca9d5f5cead022d2f36c72b2a0ed693",
+          "step": 30000,
+          "validation_loss": 0.011178230257065233
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "c9c58e99aeb96c00d9f5df0e80a3c3186de3e03270caff0f3fd7c79ec50155b3",
+          "step": 25000,
+          "validation_loss": 0.011245276374464295
+        }
+      ],
+      "seed": 16019,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "c9c58e99aeb96c00d9f5df0e80a3c3186de3e03270caff0f3fd7c79ec50155b3",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          }
+        },
+        "validation_loss": 0.011245276374464295
+      },
+      "task": "PlugCharger-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "c9c58e99aeb96c00d9f5df0e80a3c3186de3e03270caff0f3fd7c79ec50155b3",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.011245276374464295
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "64a55f4191a4f232d0af6b198607f67f6ca9d5f5cead022d2f36c72b2a0ed693",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.011178230257065233
+        }
+      ]
+    },
+    "PlugCharger-v1/seed_16020": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "60a84fd4a5692819e80e60c8e9f68950ed3261f51ff14f31c06b584bdb106616",
+          "step": 25000,
+          "validation_loss": 0.013148164199204677
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "3490c1716b7eb033690076b5236bc39be5744f544149cdd5b516dafb6399c0e2",
+          "step": 30000,
+          "validation_loss": 0.013150507132283345
+        }
+      ],
+      "seed": 16020,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "60a84fd4a5692819e80e60c8e9f68950ed3261f51ff14f31c06b584bdb106616",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.01,
+            "success_hold5": 0.01,
+            "success_once": 0.01
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          }
+        },
+        "validation_loss": 0.013148164199204677
+      },
+      "task": "PlugCharger-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "60a84fd4a5692819e80e60c8e9f68950ed3261f51ff14f31c06b584bdb106616",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.01
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.013148164199204677
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PlugCharger-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "3490c1716b7eb033690076b5236bc39be5744f544149cdd5b516dafb6399c0e2",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.013150507132283345
+        }
+      ]
+    },
+    "PullCubeTool-v1/seed_16018": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "7dd46fe88baf75f02198d226e26939e48745916efaa6921a9e7f1d2cf042086a",
+          "step": 30000,
+          "validation_loss": 0.008449701450188567
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "6c441a3357434153f2be313d78d6338705d180818b793669abdb1b4cb7e75266",
+          "step": 25000,
+          "validation_loss": 0.00851305884518208
+        }
+      ],
+      "seed": 16018,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "6c441a3357434153f2be313d78d6338705d180818b793669abdb1b4cb7e75266",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          }
+        },
+        "validation_loss": 0.00851305884518208
+      },
+      "task": "PullCubeTool-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "6c441a3357434153f2be313d78d6338705d180818b793669abdb1b4cb7e75266",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.00851305884518208
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "7dd46fe88baf75f02198d226e26939e48745916efaa6921a9e7f1d2cf042086a",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.008449701450188567
+        }
+      ]
+    },
+    "PullCubeTool-v1/seed_16019": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "d30f6f13cfbe4a1af674700f740bb1352ce455e5f34be864a8f5e188d6d2dfdc",
+          "step": 30000,
+          "validation_loss": 0.008150589694579258
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "2566585ff8b10603432c860a09212bb18652956595e139383d7081e91d071056",
+          "step": 25000,
+          "validation_loss": 0.008203248657139124
+        }
+      ],
+      "seed": 16019,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "2566585ff8b10603432c860a09212bb18652956595e139383d7081e91d071056",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.01,
+            "success_hold5": 0.01,
+            "success_once": 0.01
+          }
+        },
+        "validation_loss": 0.008203248657139124
+      },
+      "task": "PullCubeTool-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "2566585ff8b10603432c860a09212bb18652956595e139383d7081e91d071056",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.01
+            }
+          },
+          "validation_loss": 0.008203248657139124
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "d30f6f13cfbe4a1af674700f740bb1352ce455e5f34be864a8f5e188d6d2dfdc",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.008150589694579258
+        }
+      ]
+    },
+    "PullCubeTool-v1/seed_16020": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "2106580de902a87918b007415664de1289ebb640a4eae861acf34de954579d35",
+          "step": 30000,
+          "validation_loss": 0.008148261771713844
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "1050351f341fdf6258a331c14698908bf0bf2c61c910b07b9df5d7380a0de79e",
+          "step": 25000,
+          "validation_loss": 0.00819111986607888
+        }
+      ],
+      "seed": 16020,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "1050351f341fdf6258a331c14698908bf0bf2c61c910b07b9df5d7380a0de79e",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.01,
+            "success_hold5": 0.0,
+            "success_once": 0.01
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.01,
+            "success_hold5": 0.01,
+            "success_once": 0.01
+          }
+        },
+        "validation_loss": 0.00819111986607888
+      },
+      "task": "PullCubeTool-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "2106580de902a87918b007415664de1289ebb640a4eae861acf34de954579d35",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.01,
+              "success_hold5": 0.0,
+              "success_once": 0.01
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.01
+            }
+          },
+          "validation_loss": 0.008148261771713844
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PullCubeTool-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "1050351f341fdf6258a331c14698908bf0bf2c61c910b07b9df5d7380a0de79e",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.01,
+              "success_hold5": 0.0,
+              "success_once": 0.01
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.01
+            }
+          },
+          "validation_loss": 0.00819111986607888
+        }
+      ]
+    },
+    "PushCube-v1/seed_16018": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.525,
+            "success_hold5": 0.525,
+            "success_once": 0.525
+          },
+          "sha256": "ca515c8b29d4564fee58708c77dc2fde5f6f249970b1269eae26ab79bc233098",
+          "step": 30000,
+          "validation_loss": 0.00625573046021885
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.525,
+            "success_hold5": 0.525,
+            "success_once": 0.525
+          },
+          "sha256": "3cfab570607182bd1ccc2c7a3a6853cbdaaec4abc84c17a04b1a6690038b26d0",
+          "step": 25000,
+          "validation_loss": 0.006331873421017948
+        }
+      ],
+      "seed": 16018,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.525,
+          "success_hold5": 0.525,
+          "success_once": 0.525
+        },
+        "sha256": "ca515c8b29d4564fee58708c77dc2fde5f6f249970b1269eae26ab79bc233098",
+        "step": 30000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.87,
+            "success_hold5": 0.85,
+            "success_once": 0.87
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.55,
+            "success_hold5": 0.55,
+            "success_once": 0.55
+          }
+        },
+        "validation_loss": 0.00625573046021885
+      },
+      "task": "PushCube-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.525,
+            "success_hold5": 0.525,
+            "success_once": 0.525
+          },
+          "sha256": "3cfab570607182bd1ccc2c7a3a6853cbdaaec4abc84c17a04b1a6690038b26d0",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.82,
+              "success_hold5": 0.81,
+              "success_once": 0.82
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.5,
+              "success_hold5": 0.5,
+              "success_once": 0.5
+            }
+          },
+          "validation_loss": 0.006331873421017948
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.525,
+            "success_hold5": 0.525,
+            "success_once": 0.525
+          },
+          "sha256": "ca515c8b29d4564fee58708c77dc2fde5f6f249970b1269eae26ab79bc233098",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.87,
+              "success_hold5": 0.85,
+              "success_once": 0.87
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.55,
+              "success_hold5": 0.55,
+              "success_once": 0.55
+            }
+          },
+          "validation_loss": 0.00625573046021885
+        }
+      ]
+    },
+    "PushCube-v1/seed_16019": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.3,
+            "success_hold5": 0.3,
+            "success_once": 0.3
+          },
+          "sha256": "91f19464648538c1a5f63e3bc9d3333ad3af5778048b3b9c004350f6e789d405",
+          "step": 30000,
+          "validation_loss": 0.007301096409994352
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.375,
+            "success_hold5": 0.375,
+            "success_once": 0.375
+          },
+          "sha256": "5b6fa302c46a3446c2c47693e05e65ab670a8773abdd0b5902ba205d1e19e714",
+          "step": 25000,
+          "validation_loss": 0.007340584234335874
+        }
+      ],
+      "seed": 16019,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.375,
+          "success_hold5": 0.375,
+          "success_once": 0.375
+        },
+        "sha256": "5b6fa302c46a3446c2c47693e05e65ab670a8773abdd0b5902ba205d1e19e714",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.81,
+            "success_hold5": 0.8,
+            "success_once": 0.81
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.43,
+            "success_hold5": 0.43,
+            "success_once": 0.43
+          }
+        },
+        "validation_loss": 0.007340584234335874
+      },
+      "task": "PushCube-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.375,
+            "success_hold5": 0.375,
+            "success_once": 0.375
+          },
+          "sha256": "5b6fa302c46a3446c2c47693e05e65ab670a8773abdd0b5902ba205d1e19e714",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.81,
+              "success_hold5": 0.8,
+              "success_once": 0.81
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.43,
+              "success_hold5": 0.43,
+              "success_once": 0.43
+            }
+          },
+          "validation_loss": 0.007340584234335874
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.3,
+            "success_hold5": 0.3,
+            "success_once": 0.3
+          },
+          "sha256": "91f19464648538c1a5f63e3bc9d3333ad3af5778048b3b9c004350f6e789d405",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.75,
+              "success_hold5": 0.75,
+              "success_once": 0.75
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.36,
+              "success_hold5": 0.36,
+              "success_once": 0.36
+            }
+          },
+          "validation_loss": 0.007301096409994352
+        }
+      ]
+    },
+    "PushCube-v1/seed_16020": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.5,
+            "success_hold5": 0.475,
+            "success_once": 0.5
+          },
+          "sha256": "770ad23be17ccde6991409c9babf3f8ec0047822f8404f2d927433432db1766d",
+          "step": 30000,
+          "validation_loss": 0.00664260966369969
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.525,
+            "success_hold5": 0.525,
+            "success_once": 0.525
+          },
+          "sha256": "17fde6eaa59128707a686ab278e06c2993774023d1897098a0ca235c2478cf89",
+          "step": 25000,
+          "validation_loss": 0.0067100655303658965
+        }
+      ],
+      "seed": 16020,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.525,
+          "success_hold5": 0.525,
+          "success_once": 0.525
+        },
+        "sha256": "17fde6eaa59128707a686ab278e06c2993774023d1897098a0ca235c2478cf89",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.79,
+            "success_hold5": 0.78,
+            "success_once": 0.79
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.61,
+            "success_hold5": 0.6,
+            "success_once": 0.61
+          }
+        },
+        "validation_loss": 0.0067100655303658965
+      },
+      "task": "PushCube-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.525,
+            "success_hold5": 0.525,
+            "success_once": 0.525
+          },
+          "sha256": "17fde6eaa59128707a686ab278e06c2993774023d1897098a0ca235c2478cf89",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.79,
+              "success_hold5": 0.78,
+              "success_once": 0.79
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.61,
+              "success_hold5": 0.6,
+              "success_once": 0.61
+            }
+          },
+          "validation_loss": 0.0067100655303658965
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushCube-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.5,
+            "success_hold5": 0.475,
+            "success_once": 0.5
+          },
+          "sha256": "770ad23be17ccde6991409c9babf3f8ec0047822f8404f2d927433432db1766d",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.77,
+              "success_hold5": 0.77,
+              "success_once": 0.77
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.51,
+              "success_hold5": 0.51,
+              "success_once": 0.51
+            }
+          },
+          "validation_loss": 0.00664260966369969
+        }
+      ]
+    },
+    "PushT-v1/seed_16018": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.075,
+            "success_hold5": 0.075,
+            "success_once": 0.175
+          },
+          "sha256": "97556e4dcb85fe96936a6fcf0b2ef7f64b6543e2436e2c8706b59937d44cbc47",
+          "step": 25000,
+          "validation_loss": 0.12183731388557341
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.075,
+            "success_hold5": 0.075,
+            "success_once": 0.175
+          },
+          "sha256": "b536e67875ca3ef12c27adf6b86cb338c279c4a1d29b57fcee2ade9ecddaddda",
+          "step": 20000,
+          "validation_loss": 0.12185506358257953
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.125,
+            "success_at_end": 0.075,
+            "success_hold5": 0.075,
+            "success_once": 0.2
+          },
+          "sha256": "b1d8a655b4498b12c3f95f0f0a61e7ec113179e31b483b2d2fb8d26510d1ceeb",
+          "step": 30000,
+          "validation_loss": 0.12201514523073649
+        }
+      ],
+      "seed": 16018,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.1,
+          "success_at_end": 0.075,
+          "success_hold5": 0.075,
+          "success_once": 0.175
+        },
+        "sha256": "b536e67875ca3ef12c27adf6b86cb338c279c4a1d29b57fcee2ade9ecddaddda",
+        "step": 20000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.01,
+            "success_at_end": 0.09,
+            "success_hold5": 0.09,
+            "success_once": 0.1
+          },
+          "FF": {
+            "post_success_loss": 0.01,
+            "success_at_end": 0.06,
+            "success_hold5": 0.06,
+            "success_once": 0.07
+          }
+        },
+        "validation_loss": 0.12185506358257953
+      },
+      "task": "PushT-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16018/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.075,
+            "success_hold5": 0.075,
+            "success_once": 0.175
+          },
+          "sha256": "b536e67875ca3ef12c27adf6b86cb338c279c4a1d29b57fcee2ade9ecddaddda",
+          "step": 20000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.01,
+              "success_at_end": 0.09,
+              "success_hold5": 0.09,
+              "success_once": 0.1
+            },
+            "FF": {
+              "post_success_loss": 0.01,
+              "success_at_end": 0.06,
+              "success_hold5": 0.06,
+              "success_once": 0.07
+            }
+          },
+          "validation_loss": 0.12185506358257953
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.075,
+            "success_hold5": 0.075,
+            "success_once": 0.175
+          },
+          "sha256": "97556e4dcb85fe96936a6fcf0b2ef7f64b6543e2436e2c8706b59937d44cbc47",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.06,
+              "success_at_end": 0.05,
+              "success_hold5": 0.05,
+              "success_once": 0.11
+            },
+            "FF": {
+              "post_success_loss": 0.04,
+              "success_at_end": 0.04,
+              "success_hold5": 0.04,
+              "success_once": 0.08
+            }
+          },
+          "validation_loss": 0.12183731388557341
+        }
+      ]
+    },
+    "PushT-v1/seed_16019": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.125
+          },
+          "sha256": "99408f7cbf439700a4fc293508dfdd81615ccf763a1117220035ca213b45bbbe",
+          "step": 20000,
+          "validation_loss": 0.11946503974378386
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16019/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.1
+          },
+          "sha256": "858021a6c88a723da71c97ee845bf81b6c105d6373f351d3d93d0965dc35014a",
+          "step": 25000,
+          "validation_loss": 0.11965707465509473
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.125
+          },
+          "sha256": "a97e4b4cad4f8de0c05b406c1b47d2526ef47cb6455be1cbdb5b9026fa1a3bbd",
+          "step": 30000,
+          "validation_loss": 0.11987599609225874
+        }
+      ],
+      "seed": 16019,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.1,
+          "success_at_end": 0.025,
+          "success_hold5": 0.025,
+          "success_once": 0.125
+        },
+        "sha256": "a97e4b4cad4f8de0c05b406c1b47d2526ef47cb6455be1cbdb5b9026fa1a3bbd",
+        "step": 30000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.06,
+            "success_at_end": 0.04,
+            "success_hold5": 0.04,
+            "success_once": 0.1
+          },
+          "FF": {
+            "post_success_loss": 0.02,
+            "success_at_end": 0.03,
+            "success_hold5": 0.03,
+            "success_once": 0.05
+          }
+        },
+        "validation_loss": 0.11987599609225874
+      },
+      "task": "PushT-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.125
+          },
+          "sha256": "99408f7cbf439700a4fc293508dfdd81615ccf763a1117220035ca213b45bbbe",
+          "step": 20000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.05,
+              "success_at_end": 0.05,
+              "success_hold5": 0.05,
+              "success_once": 0.1
+            },
+            "FF": {
+              "post_success_loss": 0.06,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.07
+            }
+          },
+          "validation_loss": 0.11946503974378386
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.1,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.125
+          },
+          "sha256": "a97e4b4cad4f8de0c05b406c1b47d2526ef47cb6455be1cbdb5b9026fa1a3bbd",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.06,
+              "success_at_end": 0.04,
+              "success_hold5": 0.04,
+              "success_once": 0.1
+            },
+            "FF": {
+              "post_success_loss": 0.02,
+              "success_at_end": 0.03,
+              "success_hold5": 0.03,
+              "success_once": 0.05
+            }
+          },
+          "validation_loss": 0.11987599609225874
+        }
+      ]
+    },
+    "PushT-v1/seed_16020": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.075,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.1
+          },
+          "sha256": "7178d2d9a80fb07b3824adbe0f84894ef172c57d411a9bd94b36208a5574842b",
+          "step": 20000,
+          "validation_loss": 0.12178862018626997
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.075,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.1
+          },
+          "sha256": "73b27a7213d03164e40c10cb0e5d01d7b9cba6355afa93b80a68306ff2494a26",
+          "step": 25000,
+          "validation_loss": 0.12209878684634824
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.05,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.05
+          },
+          "sha256": "14e983c41849df47283d2b720185253a6dbc61b749a60bd37bbc461ac115d64a",
+          "step": 30000,
+          "validation_loss": 0.12237364700476938
+        }
+      ],
+      "seed": 16020,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.075,
+          "success_at_end": 0.025,
+          "success_hold5": 0.025,
+          "success_once": 0.1
+        },
+        "sha256": "7178d2d9a80fb07b3824adbe0f84894ef172c57d411a9bd94b36208a5574842b",
+        "step": 20000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.07,
+            "success_at_end": 0.05,
+            "success_hold5": 0.05,
+            "success_once": 0.12
+          },
+          "FF": {
+            "post_success_loss": 0.03,
+            "success_at_end": 0.01,
+            "success_hold5": 0.01,
+            "success_once": 0.04
+          }
+        },
+        "validation_loss": 0.12178862018626997
+      },
+      "task": "PushT-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.075,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.1
+          },
+          "sha256": "7178d2d9a80fb07b3824adbe0f84894ef172c57d411a9bd94b36208a5574842b",
+          "step": 20000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.07,
+              "success_at_end": 0.05,
+              "success_hold5": 0.05,
+              "success_once": 0.12
+            },
+            "FF": {
+              "post_success_loss": 0.03,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.04
+            }
+          },
+          "validation_loss": 0.12178862018626997
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/PushT-v1/seed_16020/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.075,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.1
+          },
+          "sha256": "73b27a7213d03164e40c10cb0e5d01d7b9cba6355afa93b80a68306ff2494a26",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.05,
+              "success_at_end": 0.03,
+              "success_hold5": 0.03,
+              "success_once": 0.08
+            },
+            "FF": {
+              "post_success_loss": 0.05,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.06
+            }
+          },
+          "validation_loss": 0.12209878684634824
+        }
+      ]
+    },
+    "StackCube-v1/seed_16018": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "4b68ef98c26e920aac0bad738115766b8e35569d102a7aaefb75f43cc5bf2fd7",
+          "step": 25000,
+          "validation_loss": 0.056754354811671424
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "44ee71b2d6f9050af2a26b2f78c8fdcc1dafb153cab48d86e7f73c17d152eb31",
+          "step": 30000,
+          "validation_loss": 0.056881553036740785
+        }
+      ],
+      "seed": 16018,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.0,
+          "success_hold5": 0.0,
+          "success_once": 0.0
+        },
+        "sha256": "4b68ef98c26e920aac0bad738115766b8e35569d102a7aaefb75f43cc5bf2fd7",
+        "step": 25000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.01,
+            "success_at_end": 0.1,
+            "success_hold5": 0.1,
+            "success_once": 0.11
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          }
+        },
+        "validation_loss": 0.056754354811671424
+      },
+      "task": "StackCube-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16018/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "44ee71b2d6f9050af2a26b2f78c8fdcc1dafb153cab48d86e7f73c17d152eb31",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.08,
+              "success_hold5": 0.07,
+              "success_once": 0.08
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.056881553036740785
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.0,
+            "success_hold5": 0.0,
+            "success_once": 0.0
+          },
+          "sha256": "4b68ef98c26e920aac0bad738115766b8e35569d102a7aaefb75f43cc5bf2fd7",
+          "step": 25000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.01,
+              "success_at_end": 0.1,
+              "success_hold5": 0.1,
+              "success_once": 0.11
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.0,
+              "success_hold5": 0.0,
+              "success_once": 0.0
+            }
+          },
+          "validation_loss": 0.056754354811671424
+        }
+      ]
+    },
+    "StackCube-v1/seed_16019": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "f0e3b87f95aae5b707cf0cd401008a3620ade88120a2b85a34106d1561adfb2a",
+          "step": 20000,
+          "validation_loss": 0.05066597710856114
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "4d50d3f65ec051335f2f8838e1b2e9fb88a6ab2e554758c0e3cbbff740008c4e",
+          "step": 30000,
+          "validation_loss": 0.050680696737706615
+        }
+      ],
+      "seed": 16019,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.025,
+          "success_hold5": 0.025,
+          "success_once": 0.025
+        },
+        "sha256": "4d50d3f65ec051335f2f8838e1b2e9fb88a6ab2e554758c0e3cbbff740008c4e",
+        "step": 30000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.02,
+            "success_at_end": 0.16,
+            "success_hold5": 0.15,
+            "success_once": 0.18
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.02,
+            "success_hold5": 0.02,
+            "success_once": 0.02
+          }
+        },
+        "validation_loss": 0.050680696737706615
+      },
+      "task": "StackCube-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16019/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "f0e3b87f95aae5b707cf0cd401008a3620ade88120a2b85a34106d1561adfb2a",
+          "step": 20000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.01,
+              "success_at_end": 0.15,
+              "success_hold5": 0.15,
+              "success_once": 0.16
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.01,
+              "success_hold5": 0.01,
+              "success_once": 0.01
+            }
+          },
+          "validation_loss": 0.05066597710856114
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16019/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.025,
+            "success_hold5": 0.025,
+            "success_once": 0.025
+          },
+          "sha256": "4d50d3f65ec051335f2f8838e1b2e9fb88a6ab2e554758c0e3cbbff740008c4e",
+          "step": 30000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.02,
+              "success_at_end": 0.16,
+              "success_hold5": 0.15,
+              "success_once": 0.18
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.02,
+              "success_hold5": 0.02,
+              "success_once": 0.02
+            }
+          },
+          "validation_loss": 0.050680696737706615
+        }
+      ]
+    },
+    "StackCube-v1/seed_16020": {
+      "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+      "screened": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.1,
+            "success_hold5": 0.1,
+            "success_once": 0.1
+          },
+          "sha256": "9529a9a3e11ca7188b1a6cc8af7092090aa828abc50d8d1cad2b777adaabf7b7",
+          "step": 20000,
+          "validation_loss": 0.053215835619433924
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16020/checkpoints/step_000015000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.075,
+            "success_hold5": 0.075,
+            "success_once": 0.075
+          },
+          "sha256": "1072a323641b5bab846668db263f563dc95a1871d00f066c7f83f5269ceea285",
+          "step": 15000,
+          "validation_loss": 0.05396457464133803
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16020/checkpoints/step_000030000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.075,
+            "success_hold5": 0.075,
+            "success_once": 0.075
+          },
+          "sha256": "1f154333461da412153366728297bfd9900329cdf17fbfcfdea536ebf8a0c2c2",
+          "step": 30000,
+          "validation_loss": 0.05492905982217255
+        }
+      ],
+      "seed": 16020,
+      "selected": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16020/checkpoints/step_000015000/checkpoint.pt",
+        "screen": {
+          "post_success_loss": 0.0,
+          "success_at_end": 0.075,
+          "success_hold5": 0.075,
+          "success_once": 0.075
+        },
+        "sha256": "1072a323641b5bab846668db263f563dc95a1871d00f066c7f83f5269ceea285",
+        "step": 15000,
+        "validation": {
+          "CC": {
+            "post_success_loss": 0.01,
+            "success_at_end": 0.16,
+            "success_hold5": 0.16,
+            "success_once": 0.17
+          },
+          "FF": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.04,
+            "success_hold5": 0.04,
+            "success_once": 0.04
+          }
+        },
+        "validation_loss": 0.05396457464133803
+      },
+      "task": "StackCube-v1",
+      "validated_top2": [
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16020/checkpoints/step_000020000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.1,
+            "success_hold5": 0.1,
+            "success_once": 0.1
+          },
+          "sha256": "9529a9a3e11ca7188b1a6cc8af7092090aa828abc50d8d1cad2b777adaabf7b7",
+          "step": 20000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.04,
+              "success_at_end": 0.22,
+              "success_hold5": 0.21,
+              "success_once": 0.26
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.03,
+              "success_hold5": 0.03,
+              "success_once": 0.03
+            }
+          },
+          "validation_loss": 0.053215835619433924
+        },
+        {
+          "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16020/checkpoints/step_000015000/checkpoint.pt",
+          "screen": {
+            "post_success_loss": 0.0,
+            "success_at_end": 0.075,
+            "success_hold5": 0.075,
+            "success_once": 0.075
+          },
+          "sha256": "1072a323641b5bab846668db263f563dc95a1871d00f066c7f83f5269ceea285",
+          "step": 15000,
+          "validation": {
+            "CC": {
+              "post_success_loss": 0.01,
+              "success_at_end": 0.16,
+              "success_hold5": 0.16,
+              "success_once": 0.17
+            },
+            "FF": {
+              "post_success_loss": 0.0,
+              "success_at_end": 0.04,
+              "success_hold5": 0.04,
+              "success_once": 0.04
+            }
+          },
+          "validation_loss": 0.05396457464133803
+        }
+      ]
+    }
+  },
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "pushcube_success_hold5": [
+    0.55,
+    0.43,
+    0.6
+  ],
+  "selected_negative": null,
+  "selected_positive": null,
+  "task_gates": {
+    "PegInsertionSide-v1": {
+      "CC": [
+        0.0,
+        0.0,
+        0.01
+      ],
+      "FF": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": false
+    },
+    "PlugCharger-v1": {
+      "CC": [
+        0.0,
+        0.0,
+        0.01
+      ],
+      "FF": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": false
+    },
+    "PullCubeTool-v1": {
+      "CC": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "FF": [
+        0.0,
+        0.01,
+        0.01
+      ],
+      "pass": false
+    },
+    "PushT-v1": {
+      "CC": [
+        0.09,
+        0.04,
+        0.05
+      ],
+      "FF": [
+        0.06,
+        0.03,
+        0.01
+      ],
+      "pass": false
+    },
+    "StackCube-v1": {
+      "CC": [
+        0.1,
+        0.15,
+        0.16
+      ],
+      "FF": [
+        0.0,
+        0.02,
+        0.04
+      ],
+      "pass": false
+    }
+  }
+}

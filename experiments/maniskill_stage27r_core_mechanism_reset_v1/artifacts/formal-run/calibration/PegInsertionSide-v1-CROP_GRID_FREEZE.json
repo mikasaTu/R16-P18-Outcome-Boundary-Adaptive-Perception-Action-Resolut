@@ -1,0 +1,8 @@
+{
+  "grid2_oracle_gain": 1.4179303538468149,
+  "grid4_oracle_gain": 2.317920461322905,
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "recovery_ratio": 0.6117251983001869,
+  "selected_grid": 4,
+  "threshold": 0.9
+}

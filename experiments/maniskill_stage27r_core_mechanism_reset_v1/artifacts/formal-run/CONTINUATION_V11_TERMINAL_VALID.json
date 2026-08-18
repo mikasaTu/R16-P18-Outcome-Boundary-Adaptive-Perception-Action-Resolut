@@ -1,0 +1,55 @@
+{
+  "active_job_verification": {
+    "v11": {
+      "active": false,
+      "job_id": "dlc1x9np56zy7gpm",
+      "live_status": "Stopped"
+    },
+    "v12": {
+      "active": false,
+      "basis": "no_official_registry_run_or_ledger_submission",
+      "registry_ledger_matches": 0,
+      "registry_run_present": false
+    }
+  },
+  "invalid_predecessor": {
+    "bytes": 8026,
+    "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/CONTINUATION_V11_TERMINAL.json",
+    "preserved_byte_for_byte": true,
+    "reason": "trailing_literal_backslash_n",
+    "sha256": "bbf16df01c734e21e37c90d4f77b9291ea94a8ae203bc2c42841adeacf584dde"
+  },
+  "job_id": "dlc1x9np56zy7gpm",
+  "kind": "stage27r_continuation_v11_terminal_valid",
+  "no_overlap_after_terminal": true,
+  "observed_at": "2026-08-18T21:47:33Z",
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "raw_terminal_getjob": {
+    "bytes": 16801,
+    "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v11/getjob-terminal-dlc1x9np56zy7gpm-20260818T214733Z.json",
+    "sha256": "128734824c901e1828b2e260f4a8bfadd0e3d162a2c47cd04afc860f2ad36922"
+  },
+  "registry": {
+    "placement": {
+      "bytes": 1034,
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v11/placement-evidence.external.json",
+      "sha256": "8774798532eece559ce713bc5731fb51e9921ce98dd1f18fccf5ad1aac37fee2"
+    },
+    "resolved": {
+      "bytes": 23601,
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v11/resolved.json",
+      "sha256": "d5fd068a66099920a271d710938574eaa242574946142e10e665639759cbee9f"
+    }
+  },
+  "run_id": "stage27r-formal-idle-v11",
+  "schema_version": 1,
+  "scientific_outputs_preserved": true,
+  "scope_note": "Evidence-only repair. The malformed predecessor, PAI jobs, scientific outputs, and source code were not modified.",
+  "source": {
+    "commit": "7554bca313d796fd0b4cdf3abbc817c6ecc7e9fd",
+    "tree": "837e29d5547c67c8045522164ab72e8fbcc2d5a0"
+  },
+  "status": "PASS",
+  "terminal": true,
+  "terminal_status": "Stopped"
+}

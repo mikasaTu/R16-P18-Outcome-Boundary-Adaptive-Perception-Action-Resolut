@@ -1,0 +1,37 @@
+{
+  "getjob": {
+    "bytes": 15924,
+    "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v9/getjob-terminal-dlc9nkd8q7u4szm3-20260818T212723Z.json",
+    "sha256": "7957494d4ef4f961ae98c44d7712cb77d9631568c2afcd1c11e1c2e036d332d9"
+  },
+  "job_id": "dlc9nkd8q7u4szm3",
+  "kind": "stage27r_old_producer_terminal",
+  "no_overlap": true,
+  "observed_at": "2026-08-18T21:27:57Z",
+  "observed_at_utc": "2026-08-18T21:27:57Z",
+  "producer_registry": {
+    "job_id": "dlc9nkd8q7u4szm3",
+    "placement": {
+      "bytes": 1031,
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v9/placement-evidence.external.json",
+      "sha256": "c7dc671cbadf95ecf0cde1e2df651db59b7e8f0f063122c5ce3d1fd820f34235"
+    },
+    "resolved": {
+      "bytes": 17983,
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v9/resolved.json",
+      "sha256": "81db0c633d40074c125d4bf801f68ba1e359a45f456b0954282ae745b321c5a6"
+    },
+    "run_id": "stage27r-formal-idle-v9"
+  },
+  "run_id": "stage27r-formal-idle-v9",
+  "schema_version": 1,
+  "scope_note": "Exact old producer terminal/no-overlap attestation. No PAI service record or CPFS scientific artifact was deleted.",
+  "status": "Stopped",
+  "stop_action": {
+    "job_id": "dlc9nkd8q7u4szm3",
+    "operation": "pinned_dlc_stop_job_force",
+    "result": "stopped"
+  },
+  "terminal": true,
+  "terminal_status": "Stopped"
+}

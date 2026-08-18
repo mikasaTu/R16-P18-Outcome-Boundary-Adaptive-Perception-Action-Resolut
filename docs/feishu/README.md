@@ -9,6 +9,7 @@ This directory contains Markdown snapshots of the R16-P18 Feishu experiment-plan
 | 3 | [step3/step.md](step3/step.md) | [step3/experiment-report.md](step3/experiment-report.md) |
 | 4 | [step4/step.md](step4/step.md) | [step4/experiment-report.md](step4/experiment-report.md) |
 | 5 | [step5/step.md](step5/step.md) | [step5/experiment-report.md](step5/experiment-report.md) |
+| 6 | [step6/step.md](step6/step.md) | [step6/experiment-report.md](step6/experiment-report.md) |
 
 Each generated file records its Feishu source URL, wiki token, object token, and revision in YAML front matter. Run `scripts/export_feishu_steps.sh` from an authenticated environment to refresh all snapshots.
 

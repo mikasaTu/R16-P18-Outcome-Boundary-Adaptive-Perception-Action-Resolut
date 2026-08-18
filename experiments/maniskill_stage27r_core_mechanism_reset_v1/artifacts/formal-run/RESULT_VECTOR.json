@@ -1,0 +1,69 @@
+{
+  "causal_backend_pass": true,
+  "downstream_cannot_reverse_upstream_failure": true,
+  "fidelity_pass_rates": [
+    1.0,
+    1.0
+  ],
+  "final_status": "NO_GO_CORE_MECHANISM",
+  "fresh_reset_categorical_agreement_100pct": true,
+  "per_weight_gates": {
+    "balanced": {
+      "action": false,
+      "budget_50_compute_reduction": 0.0,
+      "budget_50_success_ci95": [
+        0.0,
+        0.0
+      ],
+      "budget_50_success_gain": 0.0,
+      "budget_joint": false,
+      "joint": false,
+      "joint_fraction": true,
+      "state_axis": false,
+      "visual": true,
+      "visual_budget": false
+    },
+    "progress_dominant": {
+      "action": false,
+      "budget_50_compute_reduction": 0.0,
+      "budget_50_success_ci95": [
+        0.0,
+        0.0
+      ],
+      "budget_50_success_gain": 0.0,
+      "budget_joint": false,
+      "joint": false,
+      "joint_fraction": true,
+      "state_axis": false,
+      "visual": true,
+      "visual_budget": false
+    },
+    "success_dominant": {
+      "action": false,
+      "budget_50_compute_reduction": 0.0,
+      "budget_50_success_ci95": [
+        0.0,
+        0.0
+      ],
+      "budget_50_success_gain": 0.0,
+      "budget_joint": false,
+      "joint": false,
+      "joint_fraction": true,
+      "state_axis": false,
+      "visual": true,
+      "visual_budget": false
+    }
+  },
+  "positive_task_screen_gate_pass": false,
+  "precedence_applied": true,
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "two_of_three_weight_set_gates": {
+    "action": false,
+    "budget_joint": false,
+    "joint": false,
+    "joint_fraction": true,
+    "state_axis": false,
+    "visual": true,
+    "visual_budget": false
+  }
+}

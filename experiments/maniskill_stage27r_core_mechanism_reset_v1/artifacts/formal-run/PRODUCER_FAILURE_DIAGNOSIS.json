@@ -1,0 +1,80 @@
+{
+  "failure": {
+    "autoresume_loop": true,
+    "class": "deterministic_audit_error",
+    "evidence": "formal-runtime.log lines 406-412; audit_formal_results.py accesses protocol[\"preregistration_sha256\"] after derived results were produced",
+    "exception": "KeyError: preregistration_sha256"
+  },
+  "job": {
+    "job_id": "dlc9nkd8q7u4szm3",
+    "live_status_before_stop": "EnvPreparing",
+    "resource_id": "quotaewyznuc7b9l",
+    "run_id": "stage27r-formal-idle-v9"
+  },
+  "kind": "stage27r_old_producer_failure_diagnosis",
+  "observed_at_utc": "2026-08-18T21:26:29Z",
+  "schema_version": 1,
+  "scientific_evidence_gate": {
+    "changed_files": [],
+    "each_row_count": 16320,
+    "formal_root_regular_files_checked": 49,
+    "formal_root_total_bytes": 628906445,
+    "oracle_collection_validator": "PASS",
+    "row_count": 97920,
+    "stability_window_seconds": 12,
+    "validated_shards": 6,
+    "validator_commit": "7554bca",
+    "validator_source": "stage27r-formal-source-v11",
+    "validator_tree": "837e29d5547c67c8045522164ab72e8fbcc2d5a0"
+  },
+  "scope_note": "diagnosis only; no scientific output was overwritten and no continuation was submitted",
+  "shards": [
+    {
+      "bytes": 71603054,
+      "path": "oracle/PegInsertionSide-v1-seed16018-confirmatory.json",
+      "rows": 16320,
+      "sha256": "798490f0514865cf63383cfd7238415150f0ffe9e618fcdb7e7fcced1a79e4c7",
+      "validator": "PASS"
+    },
+    {
+      "bytes": 71737825,
+      "path": "oracle/PegInsertionSide-v1-seed16019-confirmatory.json",
+      "rows": 16320,
+      "sha256": "18d6c4d8c56d86a93334721ab5d2aa6ff430def9b82898b851ab8a1415287793",
+      "validator": "PASS"
+    },
+    {
+      "bytes": 71664264,
+      "path": "oracle/PegInsertionSide-v1-seed16020-confirmatory.json",
+      "rows": 16320,
+      "sha256": "abed063078025d97dcc52f69ddb713c07bbb33ae6bea7e64eb6b3a37211a8186",
+      "validator": "PASS"
+    },
+    {
+      "bytes": 70380888,
+      "path": "oracle/StackCube-v1-seed16018-confirmatory.json",
+      "rows": 16320,
+      "sha256": "9be2072119703fe1e8b2e1ecc16f3488cc49c75b10f606e44b1d93fc5c0581c2",
+      "validator": "PASS"
+    },
+    {
+      "bytes": 70611991,
+      "path": "oracle/StackCube-v1-seed16019-confirmatory.json",
+      "rows": 16320,
+      "sha256": "86eb7d00e618486783f3ebb6c77ec6845ded1640172dace4e4f256b01f2a0981",
+      "validator": "PASS"
+    },
+    {
+      "bytes": 70796592,
+      "path": "oracle/StackCube-v1-seed16020-confirmatory.json",
+      "rows": 16320,
+      "sha256": "e98c5e4a5d772d7f7375116b4d9e225fd987abbe333ec98e91d13c19222fba1f",
+      "validator": "PASS"
+    }
+  ],
+  "source": {
+    "commit": "fa05c2ef52e5cce16f62397540162724bfd4a6b9",
+    "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage27r-formal-source-v8/experiments/maniskill_stage27r_core_mechanism_reset_v1/scripts/audit_formal_results.py",
+    "tree": "6fdb28764d002def6d10e5a9c4f41918fe7713d1"
+  }
+}

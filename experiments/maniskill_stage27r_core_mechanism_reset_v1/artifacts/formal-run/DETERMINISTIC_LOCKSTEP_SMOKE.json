@@ -1,0 +1,13 @@
+{
+  "broadcast_action_max_abs": 0.0,
+  "categorical_agreement": true,
+  "kind": "fresh_reset_deterministic_lockstep_smoke",
+  "pass": true,
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "rgb_max_lsb": 0,
+  "rotation_rad": 5.16191365590357e-08,
+  "seed": 2709001,
+  "steps": 4,
+  "task": "StackCube-v1",
+  "translation_m": 0.0
+}

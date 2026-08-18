@@ -1,0 +1,448 @@
+{
+  "accounting_recompute": {
+    "flop_formula": "global*1.8e9 + fine*1.8e9 + policy*0.7e9",
+    "mismatch_count": 0,
+    "mismatches": [],
+    "pass": true
+  },
+  "camera_checks": {
+    "PegInsertionSide-v1": {
+      "cross_validation": {
+        "camera_count_equal": true,
+        "camera_key_order_equal": true,
+        "camera_key_set_equal": true,
+        "native_rgb_shape_128x128x3": true
+      },
+      "derived_camera_count": 2,
+      "env_rgb_sensor_keys": [
+        "base_camera",
+        "hand_camera"
+      ],
+      "official_preprocess_rgb_shape": [
+        1,
+        2,
+        3,
+        224,
+        224
+      ],
+      "pass": true,
+      "replay_rgb_camera_keys": [
+        "base_camera",
+        "hand_camera"
+      ]
+    },
+    "StackCube-v1": {
+      "cross_validation": {
+        "camera_count_equal": true,
+        "camera_key_order_equal": true,
+        "camera_key_set_equal": true,
+        "native_rgb_shape_128x128x3": true
+      },
+      "derived_camera_count": 2,
+      "env_rgb_sensor_keys": [
+        "base_camera",
+        "hand_camera"
+      ],
+      "official_preprocess_rgb_shape": [
+        1,
+        2,
+        3,
+        224,
+        224
+      ],
+      "pass": true,
+      "replay_rgb_camera_keys": [
+        "base_camera",
+        "hand_camera"
+      ]
+    }
+  },
+  "camera_evidence": {
+    "by_task": {
+      "PegInsertionSide-v1": {
+        "cross_validation": {
+          "camera_count_equal": true,
+          "camera_key_order_equal": true,
+          "camera_key_set_equal": true,
+          "native_rgb_shape_128x128x3": true
+        },
+        "derived_camera_count": 2,
+        "deterministic_reset_seed": 2704000,
+        "env_rgb_native_shapes": {
+          "base_camera": [
+            1,
+            128,
+            128,
+            3
+          ],
+          "hand_camera": [
+            1,
+            128,
+            128,
+            3
+          ]
+        },
+        "env_rgb_sensor_count": 2,
+        "env_rgb_sensor_keys": [
+          "base_camera",
+          "hand_camera"
+        ],
+        "official_act_preprocess": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/ManiSkill-r16p18-v3.0.1/examples/baselines/act/train_rgbd.py",
+        "official_act_preprocess_sha256": "6ee91a2a7c853eae3b776ea7a4dbccf0cc94ec40ca41147d04b94ef389243654",
+        "official_preprocess_camera_count": 2,
+        "official_preprocess_rgb_shape": [
+          1,
+          2,
+          3,
+          224,
+          224
+        ],
+        "pinned_maniskill_commit": "a4a4f9272ad64b1564035874b605ceb687b63ed8",
+        "pinned_maniskill_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/ManiSkill-r16p18-v3.0.1",
+        "posthoc_evidence_only": true,
+        "preregistration_unchanged": true,
+        "replay_h5": {
+          "path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-stage27r-core-reset-v2/PegInsertionSide-v1/oversized_source/trajectory.rgb.pd_ee_delta_pose.physx_cpu.h5",
+          "rgb_camera_count": 2,
+          "rgb_camera_keys": [
+            "base_camera",
+            "hand_camera"
+          ],
+          "rgb_shapes": {
+            "base_camera": [
+              179,
+              128,
+              128,
+              3
+            ],
+            "hand_camera": [
+              179,
+              128,
+              128,
+              3
+            ]
+          },
+          "sha256": "7d4f9ebf5e544010cc5e4a665019264b06284084fcf51ecdb63384d0f453c143",
+          "trajectory_key": "traj_0"
+        },
+        "task": "PegInsertionSide-v1"
+      },
+      "StackCube-v1": {
+        "cross_validation": {
+          "camera_count_equal": true,
+          "camera_key_order_equal": true,
+          "camera_key_set_equal": true,
+          "native_rgb_shape_128x128x3": true
+        },
+        "derived_camera_count": 2,
+        "deterministic_reset_seed": 2704000,
+        "env_rgb_native_shapes": {
+          "base_camera": [
+            1,
+            128,
+            128,
+            3
+          ],
+          "hand_camera": [
+            1,
+            128,
+            128,
+            3
+          ]
+        },
+        "env_rgb_sensor_count": 2,
+        "env_rgb_sensor_keys": [
+          "base_camera",
+          "hand_camera"
+        ],
+        "official_act_preprocess": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/ManiSkill-r16p18-v3.0.1/examples/baselines/act/train_rgbd.py",
+        "official_act_preprocess_sha256": "6ee91a2a7c853eae3b776ea7a4dbccf0cc94ec40ca41147d04b94ef389243654",
+        "official_preprocess_camera_count": 2,
+        "official_preprocess_rgb_shape": [
+          1,
+          2,
+          3,
+          224,
+          224
+        ],
+        "pinned_maniskill_commit": "a4a4f9272ad64b1564035874b605ceb687b63ed8",
+        "pinned_maniskill_root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/ManiSkill-r16p18-v3.0.1",
+        "posthoc_evidence_only": true,
+        "preregistration_unchanged": true,
+        "replay_h5": {
+          "path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-stage27r-core-reset-v2/StackCube-v1/oversized_source/trajectory.rgb.pd_ee_delta_pos.physx_cpu.h5",
+          "rgb_camera_count": 2,
+          "rgb_camera_keys": [
+            "base_camera",
+            "hand_camera"
+          ],
+          "rgb_shapes": {
+            "base_camera": [
+              108,
+              128,
+              128,
+              3
+            ],
+            "hand_camera": [
+              108,
+              128,
+              128,
+              3
+            ]
+          },
+          "sha256": "dbba218fafa921deaf78958149d9f0bce7b0b4d1de8984e66fb2830365bad363",
+          "trajectory_key": "traj_0"
+        },
+        "task": "StackCube-v1"
+      }
+    },
+    "does_not_modify_preregistration": true,
+    "posthoc_evidence_only": true,
+    "source": "pinned_ManiSkill_reset_plus_official_ACT_preprocess_plus_frozen_replay_H5",
+    "status": "PASS"
+  },
+  "independence": {
+    "does_not_import_analyze_stage27r": true,
+    "script_sha256": "24d25ad3f134aa0e227e20aa86ea6695b688d4a26f0fc1b4b08be675ddce618b"
+  },
+  "outcome_recompute": {
+    "mismatch_count": 0,
+    "mismatches": [],
+    "pass": true
+  },
+  "paired_effects_independent": {
+    "bootstrap_replicates": 10000,
+    "holm_adjusted_signflip_p": {
+      "balanced/PegInsertionSide-v1/action": 1.0,
+      "balanced/PegInsertionSide-v1/joint": 0.0035996400359964006,
+      "balanced/PegInsertionSide-v1/visual": 0.0017998200179982003,
+      "balanced/StackCube-v1/action": 0.04649535046495351,
+      "balanced/StackCube-v1/joint": 0.0029997000299970002,
+      "balanced/StackCube-v1/visual": 0.0017998200179982003,
+      "progress_dominant/PegInsertionSide-v1/action": 1.0,
+      "progress_dominant/PegInsertionSide-v1/joint": 0.0021997800219978004,
+      "progress_dominant/PegInsertionSide-v1/visual": 0.0017998200179982003,
+      "progress_dominant/StackCube-v1/action": 0.04079592040795921,
+      "progress_dominant/StackCube-v1/joint": 0.0017998200179982003,
+      "progress_dominant/StackCube-v1/visual": 0.0017998200179982003,
+      "success_dominant/PegInsertionSide-v1/action": 1.0,
+      "success_dominant/PegInsertionSide-v1/joint": 0.006399360063993601,
+      "success_dominant/PegInsertionSide-v1/visual": 0.0017998200179982003,
+      "success_dominant/StackCube-v1/action": 0.04649535046495351,
+      "success_dominant/StackCube-v1/joint": 0.007699230076992301,
+      "success_dominant/StackCube-v1/visual": 0.0017998200179982003
+    },
+    "summaries": {
+      "balanced/PegInsertionSide-v1/action": {
+        "ci95": [
+          -1.504061886672086,
+          2.79998163788534
+        ],
+        "clusters": 96,
+        "mean": 0.45529480933004773,
+        "signflip_p": 0.7390260973902609
+      },
+      "balanced/PegInsertionSide-v1/joint": {
+        "ci95": [
+          -3.4525059471699127,
+          -0.5536222404965276
+        ],
+        "clusters": 96,
+        "mean": -1.818831314319848,
+        "signflip_p": 0.00039996000399960006
+      },
+      "balanced/PegInsertionSide-v1/visual": {
+        "ci95": [
+          0.3734308084967779,
+          0.9080570834048555
+        ],
+        "clusters": 96,
+        "mean": 0.6223281513666733,
+        "signflip_p": 9.999000099990002e-05
+      },
+      "balanced/StackCube-v1/action": {
+        "ci95": [
+          -8.001030080046299,
+          -1.3590078903103464
+        ],
+        "clusters": 96,
+        "mean": -4.37391402406825,
+        "signflip_p": 0.009299070092990702
+      },
+      "balanced/StackCube-v1/joint": {
+        "ci95": [
+          -8.602240467651024,
+          -2.308192867889173
+        ],
+        "clusters": 96,
+        "mean": -5.242916677768032,
+        "signflip_p": 0.00029997000299970003
+      },
+      "balanced/StackCube-v1/visual": {
+        "ci95": [
+          0.18638163598047364,
+          2.7493734832904813
+        ],
+        "clusters": 96,
+        "mean": 1.2934400617248483,
+        "signflip_p": 9.999000099990002e-05
+      },
+      "progress_dominant/PegInsertionSide-v1/action": {
+        "ci95": [
+          -1.6315910369493292,
+          2.2637285838920636
+        ],
+        "clusters": 96,
+        "mean": 0.15006452743869472,
+        "signflip_p": 0.8765123487651235
+      },
+      "progress_dominant/PegInsertionSide-v1/joint": {
+        "ci95": [
+          -3.2531340501429638,
+          -0.6589197288146053
+        ],
+        "clusters": 96,
+        "mean": -1.8374686889486231,
+        "signflip_p": 0.00019998000199980003
+      },
+      "progress_dominant/PegInsertionSide-v1/visual": {
+        "ci95": [
+          0.6118618453296626,
+          1.4229472879867697
+        ],
+        "clusters": 96,
+        "mean": 0.9849075982250118,
+        "signflip_p": 9.999000099990002e-05
+      },
+      "progress_dominant/StackCube-v1/action": {
+        "ci95": [
+          -6.750349112107263,
+          -1.104709966431579
+        ],
+        "clusters": 96,
+        "mean": -3.7090370421194367,
+        "signflip_p": 0.006799320067993201
+      },
+      "progress_dominant/StackCube-v1/joint": {
+        "ci95": [
+          -7.506335026875604,
+          -2.075025680895326
+        ],
+        "clusters": 96,
+        "mean": -4.581889549477233,
+        "signflip_p": 9.999000099990002e-05
+      },
+      "progress_dominant/StackCube-v1/visual": {
+        "ci95": [
+          0.2981904166517779,
+          2.4222788012508927
+        ],
+        "clusters": 96,
+        "mean": 1.2478951080184846,
+        "signflip_p": 9.999000099990002e-05
+      },
+      "success_dominant/PegInsertionSide-v1/action": {
+        "ci95": [
+          -1.4809207430392335,
+          3.335364820238545
+        ],
+        "clusters": 96,
+        "mean": 0.7328557379983569,
+        "signflip_p": 0.7103289671032896
+      },
+      "success_dominant/PegInsertionSide-v1/joint": {
+        "ci95": [
+          -3.679474135766375,
+          -0.5203710446473757
+        ],
+        "clusters": 96,
+        "mean": -1.8851101016043688,
+        "signflip_p": 0.0007999200079992001
+      },
+      "success_dominant/PegInsertionSide-v1/visual": {
+        "ci95": [
+          0.2043001091374511,
+          0.5665139585788387
+        ],
+        "clusters": 96,
+        "mean": 0.36671963123889223,
+        "signflip_p": 9.999000099990002e-05
+      },
+      "success_dominant/StackCube-v1/action": {
+        "ci95": [
+          -9.313818556830908,
+          -1.5960246509975857
+        ],
+        "clusters": 96,
+        "mean": -5.081054234256348,
+        "signflip_p": 0.010498950104989501
+      },
+      "success_dominant/StackCube-v1/joint": {
+        "ci95": [
+          -9.89082411286266,
+          -2.5638003876794966
+        ],
+        "clusters": 96,
+        "mean": -5.979097227772904,
+        "signflip_p": 0.0010998900109989002
+      },
+      "success_dominant/StackCube-v1/visual": {
+        "ci95": [
+          0.0933561358885426,
+          3.067596250410295
+        ],
+        "clusters": 96,
+        "mean": 1.3793589197513125,
+        "signflip_p": 9.999000099990002e-05
+      }
+    },
+    "unit": "source_episode cluster"
+  },
+  "prefix_latency_disclosure": {
+    "episode_total_compute_ms_sum": 64312262.48481536,
+    "interpretation": "prefix replay cost is persisted separately and omitted from episode_total_compute; all arms share the prefix, but reported total compute is deployment-only treatment/continuation cost",
+    "prefix_included_in_episode_total": false,
+    "prefix_replay_simulator_latency_ms_sum": 72773426.8613704
+  },
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "raw_files": [
+    {
+      "bytes": 71603054,
+      "path": "oracle/PegInsertionSide-v1-seed16018-confirmatory.json",
+      "sha256": "798490f0514865cf63383cfd7238415150f0ffe9e618fcdb7e7fcced1a79e4c7"
+    },
+    {
+      "bytes": 71737825,
+      "path": "oracle/PegInsertionSide-v1-seed16019-confirmatory.json",
+      "sha256": "18d6c4d8c56d86a93334721ab5d2aa6ff430def9b82898b851ab8a1415287793"
+    },
+    {
+      "bytes": 71664264,
+      "path": "oracle/PegInsertionSide-v1-seed16020-confirmatory.json",
+      "sha256": "abed063078025d97dcc52f69ddb713c07bbb33ae6bea7e64eb6b3a37211a8186"
+    },
+    {
+      "bytes": 70380888,
+      "path": "oracle/StackCube-v1-seed16018-confirmatory.json",
+      "sha256": "9be2072119703fe1e8b2e1ecc16f3488cc49c75b10f606e44b1d93fc5c0581c2"
+    },
+    {
+      "bytes": 70611991,
+      "path": "oracle/StackCube-v1-seed16019-confirmatory.json",
+      "sha256": "86eb7d00e618486783f3ebb6c77ec6845ded1640172dace4e4f256b01f2a0981"
+    },
+    {
+      "bytes": 70796592,
+      "path": "oracle/StackCube-v1-seed16020-confirmatory.json",
+      "sha256": "e98c5e4a5d772d7f7375116b4d9e225fd987abbe333ec98e91d13c19222fba1f"
+    }
+  ],
+  "raw_row_count": 97920,
+  "schedule_recompute": {
+    "mismatch_count": 0,
+    "mismatches": [],
+    "pass": true,
+    "schedule_definition": "trace length, treatment 8-step query cadence, common fine continuation"
+  },
+  "status": "PASS"
+}

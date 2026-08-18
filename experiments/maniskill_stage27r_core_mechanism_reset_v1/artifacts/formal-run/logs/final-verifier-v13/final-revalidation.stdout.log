@@ -1,0 +1,6 @@
+{"kind": "official_audit", "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/INDEPENDENT_AUDIT.json", "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1", "status": "PASS"}
+{"kind": "posthoc_audit", "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/POSTHOC_INDEPENDENT_AUDIT.json", "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1", "status": "PASS"}
+{"kind": "marker", "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/FORMAL_COMPLETE.json", "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1", "status": "PASS"}
+{"kind": "result", "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/RESULT_VECTOR.json", "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1", "status": "PASS"}
+{"kind": "oracle_validation", "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/ORACLE_VALIDATION.json", "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1", "status": "PASS"}
+{"kind": "lineage", "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/ORACLE_LINEAGE_MANIFEST.json", "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1", "status": "PASS"}

@@ -1,0 +1,8 @@
+{
+  "compileall": true,
+  "unit_tests": true,
+  "deterministic_smoke": true,
+  "deterministic_smoke_evidence": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/DETERMINISTIC_LOCKSTEP_SMOKE.json",
+  "fail_on_overwrite": true,
+  "all_pass": true
+}

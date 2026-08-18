@@ -1,0 +1,222 @@
+{
+  "predecessor_immutability": {
+    "pass": true,
+    "frozen": {
+      "experiments/maniskill_act_boundary_screen_v1": "7fd28ddb55dc40813c014b37be82389da345e029",
+      "experiments/maniskill_stage25_repair_oracle_v1": "f05c4f074deb178580b0bf090b3785d8b788d914",
+      "experiments/maniskill_stage26_counterfactual_completion_v1": "9350ed1f8a25b6ad55ee17bdf078294c054e40ae"
+    },
+    "current": {
+      "experiments/maniskill_act_boundary_screen_v1": "7fd28ddb55dc40813c014b37be82389da345e029",
+      "experiments/maniskill_stage25_repair_oracle_v1": "f05c4f074deb178580b0bf090b3785d8b788d914",
+      "experiments/maniskill_stage26_counterfactual_completion_v1": "9350ed1f8a25b6ad55ee17bdf078294c054e40ae"
+    }
+  },
+  "clean_source_commit": {
+    "pass": true,
+    "role": "final_independent_verifier",
+    "commit": "6893116948025785d0da7860e7ece94ea5497707",
+    "tree": "5326b8529ff5bc0bdc99ceb6f526117d0fb10e52",
+    "repository": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage27r-formal-source-v13",
+    "audit_script": "experiments/maniskill_stage27r_core_mechanism_reset_v1/scripts/audit_formal_results.py",
+    "audit_script_sha256": "e3e8bbb601fe1db6f048883c7d693f0fe6917c6bcdaa7a48f06ddb9f4dbbbaec",
+    "working_tree_clean": true,
+    "dirty_entries": []
+  },
+  "final_verifier_source": {
+    "pass": true,
+    "role": "final_independent_verifier",
+    "commit": "6893116948025785d0da7860e7ece94ea5497707",
+    "tree": "5326b8529ff5bc0bdc99ceb6f526117d0fb10e52",
+    "repository": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage27r-formal-source-v13",
+    "audit_script": "experiments/maniskill_stage27r_core_mechanism_reset_v1/scripts/audit_formal_results.py",
+    "audit_script_sha256": "e3e8bbb601fe1db6f048883c7d693f0fe6917c6bcdaa7a48f06ddb9f4dbbbaec",
+    "working_tree_clean": true,
+    "dirty_entries": []
+  },
+  "protocol_freeze": {
+    "pass": true,
+    "digest_field_present": false,
+    "expected": "8ad834e89250bee6e81f86843619b4003eb1c632f4ad75c46f9487970a4aac9a",
+    "observed": "8ad834e89250bee6e81f86843619b4003eb1c632f4ad75c46f9487970a4aac9a",
+    "derived_from_frozen_git_commit": "d1d479f86b4d696b3d1c5ba0cedc9222d1b1bc1d",
+    "derived_path": "experiments/maniskill_stage27r_core_mechanism_reset_v1/preregistration.yaml"
+  },
+  "lineage_role_separation": {
+    "pass": true,
+    "errors": [],
+    "historical_continuation_verifier": {
+      "role": "clean_posthoc_verifier_and_continuation_source",
+      "commit": "7554bca313d796fd0b4cdf3abbc817c6ecc7e9fd",
+      "tree": "837e29d5547c67c8045522164ab72e8fbcc2d5a0",
+      "run_id": "stage27r-formal-idle-v11",
+      "job_id": "dlc1x9np56zy7gpm"
+    },
+    "final_independent_verifier": {
+      "pass": true,
+      "role": "final_independent_verifier",
+      "commit": "6893116948025785d0da7860e7ece94ea5497707",
+      "tree": "5326b8529ff5bc0bdc99ceb6f526117d0fb10e52",
+      "repository": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage27r-formal-source-v13",
+      "audit_script": "experiments/maniskill_stage27r_core_mechanism_reset_v1/scripts/audit_formal_results.py",
+      "audit_script_sha256": "e3e8bbb601fe1db6f048883c7d693f0fe6917c6bcdaa7a48f06ddb9f4dbbbaec",
+      "working_tree_clean": true,
+      "dirty_entries": []
+    },
+    "same_source_commit": false,
+    "role_separation_semantics": "v11 created/validated continuation lineage; current clean source performs the final independent audit",
+    "evidence": {
+      "lineage_manifest": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/ORACLE_LINEAGE_MANIFEST.json",
+        "sha256": "4d84a48c543bb369d490dfb8c9eb90646d6fd015ad22f399abb7c9b1f2ca9681",
+        "bytes": 42353
+      },
+      "v11_registry_resolved": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v11/resolved.json",
+        "sha256": "d5fd068a66099920a271d710938574eaa242574946142e10e665639759cbee9f",
+        "bytes": 23601
+      },
+      "v11_terminal": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/CONTINUATION_V11_TERMINAL_VALID.json",
+        "sha256": "73443d0cbb8277b38f3fb9468f2f29d75a3e8684ac60fbc9b3e596ed0cccd5ef",
+        "bytes": 2166
+      },
+      "v11_terminal_raw_getjob": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v11/getjob-terminal-dlc1x9np56zy7gpm-20260818T214733Z.json",
+        "sha256": "128734824c901e1828b2e260f4a8bfadd0e3d162a2c47cd04afc860f2ad36922",
+        "bytes": 16801
+      },
+      "v11_terminal_placement": {
+        "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v11/placement-evidence.external.json",
+        "sha256": "8774798532eece559ce713bc5731fb51e9921ce98dd1f18fccf5ad1aac37fee2",
+        "bytes": 1034
+      }
+    }
+  },
+  "no_privileged_model_input": {
+    "pass": true,
+    "observed_keys": [
+      "_latent_noise",
+      "_tile_grid",
+      "_tile_id",
+      "_visual_mode",
+      "rgb",
+      "state"
+    ],
+    "deployable_observed_keys": [
+      "_tile_grid",
+      "_tile_id",
+      "_visual_mode",
+      "rgb",
+      "state"
+    ],
+    "training_internal_keys": [
+      "_latent_noise"
+    ],
+    "unknown_keys": [],
+    "training_internal_violations": [],
+    "dynamic_accesses": [],
+    "training_internal_rationale": {
+      "_latent_noise": "ACT posterior sample generated inside compute_loss; training-only stochastic control, never an environment/inference input"
+    }
+  },
+  "split_leakage": {
+    "pass": true,
+    "task_checks": {
+      "PegInsertionSide-v1": {
+        "episodes": 300,
+        "pass": true,
+        "split_leakage": false,
+        "unique_initial_states": 300,
+        "unique_seeds": 300,
+        "unique_sources": 300
+      },
+      "PlugCharger-v1": {
+        "episodes": 300,
+        "pass": true,
+        "split_leakage": false,
+        "unique_initial_states": 300,
+        "unique_seeds": 300,
+        "unique_sources": 300
+      },
+      "PullCubeTool-v1": {
+        "episodes": 300,
+        "pass": true,
+        "split_leakage": false,
+        "unique_initial_states": 300,
+        "unique_seeds": 300,
+        "unique_sources": 300
+      },
+      "PushCube-v1": {
+        "episodes": 300,
+        "pass": true,
+        "split_leakage": false,
+        "unique_initial_states": 300,
+        "unique_seeds": 300,
+        "unique_sources": 300
+      },
+      "PushT-v1": {
+        "episodes": 300,
+        "pass": true,
+        "split_leakage": false,
+        "unique_initial_states": 300,
+        "unique_seeds": 300,
+        "unique_sources": 300
+      },
+      "StackCube-v1": {
+        "episodes": 300,
+        "pass": true,
+        "split_leakage": false,
+        "unique_initial_states": 300,
+        "unique_seeds": 300,
+        "unique_sources": 300
+      }
+    }
+  },
+  "unit_compile_smoke_overwrite": {
+    "pass": true,
+    "evidence": {
+      "compileall": true,
+      "unit_tests": true,
+      "deterministic_smoke": true,
+      "deterministic_smoke_evidence": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/DETERMINISTIC_LOCKSTEP_SMOKE.json",
+      "fail_on_overwrite": true,
+      "all_pass": true
+    }
+  },
+  "shard_autoresume": {
+    "pass": true,
+    "training_complete": true,
+    "complete_checkpoint_markers": 108
+  },
+  "fresh_reset_prefix_fidelity": {
+    "pass": true,
+    "pass_rates": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "raw_outcome_recompute": {
+    "pass": true,
+    "rows": 97920,
+    "utility_mismatches": 0
+  },
+  "compute_accounting_recompute": {
+    "pass": true,
+    "missing_rows": 0,
+    "formula_mismatches": 0,
+    "budget_mismatches": []
+  },
+  "paired_statistics_recompute": {
+    "pass": true,
+    "recomputed_sha256": "4cc71eff2251f008bfb9910e8a4065459d998a9a635d8dc5d075b40896ce87bd",
+    "reported_sha256": "4cc71eff2251f008bfb9910e8a4065459d998a9a635d8dc5d075b40896ce87bd"
+  },
+  "scientific_sha256_manifest": {
+    "pass": true,
+    "files": 56
+  },
+  "all_pass": true
+}

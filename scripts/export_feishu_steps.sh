@@ -61,3 +61,5 @@ export_doc step4 step4 Vg0WwZcAfiqhbQkNooKcllXcnkd OBq0d61yMoYAlSxQTHNc11wbnZg s
 export_doc step4 实验报告 GnYKwQ63EiWZUjkyeOwcJXvYnRj KVUedo75RoAh7cxgAudcNWPynMb experiment-report.md
 export_doc step5 step5 HtXgwUQFGiKrSZkjCt1ckQnZn9f BdSTdAemdot642x9PYic2H0Jnzb step.md
 export_doc step5 实验报告 UOaFwX6X7iAQ0Nk1zJ3cdce7nQg LI2pdPfDOovCdrxbfc1cPlAenLb experiment-report.md
+export_doc step6 step6 YzvVwnstMilUKKkazZ5cy65InQe FjmTdYMdfovDnYxBzsTck6xQnbd step.md
+export_doc step6 实验报告 Rz6twhP00iucgmkmWTFcm8U6n6g WTAadi9DgosSQjxH73rcXmT8npc experiment-report.md

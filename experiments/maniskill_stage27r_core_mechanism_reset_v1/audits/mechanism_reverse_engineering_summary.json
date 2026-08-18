@@ -1,0 +1,289 @@
+{
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "scope": "code_first_reverse_engineering_without_new_idea_generation",
+  "method": {
+    "skill": "code-first-ideation",
+    "steps_used": [
+      "read the runnable implementation",
+      "reconstruct the actual treatment paths",
+      "compare paired outcomes and mediators",
+      "separate confirmed semantics from bounded mechanism inference"
+    ],
+    "new_idea_generated": false,
+    "raw_evidence_modified": false,
+    "thresholds_modified": false,
+    "result_vector_modified": false
+  },
+  "source_identity": {
+    "final_verifier_commit": "6893116948025785d0da7860e7ece94ea5497707",
+    "final_verifier_tree": "5326b8529ff5bc0bdc99ceb6f526117d0fb10e52",
+    "historical_posthoc_verifier_commit": "7554bca313d796fd0b4cdf3abbc817c6ecc7e9fd",
+    "historical_posthoc_verifier_tree": "837e29d5547c67c8045522164ab72e8fbcc2d5a0",
+    "oracle_producer_commit": "fa05c2ef52e5cce16f62397540162724bfd4a6b9",
+    "oracle_producer_tree": "6fdb28764d002def6d10e5a9c4f41918fe7713d1",
+    "pinned_maniskill_commit": "a4a4f9272ad64b1564035874b605ceb687b63ed8",
+    "implementation_sha256": {
+      "multires_policy.py": "ab34c3e0c731c6523e4431bf2c6af27c3d4496c843b5bd7f5a2a4734243be75f",
+      "stage27r_runtime.py": "900c448fe0bae99e26fdccad25d4ca2a1ded63173a84cc2b4ecb40eddcab5595",
+      "run_factorial_oracle.py": "6b2f14e40b18e143f081fb534d8d3de3cbc4ab512a205cfe113dac9783e4b354",
+      "analyze_stage27r.py": "8adc7cb3d909e5fce3e4d561daa0457e640cb42fd1c9dd315a2b24f67d3ecb86",
+      "mechanism_audit.py": "b1dc5cb24daa7f3e80fb948bd6db9671d8dbdaa04b894a7962e31515aa5ef729",
+      "decide_stage27r.py": "e154ef83546caea318a050854576e38f1766f281be803ef9b477318b2503538c",
+      "preregistration.yaml": "8ad834e89250bee6e81f86843619b4003eb1c632f4ad75c46f9487970a4aac9a",
+      "PROTOCOL_FREEZE.json": "b45622e2c8dcc91bd185ef7c6dcaa56287a22dde5315035f8ae743064f2989fd"
+    }
+  },
+  "formal_evidence": {
+    "oracle_validation_status": "PASS",
+    "oracle_validation_sha256": "be515e8f4fb12825a254ff046cffd0ad0939427d3a598ec7d293725439668bdb",
+    "statistics_sha256": "4cc71eff2251f008bfb9910e8a4065459d998a9a635d8dc5d075b40896ce87bd",
+    "result_vector_sha256": "bbdd69a67f1cd5d3f760196524549ae7b442ac21afc5f95963194b4eb3b5a095",
+    "raw_row_count": 97920,
+    "shard_count": 6,
+    "rows_per_shard": 16320,
+    "states_per_task": 96,
+    "conditions_per_state": 34,
+    "repeats_per_condition": 5,
+    "bootstrap_replicates": 10000,
+    "primary_unit": "source_episode",
+    "raw_oracle_sha256": {
+      "PegInsertionSide-v1-seed16018-confirmatory.json": "798490f0514865cf63383cfd7238415150f0ffe9e618fcdb7e7fcced1a79e4c7",
+      "PegInsertionSide-v1-seed16019-confirmatory.json": "18d6c4d8c56d86a93334721ab5d2aa6ff430def9b82898b851ab8a1415287793",
+      "PegInsertionSide-v1-seed16020-confirmatory.json": "abed063078025d97dcc52f69ddb713c07bbb33ae6bea7e64eb6b3a37211a8186",
+      "StackCube-v1-seed16018-confirmatory.json": "9be2072119703fe1e8b2e1ecc16f3488cc49c75b10f606e44b1d93fc5c0581c2",
+      "StackCube-v1-seed16019-confirmatory.json": "86eb7d00e618486783f3ebb6c77ec6845ded1640172dace4e4f256b01f2a0981",
+      "StackCube-v1-seed16020-confirmatory.json": "e98c5e4a5d772d7f7375116b4d9e225fd987abbe333ec98e91d13c19222fba1f"
+    },
+    "causal_backend": {
+      "status": "PASS",
+      "fidelity_pass_rates": [1.0, 1.0],
+      "fresh_reset_categorical_agreement": 1.0,
+      "row_causal_fidelity_pass": true,
+      "limitation": "formal conditions use serial fresh-reset replay; this is not simultaneous multi-condition stepping"
+    }
+  },
+  "confirmed_code_semantics": {
+    "visual": "fine retains each camera's 112x112 global branch and appends one shared-ResNet18 crop branch from the original 128x128 image",
+    "visual_feature_accounting": {
+      "cameras": 2,
+      "global_encoder_calls_per_policy_forward": 2,
+      "fine_encoder_calls_per_policy_forward": 2,
+      "feature_tokens_per_branch_per_camera": 16,
+      "fine_tile_grid_in_formal_run": 4,
+      "formal_tile_candidates": 16
+    },
+    "action": {
+      "coarse": "query at treatment step 0 and every four executed steps, reuse the cached chunk entries",
+      "fine": "query every treatment step and execute the first action of each fresh chunk",
+      "treatment_steps": 8,
+      "common_continuation_steps": 20,
+      "continuation": "all arms switch to the same fine/native continuation",
+      "direct_action_discontinuity_logged": false
+    },
+    "oracle": "state_table chooses the FC and FF tile with maximum repeated physical utility; this is privileged offline labeling, not deployable crop selection",
+    "joint_definition": "FF minus max(FC, CF), not FF minus CC",
+    "success": "any five consecutive true success predicates, with common evaluator termination"
+  },
+  "task_screen": {
+    "screen_values_success_hold5_by_seed_order_16018_16019_16020": {
+      "StackCube-v1": {"CC": [0.10, 0.15, 0.16], "FF": [0.00, 0.02, 0.04], "pass": false},
+      "PegInsertionSide-v1": {"CC": [0.00, 0.00, 0.01], "FF": [0.00, 0.00, 0.00], "pass": false},
+      "PlugCharger-v1": {"CC": [0.00, 0.00, 0.01], "FF": [0.00, 0.00, 0.00], "pass": false},
+      "PullCubeTool-v1": {"CC": [0.00, 0.00, 0.00], "FF": [0.00, 0.01, 0.01], "pass": false},
+      "PushT-v1": {"CC": [0.09, 0.04, 0.05], "FF": [0.06, 0.03, 0.01], "pass": false},
+      "PushCube-v1": {"CC": [0.55, 0.43, 0.60], "aggregate": 0.5266666666666667, "negative_threshold": 0.70, "pass": false}
+    },
+    "selected_positive": null,
+    "selected_negative": null,
+    "claim_tier": "diagnostic oracle evidence only",
+    "limitations": [
+      "StackCubeHard fallback was not implemented",
+      "PickCube/LiftPeg negative fallback was not implemented",
+      "formal positive-task screen gate failed before the Stack/Peg oracle"
+    ]
+  },
+  "aggregate_effects": {
+    "unit": "source_episode cluster",
+    "ci": "paired 95% bootstrap CI",
+    "holm_p": true,
+    "balanced": {
+      "visual_FC_minus_CC": {
+        "PegInsertionSide-v1": {"mean": 0.6223281513666733, "ci95": [0.3715265793159941, 0.9152473311551145], "holm_signflip_p": 0.0017998200179982003},
+        "StackCube-v1": {"mean": 1.2934400617248483, "ci95": [0.17991255878263876, 2.7355416918742574], "holm_signflip_p": 0.0017998200179982003}
+      },
+      "action_CF_minus_CC": {
+        "PegInsertionSide-v1": {"mean": 0.45529480933004773, "ci95": [-1.5187016118757635, 2.816812396324369], "holm_signflip_p": 1.0},
+        "StackCube-v1": {"mean": -4.37391402406825, "ci95": [-7.948616926351356, -1.3699517870684064], "holm_signflip_p": 0.042995700429957005}
+      },
+      "joint_FF_minus_max_single": {
+        "PegInsertionSide-v1": {"mean": -1.8188313143198482, "ci95": [-3.449026879907857, -0.5640089668272088], "holm_signflip_p": 0.0026997300269973002},
+        "StackCube-v1": {"mean": -5.242916677768032, "ci95": [-8.69486387612091, -2.3045374989354364], "holm_signflip_p": 0.0021997800219978004}
+      }
+    },
+    "success_dominant": {
+      "visual_FC_minus_CC": {
+        "PegInsertionSide-v1": {"mean": 0.36671963123889223, "ci95": [0.19858781048872814, 0.5723896654346996], "holm_signflip_p": 0.0017998200179982003},
+        "StackCube-v1": {"mean": 1.3793589197513125, "ci95": [0.0915206603343702, 3.073742116196081], "holm_signflip_p": 0.0017998200179982003}
+      },
+      "action_CF_minus_CC": {
+        "PegInsertionSide-v1": {"mean": 0.7328557379983569, "ci95": [-1.4812033436314471, 3.380045213074643], "holm_signflip_p": 1.0},
+        "StackCube-v1": {"mean": -5.081054234256348, "ci95": [-9.336748819226505, -1.6000690406886873], "holm_signflip_p": 0.042995700429957005}
+      },
+      "joint_FF_minus_max_single": {
+        "PegInsertionSide-v1": {"mean": -1.8851101016043688, "ci95": [-3.677845240661797, -0.5229380868999418], "holm_signflip_p": 0.0031996800319968005},
+        "StackCube-v1": {"mean": -5.979097227772904, "ci95": [-10.004704474212808, -2.566057439451106], "holm_signflip_p": 0.004199580041995801}
+      }
+    },
+    "progress_dominant": {
+      "visual_FC_minus_CC": {
+        "PegInsertionSide-v1": {"mean": 0.9849075982250118, "ci95": [0.6073186185846378, 1.4286992999910177], "holm_signflip_p": 0.0017998200179982003},
+        "StackCube-v1": {"mean": 1.2478951080184846, "ci95": [0.30374312449324253, 2.4585369328399076], "holm_signflip_p": 0.0017998200179982003}
+      },
+      "action_CF_minus_CC": {
+        "PegInsertionSide-v1": {"mean": 0.15006452743869472, "ci95": [-1.6005559421654554, 2.28565965439581], "holm_signflip_p": 1.0},
+        "StackCube-v1": {"mean": -3.7090370421194367, "ci95": [-6.743009082863056, -1.1564790308669535], "holm_signflip_p": 0.04079592040795921}
+      },
+      "joint_FF_minus_max_single": {
+        "PegInsertionSide-v1": {"mean": -1.8374686889486231, "ci95": [-3.314117217984151, -0.6780465780559308], "holm_signflip_p": 0.0021997800219978004},
+        "StackCube-v1": {"mean": -4.581889549477233, "ci95": [-7.51453033570821, -2.104168905055203], "holm_signflip_p": 0.0017998200179982003}
+      }
+    }
+  },
+  "balanced_phase_mechanism": {
+    "visual": {
+      "PegInsertionSide-v1": {
+        "free_space_approach": {"utility_delta": 0.5271785520017147, "positive_fraction": 0.9166666666666666, "components": {"progress": 0.5271785520017147, "success": 0.0, "recoverability": 0.0, "drop": 0.0, "collision": 0.0}},
+        "pre_contact_or_pre_grasp": {"utility_delta": 0.4991155376450883, "positive_fraction": 0.9166666666666666, "components": {"progress": 0.3602266487561994, "success": 0.0, "recoverability": 0.0, "drop": 0.1388888888888889, "collision": 0.0}},
+        "object_in_hand_pre_placement": {"utility_delta": 0.9993643649957247, "positive_fraction": 0.9583333333333334, "components": {"progress": 0.7910310316623913, "success": 0.0, "recoverability": 0.20833333333333334, "drop": 0.0, "collision": 0.0}},
+        "contact_placement_near_completion": {"utility_delta": 0.463654150824166, "positive_fraction": 0.8472222222222222, "components": {"progress": 0.2553208174908327, "success": 0.0, "recoverability": 0.06944444444444445, "drop": 0.1388888888888889, "collision": 0.0}}
+      },
+      "StackCube-v1": {
+        "free_space_approach": {"utility_delta": 0.41347243305709624, "positive_fraction": 0.8472222222222222, "components": {"progress": 0.41347243305709624, "success": 0.0, "recoverability": 0.0, "drop": 0.0, "collision": 0.0}},
+        "pre_contact_or_pre_grasp": {"utility_delta": 0.20054631349113253, "positive_fraction": 0.8611111111111112, "components": {"progress": 0.13110186904668808, "success": 0.0, "recoverability": 0.06944444444444445, "drop": 0.0, "collision": 0.0}},
+        "object_in_hand_pre_placement": {"utility_delta": 1.5187895504964724, "positive_fraction": 0.7916666666666666, "components": {"progress": 0.12990066160758337, "success": 1.3888888888888888, "recoverability": 0.0, "drop": 0.0, "collision": 0.0}},
+        "contact_placement_near_completion": {"utility_delta": 3.040951949854692, "positive_fraction": 0.8333333333333334, "components": {"progress": 0.1937297276324696, "success": 2.7777777777777777, "recoverability": 0.06944444444444445, "drop": 0.0, "collision": 0.0}}
+      }
+    },
+    "action": {
+      "PegInsertionSide-v1": {
+        "free_space_approach": {"utility_delta": -0.41192072443664074, "components": {"progress": -0.411921, "success": 0.0, "recoverability": 0.0, "drop": 0.0, "collision": 0.0}},
+        "pre_contact_or_pre_grasp": {"utility_delta": -0.3337761914978425, "components": {"progress": -0.264332, "success": 0.0, "recoverability": -0.069444, "drop": 0.0, "collision": 0.0}},
+        "object_in_hand_pre_placement": {"utility_delta": 2.882230031148841, "components": {"progress": 0.035008, "success": 2.777778, "recoverability": 0.069444, "drop": 0.0, "collision": 0.0}},
+        "contact_placement_near_completion": {"utility_delta": -0.31535387789416647, "components": {"progress": -0.245909, "success": 0.0, "recoverability": -0.208333, "drop": 0.138889, "collision": 0.0}}
+      },
+      "StackCube-v1": {
+        "free_space_approach": {"utility_delta": 0.13152655214071274, "components": {"progress": 0.06208210769626829, "success": 0.0, "recoverability": 0.06944444444444445, "drop": 0.0, "collision": 0.0}},
+        "pre_contact_or_pre_grasp": {"utility_delta": 0.1238537041677369, "components": {"progress": -0.015035184721151987, "success": 0.0, "recoverability": 0.0, "drop": 0.1388888888888889, "collision": 0.0}},
+        "object_in_hand_pre_placement": {"utility_delta": -1.691601884861787, "components": {"progress": -0.30271299597289825, "success": -1.3888888888888888, "recoverability": -0.1388888888888889, "drop": 0.1388888888888889, "collision": 0.0}},
+        "contact_placement_near_completion": {"utility_delta": -16.05943446771966, "components": {"progress": -0.6427678010529942, "success": -15.277777777777779, "recoverability": 0.0, "drop": -0.1388888888888889, "collision": 0.0}}
+      }
+    },
+    "joint": {
+      "PegInsertionSide-v1": {
+        "free_space_approach": {"utility_delta": -0.35771669406029916, "components": {"progress": -0.357717, "success": 0.0, "recoverability": 0.0, "drop": 0.0, "collision": 0.0}},
+        "pre_contact_or_pre_grasp": {"utility_delta": -0.25425988663401866, "components": {"progress": -0.184815, "success": 0.0, "recoverability": -0.069444, "drop": 0.0, "collision": 0.0}},
+        "object_in_hand_pre_placement": {"utility_delta": -3.3995510182446904, "components": {"progress": -0.691218, "success": -2.777778, "recoverability": 0.069444, "drop": 0.0, "collision": 0.0}},
+        "contact_placement_near_completion": {"utility_delta": -3.2637976583403847, "components": {"progress": -0.347131, "success": -2.777778, "recoverability": -0.138889, "drop": 0.0, "collision": 0.0}}
+      },
+      "StackCube-v1": {
+        "free_space_approach": {"utility_delta": -0.5396833394964536, "components": {"progress": -0.5396833394964536, "success": 0.0, "recoverability": 0.0, "drop": 0.0, "collision": 0.0}},
+        "pre_contact_or_pre_grasp": {"utility_delta": 0.26002513037787545, "components": {"progress": -0.017752647399902344, "success": 0.0, "recoverability": 0.0, "drop": 0.2777777777777778, "collision": 0.0}},
+        "object_in_hand_pre_placement": {"utility_delta": -3.094139715863599, "components": {"progress": -0.246917, "success": -2.777778, "recoverability": -0.069444, "drop": 0.0, "collision": 0.0}},
+        "contact_placement_near_completion": {"utility_delta": -17.59786878608995, "components": {"progress": -0.861757674978839, "success": -16.666666666666668, "recoverability": -0.06944444444444445, "drop": 0.0, "collision": 0.0}}
+      }
+    }
+  },
+  "direct_ff_minus_cc_balanced": {
+    "PegInsertionSide-v1": {
+      "contact_placement_near_completion": -1.3686339937460918,
+      "free_space_approach": 0.18741520225173897,
+      "object_in_hand_pre_placement": 2.2081965609039695,
+      "pre_contact_or_pre_grasp": 0.3170553988052739
+    },
+    "StackCube-v1": {
+      "contact_placement_near_completion": -12.958256916867363,
+      "free_space_approach": 0.17652151899205315,
+      "object_in_hand_pre_placement": -0.03527217027213839,
+      "pre_contact_or_pre_grasp": 0.5095139642556509
+    },
+    "interpretation": "negative joint values are FF minus the better single axis; they are not equivalent to FF minus CC"
+  },
+  "cross_seed_balanced": {
+    "visual_means": {
+      "StackCube-v1": [0.0874, 2.3401, 1.4529],
+      "PegInsertionSide-v1": [0.5506, 0.6224, 0.6940]
+    },
+    "action_means": {
+      "StackCube-v1": [-5.7781, -3.2466, -4.0971],
+      "PegInsertionSide-v1": [-1.6832, 3.3454, -0.2964]
+    },
+    "joint_means": {
+      "StackCube-v1": [-5.6453, -5.5496, -4.5338],
+      "PegInsertionSide-v1": [-3.7267, -1.3525, -0.3773]
+    },
+    "positive_joint_state_fraction_by_seed": {
+      "StackCube-v1": [0.2916666666666667, 0.25, 0.4479166666666667],
+      "PegInsertionSide-v1": [0.4166666666666667, 0.375, 0.40625]
+    },
+    "interpretation": "positive local-state fractions coexist with negative task-level means because negative states have larger losses; the preregistered GO gate is task-level CI, not fraction alone"
+  },
+  "compute_budget": {
+    "all_coarse_cost": 92438200000000.0,
+    "all_fine_cost": 125120200000000.0,
+    "coarse_to_fine_ratio": 0.738795174560143,
+    "budgets": {
+      "0.25": {"budget": 31280050000000.0, "all_coarse_compliant": false, "all_fine_compliant": false, "allocation_refined_states": 0},
+      "0.50": {"budget": 62560100000000.0, "all_coarse_compliant": false, "all_fine_compliant": false, "allocation_refined_states": 0, "joint_vs_fixed_success_gain": 0.0, "joint_vs_fixed_success_ci95": [0.0, 0.0]},
+      "0.75": {"budget": 93840150000000.0, "all_coarse_compliant": true, "all_fine_compliant": false, "joint_cost": 93834900000000.0, "strongest_fixed_cost": 93833800000000.0, "joint_vs_fixed_success_gain": 0.012152777777777776, "joint_vs_fixed_success_ci95": [0.003472222222222222, 0.022569444444444444], "joint_vs_fixed_signflip_p": 0.0332966703329667}
+    },
+    "interpretation": "25% and 50% are infeasible for this measured cost geometry; 75% is not the preregistered 50% GO gate"
+  },
+  "mechanism_interpretation": {
+    "visual": "bounded positive marginal signal from the added local crop branch, expressed mainly as progress/recoverability shifts and a few discrete Stack success transitions; no collision reduction observed",
+    "action": "Peg is null at task level despite an in-hand positive pocket; Stack is negative, dominated by contact-phase success loss and small progress/drop changes",
+    "joint": "negative synergy relative to the better single axis; FF can exceed CC in some phases while still losing to FC or CF",
+    "action_discontinuity": "schedule is confirmed by code, but action vectors are not stored, so a numerical discontinuity mediator is not tested",
+    "tile_oracle": "physical outcome-based tile selection is privileged and nondeployable",
+    "causal_scope": "matched-prefix contrasts support bounded treatment comparisons; component-level explanations are descriptive/bounded rather than direct mediation proofs"
+  },
+  "interpretation_boundary": {
+    "confirmed_code_semantics": [
+      "global-plus-local shared ResNet18 visual branch",
+      "8-step treatment and common 20-step continuation",
+      "4-step cached coarse action versus 1-step fine re-query",
+      "physical repeated-outcome tile oracle",
+      "FF-max(FC,CF) joint definition",
+      "success_hold5 and accounting formulas"
+    ],
+    "observed_paired_evidence": [
+      "visual positive on both diagnostic tasks and all utility weights",
+      "Peg action aggregate CI crosses zero",
+      "Stack action aggregate negative for all utility weights",
+      "joint aggregate negative on both diagnostic tasks and all utility weights",
+      "no collision signal in these rows",
+      "25/50% budget infeasibility"
+    ],
+    "bounded_inference": [
+      "visual improvement is consistent with added crop information changing progress/recoverability",
+      "Stack action loss is concentrated in contact/placement and is consistent with harmful fine-action execution there",
+      "negative joint effect indicates lack of super-additivity, not necessarily FF<CC everywhere"
+    ],
+    "not_tested_or_not_claimable": [
+      "direct action-discontinuity magnitude",
+      "deployable learned router",
+      "healthy negative-control formal result",
+      "OOD, closed-loop expansion, Stage-2.8, pi0.5, real robot",
+      "universal validity of the core idea"
+    ]
+  },
+  "final_conclusion": {
+    "final_status": "NO_GO_CORE_MECHANISM",
+    "causal_backend_pass": true,
+    "positive_task_screen_gate_pass": false,
+    "visual_signal": "positive_diagnostic_only",
+    "action_signal": "Peg null; Stack negative",
+    "joint_signal": "negative",
+    "stage28_draft_created": false,
+    "claim": "This is a preregistered no-go for the Stage-2.7R core mechanism under the screened formal evidence, not a universal disproof of the research direction."
+  }
+}

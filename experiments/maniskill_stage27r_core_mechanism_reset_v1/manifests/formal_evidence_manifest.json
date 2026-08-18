@@ -1,0 +1,1143 @@
+{
+  "schema_version": 1,
+  "kind": "stage27r_formal_evidence_manifest",
+  "protocol_id": "R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1",
+  "created_at_utc": "2026-08-18T22:27:04Z",
+  "formal_root": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run",
+  "archive_root_relative_to_repo": "experiments/maniskill_stage27r_core_mechanism_reset_v1/artifacts/formal-run",
+  "archive_policy": {
+    "raw_oracle_shards_archived_to_git": false,
+    "raw_calibration_shards_archived_to_git": false,
+    "checkpoints_archived_to_git": false,
+    "demonstrations_archived_to_git": false,
+    "git_lfs_used": false,
+    "max_archived_file_bytes": 52428800,
+    "malformed_predecessor_copied": false
+  },
+  "source_inventory": {
+    "file_count": 60,
+    "total_bytes": 629027059,
+    "files": [
+      {
+        "path": ".INDEPENDENT_AUDIT.json.resume-1704-7e727c2a82d84fd0932bc2427ce4b088.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/.INDEPENDENT_AUDIT.json.resume-1704-7e727c2a82d84fd0932bc2427ce4b088.json",
+        "bytes": 13818,
+        "sha256": "ba55aa2a1bab67e15e0cb25c633072166601ddb601927738dd19c13d5f29dc5d",
+        "role": "temporary_audit_predecessor",
+        "category": "audit_temporary",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "CONTINUATION_V11_TERMINAL.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/CONTINUATION_V11_TERMINAL.json",
+        "bytes": 8026,
+        "sha256": "bbf16df01c734e21e37c90d4f77b9291ea94a8ae203bc2c42841adeacf584dde",
+        "role": "invalid_predecessor",
+        "category": "terminal_attestation",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "CONTINUATION_V11_TERMINAL_VALID.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/CONTINUATION_V11_TERMINAL_VALID.json",
+        "bytes": 2166,
+        "sha256": "73443d0cbb8277b38f3fb9468f2f29d75a3e8684ac60fbc9b3e596ed0cccd5ef",
+        "role": "continuation_terminal_valid",
+        "category": "provenance",
+        "archived_relative_path": "CONTINUATION_V11_TERMINAL_VALID.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "DETERMINISTIC_LOCKSTEP_SMOKE.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/DETERMINISTIC_LOCKSTEP_SMOKE.json",
+        "bytes": 349,
+        "sha256": "896f37274dc71c8dea2b2eb0091738baa691472bc5bb27f97a3d2a8e2a66a4e2",
+        "role": "deterministic_smoke",
+        "category": "precheck",
+        "archived_relative_path": "DETERMINISTIC_LOCKSTEP_SMOKE.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "EXACT_DATASET_AUDIT.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/EXACT_DATASET_AUDIT.json",
+        "bytes": 446558,
+        "sha256": "febdf21bbfd5c56db885fe94d4195730fd92121eec5b1e694e39b5862a668a86",
+        "role": "dataset_audit",
+        "category": "precheck",
+        "archived_relative_path": "EXACT_DATASET_AUDIT.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "FORMAL_COMPLETE.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/FORMAL_COMPLETE.json",
+        "bytes": 90,
+        "sha256": "a72f70abf539a6a2b173cfe494697044a5c959e53302579c7994297e7c9b9b3b",
+        "role": "formal_complete_marker",
+        "category": "completion",
+        "archived_relative_path": "FORMAL_COMPLETE.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "INDEPENDENT_AUDIT.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/INDEPENDENT_AUDIT.json",
+        "bytes": 18574,
+        "sha256": "8069ae08a9ed0c2d04cbdb068cb4fbc349c3333c6bb17ce27a597c54be5fa0e3",
+        "role": "independent_audit",
+        "category": "audit",
+        "archived_relative_path": "INDEPENDENT_AUDIT.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "MECHANISM_AUDIT.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/MECHANISM_AUDIT.json",
+        "bytes": 1221287,
+        "sha256": "09f5c1be03e67d3846bbcb06ab2a494a357068d90cadc89b98484c3d5e94bc6e",
+        "role": "mechanism_audit",
+        "category": "scientific_result",
+        "archived_relative_path": "MECHANISM_AUDIT.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "OLD_PRODUCER_TERMINAL.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/OLD_PRODUCER_TERMINAL.json",
+        "bytes": 1476,
+        "sha256": "9402c385db3d349d775db4a90c9b008cea68d4c96fae8891e5cb015d7cd218be",
+        "role": "old_producer_terminal",
+        "category": "provenance",
+        "archived_relative_path": "OLD_PRODUCER_TERMINAL.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "ORACLE_INPUT_SNAPSHOT.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/ORACLE_INPUT_SNAPSHOT.json",
+        "bytes": 2502,
+        "sha256": "29dc766090b22315fad39ef2b3657481f6385dac057822caaa8b5624724bfe85",
+        "role": "oracle_input_snapshot",
+        "category": "provenance",
+        "archived_relative_path": "ORACLE_INPUT_SNAPSHOT.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "ORACLE_LINEAGE_MANIFEST.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/ORACLE_LINEAGE_MANIFEST.json",
+        "bytes": 42353,
+        "sha256": "4d84a48c543bb369d490dfb8c9eb90646d6fd015ad22f399abb7c9b1f2ca9681",
+        "role": "oracle_lineage_manifest",
+        "category": "provenance",
+        "archived_relative_path": "ORACLE_LINEAGE_MANIFEST.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "ORACLE_VALIDATION.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/ORACLE_VALIDATION.json",
+        "bytes": 14786,
+        "sha256": "be515e8f4fb12825a254ff046cffd0ad0939427d3a598ec7d293725439668bdb",
+        "role": "oracle_validation",
+        "category": "audit",
+        "archived_relative_path": "ORACLE_VALIDATION.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "POSTHOC_INDEPENDENT_AUDIT.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/POSTHOC_INDEPENDENT_AUDIT.json",
+        "bytes": 13851,
+        "sha256": "35d063d1b9c7d17ba8139839dc2b0a892a59dfab9e40936a0c200d62d4116a0f",
+        "role": "posthoc_independent_audit",
+        "category": "audit",
+        "archived_relative_path": "POSTHOC_INDEPENDENT_AUDIT.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "PRECHECKS.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/PRECHECKS.json",
+        "bytes": 284,
+        "sha256": "a211028e16e819aabdac2c9e17c657e6fb5c5f03755e66294ce3f1a52939bc5b",
+        "role": "prechecks",
+        "category": "precheck",
+        "archived_relative_path": "PRECHECKS.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "PRODUCER_FAILURE_DIAGNOSIS.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/PRODUCER_FAILURE_DIAGNOSIS.json",
+        "bytes": 2972,
+        "sha256": "2c55826c3b59b8f911ce60116be984fd89f4614b6a5f74e7bf65f62ee89393a0",
+        "role": "producer_failure_diagnosis",
+        "category": "provenance",
+        "archived_relative_path": "PRODUCER_FAILURE_DIAGNOSIS.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "RESULT_VECTOR.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/RESULT_VECTOR.json",
+        "bytes": 1686,
+        "sha256": "bbdd69a67f1cd5d3f760196524549ae7b442ac21afc5f95963194b4eb3b5a095",
+        "role": "result_vector",
+        "category": "scientific_result",
+        "archived_relative_path": "RESULT_VECTOR.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "calibration/PegInsertionSide-v1-CROP_GRID_FREEZE.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/PegInsertionSide-v1-CROP_GRID_FREEZE.json",
+        "bytes": 235,
+        "sha256": "38612b749243e2219876bca0eab93d0d691727963ca14712bc2f0b39a819163e",
+        "role": "crop_grid_freeze",
+        "category": "calibration_contract",
+        "archived_relative_path": "calibration/PegInsertionSide-v1-CROP_GRID_FREEZE.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "calibration/PegInsertionSide-v1-seed16018-grid2.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/PegInsertionSide-v1-seed16018-grid2.json",
+        "bytes": 6281869,
+        "sha256": "00b36486839de9fed13c332ea80214d7d9e837f7a2fa461a9dc8c38c74cff3b8",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/PegInsertionSide-v1-seed16018-grid4.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/PegInsertionSide-v1-seed16018-grid4.json",
+        "bytes": 21360634,
+        "sha256": "f73229cc8269991d61cad5bad2d69032addda3170c39afcbeaf7653d5e7893e3",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/PegInsertionSide-v1-seed16019-grid2.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/PegInsertionSide-v1-seed16019-grid2.json",
+        "bytes": 6300429,
+        "sha256": "5af934cfad61dcc8fa83bca6a8622e07fce67ceee39a3a850be7df289cc032f9",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/PegInsertionSide-v1-seed16019-grid4.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/PegInsertionSide-v1-seed16019-grid4.json",
+        "bytes": 21433621,
+        "sha256": "11c04278d5fdd0224804379f413d1c3d0d960a40e8342fe4045ba576eed2915b",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/PegInsertionSide-v1-seed16020-grid2.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/PegInsertionSide-v1-seed16020-grid2.json",
+        "bytes": 6301067,
+        "sha256": "257025d8a7d494d7c341fa8274c0cb298134873479c1b548b700f6c59fb00094",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/PegInsertionSide-v1-seed16020-grid4.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/PegInsertionSide-v1-seed16020-grid4.json",
+        "bytes": 21428753,
+        "sha256": "c0227e42827ec3f903e1dbead5d54ebf665f929a776c50c123f3a7b62c8be522",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/StackCube-v1-CROP_GRID_FREEZE.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/StackCube-v1-CROP_GRID_FREEZE.json",
+        "bytes": 229,
+        "sha256": "8dd20822a5da1f9e215549704fb5a5557e4c17a9bbba78a7658be58ac254c6b6",
+        "role": "crop_grid_freeze",
+        "category": "calibration_contract",
+        "archived_relative_path": "calibration/StackCube-v1-CROP_GRID_FREEZE.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "calibration/StackCube-v1-seed16018-grid2.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/StackCube-v1-seed16018-grid2.json",
+        "bytes": 6278226,
+        "sha256": "ba37517eeb476a65b439d2e13f5f09ba8a7b1fa6df45dd489f204b9e4aa62c11",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/StackCube-v1-seed16018-grid4.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/StackCube-v1-seed16018-grid4.json",
+        "bytes": 21355364,
+        "sha256": "2e4787381a017efeccbc09ee3cf8fec0643abd1375e62729dbc55c9a934212e0",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/StackCube-v1-seed16019-grid2.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/StackCube-v1-seed16019-grid2.json",
+        "bytes": 6277337,
+        "sha256": "224d2543e767db3c4d6025269cac933336f5c8a77253f16defaf8c28fa99fe7b",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/StackCube-v1-seed16019-grid4.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/StackCube-v1-seed16019-grid4.json",
+        "bytes": 21358792,
+        "sha256": "78e342bf59e9dba41a187b515a7743883f5d76adb8879a4bcfc310471123f1a6",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/StackCube-v1-seed16020-grid2.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/StackCube-v1-seed16020-grid2.json",
+        "bytes": 6245286,
+        "sha256": "be9b4764551e1c37034145d7e9898df9f4080da6a82ad0270469b4a645e970e2",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "calibration/StackCube-v1-seed16020-grid4.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/calibration/StackCube-v1-seed16020-grid4.json",
+        "bytes": 21264303,
+        "sha256": "50986c5f26cfb935164b183fd8a9e2258df7f10c56496d7271e80a108760a1d2",
+        "role": "raw_calibration_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "oracle/PegInsertionSide-v1-seed16018-confirmatory.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/oracle/PegInsertionSide-v1-seed16018-confirmatory.json",
+        "bytes": 71603054,
+        "sha256": "798490f0514865cf63383cfd7238415150f0ffe9e618fcdb7e7fcced1a79e4c7",
+        "role": "raw_confirmatory_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "oracle/PegInsertionSide-v1-seed16019-confirmatory.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/oracle/PegInsertionSide-v1-seed16019-confirmatory.json",
+        "bytes": 71737825,
+        "sha256": "18d6c4d8c56d86a93334721ab5d2aa6ff430def9b82898b851ab8a1415287793",
+        "role": "raw_confirmatory_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "oracle/PegInsertionSide-v1-seed16020-confirmatory.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/oracle/PegInsertionSide-v1-seed16020-confirmatory.json",
+        "bytes": 71664264,
+        "sha256": "abed063078025d97dcc52f69ddb713c07bbb33ae6bea7e64eb6b3a37211a8186",
+        "role": "raw_confirmatory_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "oracle/StackCube-v1-seed16018-confirmatory.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/oracle/StackCube-v1-seed16018-confirmatory.json",
+        "bytes": 70380888,
+        "sha256": "9be2072119703fe1e8b2e1ecc16f3488cc49c75b10f606e44b1d93fc5c0581c2",
+        "role": "raw_confirmatory_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "oracle/StackCube-v1-seed16019-confirmatory.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/oracle/StackCube-v1-seed16019-confirmatory.json",
+        "bytes": 70611991,
+        "sha256": "86eb7d00e618486783f3ebb6c77ec6845ded1640172dace4e4f256b01f2a0981",
+        "role": "raw_confirmatory_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "oracle/StackCube-v1-seed16020-confirmatory.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/oracle/StackCube-v1-seed16020-confirmatory.json",
+        "bytes": 70796592,
+        "sha256": "e98c5e4a5d772d7f7375116b4d9e225fd987abbe333ec98e91d13c19222fba1f",
+        "role": "raw_confirmatory_oracle",
+        "category": "scientific_raw",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PegInsertionSide-v1-seed16018.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PegInsertionSide-v1-seed16018.json",
+        "bytes": 4371,
+        "sha256": "889cdcb423f87b83598d54530846301ec2f1daafc9460ac4658cbd710698aa81",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PegInsertionSide-v1-seed16019.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PegInsertionSide-v1-seed16019.json",
+        "bytes": 4351,
+        "sha256": "ec5dc709a6d39b73b1c1b0704c5b48bb69b5eaaaf3f5c7822bac7396adb4fd84",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PegInsertionSide-v1-seed16020.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PegInsertionSide-v1-seed16020.json",
+        "bytes": 4358,
+        "sha256": "d9da2e76f9b1e835c586ced145b095eb85b2d65cabf2a187c088b690056db649",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PlugCharger-v1-seed16018.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PlugCharger-v1-seed16018.json",
+        "bytes": 3792,
+        "sha256": "bd6b170e036d9c4b32173864f00fb87c3131bbfc456834e418760190efa576ea",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PlugCharger-v1-seed16019.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PlugCharger-v1-seed16019.json",
+        "bytes": 3792,
+        "sha256": "67bf30f9935ce22aea0d980629c39eaa22f5276f7363b299f18e3acdc57ab33b",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PlugCharger-v1-seed16020.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PlugCharger-v1-seed16020.json",
+        "bytes": 3798,
+        "sha256": "21471207082b6721abe4d1f5fce0c63d1e5c3bd98648c4bc1c022229f03d7174",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PullCubeTool-v1-seed16018.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PullCubeTool-v1-seed16018.json",
+        "bytes": 3795,
+        "sha256": "a40bd72b93ed8d7f9885e66e7c282cbc415a56b327dc15d424a7f35d69d98a7e",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PullCubeTool-v1-seed16019.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PullCubeTool-v1-seed16019.json",
+        "bytes": 3804,
+        "sha256": "f14ffb3d648c795531f868f1477642465ca964727256643be5793f67c459ba66",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PullCubeTool-v1-seed16020.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PullCubeTool-v1-seed16020.json",
+        "bytes": 3822,
+        "sha256": "351be5851e437cf7041309e2a7517844c7efaf8e2eb0adafe7e6253fb63ebc17",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PushCube-v1-seed16018.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PushCube-v1-seed16018.json",
+        "bytes": 3816,
+        "sha256": "00fb8e5abc2167c31f7a0e58c6c6f34684525fa7aef054fb339c668c99e0f066",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PushCube-v1-seed16019.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PushCube-v1-seed16019.json",
+        "bytes": 3808,
+        "sha256": "f4b0cffc03ade130be428cedbb0602734c221a81f4cc1483e03f75112926a275",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PushCube-v1-seed16020.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PushCube-v1-seed16020.json",
+        "bytes": 3813,
+        "sha256": "2741aa5ccb8cea32e211df2398a3c9db6142d9b873b326ebb3ce46156604f42c",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PushT-v1-seed16018.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PushT-v1-seed16018.json",
+        "bytes": 4329,
+        "sha256": "52eb50812c3f3a24a4ed627f3142363f5e269b0a4d42a14d57da9da8b323f6ba",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PushT-v1-seed16019.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PushT-v1-seed16019.json",
+        "bytes": 4322,
+        "sha256": "a9d3491332769274773ca2c6033a27baa3971655e90e6a251734b8bf71fa9941",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/PushT-v1-seed16020.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/PushT-v1-seed16020.json",
+        "bytes": 4327,
+        "sha256": "f962a1bf3d811620889243d02e5ef5469e129275d1daaba8f87f1aa386083d3d",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/StackCube-v1-seed16018.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/StackCube-v1-seed16018.json",
+        "bytes": 3799,
+        "sha256": "19a0d7c0d6ad410d323e5d537ade2a7e29347ef5827c8539a0635d6c27c98aea",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/StackCube-v1-seed16019.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/StackCube-v1-seed16019.json",
+        "bytes": 3829,
+        "sha256": "7317831fc43d1cfda8d59635440f185893e0cf956b8723c24a6822ab24022bd3",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/StackCube-v1-seed16020.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/StackCube-v1-seed16020.json",
+        "bytes": 4346,
+        "sha256": "3dd59ebe8c74115771db4208050961444a2fade061d0d67d3cc22ff844298007",
+        "role": "raw_task_screen",
+        "category": "screen",
+        "archived_relative_path": null,
+        "archived_to_git": false
+      },
+      {
+        "path": "screen/TASK_SELECTION.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/screen/TASK_SELECTION.json",
+        "bytes": 82293,
+        "sha256": "c9807d8786f75c334766636ffe892e81e4cb3d3f0da7344ac0499d3c044f0fbf",
+        "role": "task_selection",
+        "category": "screen",
+        "archived_relative_path": "screen/TASK_SELECTION.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "state_banks/PegInsertionSide-v1-calibration.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/state_banks/PegInsertionSide-v1-calibration.json",
+        "bytes": 1023855,
+        "sha256": "fc8b7660b0c46237c5ca3508912af3aa5fad4c7c52050a9a1a6043e6dc9e7967",
+        "role": "state_bank",
+        "category": "scientific_input",
+        "archived_relative_path": "state_banks/PegInsertionSide-v1-calibration.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "state_banks/PegInsertionSide-v1-confirmatory.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/state_banks/PegInsertionSide-v1-confirmatory.json",
+        "bytes": 2035447,
+        "sha256": "2dc45c47248f3580aa2652f353ddc0078a34cbc3392f18f3972252a0f52a0ef1",
+        "role": "state_bank",
+        "category": "scientific_input",
+        "archived_relative_path": "state_banks/PegInsertionSide-v1-confirmatory.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "state_banks/StackCube-v1-calibration.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/state_banks/StackCube-v1-calibration.json",
+        "bytes": 555730,
+        "sha256": "6fed4dc8dd3aac5d053ed1f03b2c978be37e83b31440e41fa691613ac9bbe11d",
+        "role": "state_bank",
+        "category": "scientific_input",
+        "archived_relative_path": "state_banks/StackCube-v1-calibration.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "state_banks/StackCube-v1-confirmatory.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/state_banks/StackCube-v1-confirmatory.json",
+        "bytes": 1130162,
+        "sha256": "a19fdf382cdaeadac6f41f374ed57e1751c252ece8ee426183a2a0e746854873",
+        "role": "state_bank",
+        "category": "scientific_input",
+        "archived_relative_path": "state_banks/StackCube-v1-confirmatory.json",
+        "archived_to_git": true
+      },
+      {
+        "path": "statistics.json",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/statistics.json",
+        "bytes": 29655763,
+        "sha256": "4cc71eff2251f008bfb9910e8a4065459d998a9a635d8dc5d075b40896ce87bd",
+        "role": "paired_statistics",
+        "category": "scientific_result",
+        "archived_relative_path": "statistics.json",
+        "archived_to_git": true
+      }
+    ]
+  },
+  "external_log_inventory": {
+    "root": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13",
+    "file_count": 14,
+    "total_bytes": 14120,
+    "files": [
+      {
+        "path": "final-revalidation.stderr.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/final-revalidation.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/final-revalidation.stderr.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "final-revalidation.stdout.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/final-revalidation.stdout.log",
+        "bytes": 1361,
+        "sha256": "4a50615fec3963aee48a5e9e46315d3fb0ef83cc5549b1956a7a86b9eeacb68e",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/final-revalidation.stdout.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "formal-complete-validate.stderr.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/formal-complete-validate.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/formal-complete-validate.stderr.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "formal-complete-validate.stdout.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/formal-complete-validate.stdout.log",
+        "bytes": 219,
+        "sha256": "af0e5062b4b14430512f36f77a55a1452c8b431484659697e6117aa50985fe00",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/formal-complete-validate.stdout.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "install-formal-complete.stderr.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/install-formal-complete.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/install-formal-complete.stderr.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "install-formal-complete.stdout.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/install-formal-complete.stdout.log",
+        "bytes": 153,
+        "sha256": "90bc3111bf9a697e941a6df54ab9e937bf2a70ca32af92558d57a0e164a11273",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/install-formal-complete.stdout.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "official-audit-validate.stderr.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/official-audit-validate.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/official-audit-validate.stderr.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "official-audit-validate.stdout.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/official-audit-validate.stdout.log",
+        "bytes": 229,
+        "sha256": "02b4caaba0ca5873235ee471e290fa8dfd8a0bdcfc97ffb07d68534c29c074b4",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/official-audit-validate.stdout.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "official-audit.stderr.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/official-audit.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/official-audit.stderr.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "official-audit.stdout.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/official-audit.stdout.log",
+        "bytes": 8240,
+        "sha256": "642ad310f11ac28639c681f6c68e42a7c1789f036f197a9e89c1f7eb915ea994",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/official-audit.stdout.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "posthoc-audit-validate.stderr.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/posthoc-audit-validate.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/posthoc-audit-validate.stderr.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "posthoc-audit-validate.stdout.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/posthoc-audit-validate.stdout.log",
+        "bytes": 236,
+        "sha256": "2f99005d951d25a45d9e7ab136cc285163b3f0b10b57760c14d209c2c9ddeb9d",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/posthoc-audit-validate.stdout.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "posthoc-audit.stderr.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/posthoc-audit.stderr.log",
+        "bytes": 2770,
+        "sha256": "a60c758ea15da7fa9e73d522a46911a0fdb8f61a9beb1216fd1602d8287b0676",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/posthoc-audit.stderr.log",
+        "archived_to_git": true
+      },
+      {
+        "path": "posthoc-audit.stdout.log",
+        "source_path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/logs/r16-p18-maniskill-stage27r-formal-v1/final-verifier-v13/posthoc-audit.stdout.log",
+        "bytes": 912,
+        "sha256": "69ca2dc300630cf3c3b68e82665fdb8e22e2d8c29be7107a005bdd83d43a302c",
+        "role": "final_verifier_log",
+        "category": "external_log",
+        "archived_relative_path": "logs/final-verifier-v13/posthoc-audit.stdout.log",
+        "archived_to_git": true
+      }
+    ]
+  },
+  "oracle_shards": {
+    "count": 6,
+    "total_rows": 97920,
+    "total_bytes": 426794614,
+    "raw_retained_on_cpfs": true,
+    "semantic_summaries": [
+      {
+        "path": "oracle/PegInsertionSide-v1-seed16018-confirmatory.json",
+        "task": "PegInsertionSide-v1",
+        "model_seed": 16018,
+        "bank": "confirmatory",
+        "rows": 16320,
+        "bytes": 71603054,
+        "sha256": "798490f0514865cf63383cfd7238415150f0ffe9e618fcdb7e7fcced1a79e4c7",
+        "status": "PASS",
+        "repeats": 5,
+        "state_bank_count": 96,
+        "tile_grid": 4,
+        "condition_count": 34,
+        "causal_flags_all_visible": true,
+        "checkpoint_hash_embedded": false,
+        "limitations": [
+          "branch_step unavailable in row or state bank; binding not established",
+          "prefix_actions unavailable in row or state bank; binding not established"
+        ],
+        "archived_to_git": false,
+        "raw_retained_on_cpfs": true
+      },
+      {
+        "path": "oracle/PegInsertionSide-v1-seed16019-confirmatory.json",
+        "task": "PegInsertionSide-v1",
+        "model_seed": 16019,
+        "bank": "confirmatory",
+        "rows": 16320,
+        "bytes": 71737825,
+        "sha256": "18d6c4d8c56d86a93334721ab5d2aa6ff430def9b82898b851ab8a1415287793",
+        "status": "PASS",
+        "repeats": 5,
+        "state_bank_count": 96,
+        "tile_grid": 4,
+        "condition_count": 34,
+        "causal_flags_all_visible": true,
+        "checkpoint_hash_embedded": false,
+        "limitations": [
+          "branch_step unavailable in row or state bank; binding not established",
+          "prefix_actions unavailable in row or state bank; binding not established"
+        ],
+        "archived_to_git": false,
+        "raw_retained_on_cpfs": true
+      },
+      {
+        "path": "oracle/PegInsertionSide-v1-seed16020-confirmatory.json",
+        "task": "PegInsertionSide-v1",
+        "model_seed": 16020,
+        "bank": "confirmatory",
+        "rows": 16320,
+        "bytes": 71664264,
+        "sha256": "abed063078025d97dcc52f69ddb713c07bbb33ae6bea7e64eb6b3a37211a8186",
+        "status": "PASS",
+        "repeats": 5,
+        "state_bank_count": 96,
+        "tile_grid": 4,
+        "condition_count": 34,
+        "causal_flags_all_visible": true,
+        "checkpoint_hash_embedded": false,
+        "limitations": [
+          "branch_step unavailable in row or state bank; binding not established",
+          "prefix_actions unavailable in row or state bank; binding not established"
+        ],
+        "archived_to_git": false,
+        "raw_retained_on_cpfs": true
+      },
+      {
+        "path": "oracle/StackCube-v1-seed16018-confirmatory.json",
+        "task": "StackCube-v1",
+        "model_seed": 16018,
+        "bank": "confirmatory",
+        "rows": 16320,
+        "bytes": 70380888,
+        "sha256": "9be2072119703fe1e8b2e1ecc16f3488cc49c75b10f606e44b1d93fc5c0581c2",
+        "status": "PASS",
+        "repeats": 5,
+        "state_bank_count": 96,
+        "tile_grid": 4,
+        "condition_count": 34,
+        "causal_flags_all_visible": true,
+        "checkpoint_hash_embedded": false,
+        "limitations": [
+          "branch_step unavailable in row or state bank; binding not established",
+          "prefix_actions unavailable in row or state bank; binding not established"
+        ],
+        "archived_to_git": false,
+        "raw_retained_on_cpfs": true
+      },
+      {
+        "path": "oracle/StackCube-v1-seed16019-confirmatory.json",
+        "task": "StackCube-v1",
+        "model_seed": 16019,
+        "bank": "confirmatory",
+        "rows": 16320,
+        "bytes": 70611991,
+        "sha256": "86eb7d00e618486783f3ebb6c77ec6845ded1640172dace4e4f256b01f2a0981",
+        "status": "PASS",
+        "repeats": 5,
+        "state_bank_count": 96,
+        "tile_grid": 4,
+        "condition_count": 34,
+        "causal_flags_all_visible": true,
+        "checkpoint_hash_embedded": false,
+        "limitations": [
+          "branch_step unavailable in row or state bank; binding not established",
+          "prefix_actions unavailable in row or state bank; binding not established"
+        ],
+        "archived_to_git": false,
+        "raw_retained_on_cpfs": true
+      },
+      {
+        "path": "oracle/StackCube-v1-seed16020-confirmatory.json",
+        "task": "StackCube-v1",
+        "model_seed": 16020,
+        "bank": "confirmatory",
+        "rows": 16320,
+        "bytes": 70796592,
+        "sha256": "e98c5e4a5d772d7f7375116b4d9e225fd987abbe333ec98e91d13c19222fba1f",
+        "status": "PASS",
+        "repeats": 5,
+        "state_bank_count": 96,
+        "tile_grid": 4,
+        "condition_count": 34,
+        "causal_flags_all_visible": true,
+        "checkpoint_hash_embedded": false,
+        "limitations": [
+          "branch_step unavailable in row or state bank; binding not established",
+          "prefix_actions unavailable in row or state bank; binding not established"
+        ],
+        "archived_to_git": false,
+        "raw_retained_on_cpfs": true
+      }
+    ]
+  },
+  "formal_terminal_bindings": {
+    "final_status": "NO_GO_CORE_MECHANISM",
+    "formal_complete_status": "FORMAL_COMPLETE",
+    "result_vector_path": "RESULT_VECTOR.json",
+    "final_verifier": {
+      "role": "final_independent_verifier",
+      "repository": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage27r-formal-source-v13",
+      "commit": "6893116948025785d0da7860e7ece94ea5497707",
+      "tree": "5326b8529ff5bc0bdc99ceb6f526117d0fb10e52",
+      "audit_script": "experiments/maniskill_stage27r_core_mechanism_reset_v1/scripts/audit_formal_results.py",
+      "audit_script_sha256": "e3e8bbb601fe1db6f048883c7d693f0fe6917c6bcdaa7a48f06ddb9f4dbbbaec",
+      "working_tree_clean": true,
+      "dirty_entries": []
+    },
+    "v9_old_producer": {
+      "job_id": "dlc9nkd8q7u4szm3",
+      "run_id": "stage27r-formal-idle-v9",
+      "status": "Stopped",
+      "terminal_status": "Stopped",
+      "terminal": true,
+      "no_overlap": true,
+      "observed_at_utc": "2026-08-18T21:27:57Z",
+      "raw_getjob": {
+        "bytes": 15924,
+        "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v9/getjob-terminal-dlc9nkd8q7u4szm3-20260818T212723Z.json",
+        "sha256": "7957494d4ef4f961ae98c44d7712cb77d9631568c2afcd1c11e1c2e036d332d9"
+      }
+    },
+    "v11_continuation": {
+      "job_id": "dlc1x9np56zy7gpm",
+      "run_id": "stage27r-formal-idle-v11",
+      "status": "PASS",
+      "terminal_status": "Stopped",
+      "terminal": true,
+      "no_overlap_after_terminal": true,
+      "observed_at_utc": "2026-08-18T21:47:33Z",
+      "raw_terminal_getjob": {
+        "bytes": 16801,
+        "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry/runs/stage27r-formal-idle-v11/getjob-terminal-dlc1x9np56zy7gpm-20260818T214733Z.json",
+        "sha256": "128734824c901e1828b2e260f4a8bfadd0e3d162a2c47cd04afc860f2ad36922"
+      },
+      "source": {
+        "commit": "7554bca313d796fd0b4cdf3abbc817c6ecc7e9fd",
+        "tree": "837e29d5547c67c8045522164ab72e8fbcc2d5a0"
+      }
+    },
+    "malformed_v11_predecessor": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-formal-v1/formal-run/CONTINUATION_V11_TERMINAL.json",
+      "bytes": 8026,
+      "sha256": "bbf16df01c734e21e37c90d4f77b9291ea94a8ae203bc2c42841adeacf584dde",
+      "preserved_byte_for_byte": true,
+      "reason": "trailing_literal_backslash_n",
+      "archived_to_git": false
+    }
+  },
+  "audit_status": {
+    "independent_audit": true,
+    "posthoc_independent_audit": "PASS",
+    "oracle_validation": "PASS",
+    "prechecks": true,
+    "copy_validation_count": 22,
+    "copy_validation_all_byte_equal": true,
+    "sha256sums_path": "artifacts/formal-run/SHA256SUMS",
+    "sha256sums_entry_count": 38,
+    "archive_files_over_50_mib": []
+  },
+  "archive_summary": {
+    "archived_file_count_excluding_gitkeep_and_sums": 37,
+    "sha256sums_file_count_including_readme_and_gitkeep": 38,
+    "archived_total_bytes_excluding_gitkeep_and_sums": 36268200,
+    "manifest_sha256_excludes_self": true
+  },
+  "copy_validation": [
+    {
+      "source_path": "CONTINUATION_V11_TERMINAL_VALID.json",
+      "archived_path": "CONTINUATION_V11_TERMINAL_VALID.json",
+      "bytes": 2166,
+      "sha256": "73443d0cbb8277b38f3fb9468f2f29d75a3e8684ac60fbc9b3e596ed0cccd5ef",
+      "byte_equal": true
+    },
+    {
+      "source_path": "DETERMINISTIC_LOCKSTEP_SMOKE.json",
+      "archived_path": "DETERMINISTIC_LOCKSTEP_SMOKE.json",
+      "bytes": 349,
+      "sha256": "896f37274dc71c8dea2b2eb0091738baa691472bc5bb27f97a3d2a8e2a66a4e2",
+      "byte_equal": true
+    },
+    {
+      "source_path": "EXACT_DATASET_AUDIT.json",
+      "archived_path": "EXACT_DATASET_AUDIT.json",
+      "bytes": 446558,
+      "sha256": "febdf21bbfd5c56db885fe94d4195730fd92121eec5b1e694e39b5862a668a86",
+      "byte_equal": true
+    },
+    {
+      "source_path": "FORMAL_COMPLETE.json",
+      "archived_path": "FORMAL_COMPLETE.json",
+      "bytes": 90,
+      "sha256": "a72f70abf539a6a2b173cfe494697044a5c959e53302579c7994297e7c9b9b3b",
+      "byte_equal": true
+    },
+    {
+      "source_path": "INDEPENDENT_AUDIT.json",
+      "archived_path": "INDEPENDENT_AUDIT.json",
+      "bytes": 18574,
+      "sha256": "8069ae08a9ed0c2d04cbdb068cb4fbc349c3333c6bb17ce27a597c54be5fa0e3",
+      "byte_equal": true
+    },
+    {
+      "source_path": "MECHANISM_AUDIT.json",
+      "archived_path": "MECHANISM_AUDIT.json",
+      "bytes": 1221287,
+      "sha256": "09f5c1be03e67d3846bbcb06ab2a494a357068d90cadc89b98484c3d5e94bc6e",
+      "byte_equal": true
+    },
+    {
+      "source_path": "OLD_PRODUCER_TERMINAL.json",
+      "archived_path": "OLD_PRODUCER_TERMINAL.json",
+      "bytes": 1476,
+      "sha256": "9402c385db3d349d775db4a90c9b008cea68d4c96fae8891e5cb015d7cd218be",
+      "byte_equal": true
+    },
+    {
+      "source_path": "ORACLE_INPUT_SNAPSHOT.json",
+      "archived_path": "ORACLE_INPUT_SNAPSHOT.json",
+      "bytes": 2502,
+      "sha256": "29dc766090b22315fad39ef2b3657481f6385dac057822caaa8b5624724bfe85",
+      "byte_equal": true
+    },
+    {
+      "source_path": "ORACLE_LINEAGE_MANIFEST.json",
+      "archived_path": "ORACLE_LINEAGE_MANIFEST.json",
+      "bytes": 42353,
+      "sha256": "4d84a48c543bb369d490dfb8c9eb90646d6fd015ad22f399abb7c9b1f2ca9681",
+      "byte_equal": true
+    },
+    {
+      "source_path": "ORACLE_VALIDATION.json",
+      "archived_path": "ORACLE_VALIDATION.json",
+      "bytes": 14786,
+      "sha256": "be515e8f4fb12825a254ff046cffd0ad0939427d3a598ec7d293725439668bdb",
+      "byte_equal": true
+    },
+    {
+      "source_path": "POSTHOC_INDEPENDENT_AUDIT.json",
+      "archived_path": "POSTHOC_INDEPENDENT_AUDIT.json",
+      "bytes": 13851,
+      "sha256": "35d063d1b9c7d17ba8139839dc2b0a892a59dfab9e40936a0c200d62d4116a0f",
+      "byte_equal": true
+    },
+    {
+      "source_path": "PRECHECKS.json",
+      "archived_path": "PRECHECKS.json",
+      "bytes": 284,
+      "sha256": "a211028e16e819aabdac2c9e17c657e6fb5c5f03755e66294ce3f1a52939bc5b",
+      "byte_equal": true
+    },
+    {
+      "source_path": "PRODUCER_FAILURE_DIAGNOSIS.json",
+      "archived_path": "PRODUCER_FAILURE_DIAGNOSIS.json",
+      "bytes": 2972,
+      "sha256": "2c55826c3b59b8f911ce60116be984fd89f4614b6a5f74e7bf65f62ee89393a0",
+      "byte_equal": true
+    },
+    {
+      "source_path": "RESULT_VECTOR.json",
+      "archived_path": "RESULT_VECTOR.json",
+      "bytes": 1686,
+      "sha256": "bbdd69a67f1cd5d3f760196524549ae7b442ac21afc5f95963194b4eb3b5a095",
+      "byte_equal": true
+    },
+    {
+      "source_path": "calibration/PegInsertionSide-v1-CROP_GRID_FREEZE.json",
+      "archived_path": "calibration/PegInsertionSide-v1-CROP_GRID_FREEZE.json",
+      "bytes": 235,
+      "sha256": "38612b749243e2219876bca0eab93d0d691727963ca14712bc2f0b39a819163e",
+      "byte_equal": true
+    },
+    {
+      "source_path": "calibration/StackCube-v1-CROP_GRID_FREEZE.json",
+      "archived_path": "calibration/StackCube-v1-CROP_GRID_FREEZE.json",
+      "bytes": 229,
+      "sha256": "8dd20822a5da1f9e215549704fb5a5557e4c17a9bbba78a7658be58ac254c6b6",
+      "byte_equal": true
+    },
+    {
+      "source_path": "screen/TASK_SELECTION.json",
+      "archived_path": "screen/TASK_SELECTION.json",
+      "bytes": 82293,
+      "sha256": "c9807d8786f75c334766636ffe892e81e4cb3d3f0da7344ac0499d3c044f0fbf",
+      "byte_equal": true
+    },
+    {
+      "source_path": "state_banks/PegInsertionSide-v1-calibration.json",
+      "archived_path": "state_banks/PegInsertionSide-v1-calibration.json",
+      "bytes": 1023855,
+      "sha256": "fc8b7660b0c46237c5ca3508912af3aa5fad4c7c52050a9a1a6043e6dc9e7967",
+      "byte_equal": true
+    },
+    {
+      "source_path": "state_banks/PegInsertionSide-v1-confirmatory.json",
+      "archived_path": "state_banks/PegInsertionSide-v1-confirmatory.json",
+      "bytes": 2035447,
+      "sha256": "2dc45c47248f3580aa2652f353ddc0078a34cbc3392f18f3972252a0f52a0ef1",
+      "byte_equal": true
+    },
+    {
+      "source_path": "state_banks/StackCube-v1-calibration.json",
+      "archived_path": "state_banks/StackCube-v1-calibration.json",
+      "bytes": 555730,
+      "sha256": "6fed4dc8dd3aac5d053ed1f03b2c978be37e83b31440e41fa691613ac9bbe11d",
+      "byte_equal": true
+    },
+    {
+      "source_path": "state_banks/StackCube-v1-confirmatory.json",
+      "archived_path": "state_banks/StackCube-v1-confirmatory.json",
+      "bytes": 1130162,
+      "sha256": "a19fdf382cdaeadac6f41f374ed57e1751c252ece8ee426183a2a0e746854873",
+      "byte_equal": true
+    },
+    {
+      "source_path": "statistics.json",
+      "archived_path": "statistics.json",
+      "bytes": 29655763,
+      "sha256": "4cc71eff2251f008bfb9910e8a4065459d998a9a635d8dc5d075b40896ce87bd",
+      "byte_equal": true
+    }
+  ],
+  "notes": [
+    "The six raw oracle shards and raw calibration shards remain on CPFS; their complete hashes, byte counts, row counts, task and model seed are recorded above.",
+    "The malformed predecessor is not copied; its exact hash and failure diagnosis are preserved in formal-root evidence and this manifest.",
+    "No CPFS source file was modified by this archival operation."
+  ]
+}
