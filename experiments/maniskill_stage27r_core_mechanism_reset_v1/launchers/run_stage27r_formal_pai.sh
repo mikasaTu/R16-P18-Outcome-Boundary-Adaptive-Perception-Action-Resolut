@@ -77,4 +77,5 @@ pids=(); for ((g=0;g<gpu_count;g++)); do oracle_worker "$g" & pids+=("$!"); done
 bank_args=("${bank_dir}/StackCube-v1-confirmatory.json" "${bank_dir}/${positive2}-confirmatory.json"); test -z "$negative" || bank_args+=("${bank_dir}/${negative}-negative.json")
 "${py}" "${exp}/scripts/decide_stage27r.py" --analysis "${result}/statistics.json" --task-selection "${screen_dir}/TASK_SELECTION.json" --state-banks "${bank_args[@]}" --positive-tasks StackCube-v1 "${positive2}" --output "${result}/RESULT_VECTOR.json"
 "${py}" "${exp}/scripts/audit_formal_results.py" --repo "${source_root}" --formal-root "${result}" --training-root "${training}" --dataset-root "${data_root}" --output "${result}/INDEPENDENT_AUDIT.json"
+"${py}" "${exp}/scripts/posthoc_independent_audit.py" --formal-root "${result}" --output "${result}/POSTHOC_INDEPENDENT_AUDIT.json"
 printf '{"protocol_id":"R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1","status":"FORMAL_COMPLETE"}\n' >"${result}/FORMAL_COMPLETE.json"
