@@ -138,9 +138,11 @@ def test_static_model_audit_rejects_dynamic_subscript_and_get() -> None:
     ]
 
 
-def _lineage_role_fixtures() -> tuple[dict, dict, dict, dict]:
+def _lineage_role_fixtures() -> tuple[dict, dict, dict, dict, dict, dict]:
     commit, tree = "c" * 40, "t" * 40
     run_id, job_id = "stage27r-formal-idle-v11", "dlc-v11"
+    resolved_binding = {"path": "/evidence/v11/resolved.json", "sha256": "a" * 64, "bytes": 42}
+    placement_binding = {"path": "/evidence/v11/placement.json", "sha256": "b" * 64, "bytes": 24}
     lineage = {
         "protocol_id": PROTOCOL_ID,
         "status": "PASS",
@@ -150,6 +152,7 @@ def _lineage_role_fixtures() -> tuple[dict, dict, dict, dict]:
             "job_id": job_id,
             "source_commit": commit,
             "source_tree": tree,
+            "files": {"resolved": resolved_binding, "placement": placement_binding},
         },
         "posthoc_verifier_source": {
             "role": "clean_posthoc_verifier_and_continuation_source",
@@ -165,12 +168,17 @@ def _lineage_role_fixtures() -> tuple[dict, dict, dict, dict]:
     }
     terminal = {
         "protocol_id": PROTOCOL_ID,
-        "status": "Stopped",
+        "status": "PASS",
         "terminal": True,
+        "terminal_status": "Stopped",
+        "no_overlap_after_terminal": True,
         "run_id": run_id,
         "job_id": job_id,
-        "source_binding": {"commit": commit, "tree": tree},
-        "registry": {"run_id": run_id, "job_id": job_id},
+        "source": {"commit": commit, "tree": tree},
+        "registry": {"resolved": resolved_binding, "placement": placement_binding},
+        "active_job_verification": {
+            "v11": {"job_id": job_id, "live_status": "Stopped", "active": False}
+        },
     }
     verifier = {
         "pass": True,
@@ -178,7 +186,13 @@ def _lineage_role_fixtures() -> tuple[dict, dict, dict, dict]:
         "commit": "f" * 40,
         "tree": "e" * 40,
     }
-    return lineage, resolved, terminal, verifier
+    getjob = {
+        "JobId": job_id,
+        "Status": "Stopped",
+        "Settings": {"Tags": {"run_id": run_id}},
+    }
+    placement = {"run_id": run_id, "job_id": job_id}
+    return lineage, resolved, terminal, verifier, getjob, placement
 
 
 def test_lineage_roles_separate_v11_producer_from_final_verifier() -> None:
@@ -191,17 +205,19 @@ def test_lineage_roles_separate_v11_producer_from_final_verifier() -> None:
 
 @pytest.mark.parametrize("mutation", ["commit", "tree", "job", "terminal"])
 def test_lineage_roles_reject_wrong_v11_binding(mutation: str) -> None:
-    lineage, resolved, terminal, verifier = _lineage_role_fixtures()
+    lineage, resolved, terminal, verifier, getjob, placement = _lineage_role_fixtures()
     if mutation == "commit":
         resolved["evidence"]["source_commit"] = "d" * 40
     elif mutation == "tree":
-        terminal["source_binding"]["tree"] = "u" * 40
+        terminal["source"]["tree"] = "u" * 40
     elif mutation == "job":
         terminal["job_id"] = "wrong-job"
     else:
-        terminal["status"] = "Running"
+        terminal["terminal_status"] = "Running"
         terminal["terminal"] = False
-    result = validate_lineage_role_separation(lineage, resolved, terminal, verifier)
+    result = validate_lineage_role_separation(
+        lineage, resolved, terminal, verifier, getjob, placement
+    )
     assert not result["pass"]
     assert result["errors"]
 

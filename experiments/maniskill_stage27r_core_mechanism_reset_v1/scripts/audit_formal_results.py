@@ -236,6 +236,8 @@ def validate_lineage_role_separation(
     registry_resolved: dict,
     terminal: dict,
     current_verifier: dict,
+    terminal_getjob: dict | None = None,
+    registry_placement: dict | None = None,
 ) -> dict:
     """Validate historical v11 production and later final-verifier roles.
 
@@ -253,8 +255,9 @@ def validate_lineage_role_separation(
     continuation = lineage.get("continuation_registry", {})
     historical = lineage.get("posthoc_verifier_source", {})
     resolved_evidence = registry_resolved.get("evidence", {})
-    terminal_source = terminal.get("source_binding", {})
+    terminal_source = terminal.get("source", {})
     terminal_registry = terminal.get("registry", {})
+    terminal_active = terminal.get("active_job_verification", {}).get("v11", {})
 
     run_id = continuation.get("run_id")
     job_id = continuation.get("job_id")
@@ -279,14 +282,37 @@ def validate_lineage_role_separation(
     require(historical.get("pai_job_id") == job_id, "historical verifier job_id mismatch")
 
     require(terminal.get("protocol_id") == PROTOCOL_ID, "v11 terminal protocol mismatch")
+    require(terminal.get("status") == "PASS", "v11 terminal evidence status is not PASS")
     require(terminal.get("terminal") is True, "v11 terminal flag is not true")
-    require(terminal.get("status") == "Stopped", "v11 terminal status is not Stopped")
+    require(terminal.get("terminal_status") == "Stopped", "v11 terminal status is not Stopped")
+    require(terminal.get("no_overlap_after_terminal") is True, "v11 terminal no-overlap flag is not true")
     require(terminal.get("run_id") == run_id, "v11 terminal run_id mismatch")
     require(terminal.get("job_id") == job_id, "v11 terminal job_id mismatch")
     require(terminal_source.get("commit") == source_commit, "v11 terminal source commit mismatch")
     require(terminal_source.get("tree") == source_tree, "v11 terminal source tree mismatch")
-    require(terminal_registry.get("run_id") == run_id, "v11 terminal registry run_id mismatch")
-    require(terminal_registry.get("job_id") == job_id, "v11 terminal registry job_id mismatch")
+    require(
+        terminal_registry.get("resolved") == continuation.get("files", {}).get("resolved"),
+        "v11 terminal registry resolved binding mismatch",
+    )
+    require(
+        terminal_registry.get("placement") == continuation.get("files", {}).get("placement"),
+        "v11 terminal registry placement binding mismatch",
+    )
+    require(terminal_active.get("job_id") == job_id, "v11 active-verification job_id mismatch")
+    require(terminal_active.get("live_status") == "Stopped", "v11 active-verification status mismatch")
+    require(terminal_active.get("active") is False, "v11 active-verification still reports active")
+    if terminal_getjob is None:
+        errors.append("v11 raw terminal GetJob is missing")
+    else:
+        require(terminal_getjob.get("JobId") == job_id, "v11 raw GetJob job_id mismatch")
+        require(terminal_getjob.get("Status") == "Stopped", "v11 raw GetJob status mismatch")
+        raw_run_id = terminal_getjob.get("Settings", {}).get("Tags", {}).get("run_id")
+        require(raw_run_id == run_id, "v11 raw GetJob run_id mismatch")
+    if registry_placement is None:
+        errors.append("v11 registry placement evidence is missing")
+    else:
+        require(registry_placement.get("run_id") == run_id, "v11 placement run_id mismatch")
+        require(registry_placement.get("job_id") == job_id, "v11 placement job_id mismatch")
 
     require(current_verifier.get("pass") is True, "final verifier source is not clean")
     require(
@@ -359,13 +385,34 @@ def main():
         resolved_path = args.v11_registry_resolved or Path(str(recorded_resolved.get("path", "")))
         registry_resolved, resolved_binding = _load_bound_json(resolved_path, recorded_resolved)
         terminal, terminal_binding = _load_bound_json(terminal_path)
+        terminal_getjob_recorded = terminal.get("raw_terminal_getjob")
+        if not isinstance(terminal_getjob_recorded, dict):
+            raise RuntimeError("v11 terminal lacks bound raw GetJob evidence")
+        terminal_getjob, terminal_getjob_binding = _load_bound_json(
+            Path(str(terminal_getjob_recorded.get("path", ""))),
+            terminal_getjob_recorded,
+        )
+        terminal_placement_recorded = terminal.get("registry", {}).get("placement")
+        if not isinstance(terminal_placement_recorded, dict):
+            raise RuntimeError("v11 terminal lacks bound placement evidence")
+        registry_placement, terminal_placement_binding = _load_bound_json(
+            Path(str(terminal_placement_recorded.get("path", ""))),
+            terminal_placement_recorded,
+        )
         role_check = validate_lineage_role_separation(
-            lineage, registry_resolved, terminal, verifier
+            lineage,
+            registry_resolved,
+            terminal,
+            verifier,
+            terminal_getjob,
+            registry_placement,
         )
         role_check["evidence"] = {
             "lineage_manifest": lineage_binding,
             "v11_registry_resolved": resolved_binding,
             "v11_terminal": terminal_binding,
+            "v11_terminal_raw_getjob": terminal_getjob_binding,
+            "v11_terminal_placement": terminal_placement_binding,
         }
         checks["lineage_role_separation"] = role_check
     except (OSError, ValueError, TypeError, json.JSONDecodeError, RuntimeError) as exc:
