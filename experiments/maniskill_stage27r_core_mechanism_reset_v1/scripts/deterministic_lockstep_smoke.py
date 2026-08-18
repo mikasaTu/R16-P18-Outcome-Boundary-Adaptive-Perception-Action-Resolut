@@ -18,22 +18,31 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=2_709_001)
     parser.add_argument("--steps", type=int, default=4)
     args = parser.parse_args()
-    env = make_env("StackCube-v1", 2)
+    # The pinned ManiSkill CPU backend intentionally rejects num_envs > 1.
+    # Use two independent single-environment instances: this is also the
+    # stronger fresh-reset/shadow contract that the smoke is meant to test.
+    left = make_env("StackCube-v1", 1)
+    right = make_env("StackCube-v1", 1)
     try:
-        obs, info = env.reset(seed=[args.seed, args.seed])
+        left_obs, left_info = left.reset(seed=[args.seed])
+        right_obs, right_info = right.reset(seed=[args.seed])
         max_action = max_translation = max_rotation = 0.0
         max_rgb = 0
         categorical = True
-        action = torch.zeros((2, env.single_action_space.shape[0]), device=env.base_env.device)
+        left_action = torch.zeros((1, left.single_action_space.shape[0]), device=left.base_env.device)
+        right_action = torch.zeros((1, right.single_action_space.shape[0]), device=right.base_env.device)
         for _ in range(args.steps):
-            max_action = max(max_action, float(torch.max(torch.abs(action[0] - action[1])).item()))
-            obs, _, _, _, info = env.step(action)
-            position, quaternion = object_pose(env.base_env, "StackCube-v1")
-            max_translation = max(max_translation, float(np.linalg.norm(position[0] - position[1])))
-            max_rotation = max(max_rotation, quat_distance(quaternion[0], quaternion[1]))
-            rgb = obs["rgb"].detach().cpu().numpy().astype(np.int16)
-            max_rgb = max(max_rgb, int(np.max(np.abs(rgb[0] - rgb[1]))))
-            categorical = categorical and bool(info["success"][0] == info["success"][1])
+            max_action = max(max_action, float(torch.max(torch.abs(left_action - right_action)).item()))
+            left_obs, _, _, _, left_info = left.step(left_action)
+            right_obs, _, _, _, right_info = right.step(right_action)
+            left_position, left_quaternion = object_pose(left.base_env, "StackCube-v1")
+            right_position, right_quaternion = object_pose(right.base_env, "StackCube-v1")
+            max_translation = max(max_translation, float(np.linalg.norm(left_position[0] - right_position[0])))
+            max_rotation = max(max_rotation, quat_distance(left_quaternion[0], right_quaternion[0]))
+            left_rgb = left_obs["rgb"].detach().cpu().numpy().astype(np.int16)
+            right_rgb = right_obs["rgb"].detach().cpu().numpy().astype(np.int16)
+            max_rgb = max(max_rgb, int(np.max(np.abs(left_rgb[0] - right_rgb[0]))))
+            categorical = categorical and bool(left_info["success"][0] == right_info["success"][0])
         passed = (
             max_action == 0.0
             and max_translation <= 1e-5
@@ -57,7 +66,8 @@ def main() -> None:
         if not passed:
             raise RuntimeError("deterministic lockstep smoke failed")
     finally:
-        env.close()
+        left.close()
+        right.close()
 
 
 if __name__ == "__main__":
