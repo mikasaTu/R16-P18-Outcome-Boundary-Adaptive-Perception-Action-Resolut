@@ -16,7 +16,11 @@ from multires_policy import MultiResolutionAgent, Native128Dataset, crop_tile  #
 from prepare_exact_replay_data import replay_state_flags  # noqa: E402
 from posthoc_independent_audit import expected_schedule, recompute_outcome  # noqa: E402
 from posthoc_independent_audit import lower_tile_tiebreak  # noqa: E402
-from audit_formal_results import frozen_preregistration_digest, official_scientific_manifest  # noqa: E402
+from audit_formal_results import (  # noqa: E402
+    classify_model_input_keys,
+    frozen_preregistration_digest,
+    official_scientific_manifest,
+)
 from resume_derived_output import run_or_validate  # noqa: E402
 from validate_oracle_shard import expected_conditions  # noqa: E402
 from install_formal_complete import MARKER, install_or_validate, validate_prerequisites  # noqa: E402
@@ -82,6 +86,29 @@ def test_consistency_uses_same_posterior_sample_and_free_space_mask(monkeypatch)
     assert len(agent.model.noises) == 2
     assert torch.equal(agent.model.noises[0], agent.model.noises[1])
     assert result["consistency"].item() == pytest.approx(0.5)
+
+
+def test_static_model_audit_classifies_latent_noise_as_training_internal() -> None:
+    model_text = (ROOT / "scripts/multires_policy.py").read_text(encoding="utf-8")
+    result = classify_model_input_keys(model_text)
+    assert result["pass"]
+    assert result["training_internal_keys"] == ["_latent_noise"]
+    assert "_latent_noise" not in result["deployable_observed_keys"]
+    assert result["unknown_keys"] == []
+    assert "training-only stochastic control" in result["training_internal_rationale"]["_latent_noise"]
+
+
+def test_static_model_audit_rejects_unknown_or_misplaced_keys() -> None:
+    model_text = (ROOT / "scripts/multires_policy.py").read_text(encoding="utf-8")
+    unknown = classify_model_input_keys(model_text + "\n\ndef injected(obs):\n    return obs['privileged_state']\n")
+    assert not unknown["pass"]
+    assert unknown["unknown_keys"] == ["privileged_state"]
+
+    misplaced = classify_model_input_keys(
+        "def get_action(obs):\n    return obs.get('_latent_noise')\n"
+    )
+    assert not misplaced["pass"]
+    assert misplaced["training_internal_violations"] == ["_latent_noise@get_action"]
 
 
 def test_pusht_rgb_conversion_uses_recorded_successful_env_states() -> None:
