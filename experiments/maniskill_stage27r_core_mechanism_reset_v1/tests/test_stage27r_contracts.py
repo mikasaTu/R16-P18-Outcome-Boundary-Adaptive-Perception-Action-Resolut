@@ -97,6 +97,12 @@ def test_formal_precheck_runs_real_deterministic_smoke() -> None:
     assert "DETERMINISTIC_LOCKSTEP_SMOKE.json" in text
 
 
+def test_state_bank_fidelity_uses_independent_cpu_environments() -> None:
+    text = (ROOT / "scripts/build_lockstep_state_bank.py").read_text()
+    assert "make_env(task,2)" not in text
+    assert "left=make_env(task,1); right=make_env(task,1)" in text
+
+
 def test_fail_on_overwrite(tmp_path: Path) -> None:
     path = tmp_path / "evidence.json"
     atomic_json(path, {"a": 1})

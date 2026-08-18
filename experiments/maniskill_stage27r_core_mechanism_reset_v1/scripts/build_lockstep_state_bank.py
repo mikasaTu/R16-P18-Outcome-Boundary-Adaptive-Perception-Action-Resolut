@@ -21,18 +21,22 @@ def rgb_array(obs): return obs["rgb"].detach().cpu().numpy()
 
 
 def fidelity(task, seed, prefix):
-    env=make_env(task,2)
+    # CPU PhysX forbids num_envs > 1.  Use two independently reset simulator
+    # instances and broadcast the exact same action to both shadow branches.
+    left=make_env(task,1); right=make_env(task,1)
     try:
-      obs,info=env.reset(seed=[seed,seed]); max_action=max_trans=max_rot=0.0; max_rgb=0; categorical=True
+      left_obs,left_info=left.reset(seed=[seed]); right_obs,right_info=right.reset(seed=[seed]); max_action=max_trans=max_rot=0.0; max_rgb=0; categorical=True
       for raw in prefix:
-        action=torch.as_tensor(raw,dtype=torch.float32,device=env.base_env.device).reshape(1,-1).repeat(2,1)
-        max_action=max(max_action,float(torch.max(torch.abs(action[0]-action[1])).item()))
-        obs,_,_,_,info=env.step(action); pos,quat=object_pose(env.base_env,task)
-        max_trans=max(max_trans,float(np.linalg.norm(pos[0]-pos[1]))); max_rot=max(max_rot,quat_distance(quat[0],quat[1])); max_rgb=max(max_rgb,int(np.max(np.abs(rgb_array(obs)[0].astype(int)-rgb_array(obs)[1].astype(int))))); categorical &= bool(info["success"][0]==info["success"][1])
-      branch_success=bool(info["success"][0].item())
+        left_action=torch.as_tensor(raw,dtype=torch.float32,device=left.base_env.device).reshape(1,-1)
+        right_action=torch.as_tensor(raw,dtype=torch.float32,device=right.base_env.device).reshape(1,-1)
+        max_action=max(max_action,float(torch.max(torch.abs(left_action.cpu()-right_action.cpu())).item()))
+        left_obs,_,_,_,left_info=left.step(left_action); right_obs,_,_,_,right_info=right.step(right_action)
+        left_pos,left_quat=object_pose(left.base_env,task); right_pos,right_quat=object_pose(right.base_env,task)
+        max_trans=max(max_trans,float(np.linalg.norm(left_pos[0]-right_pos[0]))); max_rot=max(max_rot,quat_distance(left_quat[0],right_quat[0])); max_rgb=max(max_rgb,int(np.max(np.abs(rgb_array(left_obs)[0].astype(int)-rgb_array(right_obs)[0].astype(int))))); categorical &= bool(left_info["success"][0]==right_info["success"][0])
+      branch_success=bool(left_info["success"][0].item())
       passed=max_action==0 and max_trans<=1e-5 and max_rot<=1e-4 and max_rgb<=1 and categorical
       return {"broadcast_action_max_abs":max_action,"translation_m":max_trans,"rotation_rad":max_rot,"rgb_max_lsb":max_rgb,"categorical_agreement":categorical,"branch_success":branch_success,"pass":passed}
-    finally: env.close()
+    finally: left.close(); right.close()
 
 
 def expert_rows(h5_path, count_per_phase, offset):
