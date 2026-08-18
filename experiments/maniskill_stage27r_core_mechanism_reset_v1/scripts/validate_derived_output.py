@@ -72,6 +72,20 @@ def validate_payload(path: Path, kind: str) -> dict:
             raise RuntimeError(f"lineage limitation was not disclosed: {path}")
         producer = payload.get("producer_source", {})
         verifier = payload.get("posthoc_verifier_source", {})
+        terminal = payload.get("old_producer_terminal", {})
+        continuation = payload.get("continuation_registry", {})
+        if terminal.get("status") != "PASS" or terminal.get("no_overlap") is not True:
+            raise RuntimeError(f"old producer terminal/no-overlap evidence missing: {path}")
+        if continuation.get("status") != "PASS" or not continuation.get("job_id") or continuation.get("job_id") in {"unknown", "UNKNOWN"}:
+            raise RuntimeError(f"continuation registry exact JobId evidence missing: {path}")
+        if continuation.get("use_oversold_resource") is not True or continuation.get("uid_gid") != "2254:2254":
+            raise RuntimeError(f"continuation placement identity/oversold evidence missing: {path}")
+        files = continuation.get("files", {})
+        for name in ("resolved", "placement", "payload", "template", "source_manifest"):
+            if not isinstance(files.get(name), dict) or not files[name].get("sha256"):
+                raise RuntimeError(f"continuation registry {name} hash missing: {path}")
+        if not continuation.get("source_commit") or not continuation.get("source_tree") or not continuation.get("launcher_sha256"):
+            raise RuntimeError(f"continuation source hashes missing: {path}")
         if producer.get("role") != "legacy_oracle_producer" or not producer.get("registry_evidence"):
             raise RuntimeError(f"legacy producer provenance missing: {path}")
         if verifier.get("role") != "clean_posthoc_verifier_and_continuation_source":
@@ -81,10 +95,24 @@ def validate_payload(path: Path, kind: str) -> dict:
         if not isinstance(payload.get("oracle_files"), list) or len(payload["oracle_files"]) < 6:
             raise RuntimeError(f"lineage manifest has no shards: {path}")
         for entry in payload["oracle_files"]:
-            if not all(field in entry for field in ("task", "model_seed", "bank", "oracle", "state_bank", "selected_checkpoint", "shard_validation", "producer_origin", "producer_source", "posthoc_verifier_source")):
+            if not all(field in entry for field in ("task", "model_seed", "bank", "oracle", "state_bank", "selected_checkpoint", "shard_validation", "producer_origin", "producer_source", "posthoc_verifier_source", "continuation_record")):
                 raise RuntimeError(f"lineage shard entry incomplete: {path}")
             if entry["shard_validation"].get("status") != "PASS":
                 raise RuntimeError(f"lineage shard validation failed: {path}")
+            if entry.get("producer_origin") == "created_after_clean_continuation_start":
+                record = entry.get("continuation_record") or {}
+                if record.get("semantic_validation", {}).get("status") != "PASS":
+                    raise RuntimeError(f"continuation shard immutable semantic record missing: {path}")
+                provenance = record.get("continuation_provenance", {})
+                if provenance.get("run_id") != continuation.get("run_id") or provenance.get("job_id") != continuation.get("job_id"):
+                    raise RuntimeError(f"continuation shard provenance run/JobId mismatch: {path}")
+                if provenance.get("source_commit") != continuation.get("source_commit") or provenance.get("source_tree") != continuation.get("source_tree"):
+                    raise RuntimeError(f"continuation shard provenance source mismatch: {path}")
+                if provenance.get("old_producer_terminal", {}).get("evidence", {}).get("sha256") != terminal.get("evidence", {}).get("sha256"):
+                    raise RuntimeError(f"continuation shard provenance old terminal mismatch: {path}")
+        records = payload.get("oracle_input_continuation_records", {})
+        if not isinstance(records.get("records"), list) or int(records.get("record_count", -1)) != len(records["records"]):
+            raise RuntimeError(f"oracle continuation record summary missing: {path}")
     elif kind == "oracle_validation":
         if payload.get("status") != "PASS" or int(payload.get("validated_shards", 0)) != 6:
             raise RuntimeError(f"oracle collection validation is not complete: {path}")

@@ -14,8 +14,14 @@ import hashlib
 import os
 import subprocess
 import sys
+import time
 import uuid
+import re
 from pathlib import Path
+
+
+DEFAULT_STALE_RESUME_SECONDS = 3600.0
+_CANDIDATE_NAME = re.compile(r"^\.[^/]+\.resume-[0-9]+-[0-9a-f]{32}\.json$")
 
 
 def sha256_file(path: Path) -> str:
@@ -26,10 +32,49 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _resume_candidates(target: Path) -> list[Path]:
+    """Return only regular sibling candidates; symlinks are ambiguous evidence."""
+    candidates = sorted(target.parent.glob(f".{target.name}.resume-*") )
+    for candidate in candidates:
+        if not _CANDIDATE_NAME.fullmatch(candidate.name):
+            raise RuntimeError(f"ambiguous/stale resume candidate name is invalid: {candidate}")
+        if candidate.is_symlink() or not candidate.is_file():
+            raise RuntimeError(f"ambiguous/stale resume candidate is not a regular file: {candidate}")
+    return candidates
+
+
+def _check_resume_candidates(
+    target: Path,
+    *,
+    stale_after_seconds: float = DEFAULT_STALE_RESUME_SECONDS,
+) -> list[Path]:
+    """Fail closed on old/ambiguous candidates without breaking a fresh crash resume.
+
+    A just-created candidate may be the only evidence left by a process that
+    was interrupted between producer write and install; it is retained for
+    post-mortem inspection and can safely be ignored while a deterministic
+    recomputation runs.  Candidates older than the bounded grace period, or
+    more than one candidate, are ambiguous and must be manually resolved.
+    """
+    candidates = _resume_candidates(target)
+    if not candidates:
+        return []
+    if len(candidates) > 1:
+        raise RuntimeError(f"ambiguous resume candidates; refusing to guess: {candidates}")
+    age = max(0.0, time.time() - candidates[0].stat().st_mtime)
+    if age > float(stale_after_seconds):
+        raise RuntimeError(
+            f"stale resume candidate; refusing to guess: {candidates[0]} age={age:.1f}s"
+        )
+    return candidates
+
+
 def run_or_validate(
     target: Path,
     command: list[str],
     validator: list[str] | None = None,
+    *,
+    stale_after_seconds: float = DEFAULT_STALE_RESUME_SECONDS,
 ) -> str:
     """Run a deterministic producer and install/validate its output safely.
 
@@ -39,6 +84,11 @@ def run_or_validate(
     than being silently accepted or replaced.
     """
     target = Path(target)
+    if target.is_symlink():
+        raise RuntimeError(f"derived target must not be a symlink: {target}")
+    candidates = _check_resume_candidates(target, stale_after_seconds=stale_after_seconds)
+    if target.exists() and candidates:
+        raise RuntimeError(f"resume candidate conflicts with existing target; refusing ambiguity: {candidates[0]}")
     target.parent.mkdir(parents=True, exist_ok=True)
     temporary = target.parent / f".{target.name}.resume-{os.getpid()}-{uuid.uuid4().hex}.json"
     rendered = [str(part).replace("__OUTPUT__", str(temporary)) for part in command]
@@ -106,6 +156,12 @@ def main() -> int:
             "after recomputation"
         ),
     )
+    parser.add_argument(
+        "--stale-after-seconds",
+        type=float,
+        default=DEFAULT_STALE_RESUME_SECONDS,
+        help="age after which an orphan .resume-* candidate is rejected",
+    )
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     command = list(args.command)
@@ -113,7 +169,12 @@ def main() -> int:
         command = command[1:]
     if not command or "__OUTPUT__" not in command:
         parser.error("command must contain __OUTPUT__ exactly as the producer output")
-    status = run_or_validate(args.target, command, args.validator)
+    status = run_or_validate(
+        args.target,
+        command,
+        args.validator,
+        stale_after_seconds=args.stale_after_seconds,
+    )
     print(f"RESUME_DERIVED_OUTPUT {status} {args.target}", flush=True)
     return 0
 
