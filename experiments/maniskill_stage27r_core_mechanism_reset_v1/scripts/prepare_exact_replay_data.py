@@ -3,18 +3,20 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
 from pathlib import Path
 
 import h5py
+import numpy as np
 
 from common import PROTOCOL_ID, atomic_json, sha256_file
 
 CONFIG = {
     "StackCube-v1": ("pd_ee_delta_pos", 340, "physx_cpu"),
-    "PegInsertionSide-v1": ("pd_ee_delta_pose", 400, "physx_cpu"),
+    "PegInsertionSide-v1": ("pd_ee_delta_pose", 500, "physx_cpu"),
     "PlugCharger-v1": ("pd_ee_delta_pose", 450, "physx_cpu"),
     "PullCubeTool-v1": ("pd_ee_delta_pose", 330, "physx_cpu"),
     # The official PushT policy/data are GPU-physics artifacts. Exact action
@@ -29,6 +31,19 @@ SPLITS = (("train", 200), ("validation", 50), ("test", 50))
 def replay_state_flags(task_id: str) -> list[str]:
     """Bind GPU-sensitive PushT rendering to the recorded successful states."""
     return ["--use-env-states"] if task_id == "PushT-v1" else ["--use-first-env-state"]
+
+
+def initial_hash(group: h5py.Group) -> str:
+    digest = hashlib.sha256()
+    datasets = []
+    group.visititems(lambda name, obj: datasets.append((name, obj)) if isinstance(obj, h5py.Dataset) else None)
+    for name, dataset in sorted(datasets):
+        value = np.ascontiguousarray(dataset[0])
+        digest.update(name.encode())
+        digest.update(str(value.dtype).encode())
+        digest.update(np.asarray(value.shape, dtype=np.int64).tobytes())
+        digest.update(value.tobytes())
+    return digest.hexdigest()
 
 
 def write_subset(source_h5: Path, target_h5: Path, count: int) -> None:
@@ -52,8 +67,24 @@ def write_subset(source_h5: Path, target_h5: Path, count: int) -> None:
 def split_replay(source_h5: Path, output_root: Path) -> list[dict]:
     metadata = json.loads(source_h5.with_suffix(".json").read_text())
     episodes = sorted(metadata["episodes"], key=lambda row: int(row["episode_id"]))
-    if len(episodes) < 300 or any(not bool(row.get("success")) for row in episodes[:300]):
-        raise RuntimeError(f"replay yielded fewer than 300 successful trajectories: {len(episodes)}")
+    chosen_unique, seen_seeds, seen_hashes = [], set(), set()
+    with h5py.File(source_h5, "r") as source:
+        for row in episodes:
+            if not bool(row.get("success")):
+                continue
+            seed = int(row["episode_seed"])
+            state_hash = initial_hash(source[f"traj_{row['episode_id']}"]["env_states"])
+            if seed in seen_seeds or state_hash in seen_hashes:
+                continue
+            seen_seeds.add(seed); seen_hashes.add(state_hash)
+            chosen_unique.append(row)
+            if len(chosen_unique) == 300:
+                break
+    if len(chosen_unique) < 300:
+        raise RuntimeError(
+            f"replay yielded only {len(chosen_unique)} unique successful trajectories "
+            f"from {len(episodes)} successful replay rows"
+        )
     cursor, records = 0, []
     with h5py.File(source_h5, "r") as source:
         for split, count in SPLITS:
@@ -61,7 +92,7 @@ def split_replay(source_h5: Path, output_root: Path) -> list[dict]:
             if target.exists() or target.with_suffix(".json").exists():
                 raise FileExistsError(f"fail-on-overwrite: {target}")
             target.parent.mkdir(parents=True, exist_ok=True)
-            chosen = episodes[cursor : cursor + count]
+            chosen = chosen_unique[cursor : cursor + count]
             with h5py.File(target, "x") as sink:
                 for new_id, row in enumerate(chosen):
                     source.copy(source[f"traj_{row['episode_id']}"], sink, name=f"traj_{new_id}")
@@ -71,7 +102,7 @@ def split_replay(source_h5: Path, output_root: Path) -> list[dict]:
                 split_rows.append(row)
             split_meta = dict(metadata); split_meta["episodes"] = split_rows
             target.with_suffix(".json").write_text(json.dumps(split_meta, indent=2) + "\n")
-            records.append({"split": split, "count": count, "h5": str(target), "h5_sha256": sha256_file(target), "json_sha256": sha256_file(target.with_suffix('.json'))})
+            records.append({"split": split, "count": count, "h5": str(target), "h5_sha256": sha256_file(target), "json_sha256": sha256_file(target.with_suffix('.json')), "selection": "first_300_successful_unique_seed_and_initial_state"})
             cursor += count
     return records
 
