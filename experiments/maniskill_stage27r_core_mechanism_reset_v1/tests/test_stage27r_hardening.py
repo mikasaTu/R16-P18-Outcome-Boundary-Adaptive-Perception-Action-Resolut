@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import multiprocessing
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -18,9 +19,17 @@ from record_oracle_inputs import exclusive_json, snapshot, validate_existing  # 
 from resume_derived_output import run_or_validate  # noqa: E402
 from validate_derived_output import validate_payload  # noqa: E402
 from validate_continuation_evidence import (  # noqa: E402
+    _placement_contract,
+    _template_contract,
     validate_continuation_registry,
     validate_old_producer_terminal,
 )
+
+
+PAI_REGISTRY = Path("/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/pai-job-registry")
+REAL_V9_RUN = PAI_REGISTRY / "runs/stage27r-formal-idle-v9"
+REAL_TEMPLATE = PAI_REGISTRY / "templates/r16p18-maniskill-stage27r-formal-idle-a800-8gpu.json"
+REAL_V10_TEMPLATE = PAI_REGISTRY / "templates/r16p18-maniskill-stage27r-formal-idle-a800-8gpu-v10.json"
 
 
 def _registry(root: Path, launcher: Path) -> tuple[Path, Path]:
@@ -33,12 +42,12 @@ def _registry(root: Path, launcher: Path) -> tuple[Path, Path]:
         "kind": "pytorchjob",
         "workspace_id": 179169,
         "resource_alias": "idle-a800-stablevla-native5-8gpu",
-        "worker_count": 1,
-        "gpu_count": 8,
-        "cpu_count": 92,
-        "memory": "1600Gi",
+        "worker": {"count": 1, "gpu": 8, "cpu": 92, "memory": "1600Gi"},
         "runtime": {"uid": 2254, "gid": 2254, "output_mode": "resume"},
-        "fault": {"autoresume": True},
+        "fault_tolerance": {
+            "application_auto_resume": True,
+            "pai_automatic_fault_tolerance": True,
+        },
         "evidence": {"require_actual_idle": True},
         "submission": {"priority": 9, "disable_ecs_stock_check": True},
     }
@@ -69,6 +78,12 @@ def _registry(root: Path, launcher: Path) -> tuple[Path, Path]:
             {
                 "run_id": "continuation-run",
                 "job_id": "new-job",
+                "resource": {
+                    "resource_id": "quotaewyznuc7b9l",
+                    "oversold_type": "AcceptQuotaOverSold",
+                },
+                "worker": {"count": 1, "gpu": 8, "cpu": 92, "memory": "1600Gi"},
+                "runtime": {"uid": 2254, "gid": 2254, "output_mode": "resume"},
                 "evidence": {
                     "source_commit": "c" * 40,
                     "source_tree": "t" * 40,
@@ -77,15 +92,6 @@ def _registry(root: Path, launcher: Path) -> tuple[Path, Path]:
                     "template_sha256": template_hash,
                     "source_template": str(source_template),
                     "source_template_sha256": source_template_hash,
-                    "resource_id": "quotaewyznuc7b9l",
-                    "oversold_type": "AcceptQuotaOverSold",
-                    "use_oversold_resource": True,
-                    "worker_count": 1,
-                    "gpu_count": 8,
-                    "cpu_count": 92,
-                    "memory": "1600Gi",
-                    "uid": 2254,
-                    "gid": 2254,
                 },
             }
         ),
@@ -95,17 +101,32 @@ def _registry(root: Path, launcher: Path) -> tuple[Path, Path]:
     raw_placement.write_text(
         json.dumps(
             {
-                "run_id": "continuation-run",
-                "job_id": "new-job",
-                "resource_id": "quotaewyznuc7b9l",
-                "oversold_type": "AcceptQuotaOverSold",
-                "use_oversold_resource": True,
-                "worker_count": 1,
-                "gpu_count": 8,
-                "cpu_count": 92,
-                "memory": "1600Gi",
-                "recorded_by_uid": 2254,
-                "recorded_by_gid": 2254,
+                "schema_version": 1,
+                "source": "fixture",
+                "observed_at_utc": "2026-08-18T00:00:00Z",
+                "request": {"JobId": "new-job"},
+                "response": {
+                    "Jobs": [
+                        {
+                            "JobId": "new-job",
+                            "ResourceId": "quotaewyznuc7b9l",
+                            "UseOversoldResource": True,
+                            "Settings": {
+                                "OversoldType": "AcceptQuotaOverSold",
+                                "Tags": {"run_id": "continuation-run"},
+                            },
+                            "JobSpecs": [
+                                {
+                                    "Type": "Worker",
+                                    "PodCount": 1,
+                                    "ResourceConfig": {"CPU": "92", "GPU": "8", "Memory": "1600Gi"},
+                                }
+                            ],
+                        }
+                    ],
+                    "RequestId": "fixture",
+                    "TotalCount": 1,
+                },
             }
         ),
         encoding="utf-8",
@@ -125,17 +146,139 @@ def _registry(root: Path, launcher: Path) -> tuple[Path, Path]:
                 "memory": "1600Gi",
                 "recorded_by_uid": 2254,
                 "recorded_by_gid": 2254,
-                "raw_placement_readback": {
-                    "sealed": True,
-                    "path": str(raw_placement),
-                    "sha256": sha256_file(raw_placement),
-                    "bytes": raw_placement.stat().st_size,
-                },
+                "observed_at_utc": "2026-08-18T00:00:00Z",
+                "sealed_source_path": str(raw_placement),
+                "sealed_source_sha256": sha256_file(raw_placement),
             }
         ),
         encoding="utf-8",
     )
     return run, source
+
+
+def _real_v9_copies(root: Path) -> tuple[Path, Path, Path, Path]:
+    """Copy real v9 evidence before any test-only mutation."""
+    run = root / "real-v9"
+    run.mkdir()
+    resolved = run / "resolved.json"
+    placement = run / "placement-evidence.external.json"
+    sealed = run / "placement-source.openapi.sealed.json"
+    getjob = run / "getjob-latest.json"
+    shutil.copy2(REAL_V9_RUN / "resolved.json", resolved)
+    shutil.copy2(REAL_V9_RUN / "placement-source.openapi.sealed.json", sealed)
+    shutil.copy2(REAL_V9_RUN / "getjob-latest.json", getjob)
+    placement_payload = json.loads((REAL_V9_RUN / "placement-evidence.external.json").read_text(encoding="utf-8"))
+    placement_payload["sealed_source_path"] = str(sealed)
+    placement_payload["sealed_source_sha256"] = sha256_file(sealed)
+    placement.write_text(json.dumps(placement_payload, sort_keys=True) + "\n", encoding="utf-8")
+    return run, resolved, placement, sealed
+
+
+def _call_real_placement(run: Path, resolved: Path, placement: Path) -> dict:
+    return _placement_contract(
+        run,
+        json.loads(resolved.read_text(encoding="utf-8")),
+        json.loads(placement.read_text(encoding="utf-8")),
+        expected_run_id="stage27r-formal-idle-v9",
+        expected_job_id="dlc9nkd8q7u4szm3",
+        expected_resource_id="quotaewyznuc7b9l",
+        expected_oversold_type="AcceptQuotaOverSold",
+        expected_worker_count=1,
+        expected_gpu_count=8,
+        expected_cpu_count=92,
+        expected_memory_gi="1600Gi",
+    )[0]
+
+
+def test_real_official_templates_use_exact_structured_contract() -> None:
+    for path in (REAL_TEMPLATE, REAL_V10_TEMPLATE):
+        assert path.is_file(), path
+        contract = _template_contract(json.loads(path.read_text(encoding="utf-8")))
+        assert contract["uid_gid"] == "2254:2254"
+        assert contract["pai_automatic_fault_tolerance"] is True
+        assert contract["worker_count"] == 1
+        assert contract["gpu_count"] == 8
+
+
+def test_real_v9_placement_and_terminal_formats_are_parsed_from_copies(tmp_path: Path) -> None:
+    assert REAL_V9_RUN.is_dir(), REAL_V9_RUN
+    run, resolved, placement, _sealed = _real_v9_copies(tmp_path)
+    contract = _call_real_placement(run, resolved, placement)
+    assert contract == {
+        "resource_id": "quotaewyznuc7b9l",
+        "oversold_type": "AcceptQuotaOverSold",
+        "use_oversold_resource": True,
+        "worker_count": 1,
+        "gpu_count": 8,
+        "cpu_count": 92,
+        "memory": "1600Gi",
+        "uid_gid": "2254:2254",
+    }
+
+    copied_getjob = run / "raw-getjob.json"
+    shutil.copy2(REAL_V9_RUN / "getjob-latest.json", copied_getjob)
+    getjob_payload = json.loads(copied_getjob.read_text(encoding="utf-8"))
+    getjob_payload["Status"] = "Succeeded"
+    copied_getjob.write_text(json.dumps(getjob_payload, sort_keys=True) + "\n", encoding="utf-8")
+    binding = lambda path: {"path": str(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+    terminal = tmp_path / "OLD_PRODUCER_TERMINAL.json"
+    terminal.write_text(
+        json.dumps(
+            {
+                "old_job_id": "dlc9nkd8q7u4szm3",
+                "run_id": "stage27r-formal-idle-v9",
+                "status": "Succeeded",
+                "terminal": True,
+                "no_overlap": True,
+                "observed_at": "2026-08-18T00:00:00Z",
+                "getjob": binding(copied_getjob),
+                "producer_registry": {
+                    "run_id": "stage27r-formal-idle-v9",
+                    "job_id": "dlc9nkd8q7u4szm3",
+                    "resolved": binding(resolved),
+                    "placement": binding(placement),
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = validate_old_producer_terminal(
+        terminal,
+        expected_job_id="dlc9nkd8q7u4szm3",
+        expected_run_id="stage27r-formal-idle-v9",
+        producer_registry_run=run,
+        producer_registry_evidence=resolved,
+    )
+    assert result["terminal_status"] == "Succeeded"
+    assert result["producer_registry"]["job_id"] == "dlc9nkd8q7u4szm3"
+
+
+@pytest.mark.parametrize("mutation", ["job_id", "resource", "oversold", "gpu", "uid", "raw_hash"])
+def test_real_v9_placement_rejects_mutated_raw_or_owner_evidence(tmp_path: Path, mutation: str) -> None:
+    run, resolved, placement, sealed = _real_v9_copies(tmp_path)
+    if mutation == "uid":
+        placement_payload = json.loads(placement.read_text(encoding="utf-8"))
+        placement_payload["recorded_by_uid"] = 0
+        placement.write_text(json.dumps(placement_payload, sort_keys=True) + "\n", encoding="utf-8")
+    elif mutation == "raw_hash":
+        sealed.write_text(sealed.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+    else:
+        sealed_payload = json.loads(sealed.read_text(encoding="utf-8"))
+        job = sealed_payload["response"]["Jobs"][0]
+        if mutation == "job_id":
+            job["JobId"] = "wrong-job"
+        elif mutation == "resource":
+            job["ResourceId"] = "wrong-resource"
+        elif mutation == "oversold":
+            job["Settings"]["OversoldType"] = "RejectQuotaOverSold"
+        elif mutation == "gpu":
+            job["JobSpecs"][0]["ResourceConfig"]["GPU"] = "7"
+        sealed.write_text(json.dumps(sealed_payload, sort_keys=True) + "\n", encoding="utf-8")
+        placement_payload = json.loads(placement.read_text(encoding="utf-8"))
+        placement_payload["sealed_source_sha256"] = sha256_file(sealed)
+        placement.write_text(json.dumps(placement_payload, sort_keys=True) + "\n", encoding="utf-8")
+    with pytest.raises(RuntimeError):
+        _call_real_placement(run, resolved, placement)
 
 
 def _old_registry(root: Path) -> tuple[Path, Path, Path]:
@@ -270,7 +413,7 @@ def test_placement_resource_id_and_raw_terminal_evidence_are_exact(tmp_path: Pat
     run, source = _registry(tmp_path, ROOT / "launchers/run_stage27r_formal_pai.sh")
     resolved = run / "resolved.json"
     resolved_payload = json.loads(resolved.read_text(encoding="utf-8"))
-    resolved_payload["evidence"]["resource_id"] = "wrong-resource"
+    resolved_payload["resource"]["resource_id"] = "wrong-resource"
     resolved.write_text(json.dumps(resolved_payload), encoding="utf-8")
     with pytest.raises(RuntimeError, match="resource_id (is inconsistent|mismatch)"):
         validate_continuation_registry(

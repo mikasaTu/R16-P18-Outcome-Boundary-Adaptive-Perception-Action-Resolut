@@ -242,6 +242,20 @@ def _status_value(payload: dict[str, Any], label: str) -> tuple[str, str]:
     return status, normalized
 
 
+def _job_status_value(payload: dict[str, Any], label: str) -> tuple[str, str]:
+    """Read only the top-level status of a raw GetJob object.
+
+    A GetJob response legitimately contains independent pod/container status
+    fields.  Those must not be mixed with the job-level terminal status.
+    """
+    values = [payload[key] for key in ("Status", "status", "JobStatus", "job_status") if key in payload]
+    status = _one_consistent(values, label)
+    normalized = status.upper().replace(" ", "_")
+    if normalized in NON_TERMINAL_STATUSES or normalized not in TERMINAL_STATUSES:
+        raise RuntimeError(f"{label} is not terminal: {status}")
+    return status, normalized
+
+
 def _registry_record_fields(payload: dict[str, Any], label: str, expected_run_id: str, expected_job_id: str) -> None:
     run_id = _one_consistent(_values_for_keys(payload, {"run_id"}), f"{label} run_id")
     job_id = _one_consistent(
@@ -252,6 +266,12 @@ def _registry_record_fields(payload: dict[str, Any], label: str, expected_run_id
         raise RuntimeError(
             f"{label} run/job mismatch: {run_id}/{job_id} != {expected_run_id}/{expected_job_id}"
         )
+
+
+def _registry_run_only(payload: dict[str, Any], label: str, expected_run_id: str) -> None:
+    run_id = _one_consistent(_values_for_keys(payload, {"run_id"}), f"{label} run_id")
+    if run_id != expected_run_id:
+        raise RuntimeError(f"{label} run_id mismatch: {run_id} != {expected_run_id}")
 
 
 def validate_old_producer_terminal(
@@ -310,12 +330,12 @@ def validate_old_producer_terminal(
     )
     getjob_path, getjob_payload, getjob_file = _bound_json_file(getjob_binding, "raw GetJob")
     raw_job_id = _one_consistent(
-        _values_for_keys(getjob_payload, {"job_id", "JobId", "pai_job_id"}),
+        [getjob_payload[key] for key in ("JobId", "job_id", "pai_job_id") if key in getjob_payload],
         "raw GetJob JobId",
     )
     if raw_job_id != expected_job_id:
         raise RuntimeError(f"raw GetJob JobId mismatch: {raw_job_id} != {expected_job_id}")
-    raw_status, raw_normalized_status = _status_value(getjob_payload, "raw GetJob status")
+    raw_status, raw_normalized_status = _job_status_value(getjob_payload, "raw GetJob status")
     if raw_normalized_status != normalized_status:
         raise RuntimeError(f"OLD_PRODUCER_TERMINAL summary/raw status mismatch: {status} != {raw_status}")
 
@@ -352,7 +372,7 @@ def validate_old_producer_terminal(
         "old producer placement registry",
         expected_path=expected_placement,
     )
-    _registry_record_fields(resolved_payload, "old producer resolved registry", run_id, expected_job_id)
+    _registry_run_only(resolved_payload, "old producer resolved registry", run_id)
     _registry_record_fields(placement_payload, "old producer placement registry", run_id, expected_job_id)
     return {
         "status": "PASS",
@@ -529,6 +549,105 @@ def _source_template_binding(
     }
 
 
+def _exact_path(payload: dict[str, Any], path: tuple[str, ...], label: str) -> Any:
+    current: Any = payload
+    for key in path:
+        if not isinstance(current, dict) or key not in current:
+            joined = ".".join(path)
+            raise RuntimeError(f"{label} missing exact path {joined}")
+        current = current[key]
+    return current
+
+
+def _sealed_placement_source(
+    placement: dict[str, Any],
+) -> tuple[Path, dict[str, Any], dict[str, Any]]:
+    """Read the external placement's immutable sealed raw response binding."""
+    raw_path = _exact_path(placement, ("sealed_source_path",), "placement sealed source")
+    raw_hash = _exact_path(placement, ("sealed_source_sha256",), "placement sealed source")
+    if not isinstance(raw_path, str) or not raw_path.strip():
+        raise RuntimeError("placement sealed source path is required")
+    if not isinstance(raw_hash, str) or not HEX64.fullmatch(raw_hash.strip()):
+        raise RuntimeError("placement sealed source sha256 is required and must be valid")
+    path = Path(raw_path)
+    if not path.is_file() or path.is_symlink():
+        raise RuntimeError(f"placement sealed source must be a regular immutable JSON file: {path}")
+    observed_hash = sha256_file(path)
+    observed_bytes = path.stat().st_size
+    if observed_hash.lower() != raw_hash.strip().lower():
+        raise RuntimeError(f"placement sealed source hash mismatch: {path}")
+    payload = _read_json(path, "sealed raw placement response")
+    return path, payload, {"path": str(path), "sha256": observed_hash, "bytes": observed_bytes}
+
+
+def _sealed_placement_job(
+    payload: dict[str, Any],
+    *,
+    expected_run_id: str,
+    expected_job_id: str,
+) -> dict[str, Any]:
+    """Parse the exact PAI GetJobs response shape used by the sealed readback."""
+    response = _exact_path(payload, ("response",), "sealed raw placement response")
+    if not isinstance(response, dict):
+        raise RuntimeError("sealed raw placement response.response must be an object")
+    jobs = _exact_path(response, ("Jobs",), "sealed raw placement response")
+    if not isinstance(jobs, list):
+        raise RuntimeError("sealed raw placement response.response.Jobs must be a list")
+    matches = [job for job in jobs if isinstance(job, dict) and job.get("JobId") == expected_job_id]
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"sealed raw placement response must contain exactly one exact JobId {expected_job_id}; "
+            f"found {len(matches)}"
+        )
+    job = matches[0]
+    settings = _exact_path(job, ("Settings",), "sealed raw placement job")
+    if not isinstance(settings, dict):
+        raise RuntimeError("sealed raw placement job Settings must be an object")
+    tags = _exact_path(settings, ("Tags",), "sealed raw placement job")
+    if not isinstance(tags, dict) or tags.get("run_id") != expected_run_id:
+        raise RuntimeError("sealed raw placement job Settings.Tags.run_id mismatch")
+
+    use_values = []
+    if "UseOversoldResource" in job:
+        use_values.append(job["UseOversoldResource"])
+    if "UseOversoldResource" in settings:
+        use_values.append(settings["UseOversoldResource"])
+    if not use_values or len(set(use_values)) != 1 or use_values[0] is not True:
+        raise RuntimeError("sealed raw placement job UseOversoldResource must be true")
+
+    specs = _exact_path(job, ("JobSpecs",), "sealed raw placement job")
+    if not isinstance(specs, list):
+        raise RuntimeError("sealed raw placement job JobSpecs must be a list")
+    workers = [spec for spec in specs if isinstance(spec, dict) and spec.get("Type") == "Worker"]
+    if len(workers) != 1:
+        raise RuntimeError(f"sealed raw placement job must contain exactly one Worker JobSpecs entry; found {len(workers)}")
+    worker = workers[0]
+    resource_config = _exact_path(worker, ("ResourceConfig",), "sealed raw placement Worker")
+    if not isinstance(resource_config, dict):
+        raise RuntimeError("sealed raw placement Worker ResourceConfig must be an object")
+    return {
+        "resource_id": _exact_path(job, ("ResourceId",), "sealed raw placement job"),
+        "oversold_type": _exact_path(settings, ("OversoldType",), "sealed raw placement Settings"),
+        "use_oversold_resource": True,
+        "worker_count": _strict_int(
+            _exact_path(worker, ("PodCount",), "sealed raw placement Worker"),
+            "sealed raw placement worker count",
+        ),
+        "gpu_count": _strict_int(
+            _exact_path(resource_config, ("GPU",), "sealed raw placement ResourceConfig"),
+            "sealed raw placement GPU count",
+        ),
+        "cpu_count": _strict_int(
+            _exact_path(resource_config, ("CPU",), "sealed raw placement ResourceConfig"),
+            "sealed raw placement CPU count",
+        ),
+        "memory": _memory_gi(
+            _exact_path(resource_config, ("Memory",), "sealed raw placement ResourceConfig"),
+            "sealed raw placement memory",
+        ),
+    }
+
+
 def _placement_contract(
     root: Path,
     resolved: dict[str, Any],
@@ -545,64 +664,70 @@ def _placement_contract(
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     if placement.get("complete") is not True:
         raise RuntimeError("placement evidence complete must be true")
-    raw_binding = _metadata_object(
-        placement,
-        {"raw_placement_readback", "placement_readback", "original_placement_readback"},
-        "raw placement readback",
+    if not expected_job_id or expected_job_id in {"unknown", "UNKNOWN"}:
+        raise RuntimeError("placement exact JobId is required")
+    _registry_record_fields(placement, "placement evidence", expected_run_id, expected_job_id)
+    raw_path, raw_payload, raw_file = _sealed_placement_source(placement)
+    raw_contract = _sealed_placement_job(
+        raw_payload,
+        expected_run_id=expected_run_id,
+        expected_job_id=expected_job_id,
     )
-    if raw_binding.get("sealed") is not True:
-        raise RuntimeError("raw placement readback must be explicitly sealed")
-    raw_path, raw_payload, raw_file = _bound_json_file(raw_binding, "raw placement readback")
-    _registry_record_fields(raw_payload, "raw placement readback", expected_run_id, expected_job_id)
-    records = (resolved, placement, raw_payload)
-    resource_id = _required_consistent(
-        records,
-        {"resource_id", "resourceId"},
-        "placement resource_id",
-        lambda value: str(value).strip(),
+
+    resource_id = str(_exact_path(resolved, ("resource", "resource_id"), "resolved resource")).strip()
+    resolved_oversold = str(_exact_path(resolved, ("resource", "oversold_type"), "resolved resource")).strip()
+    placement_resource_id = str(_exact_path(placement, ("resource_id",), "placement evidence")).strip()
+    placement_oversold = str(_exact_path(placement, ("oversold_type",), "placement evidence")).strip()
+    placement_use = _exact_path(placement, ("use_oversold_resource",), "placement evidence")
+    _bool_true(placement_use, "placement use_oversold_resource")
+    if resource_id != placement_resource_id or resource_id != str(raw_contract["resource_id"]).strip():
+        raise RuntimeError(
+            f"placement resource_id is inconsistent: {resource_id}, {placement_resource_id}, "
+            f"{raw_contract['resource_id']}"
+        )
+    if resolved_oversold != placement_oversold or resolved_oversold != str(raw_contract["oversold_type"]).strip():
+        raise RuntimeError(
+            f"placement oversold_type is inconsistent: {resolved_oversold}, {placement_oversold}, "
+            f"{raw_contract['oversold_type']}"
+        )
+
+    resolved_worker = _exact_path(resolved, ("worker",), "resolved worker")
+    if not isinstance(resolved_worker, dict):
+        raise RuntimeError("resolved worker must be an object")
+    worker_count = _strict_int(_exact_path(resolved_worker, ("count",), "resolved worker"), "placement worker count")
+    gpu_count = _strict_int(_exact_path(resolved_worker, ("gpu",), "resolved worker"), "placement GPU count")
+    cpu_count = _strict_int(_exact_path(resolved_worker, ("cpu",), "resolved worker"), "placement CPU count")
+    memory_gi = _memory_gi(_exact_path(resolved_worker, ("memory",), "resolved worker"), "placement memory")
+    observed_resources = {
+        "worker_count": worker_count,
+        "gpu_count": gpu_count,
+        "cpu_count": cpu_count,
+        "memory": memory_gi,
+    }
+    raw_resources = {key: raw_contract[key] for key in observed_resources}
+    if observed_resources != raw_resources:
+        raise RuntimeError(f"placement worker resource mismatch: {observed_resources} != {raw_resources}")
+
+    runtime = _exact_path(resolved, ("runtime",), "resolved runtime")
+    if not isinstance(runtime, dict):
+        raise RuntimeError("resolved runtime must be an object")
+    resolved_uid = _strict_int(_exact_path(runtime, ("uid",), "resolved runtime"), "resolved runtime uid")
+    resolved_gid = _strict_int(_exact_path(runtime, ("gid",), "resolved runtime"), "resolved runtime gid")
+    placement_uid = _strict_int(
+        _exact_path(placement, ("recorded_by_uid",), "placement evidence"),
+        "placement recorded_by_uid",
     )
-    oversold_type = _required_consistent(
-        records,
-        {"oversold_type", "oversoldType"},
-        "placement oversold_type",
-        lambda value: str(value).strip(),
+    placement_gid = _strict_int(
+        _exact_path(placement, ("recorded_by_gid",), "placement evidence"),
+        "placement recorded_by_gid",
     )
-    use_oversold = _required_consistent(
-        records,
-        {"use_oversold_resource"},
-        "placement use_oversold_resource",
-    )
-    worker_count = _required_consistent(
-        records,
-        {"worker_count", "worker_num", "num_workers", "replica_count"},
-        "placement worker_count",
-        lambda value: _strict_int(value, "placement worker_count"),
-    )
-    gpu_count = _required_consistent(
-        records,
-        {"gpu_count", "gpus", "gpu_num", "num_gpus", "gpu"},
-        "placement gpu_count",
-        lambda value: _strict_int(value, "placement gpu_count"),
-    )
-    cpu_count = _required_consistent(
-        records,
-        {"cpu_count", "cpus", "cpu_num", "num_cpus", "cpu"},
-        "placement cpu_count",
-        lambda value: _strict_int(value, "placement cpu_count"),
-    )
-    memory_gi = _required_consistent(
-        records,
-        {"memory", "memory_gi", "memoryGi", "memory_size"},
-        "placement memory",
-        lambda value: _memory_gi(value, "placement memory"),
-    )
-    uid_gid = _uid_gid_each(records, "placement")
+    if f"{resolved_uid}:{resolved_gid}" != EXPECTED_UID_GID or f"{placement_uid}:{placement_gid}" != EXPECTED_UID_GID:
+        raise RuntimeError("placement UID:GID evidence must be exactly 2254:2254")
+    uid_gid = EXPECTED_UID_GID
     if resource_id != expected_resource_id:
         raise RuntimeError(f"placement resource_id mismatch: {resource_id} != {expected_resource_id}")
-    if oversold_type != expected_oversold_type:
-        raise RuntimeError(f"placement oversold_type mismatch: {oversold_type} != {expected_oversold_type}")
-    if use_oversold is not True:
-        raise RuntimeError("placement use_oversold_resource must be true")
+    if resolved_oversold != expected_oversold_type:
+        raise RuntimeError(f"placement oversold_type mismatch: {resolved_oversold} != {expected_oversold_type}")
     expected = {
         "worker_count": expected_worker_count,
         "gpu_count": expected_gpu_count,
@@ -620,7 +745,7 @@ def _placement_contract(
     return (
         {
             "resource_id": resource_id,
-            "oversold_type": oversold_type,
+            "oversold_type": resolved_oversold,
             "use_oversold_resource": True,
             "worker_count": worker_count,
             "gpu_count": gpu_count,
@@ -633,38 +758,57 @@ def _placement_contract(
 
 
 def _template_contract(template: dict[str, Any]) -> dict[str, Any]:
-    schema_version = _required_consistent(
-        (template,), {"schema_version"}, "template schema_version", lambda value: _strict_int(value, "template schema_version")
+    schema_version = _strict_int(
+        _exact_path(template, ("schema_version",), "template schema/contract"),
+        "template schema_version",
     )
-    kind = _required_consistent((template,), {"kind"}, "template kind", lambda value: str(value).strip())
-    workspace_id = _required_consistent(
-        (template,), {"workspace_id", "workspaceId"}, "template workspace_id", lambda value: _strict_int(value, "template workspace_id")
+    kind = _exact_path(template, ("kind",), "template")
+    if not isinstance(kind, str) or not kind.strip():
+        raise RuntimeError("template kind must be a non-empty string")
+    kind = kind.strip()
+    workspace_id = _strict_int(_exact_path(template, ("workspace_id",), "template"), "template workspace_id")
+    resource_alias = _exact_path(template, ("resource_alias",), "template")
+    if not isinstance(resource_alias, str) or not resource_alias.strip():
+        raise RuntimeError("template resource_alias must be a non-empty string")
+    resource_alias = resource_alias.strip()
+    worker = _exact_path(template, ("worker",), "template")
+    if not isinstance(worker, dict):
+        raise RuntimeError("template worker must be an object")
+    worker_count = _strict_int(_exact_path(worker, ("count",), "template worker"), "template worker.count")
+    gpu_count = _strict_int(_exact_path(worker, ("gpu",), "template worker"), "template worker.gpu")
+    cpu_count = _strict_int(_exact_path(worker, ("cpu",), "template worker"), "template worker.cpu")
+    memory_gi = _memory_gi(_exact_path(worker, ("memory",), "template worker"), "template worker.memory")
+    runtime = _exact_path(template, ("runtime",), "template")
+    if not isinstance(runtime, dict):
+        raise RuntimeError("template runtime must be an object")
+    uid = _strict_int(_exact_path(runtime, ("uid",), "template runtime"), "template runtime.uid")
+    gid = _strict_int(_exact_path(runtime, ("gid",), "template runtime"), "template runtime.gid")
+    output_mode = _exact_path(runtime, ("output_mode",), "template runtime")
+    if not isinstance(output_mode, str) or not output_mode.strip():
+        raise RuntimeError("template runtime.output_mode must be a non-empty string")
+    output_mode = output_mode.strip()
+    fault_tolerance = _exact_path(template, ("fault_tolerance",), "template")
+    if not isinstance(fault_tolerance, dict):
+        raise RuntimeError("template fault_tolerance must be an object")
+    autoresume = _exact_path(fault_tolerance, ("application_auto_resume",), "template fault_tolerance")
+    pai_fault_tolerance = _exact_path(
+        fault_tolerance,
+        ("pai_automatic_fault_tolerance",),
+        "template fault_tolerance",
     )
-    resource_alias = _required_consistent(
-        (template,), {"resource_alias", "resourceAlias"}, "template resource_alias", lambda value: str(value).strip()
-    )
-    worker_count = _required_consistent(
-        (template,), {"worker_count", "worker_num", "num_workers", "replica_count"}, "template worker_count", lambda value: _strict_int(value, "template worker_count")
-    )
-    gpu_count = _required_consistent(
-        (template,), {"gpu_count", "gpus", "gpu_num", "num_gpus", "gpu"}, "template gpu_count", lambda value: _strict_int(value, "template gpu_count")
-    )
-    cpu_count = _required_consistent(
-        (template,), {"cpu_count", "cpus", "cpu_num", "num_cpus", "cpu"}, "template cpu_count", lambda value: _strict_int(value, "template cpu_count")
-    )
-    memory_gi = _required_consistent(
-        (template,), {"memory", "memory_gi", "memoryGi", "memory_size"}, "template memory", lambda value: _memory_gi(value, "template memory")
-    )
-    uid_gid = _uid_gid_each((template,), "template runtime")
-    output_mode = _required_consistent((template,), {"output_mode"}, "template output_mode", lambda value: str(value).strip())
-    autoresume = _required_consistent((template,), {"autoresume", "auto_resume", "fault_autoresume"}, "template fault autoresume")
-    require_idle = _required_consistent((template,), {"require_actual_idle"}, "template evidence require_actual_idle")
-    priority = _required_consistent(
-        (template,), {"priority", "submission_priority"}, "template submission priority", lambda value: _strict_int(value, "template priority")
-    )
-    disable_stock_check = _required_consistent(
-        (template,), {"disable_ecs_stock_check"}, "template disable_ecs_stock_check"
-    )
+    _bool_true(autoresume, "template fault_tolerance.application_auto_resume")
+    _bool_true(pai_fault_tolerance, "template fault_tolerance.pai_automatic_fault_tolerance")
+    evidence = _exact_path(template, ("evidence",), "template")
+    if not isinstance(evidence, dict):
+        raise RuntimeError("template evidence must be an object")
+    require_idle = _exact_path(evidence, ("require_actual_idle",), "template evidence")
+    _bool_true(require_idle, "template evidence.require_actual_idle")
+    submission = _exact_path(template, ("submission",), "template")
+    if not isinstance(submission, dict):
+        raise RuntimeError("template submission must be an object")
+    priority = _strict_int(_exact_path(submission, ("priority",), "template submission"), "template submission.priority")
+    disable_stock_check = _exact_path(submission, ("disable_ecs_stock_check",), "template submission")
+    _bool_true(disable_stock_check, "template submission.disable_ecs_stock_check")
     observed = {
         "schema_version": schema_version,
         "kind": kind,
@@ -674,9 +818,10 @@ def _template_contract(template: dict[str, Any]) -> dict[str, Any]:
         "gpu_count": gpu_count,
         "cpu_count": cpu_count,
         "memory": memory_gi,
-        "uid_gid": uid_gid,
+        "uid_gid": f"{uid}:{gid}",
         "output_mode": output_mode,
         "autoresume": autoresume,
+        "pai_automatic_fault_tolerance": pai_fault_tolerance,
         "require_actual_idle": require_idle,
         "priority": priority,
         "disable_ecs_stock_check": disable_stock_check,
@@ -693,6 +838,7 @@ def _template_contract(template: dict[str, Any]) -> dict[str, Any]:
         "uid_gid": EXPECTED_UID_GID,
         "output_mode": "resume",
         "autoresume": True,
+        "pai_automatic_fault_tolerance": True,
         "require_actual_idle": True,
         "priority": 9,
         "disable_ecs_stock_check": True,
