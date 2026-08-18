@@ -14,6 +14,41 @@ from common import PROTOCOL_ID, atomic_json, sha256_file
 PREDECESSORS = ("experiments/maniskill_act_boundary_screen_v1", "experiments/maniskill_stage25_repair_oracle_v1", "experiments/maniskill_stage26_counterfactual_completion_v1")
 WEIGHTS = {"balanced": (100, 20, 5, -10, -5), "success_dominant": (120, 10, 3, -12, -6), "progress_dominant": (80, 35, 5, -10, -5)}
 ACCOUNTING = {"global_encoder_calls", "fine_encoder_calls", "policy_forward_calls", "policy_forward_rows", "visual_tokens", "action_opportunities", "executed_steps", "gpu_latency_ms", "simulator_latency_ms", "estimated_flops", "peak_memory_bytes", "selector_latency_ms", "episode_total_compute"}
+derived_names = {
+    "INDEPENDENT_AUDIT.json",
+    "POSTHOC_INDEPENDENT_AUDIT.json",
+    "FORMAL_COMPLETE.json",
+}
+OFFICIAL_MANIFEST_METADATA = frozenset(derived_names)
+
+
+def official_scientific_manifest(formal_root: Path, output: Path) -> list[dict]:
+    """Return the stable scientific-input manifest for a formal root.
+
+    Statistics, mechanism and result evidence are scientific derived inputs
+    and remain covered.  The independent audits, completion marker, and
+    interrupted/resume temporary files are process metadata and are excluded
+    so rerunning an audit cannot change the manifest it reports.
+    """
+    root = Path(formal_root).resolve()
+    output_path = Path(output).resolve()
+    files = sorted(
+        path
+        for path in root.rglob("*")
+        if path.is_file()
+        and path.resolve() != output_path
+        and path.name not in OFFICIAL_MANIFEST_METADATA
+        and ".resume-" not in path.name
+        and ".tmp-" not in path.name
+    )
+    return [
+        {
+            "path": str(path.relative_to(root)),
+            "sha256": sha256_file(path),
+            "bytes": path.stat().st_size,
+        }
+        for path in files
+    ]
 
 
 def frozen_preregistration_digest(repo: Path, experiment: Path) -> dict:
@@ -131,29 +166,7 @@ def main():
         expected_stats = args.formal_root / "statistics.json"
         checks["paired_statistics_recompute"] = {"pass": sha256_file(recomputed) == sha256_file(expected_stats), "recomputed_sha256": sha256_file(recomputed), "reported_sha256": sha256_file(expected_stats)}
 
-    # Keep the manifest stable when a resume-safe audit is recomputed to a
-    # sibling temporary path after the canonical audit file already exists.
-    # The canonical audit outputs are metadata about the root, not scientific
-    # inputs, and the original run excluded its own output before writing it.
-    # The two audits and terminal marker are metadata about the audit process;
-    # statistics, mechanism and result vectors are scientific derived evidence
-    # and must remain covered by the official manifest.  Exclude interrupted
-    # resume candidates so a recomputation after eviction remains stable.
-    derived_names = {
-        "INDEPENDENT_AUDIT.json",
-        "POSTHOC_INDEPENDENT_AUDIT.json",
-        "FORMAL_COMPLETE.json",
-    }
-    files = sorted(
-        path
-        for path in args.formal_root.rglob("*")
-        if path.is_file()
-        and path != args.output
-        and path.name not in derived_names
-        and ".resume-" not in path.name
-        and ".tmp-" not in path.name
-    )
-    manifest = [{"path": str(path.relative_to(args.formal_root)), "sha256": sha256_file(path), "bytes": path.stat().st_size} for path in files]
+    manifest = official_scientific_manifest(args.formal_root, args.output)
     checks["scientific_sha256_manifest"] = {"pass": bool(manifest), "files": len(manifest)}
     checks["all_pass"] = all(value["pass"] for value in checks.values() if isinstance(value, dict) and "pass" in value)
     atomic_json(args.output, {"protocol_id": PROTOCOL_ID, "checks": checks, "manifest": manifest})

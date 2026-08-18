@@ -16,7 +16,7 @@ from multires_policy import MultiResolutionAgent, Native128Dataset, crop_tile  #
 from prepare_exact_replay_data import replay_state_flags  # noqa: E402
 from posthoc_independent_audit import expected_schedule, recompute_outcome  # noqa: E402
 from posthoc_independent_audit import lower_tile_tiebreak  # noqa: E402
-from audit_formal_results import frozen_preregistration_digest  # noqa: E402
+from audit_formal_results import frozen_preregistration_digest, official_scientific_manifest  # noqa: E402
 from resume_derived_output import run_or_validate  # noqa: E402
 from validate_oracle_shard import expected_conditions  # noqa: E402
 from install_formal_complete import MARKER, install_or_validate, validate_prerequisites  # noqa: E402
@@ -117,6 +117,26 @@ def test_official_manifest_excludes_resume_candidates_and_derived_metadata() -> 
         assert f'"{name}"' not in text.split("derived_names =", 1)[1].split("}", 1)[0]
     assert '".resume-"' in text
     assert '".tmp-"' in text
+
+
+def test_official_manifest_is_stable_and_covers_scientific_outputs(tmp_path: Path) -> None:
+    included = ("statistics.json", "MECHANISM_AUDIT.json", "RESULT_VECTOR.json")
+    excluded = (
+        "INDEPENDENT_AUDIT.json",
+        "POSTHOC_INDEPENDENT_AUDIT.json",
+        "FORMAL_COMPLETE.json",
+        ".statistics.json.resume-7-" + "a" * 32 + ".json",
+        "statistics.json.tmp-7-" + "b" * 32 + ".json",
+    )
+    for name in included + excluded:
+        path = tmp_path / name
+        path.write_text(name + "\n", encoding="utf-8")
+    output = tmp_path / "OFFICIAL_AUDIT.json"
+    first = official_scientific_manifest(tmp_path, output)
+    output.write_text(json.dumps({"manifest": first}), encoding="utf-8")
+    second = official_scientific_manifest(tmp_path, output)
+    assert first == second
+    assert {entry["path"] for entry in first} == set(included)
 
 
 def test_state_bank_fidelity_uses_independent_cpu_environments() -> None:

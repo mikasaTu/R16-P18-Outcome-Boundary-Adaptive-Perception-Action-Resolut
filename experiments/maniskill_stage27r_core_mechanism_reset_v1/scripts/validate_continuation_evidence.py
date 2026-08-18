@@ -241,6 +241,87 @@ def _hash_value(payloads: Iterable[dict[str, Any]], keys: set[str], label: str) 
     return next(iter(hashes))
 
 
+def _required_hash(payload: dict[str, Any], key: str, label: str) -> str:
+    """Require one exact, consistently recorded SHA-256 field in one record."""
+    values = _nonempty_strings(_values_for_keys(payload, {key}), label)
+    hashes = {value.lower() for value in values if HEX64.fullmatch(value)}
+    if not hashes:
+        raise RuntimeError(f"{label} is missing or not a valid SHA-256: {values}")
+    if len(hashes) != 1:
+        raise RuntimeError(f"{label} is inconsistent: {sorted(hashes)}")
+    return next(iter(hashes))
+
+
+def _source_template_binding(
+    root: Path,
+    resolved: dict[str, Any],
+    source_manifest_payload: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Validate an optional source-template path and its independent hash.
+
+    A registry may point at a template copied into the run, or at a template
+    outside the registry directory.  For the latter, the source path and its
+    hash must be repeated in both the resolved/request evidence and the source
+    manifest.  If the path is locally readable, its bytes are checked too;
+    an unreadable external path is rejected because a path-only assertion is
+    not provenance.
+    """
+    values = _values_for_keys(resolved, {"source_template"})
+    if not values:
+        return None
+    source_template = _one_consistent(values, "resolved source_template")
+    manifest_paths = _values_for_keys(source_manifest_payload, {"source_template"})
+    if not manifest_paths:
+        raise RuntimeError("source manifest must bind resolved source_template")
+    manifest_template = _one_consistent(manifest_paths, "source manifest source_template")
+    if manifest_template != source_template:
+        raise RuntimeError(
+            f"source_template path mismatch: {source_template} != {manifest_template}"
+        )
+
+    candidate = Path(source_template)
+    if not candidate.is_absolute():
+        candidate = root / candidate
+    root_resolved = root.resolve()
+    candidate_resolved = candidate.resolve(strict=False)
+    is_external = candidate_resolved != root_resolved and root_resolved not in candidate_resolved.parents
+    if not is_external:
+        # A registry-relative source_template is the copied template itself;
+        # template_sha256 below already binds it to the immutable copy.
+        return {"path": source_template, "external": False}
+
+    source_hash = _required_hash(
+        resolved,
+        "source_template_sha256",
+        "resolved source_template SHA-256",
+    )
+    manifest_hash = _required_hash(
+        source_manifest_payload,
+        "source_template_sha256",
+        "source manifest source_template SHA-256",
+    )
+    if source_hash != manifest_hash:
+        raise RuntimeError(
+            f"source_template SHA-256 mismatch: {source_hash} != {manifest_hash}"
+        )
+
+    if not candidate.is_file() or candidate.is_symlink():
+        raise RuntimeError(
+            f"external source_template must be a readable regular file for hash binding: {candidate}"
+        )
+    observed = sha256_file(candidate)
+    if observed != source_hash:
+        raise RuntimeError(
+            f"external source_template SHA-256 mismatch: {source_hash} != {observed}"
+        )
+    return {
+        "path": source_template,
+        "external": True,
+        "sha256": source_hash,
+        "bytes": candidate.stat().st_size,
+    }
+
+
 def validate_continuation_registry(
     registry_run: Path,
     *,
@@ -327,6 +408,34 @@ def validate_continuation_registry(
         )
 
     source_manifest_payload = _read_json(source_manifest, "continuation source manifest")
+    # A template placeholder is not provenance.  The source manifest and the
+    # external resolved/request evidence must each carry the exact hash of the
+    # immutable template copy, and that hash must match the bytes on disk.
+    template_sha = sha256_file(template)
+    manifest_template_sha = _required_hash(
+        source_manifest_payload,
+        "template_sha256",
+        "source manifest template SHA-256",
+    )
+    resolved_template_sha = _required_hash(
+        resolved,
+        "template_sha256",
+        "resolved/request template SHA-256",
+    )
+    if manifest_template_sha != resolved_template_sha:
+        raise RuntimeError(
+            f"template SHA-256 mismatch between source manifest and resolved/request evidence: "
+            f"{manifest_template_sha} != {resolved_template_sha}"
+        )
+    if template_sha != manifest_template_sha:
+        raise RuntimeError(
+            f"template SHA-256 mismatch: recorded {manifest_template_sha} != actual {template_sha}"
+        )
+    source_template_binding = _source_template_binding(
+        root,
+        resolved,
+        source_manifest_payload,
+    )
     source_payloads = (resolved, placement, source_manifest_payload)
     source_commit = _hash_or_text(source_payloads, {"source_commit", "commit", "git_commit"}, "source commit")
     source_tree = _hash_or_text(source_payloads, {"source_tree", "tree", "git_tree"}, "source tree")
@@ -359,6 +468,8 @@ def validate_continuation_registry(
         "uid_gid": uid_gid,
         "source_commit": source_commit,
         "source_tree": source_tree,
+        "template_sha256": template_sha,
+        "source_template": source_template_binding,
         "files": {
             "resolved": {"path": str(resolved_path), "sha256": sha256_file(resolved_path), "bytes": resolved_path.stat().st_size},
             "placement": {"path": str(placement_path), "sha256": sha256_file(placement_path), "bytes": placement_path.stat().st_size},
