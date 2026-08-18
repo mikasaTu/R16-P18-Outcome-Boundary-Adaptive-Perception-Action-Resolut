@@ -72,10 +72,33 @@ if [[ -n "$negative" ]]; then for seed in "${seeds[@]}"; do jobs+=("${negative} 
 oracle_worker(){ local gpu=$1 i task seed grid bank out; for ((i=gpu;i<${#jobs[@]};i+=gpu_count)); do read -r task seed grid bank <<<"${jobs[$i]}"; out="${oracle}/${task}-seed${seed}-${bank}.json"; test -f "$out" || CUDA_VISIBLE_DEVICES=$gpu "${py}" "${exp}/scripts/run_factorial_oracle.py" --state-bank "${bank_dir}/${task}-${bank}.json" --checkpoint "$(checkpoint "$task" "$seed")" --model-seed "$seed" --tile-grid "$grid" --output "$out"; done; }
 pids=(); for ((g=0;g<gpu_count;g++)); do oracle_worker "$g" & pids+=("$!"); done; for p in "${pids[@]}"; do wait "$p"; done
 
-"${py}" "${exp}/scripts/analyze_stage27r.py" --inputs "${oracle}"/*.json --output "${result}/statistics.json"
-"${py}" "${exp}/scripts/mechanism_audit.py" --inputs "${oracle}"/*.json --output "${result}/MECHANISM_AUDIT.json"
+derived_output(){
+  local target="$1"; shift
+  "${py}" "${exp}/scripts/resume_derived_output.py" --target "$target" -- "$@"
+}
+
+derived_output "${result}/statistics.json" \
+  "${py}" "${exp}/scripts/analyze_stage27r.py" --inputs "${oracle}"/*.json --output __OUTPUT__
+derived_output "${result}/MECHANISM_AUDIT.json" \
+  "${py}" "${exp}/scripts/mechanism_audit.py" --inputs "${oracle}"/*.json --output __OUTPUT__
 bank_args=("${bank_dir}/StackCube-v1-confirmatory.json" "${bank_dir}/${positive2}-confirmatory.json"); test -z "$negative" || bank_args+=("${bank_dir}/${negative}-negative.json")
-"${py}" "${exp}/scripts/decide_stage27r.py" --analysis "${result}/statistics.json" --task-selection "${screen_dir}/TASK_SELECTION.json" --state-banks "${bank_args[@]}" --positive-tasks StackCube-v1 "${positive2}" --output "${result}/RESULT_VECTOR.json"
-"${py}" "${exp}/scripts/audit_formal_results.py" --repo "${source_root}" --formal-root "${result}" --training-root "${training}" --dataset-root "${data_root}" --output "${result}/INDEPENDENT_AUDIT.json"
-"${py}" "${exp}/scripts/posthoc_independent_audit.py" --formal-root "${result}" --output "${result}/POSTHOC_INDEPENDENT_AUDIT.json"
-printf '{"protocol_id":"R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1","status":"FORMAL_COMPLETE"}\n' >"${result}/FORMAL_COMPLETE.json"
+derived_output "${result}/RESULT_VECTOR.json" \
+  "${py}" "${exp}/scripts/decide_stage27r.py" --analysis "${result}/statistics.json" --task-selection "${screen_dir}/TASK_SELECTION.json" --state-banks "${bank_args[@]}" --positive-tasks StackCube-v1 "${positive2}" --output __OUTPUT__
+derived_output "${result}/INDEPENDENT_AUDIT.json" \
+  "${py}" "${exp}/scripts/audit_formal_results.py" --repo "${source_root}" --formal-root "${result}" --training-root "${training}" --dataset-root "${data_root}" --output __OUTPUT__
+derived_output "${result}/POSTHOC_INDEPENDENT_AUDIT.json" \
+  "${py}" "${exp}/scripts/posthoc_independent_audit.py" --formal-root "${result}" --output __OUTPUT__
+
+terminal_marker='{"protocol_id":"R16-P18-MS6-STAGE27R-CORE-MECHANISM-RESET-V1","status":"FORMAL_COMPLETE"}'
+if [[ -f "${result}/FORMAL_COMPLETE.json" ]]; then
+  [[ "$(tr -d '\n' <"${result}/FORMAL_COMPLETE.json")" == "${terminal_marker}" ]] || {
+    echo "FORMAL_COMPLETE_MISMATCH refusing overwrite" >&2; exit 74;
+  }
+else
+  marker_tmp="${result}/.FORMAL_COMPLETE.json.resume-${BASHPID}"
+  printf '%s\n' "${terminal_marker}" >"${marker_tmp}"
+  mv -n "${marker_tmp}" "${result}/FORMAL_COMPLETE.json"
+  [[ -f "${result}/FORMAL_COMPLETE.json" ]] || {
+    echo "FORMAL_COMPLETE_INSTALL_FAILED" >&2; exit 74;
+  }
+fi

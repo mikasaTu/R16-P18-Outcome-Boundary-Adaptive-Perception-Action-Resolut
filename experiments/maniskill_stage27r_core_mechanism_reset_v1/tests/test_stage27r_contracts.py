@@ -17,6 +17,7 @@ from prepare_exact_replay_data import replay_state_flags  # noqa: E402
 from posthoc_independent_audit import expected_schedule, recompute_outcome  # noqa: E402
 from posthoc_independent_audit import lower_tile_tiebreak  # noqa: E402
 from audit_formal_results import frozen_preregistration_digest  # noqa: E402
+from resume_derived_output import run_or_validate  # noqa: E402
 
 
 def test_crop_tiles_partition_exactly() -> None:
@@ -165,3 +166,41 @@ def test_frozen_preregistration_is_derived_from_immutable_git_snapshot() -> None
     assert result["pass"] is True
     assert result["digest_field_present"] is False
     assert result["derived_from_frozen_git_commit"]
+
+
+def _producer(value: str) -> list[str]:
+    code = (
+        "from pathlib import Path; "
+        "Path('__OUTPUT__').write_text(" + repr(value) + ", encoding='utf-8')"
+    )
+    return [sys.executable, "-c", code, "--output", "__OUTPUT__"]
+
+
+def test_resume_derived_output_preserves_existing_target_and_validates_equivalence(tmp_path: Path) -> None:
+    target = tmp_path / "statistics.json"
+    assert run_or_validate(target, _producer("same")) == "installed_missing"
+    assert target.read_text() == "same"
+    assert run_or_validate(target, _producer("same")) == "validated_existing"
+    assert target.read_text() == "same"
+    with pytest.raises(RuntimeError, match="refusing overwrite"):
+        run_or_validate(target, _producer("different"))
+    assert target.read_text() == "same"
+
+
+def test_resume_interruption_boundaries_are_all_idempotent(tmp_path: Path) -> None:
+    # These are the three boundaries an idle restart can observe: only oracle
+    # shards, oracle plus statistics, or all official derived outputs before
+    # the independent audit/terminal marker.
+    for existing in ((), ("statistics.json",), ("statistics.json", "MECHANISM_AUDIT.json", "RESULT_VECTOR.json")):
+        root = tmp_path / "-".join(existing or ("oracle",))
+        root.mkdir()
+        for name in existing:
+            assert run_or_validate(root / name, _producer(name)) == "installed_missing"
+        for name in ("statistics.json", "MECHANISM_AUDIT.json", "RESULT_VECTOR.json", "INDEPENDENT_AUDIT.json", "POSTHOC_INDEPENDENT_AUDIT.json"):
+            expected = "" if name in existing else name
+            if name in existing:
+                assert run_or_validate(root / name, _producer(name)) == "validated_existing"
+            else:
+                assert run_or_validate(root / name, _producer(expected)) == "installed_missing"
+        for name in ("statistics.json", "MECHANISM_AUDIT.json", "RESULT_VECTOR.json", "INDEPENDENT_AUDIT.json", "POSTHOC_INDEPENDENT_AUDIT.json"):
+            assert run_or_validate(root / name, _producer(name)) == "validated_existing"

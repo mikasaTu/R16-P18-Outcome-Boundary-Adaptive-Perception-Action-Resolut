@@ -131,7 +131,16 @@ def main():
         expected_stats = args.formal_root / "statistics.json"
         checks["paired_statistics_recompute"] = {"pass": sha256_file(recomputed) == sha256_file(expected_stats), "recomputed_sha256": sha256_file(recomputed), "reported_sha256": sha256_file(expected_stats)}
 
-    files = sorted(path for path in args.formal_root.rglob("*") if path.is_file() and path != args.output)
+    # Keep the manifest stable when a resume-safe audit is recomputed to a
+    # sibling temporary path after the canonical audit file already exists.
+    # The canonical audit outputs are metadata about the root, not scientific
+    # inputs, and the original run excluded its own output before writing it.
+    audit_outputs = {
+        args.formal_root / "INDEPENDENT_AUDIT.json",
+        args.formal_root / "POSTHOC_INDEPENDENT_AUDIT.json",
+        args.output,
+    }
+    files = sorted(path for path in args.formal_root.rglob("*") if path.is_file() and path not in audit_outputs)
     manifest = [{"path": str(path.relative_to(args.formal_root)), "sha256": sha256_file(path), "bytes": path.stat().st_size} for path in files]
     checks["scientific_sha256_manifest"] = {"pass": bool(manifest), "files": len(manifest)}
     checks["all_pass"] = all(value["pass"] for value in checks.values() if isinstance(value, dict) and "pass" in value)
