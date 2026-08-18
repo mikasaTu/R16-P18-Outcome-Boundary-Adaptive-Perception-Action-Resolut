@@ -14,6 +14,7 @@ from analyze_stage27r import holm, paired_summary  # noqa: E402
 import multires_policy  # noqa: E402
 from multires_policy import MultiResolutionAgent, Native128Dataset, crop_tile  # noqa: E402
 from prepare_exact_replay_data import replay_state_flags  # noqa: E402
+from posthoc_independent_audit import expected_schedule, recompute_outcome  # noqa: E402
 
 
 def test_crop_tiles_partition_exactly() -> None:
@@ -130,3 +131,24 @@ def test_paired_summary_clusters_model_seeds_by_source_episode() -> None:
 def test_holm_is_monotone_in_sorted_pvalues() -> None:
     result = holm({"a": .01, "b": .03, "c": .2})
     assert result["a"] <= result["b"] <= result["c"]
+
+
+def test_independent_audit_recomputes_trace_outcomes_and_schedule() -> None:
+    row = {
+        "condition": "FC_tile0",
+        "success_trace": [False, True, True, True, True, True, False, False, True],
+        "reward_trace": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.55, 0.5, 0.7],
+        "intended_contact_trace": [False, True, True, True, True, True, True, True, True],
+        "grasp_trace": [False, True, True, True, True, True, False, False, False],
+        "catastrophic_trace": [False] * 9,
+    }
+    outcome = recompute_outcome(row)
+    assert outcome["success_once"] is True
+    assert outcome["success_hold5"] is True
+    assert outcome["longest_success_streak"] == 5
+    assert outcome["normalized_progress"] == pytest.approx(0.6)
+    assert outcome["dropped_or_slipped"] is False  # a stable hold5 is not a drop
+    schedule = expected_schedule(row)
+    assert schedule["executed_steps"] == 9
+    assert schedule["policy_forward_calls"] == 3  # two coarse treatment + one fine continuation
+    assert schedule["fine_encoder_calls"] == 3

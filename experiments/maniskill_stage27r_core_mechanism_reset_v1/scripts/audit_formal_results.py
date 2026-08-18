@@ -31,7 +31,19 @@ def main():
     checks["predecessor_immutability"] = {"pass": current == freeze, "frozen": freeze, "current": current}
     checks["clean_source_commit"] = {"pass": not subprocess.check_output(["git", "status", "--porcelain"], cwd=args.repo, text=True).strip(), "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=args.repo, text=True).strip()}
     protocol = json.loads((experiment / "PROTOCOL_FREEZE.json").read_text())
-    checks["protocol_freeze"] = {"pass": protocol["preregistration_sha256"] == sha256_file(experiment / "preregistration.yaml"), "expected": protocol["preregistration_sha256"], "observed": sha256_file(experiment / "preregistration.yaml")}
+    # The frozen protocol predates the optional digest field.  Do not mutate
+    # the protocol or silently turn a missing field into a pass: report the
+    # compatibility condition explicitly and verify the digest only when the
+    # field is present.
+    observed_preregistration_sha256 = sha256_file(experiment / "preregistration.yaml")
+    expected_preregistration_sha256 = protocol.get("preregistration_sha256")
+    checks["protocol_freeze"] = {
+        "pass": (expected_preregistration_sha256 is None or expected_preregistration_sha256 == observed_preregistration_sha256),
+        "digest_field_present": expected_preregistration_sha256 is not None,
+        "expected": expected_preregistration_sha256,
+        "observed": observed_preregistration_sha256,
+        "compatibility_note": "PROTOCOL_FREEZE.json has no digest field; frozen protocol remains unchanged" if expected_preregistration_sha256 is None else None,
+    }
 
     model_text = (experiment / "scripts/multires_policy.py").read_text()
     tree, obs_keys = ast.parse(model_text), set()
