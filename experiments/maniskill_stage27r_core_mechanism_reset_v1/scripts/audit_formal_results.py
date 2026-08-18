@@ -31,13 +31,13 @@ derived_names = {
 OFFICIAL_MANIFEST_METADATA = frozenset(derived_names)
 
 
-def _model_input_key_uses(model_text: str) -> list[tuple[str, str | None]]:
-    """Extract literal observation/data key uses and their enclosing function.
+def _model_input_key_uses(model_text: str) -> tuple[list[tuple[str, str | None]], list[dict]]:
+    """Extract literal and dynamic observation/data key uses.
 
     The previous audit only handled ``obs[\"key\"]`` and therefore missed the
     explicit ``obs.get(\"_latent_noise\")`` training control.  Both forms are
-    intentionally handled here; dynamic keys remain invisible to this static
-    check and are not added to the allowlist.
+    intentionally handled here.  Dynamic keys are reported explicitly and
+    fail closed because a static allowlist cannot classify their runtime value.
     """
     tree = ast.parse(model_text)
     parents: dict[ast.AST, ast.AST] = {}
@@ -54,6 +54,7 @@ def _model_input_key_uses(model_text: str) -> list[tuple[str, str | None]]:
         return None
 
     uses: list[tuple[str, str | None]] = []
+    dynamic_accesses: list[dict] = []
     for node in ast.walk(tree):
         key: str | None = None
         owner: ast.AST | None = None
@@ -61,29 +62,52 @@ def _model_input_key_uses(model_text: str) -> list[tuple[str, str | None]]:
             isinstance(node, ast.Subscript)
             and isinstance(node.value, ast.Name)
             and node.value.id in {"obs", "data"}
-            and isinstance(node.slice, ast.Constant)
-            and isinstance(node.slice.value, str)
         ):
-            key, owner = node.slice.value, node
+            owner = node
+            if isinstance(node.slice, ast.Constant) and isinstance(node.slice.value, str):
+                key = node.slice.value
+            else:
+                dynamic_accesses.append(
+                    {
+                        "function": enclosing_function(node) or "<module>",
+                        "line": int(node.lineno),
+                        "form": "subscript",
+                        "object": node.value.id,
+                        "expression": ast.unparse(node.slice),
+                    }
+                )
         elif (
             isinstance(node, ast.Call)
             and isinstance(node.func, ast.Attribute)
             and node.func.attr == "get"
             and isinstance(node.func.value, ast.Name)
             and node.func.value.id in {"obs", "data"}
-            and node.args
-            and isinstance(node.args[0], ast.Constant)
-            and isinstance(node.args[0].value, str)
         ):
-            key, owner = node.args[0].value, node
+            owner = node
+            if node.args and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str):
+                key = node.args[0].value
+            else:
+                expression = ast.unparse(node.args[0]) if node.args else "<missing>"
+                dynamic_accesses.append(
+                    {
+                        "function": enclosing_function(node) or "<module>",
+                        "line": int(node.lineno),
+                        "form": "get",
+                        "object": node.func.value.id,
+                        "expression": expression,
+                    }
+                )
         if key is not None and owner is not None:
             uses.append((key, enclosing_function(owner)))
-    return uses
+    return uses, sorted(
+        dynamic_accesses,
+        key=lambda row: (row["line"], row["function"], row["form"], row["object"]),
+    )
 
 
 def classify_model_input_keys(model_text: str) -> dict:
     """Classify static model keys while preserving a fail-closed unknown check."""
-    uses = _model_input_key_uses(model_text)
+    uses, dynamic_accesses = _model_input_key_uses(model_text)
     observed = {key for key, _ in uses}
     training_internal = observed.intersection(TRAINING_INTERNAL_MODEL_INPUT_KEYS)
     deployable = observed.difference(training_internal)
@@ -94,13 +118,14 @@ def classify_model_input_keys(model_text: str) -> dict:
         if key in training_internal and function not in TRAINING_INTERNAL_USE_FUNCTIONS
     )
     return {
-        "pass": not unknown and not internal_violations,
+        "pass": not unknown and not internal_violations and not dynamic_accesses,
         # Keep this field for existing consumers; it now includes .get uses.
         "observed_keys": sorted(observed),
         "deployable_observed_keys": sorted(deployable),
         "training_internal_keys": sorted(training_internal),
         "unknown_keys": sorted(unknown),
         "training_internal_violations": internal_violations,
+        "dynamic_accesses": dynamic_accesses,
         "training_internal_rationale": {
             key: TRAINING_INTERNAL_MODEL_INPUT_KEYS[key]
             for key in sorted(training_internal)
@@ -176,6 +201,133 @@ def frozen_preregistration_digest(repo: Path, experiment: Path) -> dict:
         }
 
 
+def final_verifier_source(repo: Path, audit_script: Path) -> dict:
+    """Bind the audit result to the exact clean source that produced it."""
+    repo = Path(repo).resolve()
+    audit_script = Path(audit_script).resolve()
+    dirty = subprocess.check_output(
+        ["git", "status", "--porcelain"], cwd=repo, text=True
+    ).strip()
+    commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=repo, text=True
+    ).strip()
+    tree = subprocess.check_output(
+        ["git", "rev-parse", "HEAD^{tree}"], cwd=repo, text=True
+    ).strip()
+    try:
+        script_path = str(audit_script.relative_to(repo))
+    except ValueError:
+        script_path = str(audit_script)
+    return {
+        "pass": not dirty,
+        "role": "final_independent_verifier",
+        "commit": commit,
+        "tree": tree,
+        "repository": str(repo),
+        "audit_script": script_path,
+        "audit_script_sha256": sha256_file(audit_script),
+        "working_tree_clean": not dirty,
+        "dirty_entries": dirty.splitlines(),
+    }
+
+
+def validate_lineage_role_separation(
+    lineage: dict,
+    registry_resolved: dict,
+    terminal: dict,
+    current_verifier: dict,
+) -> dict:
+    """Validate historical v11 production and later final-verifier roles.
+
+    This intentionally does not compare the historical
+    ``posthoc_verifier_source`` to the current HEAD.  The former is the exact
+    v11 continuation source that created the snapshot/lineage; the latter is a
+    later independent verifier whose source is self-bound in this audit.
+    """
+    errors: list[str] = []
+
+    def require(condition: bool, message: str) -> None:
+        if not condition:
+            errors.append(message)
+
+    continuation = lineage.get("continuation_registry", {})
+    historical = lineage.get("posthoc_verifier_source", {})
+    resolved_evidence = registry_resolved.get("evidence", {})
+    terminal_source = terminal.get("source_binding", {})
+    terminal_registry = terminal.get("registry", {})
+
+    run_id = continuation.get("run_id")
+    job_id = continuation.get("job_id")
+    source_commit = continuation.get("source_commit")
+    source_tree = continuation.get("source_tree")
+
+    require(lineage.get("protocol_id") == PROTOCOL_ID, "lineage protocol mismatch")
+    require(lineage.get("status") == "PASS", "lineage status is not PASS")
+    require(continuation.get("status") == "PASS", "continuation registry status is not PASS")
+    require(bool(run_id and job_id and source_commit and source_tree), "lineage continuation identity is incomplete")
+    require(registry_resolved.get("run_id") == run_id, "v11 registry run_id mismatch")
+    require(resolved_evidence.get("source_commit") == source_commit, "v11 registry source commit mismatch")
+    require(resolved_evidence.get("source_tree") == source_tree, "v11 registry source tree mismatch")
+
+    require(
+        historical.get("role") == "clean_posthoc_verifier_and_continuation_source",
+        "historical verifier role mismatch",
+    )
+    require(historical.get("commit") == source_commit, "historical verifier commit mismatch")
+    require(historical.get("tree") == source_tree, "historical verifier tree mismatch")
+    require(historical.get("pai_run_id") == run_id, "historical verifier run_id mismatch")
+    require(historical.get("pai_job_id") == job_id, "historical verifier job_id mismatch")
+
+    require(terminal.get("protocol_id") == PROTOCOL_ID, "v11 terminal protocol mismatch")
+    require(terminal.get("terminal") is True, "v11 terminal flag is not true")
+    require(terminal.get("status") == "Stopped", "v11 terminal status is not Stopped")
+    require(terminal.get("run_id") == run_id, "v11 terminal run_id mismatch")
+    require(terminal.get("job_id") == job_id, "v11 terminal job_id mismatch")
+    require(terminal_source.get("commit") == source_commit, "v11 terminal source commit mismatch")
+    require(terminal_source.get("tree") == source_tree, "v11 terminal source tree mismatch")
+    require(terminal_registry.get("run_id") == run_id, "v11 terminal registry run_id mismatch")
+    require(terminal_registry.get("job_id") == job_id, "v11 terminal registry job_id mismatch")
+
+    require(current_verifier.get("pass") is True, "final verifier source is not clean")
+    require(
+        current_verifier.get("role") == "final_independent_verifier",
+        "final verifier role mismatch",
+    )
+    require(
+        historical.get("role") != current_verifier.get("role"),
+        "historical and final verifier roles are not separated",
+    )
+    return {
+        "pass": not errors,
+        "errors": errors,
+        "historical_continuation_verifier": {
+            "role": historical.get("role"),
+            "commit": source_commit,
+            "tree": source_tree,
+            "run_id": run_id,
+            "job_id": job_id,
+        },
+        "final_independent_verifier": current_verifier,
+        "same_source_commit": historical.get("commit") == current_verifier.get("commit"),
+        "role_separation_semantics": "v11 created/validated continuation lineage; current clean source performs the final independent audit",
+    }
+
+
+def _load_bound_json(path: Path, binding: dict | None = None) -> tuple[dict, dict]:
+    """Load JSON and, when supplied, verify its recorded path/hash/size."""
+    path = Path(path).resolve()
+    if not path.is_file():
+        raise RuntimeError(f"missing evidence file: {path}")
+    observed = {"path": str(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+    if binding is not None:
+        recorded_path = Path(str(binding.get("path", ""))).resolve()
+        if recorded_path != path:
+            raise RuntimeError(f"evidence path mismatch: {path} != {recorded_path}")
+        if binding.get("sha256") != observed["sha256"] or binding.get("bytes") != observed["bytes"]:
+            raise RuntimeError(f"evidence hash/bytes mismatch: {path}")
+    return json.loads(path.read_text(encoding="utf-8")), observed
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, required=True)
@@ -183,14 +335,45 @@ def main():
     parser.add_argument("--training-root", type=Path, required=True)
     parser.add_argument("--dataset-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--lineage-manifest", type=Path, default=None)
+    parser.add_argument("--v11-registry-resolved", type=Path, default=None)
+    parser.add_argument("--v11-terminal", type=Path, default=None)
     args = parser.parse_args()
     checks = {}
     experiment = args.repo / "experiments/maniskill_stage27r_core_mechanism_reset_v1"
     freeze = json.loads((experiment / "manifests/predecessor_tree_freeze.json").read_text())["trees"]
     current = {path: subprocess.check_output(["git", "rev-parse", f"HEAD:{path}"], cwd=args.repo, text=True).strip() for path in PREDECESSORS}
     checks["predecessor_immutability"] = {"pass": current == freeze, "frozen": freeze, "current": current}
-    checks["clean_source_commit"] = {"pass": not subprocess.check_output(["git", "status", "--porcelain"], cwd=args.repo, text=True).strip(), "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=args.repo, text=True).strip()}
+    verifier = final_verifier_source(args.repo, Path(__file__))
+    checks["clean_source_commit"] = verifier
+    checks["final_verifier_source"] = dict(verifier)
     checks["protocol_freeze"] = frozen_preregistration_digest(args.repo, experiment)
+
+    lineage_path = args.lineage_manifest or args.formal_root / "ORACLE_LINEAGE_MANIFEST.json"
+    terminal_path = args.v11_terminal or args.formal_root / "CONTINUATION_V11_TERMINAL_VALID.json"
+    try:
+        lineage, lineage_binding = _load_bound_json(lineage_path)
+        recorded_resolved = lineage.get("continuation_registry", {}).get("files", {}).get("resolved")
+        if not isinstance(recorded_resolved, dict):
+            raise RuntimeError("lineage lacks bound v11 registry resolved evidence")
+        resolved_path = args.v11_registry_resolved or Path(str(recorded_resolved.get("path", "")))
+        registry_resolved, resolved_binding = _load_bound_json(resolved_path, recorded_resolved)
+        terminal, terminal_binding = _load_bound_json(terminal_path)
+        role_check = validate_lineage_role_separation(
+            lineage, registry_resolved, terminal, verifier
+        )
+        role_check["evidence"] = {
+            "lineage_manifest": lineage_binding,
+            "v11_registry_resolved": resolved_binding,
+            "v11_terminal": terminal_binding,
+        }
+        checks["lineage_role_separation"] = role_check
+    except (OSError, ValueError, TypeError, json.JSONDecodeError, RuntimeError) as exc:
+        checks["lineage_role_separation"] = {
+            "pass": False,
+            "errors": [str(exc)],
+            "final_independent_verifier": verifier,
+        }
 
     model_text = (experiment / "scripts/multires_policy.py").read_text()
     checks["no_privileged_model_input"] = classify_model_input_keys(model_text)

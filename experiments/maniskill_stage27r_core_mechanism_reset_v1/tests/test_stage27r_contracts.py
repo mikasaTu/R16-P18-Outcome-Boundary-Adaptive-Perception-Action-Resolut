@@ -9,7 +9,7 @@ import torch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from common import atomic_json  # noqa: E402
+from common import PROTOCOL_ID, atomic_json  # noqa: E402
 from analyze_stage27r import holm, paired_summary  # noqa: E402
 import multires_policy  # noqa: E402
 from multires_policy import MultiResolutionAgent, Native128Dataset, crop_tile  # noqa: E402
@@ -20,6 +20,7 @@ from audit_formal_results import (  # noqa: E402
     classify_model_input_keys,
     frozen_preregistration_digest,
     official_scientific_manifest,
+    validate_lineage_role_separation,
 )
 from resume_derived_output import run_or_validate  # noqa: E402
 from validate_oracle_shard import expected_conditions  # noqa: E402
@@ -95,6 +96,7 @@ def test_static_model_audit_classifies_latent_noise_as_training_internal() -> No
     assert result["training_internal_keys"] == ["_latent_noise"]
     assert "_latent_noise" not in result["deployable_observed_keys"]
     assert result["unknown_keys"] == []
+    assert result["dynamic_accesses"] == []
     assert "training-only stochastic control" in result["training_internal_rationale"]["_latent_noise"]
 
 
@@ -109,6 +111,99 @@ def test_static_model_audit_rejects_unknown_or_misplaced_keys() -> None:
     )
     assert not misplaced["pass"]
     assert misplaced["training_internal_violations"] == ["_latent_noise@get_action"]
+
+
+def test_static_model_audit_rejects_dynamic_subscript_and_get() -> None:
+    result = classify_model_input_keys(
+        "def injected(obs, data, key):\n"
+        "    first = obs[key]\n"
+        "    return first, data.get(key)\n"
+    )
+    assert not result["pass"]
+    assert result["dynamic_accesses"] == [
+        {
+            "function": "injected",
+            "line": 2,
+            "form": "subscript",
+            "object": "obs",
+            "expression": "key",
+        },
+        {
+            "function": "injected",
+            "line": 3,
+            "form": "get",
+            "object": "data",
+            "expression": "key",
+        },
+    ]
+
+
+def _lineage_role_fixtures() -> tuple[dict, dict, dict, dict]:
+    commit, tree = "c" * 40, "t" * 40
+    run_id, job_id = "stage27r-formal-idle-v11", "dlc-v11"
+    lineage = {
+        "protocol_id": PROTOCOL_ID,
+        "status": "PASS",
+        "continuation_registry": {
+            "status": "PASS",
+            "run_id": run_id,
+            "job_id": job_id,
+            "source_commit": commit,
+            "source_tree": tree,
+        },
+        "posthoc_verifier_source": {
+            "role": "clean_posthoc_verifier_and_continuation_source",
+            "commit": commit,
+            "tree": tree,
+            "pai_run_id": run_id,
+            "pai_job_id": job_id,
+        },
+    }
+    resolved = {
+        "run_id": run_id,
+        "evidence": {"source_commit": commit, "source_tree": tree},
+    }
+    terminal = {
+        "protocol_id": PROTOCOL_ID,
+        "status": "Stopped",
+        "terminal": True,
+        "run_id": run_id,
+        "job_id": job_id,
+        "source_binding": {"commit": commit, "tree": tree},
+        "registry": {"run_id": run_id, "job_id": job_id},
+    }
+    verifier = {
+        "pass": True,
+        "role": "final_independent_verifier",
+        "commit": "f" * 40,
+        "tree": "e" * 40,
+    }
+    return lineage, resolved, terminal, verifier
+
+
+def test_lineage_roles_separate_v11_producer_from_final_verifier() -> None:
+    result = validate_lineage_role_separation(*_lineage_role_fixtures())
+    assert result["pass"]
+    assert not result["same_source_commit"]
+    assert result["historical_continuation_verifier"]["run_id"] == "stage27r-formal-idle-v11"
+    assert result["final_independent_verifier"]["role"] == "final_independent_verifier"
+
+
+@pytest.mark.parametrize("mutation", ["commit", "tree", "job", "terminal"])
+def test_lineage_roles_reject_wrong_v11_binding(mutation: str) -> None:
+    lineage, resolved, terminal, verifier = _lineage_role_fixtures()
+    if mutation == "commit":
+        resolved["evidence"]["source_commit"] = "d" * 40
+    elif mutation == "tree":
+        terminal["source_binding"]["tree"] = "u" * 40
+    elif mutation == "job":
+        terminal["job_id"] = "wrong-job"
+    else:
+        terminal["status"] = "Running"
+        terminal["terminal"] = False
+    result = validate_lineage_role_separation(lineage, resolved, terminal, verifier)
+    assert not result["pass"]
+    assert result["errors"]
 
 
 def test_pusht_rgb_conversion_uses_recorded_successful_env_states() -> None:
