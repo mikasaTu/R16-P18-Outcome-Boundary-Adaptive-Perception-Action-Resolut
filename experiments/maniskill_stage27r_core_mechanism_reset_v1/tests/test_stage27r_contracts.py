@@ -15,6 +15,8 @@ import multires_policy  # noqa: E402
 from multires_policy import MultiResolutionAgent, Native128Dataset, crop_tile  # noqa: E402
 from prepare_exact_replay_data import replay_state_flags  # noqa: E402
 from posthoc_independent_audit import expected_schedule, recompute_outcome  # noqa: E402
+from posthoc_independent_audit import lower_tile_tiebreak  # noqa: E402
+from audit_formal_results import frozen_preregistration_digest  # noqa: E402
 
 
 def test_crop_tiles_partition_exactly() -> None:
@@ -152,3 +154,14 @@ def test_independent_audit_recomputes_trace_outcomes_and_schedule() -> None:
     assert schedule["executed_steps"] == 9
     assert schedule["policy_forward_calls"] == 3  # two coarse treatment + one fine continuation
     assert schedule["fine_encoder_calls"] == 3
+
+
+def test_independent_tile_tie_break_matches_official_lower_tile_rule() -> None:
+    assert lower_tile_tiebreak({"utility_value": 1.0, "condition": "FC_tile0"}) > lower_tile_tiebreak({"utility_value": 1.0, "condition": "FC_tile3"})
+
+
+def test_frozen_preregistration_is_derived_from_immutable_git_snapshot() -> None:
+    result = frozen_preregistration_digest(ROOT.parent.parent, ROOT)
+    assert result["pass"] is True
+    assert result["digest_field_present"] is False
+    assert result["derived_from_frozen_git_commit"]

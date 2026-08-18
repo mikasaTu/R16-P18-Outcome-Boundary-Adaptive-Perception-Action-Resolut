@@ -16,6 +16,45 @@ WEIGHTS = {"balanced": (100, 20, 5, -10, -5), "success_dominant": (120, 10, 3, -
 ACCOUNTING = {"global_encoder_calls", "fine_encoder_calls", "policy_forward_calls", "policy_forward_rows", "visual_tokens", "action_opportunities", "executed_steps", "gpu_latency_ms", "simulator_latency_ms", "estimated_flops", "peak_memory_bytes", "selector_latency_ms", "episode_total_compute"}
 
 
+def frozen_preregistration_digest(repo: Path, experiment: Path) -> dict:
+    """Verify preregistration against the frozen Git snapshot, without editing it.
+
+    PROTOCOL_FREEZE.json was intentionally kept minimal and may not contain a
+    digest field.  In that case the protocol's predecessor-freeze manifest
+    supplies the immutable Git head from which the preregistration bytes are
+    derived.  A missing/invalid Git snapshot is a failed check, never a pass.
+    """
+    protocol = json.loads((experiment / "PROTOCOL_FREEZE.json").read_text())
+    current = sha256_file(experiment / "preregistration.yaml")
+    expected = protocol.get("preregistration_sha256")
+    if expected is not None:
+        return {"pass": expected == current, "digest_field_present": True, "expected": expected, "observed": current}
+    manifest_path = experiment / "manifests/predecessor_tree_freeze.json"
+    try:
+        manifest = json.loads(manifest_path.read_text())
+        frozen_head = str(manifest["head"])
+        prereg_path = str(protocol["preregistration_path"])
+        frozen_bytes = subprocess.check_output(["git", "show", f"{frozen_head}:{prereg_path}"], cwd=repo)
+        frozen_digest = __import__("hashlib").sha256(frozen_bytes).hexdigest()
+        return {
+            "pass": frozen_digest == current,
+            "digest_field_present": False,
+            "expected": frozen_digest,
+            "observed": current,
+            "derived_from_frozen_git_commit": frozen_head,
+            "derived_path": prereg_path,
+        }
+    except (KeyError, OSError, subprocess.CalledProcessError, ValueError) as exc:
+        return {
+            "pass": False,
+            "digest_field_present": False,
+            "expected": None,
+            "observed": current,
+            "derived_from_frozen_git_commit": None,
+            "error": f"cannot derive preregistration from frozen Git snapshot: {exc}",
+        }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, required=True)
@@ -30,20 +69,7 @@ def main():
     current = {path: subprocess.check_output(["git", "rev-parse", f"HEAD:{path}"], cwd=args.repo, text=True).strip() for path in PREDECESSORS}
     checks["predecessor_immutability"] = {"pass": current == freeze, "frozen": freeze, "current": current}
     checks["clean_source_commit"] = {"pass": not subprocess.check_output(["git", "status", "--porcelain"], cwd=args.repo, text=True).strip(), "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=args.repo, text=True).strip()}
-    protocol = json.loads((experiment / "PROTOCOL_FREEZE.json").read_text())
-    # The frozen protocol predates the optional digest field.  Do not mutate
-    # the protocol or silently turn a missing field into a pass: report the
-    # compatibility condition explicitly and verify the digest only when the
-    # field is present.
-    observed_preregistration_sha256 = sha256_file(experiment / "preregistration.yaml")
-    expected_preregistration_sha256 = protocol.get("preregistration_sha256")
-    checks["protocol_freeze"] = {
-        "pass": (expected_preregistration_sha256 is None or expected_preregistration_sha256 == observed_preregistration_sha256),
-        "digest_field_present": expected_preregistration_sha256 is not None,
-        "expected": expected_preregistration_sha256,
-        "observed": observed_preregistration_sha256,
-        "compatibility_note": "PROTOCOL_FREEZE.json has no digest field; frozen protocol remains unchanged" if expected_preregistration_sha256 is None else None,
-    }
+    checks["protocol_freeze"] = frozen_preregistration_digest(args.repo, experiment)
 
     model_text = (experiment / "scripts/multires_policy.py").read_text()
     tree, obs_keys = ast.parse(model_text), set()

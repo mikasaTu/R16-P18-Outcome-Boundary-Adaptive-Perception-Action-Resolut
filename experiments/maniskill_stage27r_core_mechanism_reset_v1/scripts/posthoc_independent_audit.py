@@ -116,6 +116,11 @@ def utility(row, weights):
     return (weights[0] * row["success_hold5"] + weights[1] * row["normalized_progress"] + weights[2] * row["recoverable"] + weights[3] * row["dropped_or_slipped"] + weights[4] * row["collision"])
 
 
+def lower_tile_tiebreak(row):
+    """Match analyze_stage27r.state_table: ties select the lower tile id."""
+    return (float(row["utility_value"]), -int(str(row["condition"]).split("tile")[-1]))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--formal-root", type=Path, required=True)
@@ -165,8 +170,16 @@ def main():
     for key in sorted({k[:6] for k in means}):
         cond = {k[6]: v for k, v in means.items() if k[:6] == key}
         for weight in WEIGHTS:
-            fc = max((cond[k] for k in cond if k.startswith("FC_tile")), key=lambda r: (r["utility"][weight], r["condition"]))
-            ff = max((cond[k] for k in cond if k.startswith("FF_tile")), key=lambda r: (r["utility"][weight], r["condition"]))
+            fc_candidates = []
+            ff_candidates = []
+            for candidate in (cond[k] for k in cond if k.startswith("FC_tile")):
+                candidate = dict(candidate, utility_value=candidate["utility"][weight])
+                fc_candidates.append(candidate)
+            for candidate in (cond[k] for k in cond if k.startswith("FF_tile")):
+                candidate = dict(candidate, utility_value=candidate["utility"][weight])
+                ff_candidates.append(candidate)
+            fc = max(fc_candidates, key=lower_tile_tiebreak)
+            ff = max(ff_candidates, key=lower_tile_tiebreak)
             cc, cf = cond["CC"], cond["CF"]
             cluster = (key[0], key[4])
             effects[(weight, key[0], "visual")].append((fc["utility"][weight] - cc["utility"][weight], cluster))
