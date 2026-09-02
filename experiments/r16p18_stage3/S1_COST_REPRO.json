@@ -1,0 +1,34 @@
+{
+  "explanation_accepts_gate": false,
+  "fresh_profile_available": false,
+  "measured": {
+    "flops_ratio": 0.738795174560143,
+    "source": "immutable_stage27r_accounting",
+    "wall_clock_ratio": null
+  },
+  "measurement_protocol": {
+    "batch_size": null,
+    "cuda_synchronize": null,
+    "device": null,
+    "repeats": null,
+    "warmup": null
+  },
+  "measurement_variance": {
+    "flops_ratio": null,
+    "wall_clock_ratio": null
+  },
+  "new_measurement_required": true,
+  "original": {
+    "flops_denominator": 125120200000000.0,
+    "flops_numerator": 92438200000000.0,
+    "flops_ratio": 0.738795174560143,
+    "wall_clock_ratio": 0.7502597918865904
+  },
+  "relative_deviation": {
+    "flops": 0.0,
+    "wall_clock": null
+  },
+  "status": "ARCHIVED_REFERENCE_ONLY",
+  "verifiable_explanation": null,
+  "within_5_percent": false
+}

@@ -1,0 +1,21 @@
+{
+  "status": "BLOCKED_BY_APP_SCOPE",
+  "checked_at_utc": "2026-09-02T19:07:31Z",
+  "parent_node_token": "ACvKwniphi2saqkm6EicOsVDnFc",
+  "space_id": "7599097990090853600",
+  "requested_nodes": [
+    "step7",
+    "step7/实验报告"
+  ],
+  "nodes_created": [],
+  "error_code": 99991672,
+  "last_log_id": "2026090219073160E747A5A541A1BC8908",
+  "missing_scopes": [
+    "wiki:wiki",
+    "wiki:node:create"
+  ],
+  "scope_application_url": "https://open.feishu.cn/page/scope-apply?clientID=cli_aa8055b27138dbc8&scopes=wiki%3Awiki%2Cwiki%3Anode%3Acreate",
+  "local_plan_snapshot": "docs/feishu/step7/step.md",
+  "local_report_snapshot": "docs/feishu/step7/experiment-report.md",
+  "note": "No ambiguous create response occurred; retry after the app scopes are approved."
+}

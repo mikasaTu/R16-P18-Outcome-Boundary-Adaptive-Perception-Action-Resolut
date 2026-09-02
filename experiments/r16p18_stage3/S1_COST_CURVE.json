@@ -1,0 +1,69 @@
+{
+  "axes": {
+    "action": {
+      "flops_secondary": true,
+      "full_resolution": "fine",
+      "rows": [
+        {
+          "flops_error_bar_stdev": null,
+          "flops_normalized_to_fine": 0.25,
+          "flops_per_state_median": 8600000000.0,
+          "native_supported": true,
+          "resolution": "coarse",
+          "wall_clock_ms_error_bar_stdev": null,
+          "wall_clock_ms_median": null,
+          "wall_clock_normalized_to_fine": null
+        },
+        {
+          "flops_error_bar_stdev": null,
+          "flops_normalized_to_fine": 1.0,
+          "flops_per_state_median": 34400000000.0,
+          "native_supported": true,
+          "resolution": "fine",
+          "wall_clock_ms_error_bar_stdev": null,
+          "wall_clock_ms_median": null,
+          "wall_clock_normalized_to_fine": null
+        }
+      ],
+      "wall_clock_primary": true
+    },
+    "visual": {
+      "flops_secondary": true,
+      "full_resolution": "fine_grid4",
+      "rows": [
+        {
+          "flops_error_bar_stdev": null,
+          "flops_normalized_to_fine": 0.5443037974683544,
+          "flops_per_state_median": 8600000000.0,
+          "native_supported": true,
+          "resolution": "coarse",
+          "wall_clock_ms_error_bar_stdev": null,
+          "wall_clock_ms_median": null,
+          "wall_clock_normalized_to_fine": null
+        },
+        {
+          "flops_error_bar_stdev": null,
+          "flops_normalized_to_fine": 1.0,
+          "flops_per_state_median": 15800000000.0,
+          "native_supported": true,
+          "resolution": "fine_grid2",
+          "wall_clock_ms_error_bar_stdev": null,
+          "wall_clock_ms_median": null,
+          "wall_clock_normalized_to_fine": null
+        },
+        {
+          "flops_error_bar_stdev": null,
+          "flops_normalized_to_fine": 1.0,
+          "flops_per_state_median": 15800000000.0,
+          "native_supported": true,
+          "resolution": "fine_grid4",
+          "wall_clock_ms_error_bar_stdev": null,
+          "wall_clock_ms_median": null,
+          "wall_clock_normalized_to_fine": null
+        }
+      ],
+      "wall_clock_primary": true
+    }
+  },
+  "protocol_id": "R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1"
+}

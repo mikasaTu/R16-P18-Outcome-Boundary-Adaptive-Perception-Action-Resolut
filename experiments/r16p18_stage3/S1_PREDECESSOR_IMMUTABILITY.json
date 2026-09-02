@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "audited_at_utc": "2026-09-02T10:30:43Z",
+  "baseline_commit": "ec3fbbd054f9218332122cc477912d3ddf0ad93b",
+  "baseline_tree": "25614ce430df07c9e3ac7f2e5fb8263c055c06ce",
+  "scopes": [
+    "experiments/maniskill_stage25_repair_oracle_v1",
+    "experiments/maniskill_stage26_counterfactual_completion_v1",
+    "experiments/maniskill_stage27r_core_mechanism_reset_v1"
+  ],
+  "audit_command": "git diff --quiet origin/main -- <predecessor scopes>",
+  "modified_predecessor_paths": [],
+  "note": "All historical experiment files were read-only inputs; every new S1 artifact is under experiments/r16p18_stage3."
+}

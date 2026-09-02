@@ -1,0 +1,70 @@
+{
+  "protocol_id": "R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1",
+  "stage": "Stage-3/step1",
+  "scope": "zero_rollout_budget_feasibility",
+  "frozen_before_new_profile": true,
+  "legacy_protocols_read_only": true,
+  "prohibited": [
+    "environment construction",
+    "environment reset",
+    "environment stepping",
+    "simulation episode",
+    "PAI job",
+    "training",
+    "inference in an environment",
+    "weight modification"
+  ],
+  "profile": {
+    "batch_size": 1,
+    "input_source": "existing_cached_observation_tensor_only",
+    "visual_axis": {
+      "coarse": "model_native_global_visual_path",
+      "fine_grid2": "model_native_global_plus_one_crop_from_2x2_grid",
+      "fine_grid4": "model_native_global_plus_one_crop_from_4x4_grid",
+      "action_interval_fixed": 4
+    },
+    "action_axis": {
+      "coarse": "query_interval_4_fixed_8_action_chunk",
+      "fine": "query_interval_1_fixed_8_action_chunk",
+      "visual_mode_fixed": "coarse"
+    },
+    "authorized_host": "dev05",
+    "authorized_device": "one_owner_safe_cuda_gpu",
+    "warmup_default": 50,
+    "repeats_default": 200,
+    "seed_default": 2718001,
+    "cuda_synchronize": true,
+    "device_record_required": true
+  },
+  "inherited_stage27r_reference": {
+    "estimated_flops_numerator_all_coarse": 92438200000000,
+    "estimated_flops_denominator_all_fine": 125120200000000,
+    "recorded_flops_ratio": 0.738795174560143,
+    "recorded_wall_clock_ratio": 0.7502597918865904,
+    "source": "user_frozen_stage27r_fact",
+    "new_measurement": false
+  },
+  "alphas": [0.25, 0.5, 0.75],
+  "thresholds": [0.1, 0.2, 0.3],
+  "feasibility_formulas": {
+    "without_reuse": "k_over_N <= alpha - rho",
+    "with_coarse_reuse": "k_over_N <= (alpha - rho) / (1 - rho)",
+    "rho": "cost(coarse) / cost(fine)",
+    "fraction_is_clipped_at_zero": true,
+    "rho_ge_1_is_infeasible": true
+  },
+  "decision_precedence": [
+    "BLOCKED_BY_SUBSTRATE",
+    "BLOCKED_BY_BUDGET",
+    "PROCEED_VISION_ONLY",
+    "PROCEED_JOINT"
+  ],
+  "g1": {
+    "cost_reproduction": "measured reference ratio within 5 percent, or an explicit verifiable explanation",
+    "visual_threshold": "at least one native visual pair and alpha with k_over_N >= 0.20",
+    "action_threshold": "at least one native action pair and alpha with k_over_N >= 0.20",
+    "native_support": "selected coarse and fine modes must be explicitly supported by the module",
+    "unique_label_rule": true
+  },
+  "termination": "write S1_DECISION.md and stop; do not prepare S2"
+}

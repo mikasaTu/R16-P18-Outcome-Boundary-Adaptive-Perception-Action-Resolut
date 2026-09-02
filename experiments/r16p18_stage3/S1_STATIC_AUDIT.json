@@ -1,0 +1,32 @@
+{
+  "claims": {
+    "no_legacy_stage_write_reference": true,
+    "no_pai_commands": true,
+    "no_simulator_operations": true
+  },
+  "files": [
+    {
+      "bytes": 2957,
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage3-s1/experiments/r16p18_stage3/scripts/prepare_s1_observation.py",
+      "sha256": "16fa4d889b2143342d85a3cf75d2bf68bba12535220e68cc69b29cb31b55b0ae"
+    },
+    {
+      "bytes": 22692,
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage3-s1/experiments/r16p18_stage3/scripts/profile_s1_costs.py",
+      "sha256": "50120f1897611b3a8e4aa947848e67ff032d361a28d1874bcdf922f9840c261d"
+    },
+    {
+      "bytes": 37471,
+      "path": "/mnt/cpfs/zbl-cpfs-new/USERS/leon/code/R16-P18-Outcome-Boundary-Adaptive-Perception-Action-Resolut-stage3-s1/experiments/r16p18_stage3/scripts/compute_feasibility.py",
+      "sha256": "549cb21c8574a0afd00690eb45d41a7e7e833c2812b7add0820e4837ea95f679"
+    }
+  ],
+  "forbidden_findings": [],
+  "protocol_id": "R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1",
+  "scanned_scripts": [
+    "prepare_s1_observation.py",
+    "profile_s1_costs.py",
+    "compute_feasibility.py"
+  ],
+  "status": "PASS"
+}

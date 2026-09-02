@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="921" viewBox="0 0 920 921">
+<rect width="100%" height="100%" fill="white"/><text x="460.0" y="26" text-anchor="middle" font-size="16">visual feasibility heatmap (k/N upper bound)</text>
+<text x="245.0" y="56" text-anchor="middle" font-size="12">bound</text>
+<text x="182" y="97" text-anchor="end" font-size="10">coarse->fine_grid2 | wall_clock_ms | without_reuse | a=0.25</text>
+<rect x="190" y="75" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="97" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="131" text-anchor="end" font-size="10">coarse->fine_grid2 | wall_clock_ms | with_coarse_reuse | a=0.25</text>
+<rect x="190" y="109" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="131" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="165" text-anchor="end" font-size="10">coarse->fine_grid2 | flops | without_reuse | a=0.25</text>
+<rect x="190" y="143" width="110" height="32" fill="rgb(255,0,80)" stroke="white"/>
+<text x="245.0" y="165" text-anchor="middle" font-size="11">0.000</text>
+<text x="182" y="199" text-anchor="end" font-size="10">coarse->fine_grid2 | flops | with_coarse_reuse | a=0.25</text>
+<rect x="190" y="177" width="110" height="32" fill="rgb(255,0,80)" stroke="white"/>
+<text x="245.0" y="199" text-anchor="middle" font-size="11">0.000</text>
+<text x="182" y="233" text-anchor="end" font-size="10">coarse->fine_grid2 | wall_clock_ms | without_reuse | a=0.50</text>
+<rect x="190" y="211" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="233" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="267" text-anchor="end" font-size="10">coarse->fine_grid2 | wall_clock_ms | with_coarse_reuse | a=0.50</text>
+<rect x="190" y="245" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="267" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="301" text-anchor="end" font-size="10">coarse->fine_grid2 | flops | without_reuse | a=0.50</text>
+<rect x="190" y="279" width="110" height="32" fill="rgb(255,0,80)" stroke="white"/>
+<text x="245.0" y="301" text-anchor="middle" font-size="11">0.000</text>
+<text x="182" y="335" text-anchor="end" font-size="10">coarse->fine_grid2 | flops | with_coarse_reuse | a=0.50</text>
+<rect x="190" y="313" width="110" height="32" fill="rgb(255,0,80)" stroke="white"/>
+<text x="245.0" y="335" text-anchor="middle" font-size="11">0.000</text>
+<text x="182" y="369" text-anchor="end" font-size="10">coarse->fine_grid2 | wall_clock_ms | without_reuse | a=0.75</text>
+<rect x="190" y="347" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="369" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="403" text-anchor="end" font-size="10">coarse->fine_grid2 | wall_clock_ms | with_coarse_reuse | a=0.75</text>
+<rect x="190" y="381" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="403" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="437" text-anchor="end" font-size="10">coarse->fine_grid2 | flops | without_reuse | a=0.75</text>
+<rect x="190" y="415" width="110" height="32" fill="rgb(202,45,80)" stroke="white"/>
+<text x="245.0" y="437" text-anchor="middle" font-size="11">0.206</text>
+<text x="182" y="471" text-anchor="end" font-size="10">coarse->fine_grid2 | flops | with_coarse_reuse | a=0.75</text>
+<rect x="190" y="449" width="110" height="32" fill="rgb(139,99,80)" stroke="white"/>
+<text x="245.0" y="471" text-anchor="middle" font-size="11">0.451</text>
+<text x="182" y="505" text-anchor="end" font-size="10">coarse->fine_grid4 | wall_clock_ms | without_reuse | a=0.25</text>
+<rect x="190" y="483" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="505" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="539" text-anchor="end" font-size="10">coarse->fine_grid4 | wall_clock_ms | with_coarse_reuse | a=0.25</text>
+<rect x="190" y="517" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="539" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="573" text-anchor="end" font-size="10">coarse->fine_grid4 | flops | without_reuse | a=0.25</text>
+<rect x="190" y="551" width="110" height="32" fill="rgb(255,0,80)" stroke="white"/>
+<text x="245.0" y="573" text-anchor="middle" font-size="11">0.000</text>
+<text x="182" y="607" text-anchor="end" font-size="10">coarse->fine_grid4 | flops | with_coarse_reuse | a=0.25</text>
+<rect x="190" y="585" width="110" height="32" fill="rgb(255,0,80)" stroke="white"/>
+<text x="245.0" y="607" text-anchor="middle" font-size="11">0.000</text>
+<text x="182" y="641" text-anchor="end" font-size="10">coarse->fine_grid4 | wall_clock_ms | without_reuse | a=0.50</text>
+<rect x="190" y="619" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="641" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="675" text-anchor="end" font-size="10">coarse->fine_grid4 | wall_clock_ms | with_coarse_reuse | a=0.50</text>
+<rect x="190" y="653" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="675" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="709" text-anchor="end" font-size="10">coarse->fine_grid4 | flops | without_reuse | a=0.50</text>
+<rect x="190" y="687" width="110" height="32" fill="rgb(255,0,80)" stroke="white"/>
+<text x="245.0" y="709" text-anchor="middle" font-size="11">0.000</text>
+<text x="182" y="743" text-anchor="end" font-size="10">coarse->fine_grid4 | flops | with_coarse_reuse | a=0.50</text>
+<rect x="190" y="721" width="110" height="32" fill="rgb(255,0,80)" stroke="white"/>
+<text x="245.0" y="743" text-anchor="middle" font-size="11">0.000</text>
+<text x="182" y="777" text-anchor="end" font-size="10">coarse->fine_grid4 | wall_clock_ms | without_reuse | a=0.75</text>
+<rect x="190" y="755" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="777" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="811" text-anchor="end" font-size="10">coarse->fine_grid4 | wall_clock_ms | with_coarse_reuse | a=0.75</text>
+<rect x="190" y="789" width="110" height="32" fill="#eeeeee" stroke="white"/>
+<text x="245.0" y="811" text-anchor="middle" font-size="11">NA</text>
+<text x="182" y="845" text-anchor="end" font-size="10">coarse->fine_grid4 | flops | without_reuse | a=0.75</text>
+<rect x="190" y="823" width="110" height="32" fill="rgb(202,45,80)" stroke="white"/>
+<text x="245.0" y="845" text-anchor="middle" font-size="11">0.206</text>
+<text x="182" y="879" text-anchor="end" font-size="10">coarse->fine_grid4 | flops | with_coarse_reuse | a=0.75</text>
+<rect x="190" y="857" width="110" height="32" fill="rgb(139,99,80)" stroke="white"/>
+<text x="245.0" y="879" text-anchor="middle" font-size="11">0.451</text>
+</svg>
