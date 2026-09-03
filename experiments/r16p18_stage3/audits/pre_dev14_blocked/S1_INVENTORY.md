@@ -2,9 +2,9 @@ Inventory convention: this directory follows the existing repository convention 
 
 # S1 Inventory
 
-Protocol: `R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1`
-Repository HEAD at inventory time: `7f469f5ae2027f194b83357578375ba926d8c7e0`
-Repository tree at inventory time: `12fdda992072afdc458984e033917495451f7a6e`
+Protocol: `R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1`  
+Repository HEAD at inventory time: `ec3fbbd054f9218332122cc477912d3ddf0ad93b`  
+Repository tree at inventory time: `25614ce430df07c9e3ac7f2e5fb8263c055c06ce`
 
 ## S1.0 substrate audit
 
@@ -63,12 +63,9 @@ The frozen Stage-2.7R screen task list is StackCube-v1, PegInsertionSide-v1, Plu
 | `experiments/maniskill_stage27r_core_mechanism_reset_v1/artifacts/formal-run/statistics.json` | True | 29655763 | `4cc71eff2251f008bfb9910e8a4065459d998a9a635d8dc5d075b40896ce87bd` | aggregated_state_treatments[].accounting; cost; gpu_latency_ms |
 | `experiments/maniskill_stage27r_core_mechanism_reset_v1/audits/mechanism_reverse_engineering_summary.json` | True | 20071 | `1193b7435bea426f195a50447739922ecfb2297f9ff54808b324a1052a82babb` | compute_budget.all_coarse_cost; compute_budget.all_fine_cost; recorded ratio |
 | `experiments/maniskill_stage27r_core_mechanism_reset_v1/artifacts/formal-run/screen/TASK_SELECTION.json` | True | 82293 | `c9807d8786f75c334766636ffe892e81e4cb3d3f0da7344ac0499d3c044f0fbf` | groups[*].screened; groups[*].selected; seed; task |
-| `experiments/r16p18_stage3/S1_PROFILE.json` | True | 33388 | `a7e6e7c1c446d38b6ee3673a5e90244a5ea9e160776540275dd0d2f512de0f12` | measurement; immutable input hashes; native support; raw timing samples; operator FLOPs |
-| `experiments/r16p18_stage3/S1_DEV14_RUNTIME_AUDIT.json` | True | 1886 | `77375a25bd7e8464b35d523f53a979c2595d3d441d880bc3428d8c5ca47db039` | host; physical GPU; co-tenancy disclosure; sampling summary; no-rollout assertions |
-| `experiments/r16p18_stage3/S1_PROTOCOL_AMENDMENT_DEV14.json` | True | 847 | `d384e15d3b34d2fcc7f2621bf799d2a5a6ab4cf1c7d97f7f4c931086988c04b9` | user-authorized profiling-host amendment; unchanged constraints |
 
 ## Fresh-profile boundary
 
-Fresh S1 profiling is asserted by `S1_PROFILE.json`: batch size 1, 50 warmups, 200 CUDA-synchronized repeats, all five native resolution conditions, raw timing samples, and PyTorch operator FLOPs. The dev14 host amendment and disclosed GPU co-tenancy are recorded in `S1_PROTOCOL_AMENDMENT_DEV14.json` and `S1_DEV14_RUNTIME_AUDIT.json`. No environment was created, reset, or stepped.
+No fresh S1 profiling result is asserted by this inventory. `prepare_s1_observation.py` reads one observation through the frozen replay-HDF5 preprocessing path, and `profile_s1_costs.py` reconstructs the frozen EMA model using dummy tensor spaces. Both fail closed when an input is absent; neither constructs, resets, or steps an environment. The archived Stage-2.7R accounting fallback may populate diagnostic FLOP feasibility rows, but it cannot pass G1/S1.1 because fresh wall-clock and FLOP measurements remain unproven.
 
 `S1_COST_REPRO.json`, `S1_COST_CURVE.json`, `S1_FEASIBILITY.json`, plots, and `S1_DECISION.md` are generated only by the calculator after a supplied profile or explicitly selected archived fallback. They must not be hand-filled.

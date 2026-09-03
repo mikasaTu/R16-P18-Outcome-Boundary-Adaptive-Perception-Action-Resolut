@@ -3,7 +3,7 @@
 
 This utility never constructs, resets, or steps an environment. It uses the
 same Stage-2.7R Native128Dataset preprocessing as training and writes one
-fail-on-overwrite tensor payload for the dev05 forward-only profiler.
+fail-on-overwrite tensor payload for the authorized forward-only profiler.
 """
 from __future__ import annotations
 

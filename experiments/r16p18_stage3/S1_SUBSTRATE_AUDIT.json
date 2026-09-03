@@ -1,29 +1,40 @@
 {
   "protocol_id": "R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1",
-  "checked_at_utc": "2026-09-02T10:30:43Z",
-  "fresh_profile_required_host": "dev05",
-  "dev05_ssh": {
-    "target": "leon@39.101.65.229:1037",
-    "command_class": "read_only_connectivity_probe",
-    "connect_timeout_seconds": 10,
-    "exit_code": 255,
-    "stderr": "ssh: connect to host 39.101.65.229 port 1037: Connection timed out",
-    "reachable": false
+  "checked_at_utc": "2026-09-02T13:09:45Z",
+  "host_amendment": {
+    "path": "S1_PROTOCOL_AMENDMENT_DEV14.json",
+    "status": "USER_AUTHORIZED",
+    "effective_host_role": "dev14 DSW"
   },
-  "current_dsw_gpu_owner_safety": {
-    "host": "dsw-925252-dd65dfccb-xgbdf",
+  "runtime": {
+    "hostname": "dsw-925252-dd65dfccb-xgbdf",
+    "user": "leon",
     "gpu_model": "NVIDIA A800-SXM4-80GB",
-    "gpu_count": 4,
-    "all_devices_have_foreign_processes": true,
-    "observed_foreign_owners": [
-      "claire",
-      "herbert",
-      "lanejin",
-      "liufantan",
-      "yudit"
-    ],
-    "used_memory_mib": [75959, 26033, 18730, 75532],
-    "action": "not_used"
+    "physical_gpu_index": 2,
+    "profile_status": "PASS",
+    "runtime_audit": "S1_DEV14_RUNTIME_AUDIT.json"
+  },
+  "immutable_inputs": {
+    "observation_h5": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/dataset/leon/r16-p18-maniskill-stage27r-core-reset-v2/StackCube-v1/splits/train/trajectory.h5",
+      "bytes": 758286502,
+      "sha256": "5d6d204994b06557c07f59eb4ce73184a8ee24ae6d02fa1775adeb9e73a2d923"
+    },
+    "cached_observation": {
+      "temporary_path": "/tmp/r16p18-s1-dev14-observation.pt",
+      "bytes": 111272,
+      "sha256": "9db516f1b39fa148f261b62418a3d078b347d82775f0a081f04ce182303e70de"
+    },
+    "checkpoint": {
+      "path": "/mnt/cpfs/zbl-cpfs-new/CKPT/leon/torch/r16-p18-maniskill-stage27r-core-reset-v1/stage27r-data-train-v20-unique-recovery/training/StackCube-v1/seed_16018/checkpoints/step_000025000/checkpoint.pt",
+      "bytes": 332830162,
+      "sha256": "4b68ef98c26e920aac0bad738115766b8e35569d102a7aaefb75f43cc5bf2fd7"
+    },
+    "stage27_statistics": {
+      "path": "experiments/maniskill_stage27r_core_mechanism_reset_v1/artifacts/formal-run/statistics.json",
+      "bytes": 29655763,
+      "sha256": "4cc71eff2251f008bfb9910e8a4065459d998a9a635d8dc5d075b40896ce87bd"
+    }
   },
   "pai": {
     "submitted": false,
@@ -33,13 +44,19 @@
     "environment_created": false,
     "environment_reset": false,
     "environment_step_called": false,
-    "rollout_run": false
+    "rollout_run": false,
+    "training_run": false
   },
   "consequence": {
-    "fresh_wall_clock_available": false,
-    "fresh_flop_counter_available": false,
-    "archived_diagnostic_completed": true,
-    "g1_cost_reproduction": "FAIL",
-    "unique_label_precedence": "BLOCKED_BY_SUBSTRATE"
-  }
+    "fresh_wall_clock_available": true,
+    "fresh_flop_counter_available": true,
+    "g1_recalculation_complete": true,
+    "co_tenancy_disclosed": true,
+    "frozen_device_requirement": "one_owner_safe_cuda_gpu",
+    "device_requirement_met": false,
+    "formal_numeric_profile_accepted": false,
+    "diagnostic_budget_geometry_label": "PROCEED_JOINT",
+    "formal_g1_label": "BLOCKED_BY_SUBSTRATE"
+  },
+  "status": "FAIL_DEVICE_ISOLATION"
 }

@@ -1,0 +1,24 @@
+{
+  "protocol_id": "R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1",
+  "amendment_id": "S1-HOST-DEV14-20260902",
+  "authorized_by": "user",
+  "authorized_at_utc": "2026-09-02T12:40:00Z",
+  "exact_instruction": "不需要链接dev05，直接dev14上操作，继续完成计划里所有的任务",
+  "change": {
+    "before": "fresh single-GPU forward profiling on dev05",
+    "after": "fresh single-GPU forward profiling in the existing dev14 DSW environment"
+  },
+  "unchanged_constraints": [
+    "no simulation episode",
+    "no env.step loop",
+    "no PAI job",
+    "no training or weight update",
+    "no rollout",
+    "batch-size-one forward profiling only",
+    "warmup 50 and repeats 200",
+    "CUDA synchronization",
+    "wall-clock median and operator FLOPs both required",
+    "stop after G1"
+  ],
+  "frozen_predecessor_files_modified": false
+}

@@ -5,24 +5,26 @@
       "full_resolution": "fine",
       "rows": [
         {
-          "flops_error_bar_stdev": null,
+          "flops_error_bar_stdev": 0.0,
           "flops_normalized_to_fine": 0.25,
-          "flops_per_state_median": 8600000000.0,
+          "flops_per_state_median": 4200932352.0,
           "native_supported": true,
           "resolution": "coarse",
-          "wall_clock_ms_error_bar_stdev": null,
-          "wall_clock_ms_median": null,
-          "wall_clock_normalized_to_fine": null
+          "wall_clock_ms_error_bar_stdev": 5.063605958810828,
+          "wall_clock_ms_median": 30.567424546461552,
+          "wall_clock_normalized_error_bar_stdev": 0.040970689936448784,
+          "wall_clock_normalized_to_fine": 0.2473273954245414
         },
         {
-          "flops_error_bar_stdev": null,
+          "flops_error_bar_stdev": 0.0,
           "flops_normalized_to_fine": 1.0,
-          "flops_per_state_median": 34400000000.0,
+          "flops_per_state_median": 16803729408.0,
           "native_supported": true,
           "resolution": "fine",
-          "wall_clock_ms_error_bar_stdev": null,
-          "wall_clock_ms_median": null,
-          "wall_clock_normalized_to_fine": null
+          "wall_clock_ms_error_bar_stdev": 21.70583438449452,
+          "wall_clock_ms_median": 123.59093700069934,
+          "wall_clock_normalized_error_bar_stdev": 0.17562642464933895,
+          "wall_clock_normalized_to_fine": 1.0
         }
       ],
       "wall_clock_primary": true
@@ -32,34 +34,37 @@
       "full_resolution": "fine_grid4",
       "rows": [
         {
-          "flops_error_bar_stdev": null,
-          "flops_normalized_to_fine": 0.5443037974683544,
-          "flops_per_state_median": 8600000000.0,
+          "flops_error_bar_stdev": 0.0,
+          "flops_normalized_to_fine": 0.5053436205260166,
+          "flops_per_state_median": 4200932352.0,
           "native_supported": true,
           "resolution": "coarse",
-          "wall_clock_ms_error_bar_stdev": null,
-          "wall_clock_ms_median": null,
-          "wall_clock_normalized_to_fine": null
+          "wall_clock_ms_error_bar_stdev": 5.399476151050347,
+          "wall_clock_ms_median": 28.15814095083624,
+          "wall_clock_normalized_error_bar_stdev": 0.12113920426198238,
+          "wall_clock_normalized_to_fine": 0.6317380969665914
         },
         {
-          "flops_error_bar_stdev": null,
+          "flops_error_bar_stdev": 0.0,
           "flops_normalized_to_fine": 1.0,
-          "flops_per_state_median": 15800000000.0,
+          "flops_per_state_median": 8313021440.0,
           "native_supported": true,
           "resolution": "fine_grid2",
-          "wall_clock_ms_error_bar_stdev": null,
-          "wall_clock_ms_median": null,
-          "wall_clock_normalized_to_fine": null
+          "wall_clock_ms_error_bar_stdev": 7.8959949621079275,
+          "wall_clock_ms_median": 49.043952487409115,
+          "wall_clock_normalized_error_bar_stdev": 0.17714950854636288,
+          "wall_clock_normalized_to_fine": 1.1003188479740753
         },
         {
-          "flops_error_bar_stdev": null,
+          "flops_error_bar_stdev": 0.0,
           "flops_normalized_to_fine": 1.0,
-          "flops_per_state_median": 15800000000.0,
+          "flops_per_state_median": 8313021440.0,
           "native_supported": true,
           "resolution": "fine_grid4",
-          "wall_clock_ms_error_bar_stdev": null,
-          "wall_clock_ms_median": null,
-          "wall_clock_normalized_to_fine": null
+          "wall_clock_ms_error_bar_stdev": 6.901891469050922,
+          "wall_clock_ms_median": 44.57249148981646,
+          "wall_clock_normalized_error_bar_stdev": 0.15484643640860432,
+          "wall_clock_normalized_to_fine": 1.0
         }
       ],
       "wall_clock_primary": true

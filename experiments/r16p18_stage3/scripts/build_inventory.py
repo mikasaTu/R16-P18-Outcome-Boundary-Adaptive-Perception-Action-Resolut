@@ -86,6 +86,21 @@ def build(repo_root: Path, output: Path) -> str:
             f"{OLD_EXPERIMENT}/artifacts/formal-run/screen/TASK_SELECTION.json",
             "groups[*].screened; groups[*].selected; seed; task",
         ),
+        _record(
+            repo_root,
+            "experiments/r16p18_stage3/S1_PROFILE.json",
+            "measurement; immutable input hashes; native support; raw timing samples; operator FLOPs",
+        ),
+        _record(
+            repo_root,
+            "experiments/r16p18_stage3/S1_DEV14_RUNTIME_AUDIT.json",
+            "host; physical GPU; co-tenancy disclosure; sampling summary; no-rollout assertions",
+        ),
+        _record(
+            repo_root,
+            "experiments/r16p18_stage3/S1_PROTOCOL_AMENDMENT_DEV14.json",
+            "user-authorized profiling-host amendment; unchanged constraints",
+        ),
     ]
     screen_path = repo_root / f"{OLD_EXPERIMENT}/artifacts/formal-run/screen/TASK_SELECTION.json"
     screen_summary: dict[str, Any] = {}
@@ -117,8 +132,8 @@ def build(repo_root: Path, output: Path) -> str:
         "",
         "# S1 Inventory",
         "",
-        f"Protocol: `{PROTOCOL_ID}`  ",
-        f"Repository HEAD at inventory time: `{_git_value(repo_root, 'rev-parse', 'HEAD')}`  ",
+        f"Protocol: `{PROTOCOL_ID}`",
+        f"Repository HEAD at inventory time: `{_git_value(repo_root, 'rev-parse', 'HEAD')}`",
         f"Repository tree at inventory time: `{_git_value(repo_root, 'rev-parse', tree_ref)}`",
         "",
         "## S1.0 substrate audit",
@@ -157,6 +172,18 @@ def build(repo_root: Path, output: Path) -> str:
         )
     if not screen_summary:
         lines.append("| unavailable (immutable screen file absent or unparseable) | — | — | — | — | — | — |")
+    profile_exists = (repo_root / "experiments/r16p18_stage3/S1_PROFILE.json").is_file()
+    profile_boundary = (
+        "Fresh S1 profiling is asserted by `S1_PROFILE.json`: batch size 1, 50 warmups, "
+        "200 CUDA-synchronized repeats, all five native resolution conditions, raw timing "
+        "samples, and PyTorch operator FLOPs. The dev14 host amendment and disclosed GPU "
+        "co-tenancy are recorded in `S1_PROTOCOL_AMENDMENT_DEV14.json` and "
+        "`S1_DEV14_RUNTIME_AUDIT.json`. No environment was created, reset, or stepped."
+        if profile_exists
+        else
+        "No fresh S1 profiling result is asserted by this inventory. "
+        "`prepare_s1_observation.py` and `profile_s1_costs.py` fail closed when an input is absent."
+    )
     lines += [
         "",
         "## Source file hashes",
@@ -172,7 +199,7 @@ def build(repo_root: Path, output: Path) -> str:
         "",
         "## Fresh-profile boundary",
         "",
-        "No fresh S1 profiling result is asserted by this inventory. `prepare_s1_observation.py` reads one observation through the frozen replay-HDF5 preprocessing path, and `profile_s1_costs.py` reconstructs the frozen EMA model using dummy tensor spaces. Both fail closed when an input is absent; neither constructs, resets, or steps an environment. The archived Stage-2.7R accounting fallback may populate diagnostic FLOP feasibility rows, but it cannot pass G1/S1.1 because fresh wall-clock and FLOP measurements remain unproven.",
+        profile_boundary,
         "",
         "`S1_COST_REPRO.json`, `S1_COST_CURVE.json`, `S1_FEASIBILITY.json`, plots, and `S1_DECISION.md` are generated only by the calculator after a supplied profile or explicitly selected archived fallback. They must not be hand-filled.",
         "",

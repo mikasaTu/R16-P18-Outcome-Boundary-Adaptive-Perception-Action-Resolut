@@ -1,0 +1,58 @@
+{
+  "protocol_id": "R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1",
+  "profiled_at_utc": "2026-09-02T13:06:00Z",
+  "host_role": "user-authorized dev14 DSW environment",
+  "runtime_hostname": "dsw-925252-dd65dfccb-xgbdf",
+  "runtime_user": "leon",
+  "runtime_uid_gid": "2254:2254",
+  "physical_gpu_index": 2,
+  "cuda_visible_devices": "2",
+  "logical_device": "cuda:0",
+  "device": "NVIDIA A800-SXM4-80GB",
+  "initial_gpu_utilization_percent": 0,
+  "co_tenant_processes_present": true,
+  "co_tenant_owners_observed": [
+    "yudit",
+    "liufantan"
+  ],
+  "co_tenant_action": "none; no process was terminated, paused, signalled, or modified",
+  "sampler": {
+    "path": "audits/S1_DEV14_GPU_SAMPLES.csv",
+    "sha256": "a5caaa31e4823be58338226c70a9e9c859ff8e452aafcef0e8c63544cbf0a68e",
+    "sample_interval_ms": 1000,
+    "sample_count": 168,
+    "utilization_percent": {
+      "min": 0,
+      "median": 0,
+      "mean": 15.339285714285714,
+      "max": 99
+    },
+    "memory_used_mib": {
+      "min": 20262,
+      "max": 27288
+    },
+    "power_w": {
+      "min": 78.54,
+      "median": 78.89,
+      "max": 149.5
+    }
+  },
+  "profile": {
+    "path": "S1_PROFILE.json",
+    "sha256": "a7e6e7c1c446d38b6ee3673a5e90244a5ea9e160776540275dd0d2f512de0f12",
+    "warmup": 50,
+    "repeats": 200,
+    "batch_size": 1,
+    "cuda_synchronize": true
+  },
+  "environment_or_rollout": {
+    "environment_created": false,
+    "environment_reset": false,
+    "environment_step_called": false,
+    "rollout_run": false,
+    "pai_job_submitted": false,
+    "training_run": false
+  },
+  "timing_interference_caveat": "The physical GPU contained memory-resident processes from other owners. Median utilization was zero and all 200 synchronized samples are retained, but co-tenancy is disclosed as a bounded wall-clock limitation rather than hidden.",
+  "status": "PROFILE_COMPLETE_WITH_DISCLOSED_CO_TENANCY"
+}

@@ -178,6 +178,9 @@ def test_decision_budget_and_substrate_precedence():
     repro_ok = {"fresh_profile_available": True, "within_5_percent": True, "explanation_accepts_gate": False}
     decision = compute_feasibility._decision(repro_ok, feasibility)
     assert decision["unique_label"] == "PROCEED_JOINT"
+    assert decision["g1"]["4_native_resolution_support"]["evidence_tier"].endswith(
+        "fresh runtime forward verified"
+    )
     # Remove visual candidates while retaining an otherwise valid substrate.
     for axis in ("visual",):
         axes[axis]["candidates_both_metrics"]["0.20"] = []
@@ -187,6 +190,75 @@ def test_decision_budget_and_substrate_precedence():
         {"fresh_profile_available": False, "within_5_percent": True, "explanation_accepts_gate": False},
         feasibility,
     )["unique_label"] == "BLOCKED_BY_SUBSTRATE"
+
+
+def test_decision_discloses_reuse_conditional_visual_gate():
+    profile = _profile(
+        visual_wall=(3.0, 5.0),
+        visual_flops=(3.0, 5.0),
+        action_wall=(1.0, 4.0),
+        action_flops=(1.0, 4.0),
+    )
+    axes = {
+        axis: compute_feasibility._axis_feasibility(profile, axis)
+        for axis in ("visual", "action")
+    }
+    decision = compute_feasibility._decision(
+        {
+            "fresh_profile_available": True,
+            "within_5_percent": True,
+            "explanation_accepts_gate": False,
+        },
+        axes,
+    )
+    assert decision["unique_label"] == "PROCEED_JOINT"
+    assert decision["conditional_flags"] == ["VISUAL_GATE_REQUIRES_COARSE_REUSE"]
+
+
+def test_raw_wall_samples_populate_cost_error_bars():
+    profile = _profile()
+    for row in profile["samples"]:
+        row["wall_clock_ms_samples"] = [
+            row["wall_clock_ms_median"] - 0.1,
+            row["wall_clock_ms_median"] + 0.1,
+        ]
+    axes = {
+        axis: compute_feasibility._axis_feasibility(profile, axis)
+        for axis in ("visual", "action")
+    }
+    curve = compute_feasibility._cost_curve(axes)
+    assert curve["axes"]["visual"]["rows"][0]["wall_clock_ms_error_bar_stdev"] is not None
+    svg = compute_feasibility._svg_curve("visual", curve["axes"]["visual"])
+    assert 'class="error-bar"' in svg
+
+
+def test_co_tenant_runtime_audit_blocks_formal_g1(tmp_path):
+    profile = _profile(
+        visual_wall=(1.0, 4.0),
+        visual_flops=(1.0, 4.0),
+        action_wall=(1.0, 4.0),
+        action_flops=(1.0, 4.0),
+    )
+    profile["reproduction"] = {
+        "measured_flops_ratio": compute_feasibility.REFERENCE["flops_ratio"],
+        "measured_wall_clock_ratio": compute_feasibility.REFERENCE["wall_clock_ratio"],
+        "source": "unit-test-reference",
+    }
+    profile_path = tmp_path / "profile.json"
+    profile_path.write_text(json.dumps(profile), encoding="utf-8")
+    audit_path = tmp_path / "runtime.json"
+    audit_path.write_text(
+        json.dumps({"co_tenant_processes_present": True}), encoding="utf-8"
+    )
+    result = compute_feasibility.compute(
+        profile_path, tmp_path / "results", audit_path
+    )
+    assert result["reproduction"]["within_5_percent"] is True
+    assert result["reproduction"]["protocol_device_compliant"] is False
+    assert result["reproduction"]["status"] == "NUMERIC_PASS_PROTOCOL_DEVICE_FAIL"
+    assert result["decision"]["g1"]["1_cost_reproduction"]["status"] == "FAIL"
+    assert result["decision"]["unique_label"] == "BLOCKED_BY_SUBSTRATE"
+    assert result["decision"]["diagnostic_budget_geometry_label"] == "PROCEED_JOINT"
 
 
 def test_static_audit_and_manifest(tmp_path):
@@ -223,6 +295,9 @@ def test_archived_fallback_keeps_fresh_gate_failed(tmp_path):
     assert result["reproduction"]["fresh_profile_available"] is False
     assert result["decision"]["unique_label"] == "BLOCKED_BY_SUBSTRATE"
     assert result["decision"]["g1"]["4_native_resolution_support"]["status"] == "PASS"
+    assert result["decision"]["g1"]["4_native_resolution_support"]["evidence_tier"].endswith(
+        "fresh runtime forward unverified"
+    )
     assert (tmp_path / "fallback" / "S1_DECISION.md").read_text().strip().endswith(
         "BLOCKED_BY_SUBSTRATE"
     )

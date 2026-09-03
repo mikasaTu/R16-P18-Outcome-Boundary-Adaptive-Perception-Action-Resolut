@@ -360,7 +360,12 @@ def _measure_flops(
         from torch.utils.flop_counter import FlopCounterMode
     except ImportError as exc:  # pragma: no cover - pinned torch provides it.
         raise RuntimeError("PyTorch FlopCounterMode is required") from exc
-    with t.inference_mode(), FlopCounterMode(display=False) as counter:
+    # PyTorch 2.5's ModuleTracker (used by FlopCounterMode) registers graph
+    # hooks and is incompatible with tensors created inside inference_mode.
+    # The model is in eval mode and this call performs no optimizer/backward;
+    # leave autograd enabled solely so the official counter can trace every
+    # native operator without changing the forward graph or weights.
+    with FlopCounterMode(display=False) as counter:
         for _ in range(query_count):
             _forward(model, observation, visual_mode, action_mode)
     value = float(counter.get_total_flops())

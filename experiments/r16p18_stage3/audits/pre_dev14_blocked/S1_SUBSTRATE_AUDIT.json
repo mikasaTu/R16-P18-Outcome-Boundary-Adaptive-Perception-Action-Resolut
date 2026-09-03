@@ -1,0 +1,45 @@
+{
+  "protocol_id": "R16-P18-STAGE3-S1-BUDGET-FEASIBILITY-V1",
+  "checked_at_utc": "2026-09-02T10:30:43Z",
+  "fresh_profile_required_host": "dev05",
+  "dev05_ssh": {
+    "target": "leon@39.101.65.229:1037",
+    "command_class": "read_only_connectivity_probe",
+    "connect_timeout_seconds": 10,
+    "exit_code": 255,
+    "stderr": "ssh: connect to host 39.101.65.229 port 1037: Connection timed out",
+    "reachable": false
+  },
+  "current_dsw_gpu_owner_safety": {
+    "host": "dsw-925252-dd65dfccb-xgbdf",
+    "gpu_model": "NVIDIA A800-SXM4-80GB",
+    "gpu_count": 4,
+    "all_devices_have_foreign_processes": true,
+    "observed_foreign_owners": [
+      "claire",
+      "herbert",
+      "lanejin",
+      "liufantan",
+      "yudit"
+    ],
+    "used_memory_mib": [75959, 26033, 18730, 75532],
+    "action": "not_used"
+  },
+  "pai": {
+    "submitted": false,
+    "reason": "S1 hard constraint prohibits every PAI job"
+  },
+  "environment_or_rollout": {
+    "environment_created": false,
+    "environment_reset": false,
+    "environment_step_called": false,
+    "rollout_run": false
+  },
+  "consequence": {
+    "fresh_wall_clock_available": false,
+    "fresh_flop_counter_available": false,
+    "archived_diagnostic_completed": true,
+    "g1_cost_reproduction": "FAIL",
+    "unique_label_precedence": "BLOCKED_BY_SUBSTRATE"
+  }
+}

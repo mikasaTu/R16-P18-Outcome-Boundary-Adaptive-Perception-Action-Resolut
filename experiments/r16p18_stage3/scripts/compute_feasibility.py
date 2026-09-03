@@ -111,7 +111,14 @@ def _extract_costs(profile: Mapping[str, Any], axis: str) -> dict[str, dict[str,
         resolution = row.get("resolution")
         if not isinstance(resolution, str) or not resolution:
             raise ValueError(f"missing {axis} resolution in profile row")
-        grouped[resolution].append(_cost_from_row(row))
+        wall, flops = _cost_from_row(row)
+        raw_wall = row.get("wall_clock_ms_samples")
+        if isinstance(raw_wall, Sequence) and not isinstance(raw_wall, (str, bytes)):
+            finite_wall = [_number(item) for item in raw_wall]
+            finite_wall = [item for item in finite_wall if item is not None]
+            grouped[resolution].extend((item, flops) for item in finite_wall)
+        else:
+            grouped[resolution].append((wall, flops))
     if not grouped:
         axes = profile.get("axes", {})
         axis_payload = axes.get(axis) if isinstance(axes, Mapping) else None
@@ -394,6 +401,9 @@ def _cost_curve(axes: Mapping[str, Any]) -> dict[str, Any]:
                     "wall_clock_ms_median": value["wall_clock_ms_median"],
                     "wall_clock_ms_error_bar_stdev": _stdev(value["wall_clock_ms_samples"]),
                     "wall_clock_normalized_to_fine": _safe_divide(value["wall_clock_ms_median"], full_wall),
+                    "wall_clock_normalized_error_bar_stdev": _safe_divide(
+                        _stdev(value["wall_clock_ms_samples"]), full_wall
+                    ),
                     "flops_per_state_median": value["flops_per_state_median"],
                     "flops_error_bar_stdev": _stdev(value["flops_per_state_samples"]),
                     "flops_normalized_to_fine": _safe_divide(value["flops_per_state_median"], full_flops),
@@ -532,12 +542,16 @@ def _svg_curve(axis: str, curve: Mapping[str, Any]) -> str:
         ("wall_clock_normalized_to_fine", "#1f77b4", "wall-clock"),
         ("flops_normalized_to_fine", "#d62728", "FLOPs"),
     ]
-    all_values = [
-        float(row[key])
-        for row in rows
-        for key, _, _ in series
-        if row.get(key) is not None
-    ]
+    all_values = []
+    for row in rows:
+        for key, _, _ in series:
+            value = row.get(key)
+            if value is None:
+                continue
+            upper = float(value)
+            if key == "wall_clock_normalized_to_fine":
+                upper += float(row.get("wall_clock_normalized_error_bar_stdev") or 0.0)
+            all_values.append(upper)
     ymax = max(1.0, max(all_values, default=1.0) * 1.15)
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
@@ -558,6 +572,15 @@ def _svg_curve(axis: str, curve: Mapping[str, Any]) -> str:
             x = margin + (plot_w * index / max(1, len(rows) - 1))
             y = height - margin - plot_h * float(value) / ymax
             points.append(f"{x:.2f},{y:.2f}")
+            if key == "wall_clock_normalized_to_fine":
+                error = row.get("wall_clock_normalized_error_bar_stdev")
+                if error is not None:
+                    y_hi = height - margin - plot_h * (float(value) + float(error)) / ymax
+                    y_lo = height - margin - plot_h * max(0.0, float(value) - float(error)) / ymax
+                    parts.append(
+                        f'<line class="error-bar" x1="{x:.2f}" y1="{y_hi:.2f}" '
+                        f'x2="{x:.2f}" y2="{y_lo:.2f}" stroke="{colour}" stroke-width="1"/>'
+                    )
         if points:
             parts.append(f'<polyline points="{" ".join(points)}" fill="none" stroke="{colour}" stroke-width="2"/>')
             for point in points:
@@ -625,10 +648,11 @@ def _decision(repro: Mapping[str, Any], feasibility: Mapping[str, Any]) -> dict[
     )
     # An archived Stage-2.7R ratio can populate diagnostic tables but cannot
     # satisfy S1.1: G1 requires a fresh batch-size-one measurement.
-    repro_gate = bool(
+    numeric_repro_gate = bool(
         repro.get("fresh_profile_available")
         and (repro.get("within_5_percent") or repro.get("explanation_accepts_gate"))
     )
+    repro_gate = bool(numeric_repro_gate and repro.get("protocol_device_compliant", True))
     if not repro_gate or not native_gate:
         label = "BLOCKED_BY_SUBSTRATE"
     elif not visual_gate:
@@ -637,6 +661,25 @@ def _decision(repro: Mapping[str, Any], feasibility: Mapping[str, Any]) -> dict[
         label = "PROCEED_VISION_ONLY"
     else:
         label = "PROCEED_JOINT"
+    if not numeric_repro_gate or not native_gate:
+        diagnostic_label = "BLOCKED_BY_SUBSTRATE"
+    elif not visual_gate:
+        diagnostic_label = "BLOCKED_BY_BUDGET"
+    elif not action_gate:
+        diagnostic_label = "PROCEED_VISION_ONLY"
+    else:
+        diagnostic_label = "PROCEED_JOINT"
+    conditional_flags = []
+    if visual_gate and not any(
+        row["sharing"] == "without_reuse" and row["native_pair"]
+        for row in visual_candidates
+    ):
+        conditional_flags.append("VISUAL_GATE_REQUIRES_COARSE_REUSE")
+    if action_gate and not any(
+        row["sharing"] == "without_reuse" and row["native_pair"]
+        for row in action_candidates
+    ):
+        conditional_flags.append("ACTION_GATE_REQUIRES_COARSE_REUSE")
     return {
         "protocol_id": PROTOCOL_ID,
         "flop_only_candidates": {
@@ -658,7 +701,11 @@ def _decision(repro: Mapping[str, Any], feasibility: Mapping[str, Any]) -> dict[
             },
             "4_native_resolution_support": {
                 "status": "PASS" if native_gate else "FAIL",
-                "evidence_tier": "source-confirmed native paths; fresh runtime forward unverified",
+                "evidence_tier": (
+                    "source-confirmed native paths; fresh runtime forward verified"
+                    if repro.get("fresh_profile_available")
+                    else "source-confirmed native paths; fresh runtime forward unverified"
+                ),
                 "enumerated_pairs": [
                     {
                         "axis": row["axis"],
@@ -672,9 +719,12 @@ def _decision(repro: Mapping[str, Any], feasibility: Mapping[str, Any]) -> dict[
         },
         "metric_policy": "a candidate must meet the threshold under both wall-clock and FLOP accounts; disagreements are reported separately",
         "unique_label": label,
+        "diagnostic_budget_geometry_label": diagnostic_label,
+        "conditional_flags": conditional_flags,
         "termination": "G1 recorded; stop and await human confirmation; no S2 preparation",
         "notes": [
             "No budget conclusion is valid when the profile is unavailable or FLOP metadata is missing.",
+            "A numerically matching profile cannot pass G1.1 when its device violates the frozen one-owner-safe requirement.",
             "Archived Stage-2.7R accounting is diagnostic fallback only; it cannot pass the fresh S1.1 reproduction gate.",
             "Action resolution means native query interval 4 versus 1 with a fixed 8-query output chunk.",
             "Visual resolution means native coarse/fine forward paths; no blur or synthetic resize substitute is accepted.",
@@ -682,7 +732,11 @@ def _decision(repro: Mapping[str, Any], feasibility: Mapping[str, Any]) -> dict[
     }
 
 
-def compute(profile_path: Path, output_dir: Path) -> dict[str, Any]:
+def compute(
+    profile_path: Path,
+    output_dir: Path,
+    runtime_audit_path: Path | None = None,
+) -> dict[str, Any]:
     if not profile_path.is_file():
         raise FileNotFoundError(f"profile not found: {profile_path}")
     profile = json.loads(profile_path.read_text(encoding="utf-8"))
@@ -692,6 +746,21 @@ def compute(profile_path: Path, output_dir: Path) -> dict[str, Any]:
         raise ValueError("profile protocol_id mismatch")
     axes = {axis: _axis_feasibility(profile, axis) for axis in ("visual", "action")}
     repro = _reproduction(profile, axes)
+    if runtime_audit_path is not None:
+        runtime_audit = json.loads(runtime_audit_path.read_text(encoding="utf-8"))
+        co_tenant = runtime_audit.get("co_tenant_processes_present") is True
+        repro["runtime_audit_path"] = str(runtime_audit_path)
+        repro["runtime_audit_sha256"] = sha256_file(runtime_audit_path)
+        repro["protocol_device_requirement"] = "one_owner_safe_cuda_gpu"
+        repro["protocol_device_compliant"] = not co_tenant
+        repro["protocol_device_reason"] = (
+            "foreign-owner GPU processes were present during profiling"
+            if co_tenant
+            else "no co-tenant GPU process was recorded"
+        )
+        if co_tenant:
+            repro["status"] = "NUMERIC_PASS_PROTOCOL_DEVICE_FAIL"
+            repro["new_measurement_required"] = True
     curve = _cost_curve(axes)
     feasibility = {
         "protocol_id": PROTOCOL_ID,
@@ -703,6 +772,11 @@ def compute(profile_path: Path, output_dir: Path) -> dict[str, Any]:
         "sharing_conventions": {
             "without_reuse": "k/N <= alpha - rho",
             "with_coarse_reuse": "k/N <= (alpha - rho)/(1-rho)",
+        },
+        "implementation_accounting": {
+            "visual_current_code": "without_reuse",
+            "action_current_code": "without_reuse",
+            "g1_enumeration": "both preregistered sharing conventions",
         },
         "axes": axes,
         "wall_flop_disagreements": {
@@ -734,12 +808,13 @@ def compute_from_sources(
     profile_path: Path | None,
     archived_path: Path | None,
     output_dir: Path,
+    runtime_audit_path: Path | None = None,
 ) -> dict[str, Any]:
     """Run from a fresh profile or immutable Stage-2.7R diagnostic fallback."""
     if (profile_path is None) == (archived_path is None):
         raise ValueError("provide exactly one of --profile or --archived-stage27r-accounting")
     if profile_path is not None:
-        return compute(profile_path, output_dir)
+        return compute(profile_path, output_dir, runtime_audit_path)
     assert archived_path is not None
     profile, source_sha = _archived_profile(archived_path)
     # Keep the fallback self-describing without writing a synthetic profile
@@ -770,6 +845,11 @@ def compute_ephemeral(
         "sharing_conventions": {
             "without_reuse": "k/N <= alpha - rho",
             "with_coarse_reuse": "k/N <= (alpha-rho)/(1-rho)",
+        },
+        "implementation_accounting": {
+            "visual_current_code": "without_reuse",
+            "action_current_code": "without_reuse",
+            "g1_enumeration": "both preregistered sharing conventions",
         },
         "axes": axes,
         "wall_flop_disagreements": {axis: payload["disagreements"] for axis, payload in axes.items()},
@@ -808,7 +888,18 @@ def _decision_markdown(decision: Mapping[str, Any]) -> str:
         "",
         f"**Unique label: `{decision['unique_label']}`**",
         "",
+        f"Diagnostic budget-geometry label: `{decision['diagnostic_budget_geometry_label']}`",
+        "",
+        "Conditional flags: "
+        + (", ".join(f"`{flag}`" for flag in decision["conditional_flags"]) or "none"),
+        "",
         "G1.4 evidence tier: " + decision["g1"]["4_native_resolution_support"]["evidence_tier"] + ".",
+        "",
+        "G1.1 numeric reproduction within 5%: "
+        + str(bool(decision["g1"]["1_cost_reproduction"]["evidence"].get("within_5_percent")))
+        + "; protocol device compliant: "
+        + str(decision["g1"]["1_cost_reproduction"]["evidence"].get("protocol_device_compliant", True))
+        + ".",
         "",
         "### Candidate combinations at the preregistered 0.20 threshold",
         "",
@@ -826,9 +917,9 @@ def _decision_markdown(decision: Mapping[str, Any]) -> str:
             )
     lines += [
         "",
-        "### Diagnostic FLOP-only candidates",
+        "### Per-metric FLOP candidates (sensitivity table)",
         "",
-        "These do not pass G1 while fresh wall-clock is unavailable.",
+        "These rows pass the FLOP account alone; G1 above uses the intersection with wall-clock.",
         "",
     ]
     for axis in ("visual", "action"):
@@ -862,9 +953,15 @@ def main() -> None:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--profile", type=Path)
     source.add_argument("--archived-stage27r-accounting", type=Path)
+    parser.add_argument("--runtime-audit", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
-    compute_from_sources(args.profile, args.archived_stage27r_accounting, args.output_dir)
+    compute_from_sources(
+        args.profile,
+        args.archived_stage27r_accounting,
+        args.output_dir,
+        args.runtime_audit,
+    )
 
 
 if __name__ == "__main__":

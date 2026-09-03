@@ -6,17 +6,10 @@
 <text x="65.00" y="385" text-anchor="middle" font-size="11">coarse</text>
 <text x="380.00" y="385" text-anchor="middle" font-size="11">fine_grid2</text>
 <text x="695.00" y="385" text-anchor="middle" font-size="11">fine_grid4</text>
-<line class="error-bar" x1="65.00" y1="211.26" x2="65.00" y2="260.73" stroke="#1f77b4" stroke-width="1"/>
-<line class="error-bar" x1="380.00" y1="104.13" x2="380.00" y2="176.48" stroke="#1f77b4" stroke-width="1"/>
-<line class="error-bar" x1="695.00" y1="129.17" x2="695.00" y2="192.41" stroke="#1f77b4" stroke-width="1"/>
-<polyline points="65.00,235.99 380.00,140.31 695.00,160.79" fill="none" stroke="#1f77b4" stroke-width="2"/>
-<circle cx="65.00" cy="235.99" r="3" fill="#1f77b4"/>
-<circle cx="380.00" cy="140.31" r="3" fill="#1f77b4"/>
-<circle cx="695.00" cy="160.79" r="3" fill="#1f77b4"/>
 <text x="610" y="36" fill="#1f77b4" font-size="12">wall-clock</text>
-<polyline points="65.00,261.80 380.00,160.79 695.00,160.79" fill="none" stroke="#d62728" stroke-width="2"/>
-<circle cx="65.00" cy="261.80" r="3" fill="#d62728"/>
-<circle cx="380.00" cy="160.79" r="3" fill="#d62728"/>
-<circle cx="695.00" cy="160.79" r="3" fill="#d62728"/>
+<polyline points="65.00,223.01 380.00,104.13 695.00,104.13" fill="none" stroke="#d62728" stroke-width="2"/>
+<circle cx="65.00" cy="223.01" r="3" fill="#d62728"/>
+<circle cx="380.00" cy="104.13" r="3" fill="#d62728"/>
+<circle cx="695.00" cy="104.13" r="3" fill="#d62728"/>
 <text x="610" y="54" fill="#d62728" font-size="12">FLOPs</text>
 </svg>

@@ -29,10 +29,15 @@ recorded Stage-2.7R values:
 * previously recorded wall-clock ratio: `0.75025979` (historical reference,
   not a new measurement).
 
-No new profiling result is claimed by the source tree.  Run
-`profile_s1_costs.py` only after supplying the actual cached tensor and
-checkpoint.  Every generated result is fail-on-overwrite and should be added
-to `SHA256SUMS` with `update_sha256s.py`.
+The checked-in result now includes a fresh dev14 profile of the frozen
+Stage-2.7R checkpoint. It used one cached replay observation, physical GPU 2,
+batch size 1, 50 warmups, and 200 CUDA-synchronized repeats for each of five
+native conditions. `S1_PROFILE.json` retains every timing sample; the immutable
+input hashes and disclosed GPU co-tenancy are recorded in
+`S1_DEV14_RUNTIME_AUDIT.json`. Because that co-tenancy violates the frozen
+`one_owner_safe_cuda_gpu` requirement, the formal G1 label is
+`BLOCKED_BY_SUBSTRATE`; `PROCEED_JOINT` is retained only as the diagnostic
+budget-geometry result. Every generated result is covered by `SHA256SUMS`.
 
 ## Intended commands
 
@@ -63,6 +68,8 @@ python experiments/r16p18_stage3/scripts/update_sha256s.py \
   --root experiments/r16p18_stage3
 ```
 
-The profiler command is authorized only on dev05 with one owner-safe GPU.
-These commands document the bounded workflow; they are not evidence that a
-fresh profile has been performed.
+The original profiler location was dev05. The user explicitly amended the
+location to the existing dev14 DSW environment on 2026-09-02; the amendment is
+recorded separately so the frozen protocol is not silently rewritten. These
+commands document the bounded workflow and a profile is evidence only when its
+raw JSON, input hashes, runtime audit, and SHA256 manifest are all present.

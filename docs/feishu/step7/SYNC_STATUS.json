@@ -1,21 +1,31 @@
 {
-  "status": "BLOCKED_BY_APP_SCOPE",
-  "checked_at_utc": "2026-09-02T19:07:31Z",
-  "parent_node_token": "ACvKwniphi2saqkm6EicOsVDnFc",
+  "status": "SYNCED_AND_READ_BACK",
+  "checked_at_utc": "2026-09-03T05:10:16Z",
+  "identity": "user",
   "space_id": "7599097990090853600",
-  "requested_nodes": [
-    "step7",
-    "step7/实验报告"
-  ],
-  "nodes_created": [],
-  "error_code": 99991672,
-  "last_log_id": "2026090219073160E747A5A541A1BC8908",
-  "missing_scopes": [
-    "wiki:wiki",
-    "wiki:node:create"
-  ],
-  "scope_application_url": "https://open.feishu.cn/page/scope-apply?clientID=cli_aa8055b27138dbc8&scopes=wiki%3Awiki%2Cwiki%3Anode%3Acreate",
+  "parent_node_token": "ACvKwniphi2saqkm6EicOsVDnFc",
+  "step7": {
+    "wiki_node_token": "AdqHwHtfLizEwlkg4ENcQ3FEnyc",
+    "object_token": "NDHfdiLD2oAzbBxDSqOc2jOFnAB",
+    "revision_id": 5,
+    "url": "https://icnbwz7kd1ui.feishu.cn/wiki/AdqHwHtfLizEwlkg4ENcQ3FEnyc",
+    "readback_ok": true
+  },
+  "experiment_report": {
+    "wiki_node_token": "PdLUwsj9FiepqEkVXkLc2ermnmg",
+    "object_token": "RyJVdGcuKo74uJxi1uOc9RC9nne",
+    "revision_id": 5,
+    "url": "https://icnbwz7kd1ui.feishu.cn/wiki/PdLUwsj9FiepqEkVXkLc2ermnmg",
+    "readback_ok": true
+  },
   "local_plan_snapshot": "docs/feishu/step7/step.md",
   "local_report_snapshot": "docs/feishu/step7/experiment-report.md",
-  "note": "No ambiguous create response occurred; retry after the app scopes are approved."
+  "readback_assertions": {
+    "plan_contains_protocol_title": true,
+    "report_contains_unique_g1_label": true,
+    "report_formal_g1_label": "BLOCKED_BY_SUBSTRATE",
+    "report_diagnostic_geometry_label": "PROCEED_JOINT",
+    "report_contains_reuse_limitation": true,
+    "report_contains_device_isolation_failure": true
+  }
 }

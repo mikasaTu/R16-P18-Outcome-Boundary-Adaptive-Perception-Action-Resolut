@@ -1,21 +1,34 @@
 {
   "explanation_accepts_gate": false,
-  "fresh_profile_available": false,
+  "fresh_profile_available": true,
   "measured": {
-    "flops_ratio": 0.738795174560143,
-    "source": "immutable_stage27r_accounting",
-    "wall_clock_ratio": null
+    "flops_ratio": 0.7359613493399401,
+    "source": "fresh_forwards_reweighted_by_immutable_stage27r_query_counts",
+    "wall_clock_ratio": 0.745154835692986
   },
   "measurement_protocol": {
-    "batch_size": null,
-    "cuda_synchronize": null,
-    "device": null,
-    "repeats": null,
-    "warmup": null
+    "batch_size": 1,
+    "cuda_synchronize": true,
+    "device": {
+      "cuda_available": true,
+      "cuda_version": "12.4",
+      "device_capability": [
+        8,
+        0
+      ],
+      "device_name": "NVIDIA A800-SXM4-80GB",
+      "platform": "Linux-5.10.134-013.9.kangaroo.al8.x86_64-x86_64-with-glibc2.35",
+      "python": "3.11.11 (main, Mar 17 2025, 21:02:09) [Clang 20.1.0 ]",
+      "requested": "cuda:0",
+      "torch": "2.5.1+cu124",
+      "type": "cuda"
+    },
+    "repeats": 200,
+    "warmup": 50
   },
   "measurement_variance": {
     "flops_ratio": null,
-    "wall_clock_ratio": null
+    "wall_clock_ratio": 0.000207164129664062
   },
   "new_measurement_required": true,
   "original": {
@@ -24,11 +37,16 @@
     "flops_ratio": 0.738795174560143,
     "wall_clock_ratio": 0.7502597918865904
   },
+  "protocol_device_compliant": false,
+  "protocol_device_reason": "foreign-owner GPU processes were present during profiling",
+  "protocol_device_requirement": "one_owner_safe_cuda_gpu",
   "relative_deviation": {
-    "flops": 0.0,
-    "wall_clock": null
+    "flops": 0.0038357386699095592,
+    "wall_clock": 0.006804251339082918
   },
-  "status": "ARCHIVED_REFERENCE_ONLY",
+  "runtime_audit_path": "experiments/r16p18_stage3/S1_DEV14_RUNTIME_AUDIT.json",
+  "runtime_audit_sha256": "77375a25bd7e8464b35d523f53a979c2595d3d441d880bc3428d8c5ca47db039",
+  "status": "NUMERIC_PASS_PROTOCOL_DEVICE_FAIL",
   "verifiable_explanation": null,
-  "within_5_percent": false
+  "within_5_percent": true
 }

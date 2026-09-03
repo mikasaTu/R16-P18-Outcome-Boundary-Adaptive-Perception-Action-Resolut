@@ -1,3 +1,11 @@
+---
+feishu_title: "step7"
+feishu_url: "https://icnbwz7kd1ui.feishu.cn/wiki/AdqHwHtfLizEwlkg4ENcQ3FEnyc"
+feishu_wiki_token: "AdqHwHtfLizEwlkg4ENcQ3FEnyc"
+feishu_object_token: "NDHfdiLD2oAzbBxDSqOc2jOFnAB"
+feishu_revision: 5
+---
+
 <title>step7</title>
 
 继续完成任务“按照这个计划继续推进验证，并且把结果放到对应step7的实验报告（首先在该idea的飞书云文档里实验规划下创建新的子云文档创建名叫“step7”云文档，然后把计划内容复制进step7文档中，再在step7下创建子文档“实验报告”）中（飞书云文档用skill连接）。针对有提升或者降低的那机制的代码，你需要反解（参考 code-first-ideation）什么原因导致带来的提升和降低，这里不生成新的idea，但是需要了解清楚机理。此外还需要把代码和测试结果等信息上传到github的main分支中，必须完成计划里面的全部实验，不能因为一个gate不到就停止验证其他实验。（使用 pai-vla-training、pai-spot-autoresume、pai-web-training-orchestrator）”
